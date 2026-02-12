@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">TuProfe</string>
+    <string name="logo_tuprofe">Logo TuProfe</string>
+    <string name="fondo_tuprofe">Fondo TuProfe</string>
 </resources>
