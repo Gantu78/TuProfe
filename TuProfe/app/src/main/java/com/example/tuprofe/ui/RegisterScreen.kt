@@ -23,7 +23,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.tuprofe.ui.utils.AppButton
 import com.example.tuprofe.ui.utils.BackgroundImage
-import com.example.tuprofe.ui.utils.logoApp
+import com.example.tuprofe.ui.utils.LogoApp
 import com.example.tuprofe.R
 import com.example.tuprofe.ui.utils.AppTextButton
 import com.example.tuprofe.ui.utils.TextFieldApp
@@ -43,7 +43,7 @@ fun RegisterScreen(
             horizontalAlignment = Alignment.CenterHorizontally,
             modifier = Modifier.fillMaxSize()
         ) {
-            logoApp()
+            LogoApp()
             FormularioRegistro()
             Spacer(modifier = Modifier.padding(15.dp))
             AppButton(stringResource(R.string.registrarse))
@@ -68,8 +68,8 @@ fun RegisterScreenPreview(){
          modifier = modifier
      ) {
          TextFieldApp(stringResource(R.string.email))
-         TextFieldApp(stringResource(R.string.email))
-         TextFieldApp(stringResource(R.string.email))
+         TextFieldApp(stringResource(R.string.usuario))
+         TextFieldApp(stringResource(R.string.carrera))
          TextFieldContraApp(stringResource(R.string.contrase_a))
          TextFieldContraApp(stringResource(R.string.repetir_contrase_a) )
      }

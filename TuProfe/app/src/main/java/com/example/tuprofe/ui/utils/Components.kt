@@ -22,9 +22,10 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.material3.TextButton
 import androidx.compose.ui.text.style.TextDecoration
 import com.example.tuprofe.R
+import com.example.tuprofe.ui.theme.BebasNeue
 
 @Composable
-fun logoApp(
+fun LogoApp(
     modifier: Modifier = Modifier
 ){
     Image(
@@ -47,7 +48,25 @@ fun AppButton(
 
         modifier = modifier
     ) {
-        Text(textoBoton, fontSize = 20.sp)
+        Text(textoBoton, fontSize = 20.sp, fontFamily = BebasNeue)
+    }
+}
+
+
+@Composable
+fun AppButtonRow(
+    textoBoton: String,
+    modifier: Modifier = Modifier
+){
+    Button(
+        onClick =  {/*TODO*/},
+        colors = ButtonDefaults.buttonColors(
+            containerColor = colorResource(R.color.verdetp)
+        ),
+
+        modifier = modifier
+    ) {
+        Text(textoBoton, fontSize = 15.sp, fontFamily = BebasNeue)
     }
 }
 
@@ -69,7 +88,8 @@ fun AppTextButton(
             text = textoBoton,
             fontSize = 20.sp,
             textDecoration = TextDecoration.Underline, // Subraya el texto
-            color = colorResource(R.color.verdetp)
+            color = colorResource(R.color.verdetp),
+            fontFamily = BebasNeue
         )
     }
 }
