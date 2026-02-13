@@ -34,6 +34,16 @@ fun LogoApp(
     )
 }
 
+@Composable
+fun LogoLoading(
+    modifier: Modifier = Modifier
+){
+    Image(
+        painter = painterResource(R.drawable.loading),
+        contentDescription = (stringResource(R.string.loading))
+    )
+}
+
 
 @Composable
 fun AppButton(
