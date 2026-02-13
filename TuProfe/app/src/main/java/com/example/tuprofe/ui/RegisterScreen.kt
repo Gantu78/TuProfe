@@ -31,7 +31,7 @@ import com.example.tuprofe.ui.utils.TextFieldContraApp
 
 @Composable
 fun RegisterScreen(
-    modifier: Modifier = Modifier.Companion
+    modifier: Modifier = Modifier
 ) {
 
     Box(

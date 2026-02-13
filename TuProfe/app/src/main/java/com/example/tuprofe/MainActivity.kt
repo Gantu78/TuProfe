@@ -13,6 +13,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.tuprofe.ui.HomeScreen
 import com.example.tuprofe.ui.RegisterScreen
+import com.example.tuprofe.ui.ResetPasswordScreen
 import com.example.tuprofe.ui.theme.TuProfeTheme
 
 class MainActivity : ComponentActivity() {
@@ -20,8 +21,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-            HomeScreen()
-            RegisterScreen()
+            ResetPasswordScreen()
         }
     }
 }
