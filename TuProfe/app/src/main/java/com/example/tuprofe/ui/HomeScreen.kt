@@ -41,7 +41,7 @@ fun HomeScreen(
             Spacer(modifier = Modifier.padding(30.dp))
             FormularioInicio()
             Spacer(modifier = Modifier.padding(15.dp))
-            AppButton(stringResource(R.string.registrarse))
+            AppButton(stringResource(R.string.iniciar_sesion))
             Spacer(modifier = Modifier.padding(30.dp))
             Row(
                 verticalAlignment = Alignment.CenterVertically,
