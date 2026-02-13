@@ -7,12 +7,18 @@ La aplicación está inspirada en plataformas como Goodreads o Letterboxd, pero 
 
 ---
 
-## Autores:
+## 👨‍💻 Autores
+
+Proyecto desarrollado con fines académicos.
 
  - Samuel Jerónimo Gantiva Garzón
  - Oscar Alejandro Montes Moreno
  - Jorge Enrique Olaya Liévano
  - Carlos Santiago Pinzón Caicedo
+
+---
+
+ 
 
 ## 📱 Características Principales
 
@@ -106,11 +112,7 @@ TuProfe/
 
 ---
 
-## 👨‍💻 Autores
 
-Proyecto desarrollado con fines académicos.
-
----
 
 ## 📜 Licencia
 
