@@ -17,5 +17,5 @@
     <string name="textorespass">Ingresa tu dirección de correo electrónico y te enviaremos un enlace para reestablecer tu contraseña</string>
     <string name="enviar_enlace">Enviar Enlace</string>
     <string name="loading">loading</string>
-    <string name="iniciar_sesion">INICIAR SESION</string>
+    <string name="iniciar_sesion">INICIAR SESIÓN</string>
 </resources>

@@ -98,7 +98,7 @@ fun AppTextButton(
             text = textoBoton,
             fontSize = 20.sp,
             textDecoration = TextDecoration.Underline, // Subraya el texto
-            color = colorResource(R.color.verdetp),
+            color = colorResource(R.color.verdetp2),
             fontFamily = BebasNeue
         )
     }

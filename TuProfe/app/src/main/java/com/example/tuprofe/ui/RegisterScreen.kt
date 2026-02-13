@@ -21,10 +21,12 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.example.tuprofe.ui.utils.AppButton
 import com.example.tuprofe.ui.utils.BackgroundImage
 import com.example.tuprofe.ui.utils.LogoApp
 import com.example.tuprofe.R
+import com.example.tuprofe.ui.theme.BebasNeue
 import com.example.tuprofe.ui.utils.AppTextButton
 import com.example.tuprofe.ui.utils.TextFieldApp
 import com.example.tuprofe.ui.utils.TextFieldContraApp
@@ -43,7 +45,8 @@ fun RegisterScreen(
             horizontalAlignment = Alignment.CenterHorizontally,
             modifier = Modifier.fillMaxSize()
         ) {
-            LogoApp()
+
+            Header()
             FormularioRegistro()
             Spacer(modifier = Modifier.padding(15.dp))
             AppButton(stringResource(R.string.registrarse))
@@ -76,3 +79,16 @@ fun RegisterScreenPreview(){
 
 
  }
+
+@Composable
+fun Header(
+    modifier: Modifier = Modifier
+){
+    LogoApp()
+    Spacer(modifier = Modifier.padding(10.dp))
+    Text(stringResource(R.string.registrarse),
+        color = colorResource(R.color.verdetp2),
+        fontFamily = BebasNeue,
+        fontSize = 25.sp
+    )
+}

@@ -41,19 +41,7 @@ fun HomeScreen(
             Spacer(modifier = Modifier.padding(30.dp))
             FormularioInicio()
             Spacer(modifier = Modifier.padding(15.dp))
-            AppButton(stringResource(R.string.iniciar_sesion))
-            Spacer(modifier = Modifier.padding(30.dp))
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.Center,
-                modifier = Modifier.fillMaxWidth()
-            ) {
-
-                AppButtonRow(stringResource(R.string.olvide_la_contrase_a))
-                Spacer(modifier = Modifier.width(30.dp))
-                AppButtonRow(stringResource(R.string.crear_cuenta))
-                Spacer(modifier = Modifier.width(16.dp))
-            }
+            Botones()
         }
     }
 }
@@ -75,4 +63,23 @@ fun FormularioInicio(
         TextFieldContraApp(stringResource(R.string.contrase_a))
     }
 
+}
+
+@Composable
+fun Botones(
+    modifier: Modifier = Modifier
+){
+    AppButton(stringResource(R.string.iniciar_sesion))
+    Spacer(modifier = Modifier.padding(30.dp))
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.Center,
+        modifier = Modifier.fillMaxWidth()
+    ) {
+
+        AppButtonRow(stringResource(R.string.olvide_la_contrase_a))
+        Spacer(modifier = Modifier.width(30.dp))
+        AppButtonRow(stringResource(R.string.crear_cuenta))
+        Spacer(modifier = Modifier.width(16.dp))
+    }
 }

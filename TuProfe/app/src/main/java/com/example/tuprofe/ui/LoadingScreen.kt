@@ -29,8 +29,6 @@ fun LoadingScreen(
             modifier = Modifier.fillMaxSize()
         ) {
             LogoApp()
-            Spacer(modifier = Modifier.padding(15.dp))
-            LogoLoading()
         }
 
     }

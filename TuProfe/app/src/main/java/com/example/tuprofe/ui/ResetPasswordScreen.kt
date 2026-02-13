@@ -63,14 +63,16 @@ fun TextosPassword(
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         Text(stringResource(R.string.recuperar_contrase_a),
-            color = colorResource(R.color.verdetp),
+            color = colorResource(R.color.verdetp2),
             fontFamily = BebasNeue,
-            fontSize = 22.sp
+            fontSize = 22.sp,
+
         )
         Spacer(modifier = Modifier.padding(15.dp))
         Text(stringResource(R.string.textorespass),
             textAlign = TextAlign.Center,
             fontSize = 17.sp,
+            color = colorResource(R.color.black),
             modifier = Modifier.padding(horizontal = 50.dp, vertical = 0.dp)
         )
     }
