@@ -64,7 +64,6 @@ fun TextosPassword(
     ) {
         Text(stringResource(R.string.recuperar_contrase_a),
             color = colorResource(R.color.verdetp),
-            textDecoration = TextDecoration.Underline,
             fontFamily = BebasNeue,
             fontSize = 22.sp
         )
