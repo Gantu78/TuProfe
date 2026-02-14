@@ -2,9 +2,9 @@
 # TuProfe 📚👨‍🏫
 <section style=text-align: center>
 
-![Texto Alternativo](TuProfe\app\src\main\res\drawable\img.png)
+<img src="TuProfe\app\src\main\res\drawable\img.png" >
 
-![Texto Alternativo](pantallas.png)
+<img src="pantallas.png" >
 
 </section>
 **TuProfe** es una aplicación móvil para Android orientada a la calificación, reseña y análisis de profesores, funcionando como una red social académica donde los usuarios pueden compartir experiencias, interactuar y formar comunidad.
