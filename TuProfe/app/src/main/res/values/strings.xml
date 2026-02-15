@@ -18,4 +18,5 @@
     <string name="enviar_enlace">Enviar Enlace</string>
     <string name="loading">loading</string>
     <string name="iniciar_sesion">INICIAR SESIÓN</string>
+    <string name="las_contrase_as_no_coinciden">Las contraseñas no coinciden</string>
 </resources>

@@ -8,6 +8,10 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.colorResource
@@ -30,6 +34,7 @@ fun ResetPasswordScreen(
     modifier: Modifier = Modifier
     )
     {
+        var email by remember { mutableStateOf("") }
         Box(
             modifier = modifier
         ){
@@ -43,9 +48,13 @@ fun ResetPasswordScreen(
                 Spacer(modifier = Modifier.padding(15.dp))
                 TextosPassword()
                 Spacer(modifier = Modifier.padding(10.dp))
-                TextFieldApp(stringResource(R.string.email))
+                TextFieldApp(
+                    stringResource(R.string.email),
+                    value = email,
+                    onValueChange = { email = it }
+                )
                 Spacer(modifier = Modifier.padding(20.dp))
-                AppButton(stringResource(R.string.enviar_enlace))
+                AppButton(stringResource(R.string.enviar_enlace), onClick = {})
                 Spacer(modifier = Modifier.padding(10.dp))
                 AppTextButton(stringResource(R.string.volver))
 
@@ -77,6 +86,13 @@ fun TextosPassword(
         )
     }
 }
+
+@Composable
+@Preview(showBackground = true)
+fun TextosPasswordPreview(){
+    TextosPassword()
+}
+
 
 @Composable
 @Preview (showBackground = true)

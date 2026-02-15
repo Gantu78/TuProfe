@@ -10,6 +10,10 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -28,6 +32,10 @@ import com.example.tuprofe.ui.utils.LogoApp
 fun HomeScreen(
     modifier: Modifier = Modifier
 ){
+    var passwordVisible by remember { mutableStateOf(false) }
+    var email by remember { mutableStateOf("") }
+    var password by remember { mutableStateOf("") }
+    val icono = if (passwordVisible) R.drawable.mostrar else R.drawable.ocultar
     Box(
         modifier = modifier
     ) {
@@ -39,7 +47,15 @@ fun HomeScreen(
         ) {
             LogoApp()
             Spacer(modifier = Modifier.padding(30.dp))
-            FormularioInicio()
+            FormularioInicio(
+                email = email,
+                password = password,
+                passwordVisible = passwordVisible,
+                icono = icono,
+                onEmailChange = { email = it },
+                onPasswordChange = { password = it },
+                onPasswordVisibleChange = { passwordVisible = !passwordVisible }
+            )
             Spacer(modifier = Modifier.padding(15.dp))
             Botones()
         }
@@ -54,32 +70,80 @@ fun HomeScreenPreview(){
 
 @Composable
 fun FormularioInicio(
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    email: String,
+    password: String,
+    passwordVisible: Boolean,
+    icono: Int,
+    onEmailChange : (String) -> Unit,
+    onPasswordChange : (String) -> Unit,
+    onPasswordVisibleChange : () -> Unit
+
 ){
+
+
     Column(
         modifier = modifier
     ) {
-        TextFieldApp(stringResource(R.string.usuario))
-        TextFieldContraApp(stringResource(R.string.contrase_a))
+        TextFieldApp(
+            stringResource(R.string.usuario),
+            value = email,
+            onValueChange = onEmailChange
+        )
+        TextFieldContraApp(
+            stringResource(R.string.contrase_a),
+            value = password,
+            mostrarPassword = passwordVisible,
+            click = onPasswordVisibleChange,
+            onValueChange = onPasswordChange,
+            icono = icono
+        )
     }
 
 }
 
 @Composable
+@Preview(showBackground = true)
+fun FormularioInicioPreview(){
+    FormularioInicio(
+        email = "",
+        password = "",
+        passwordVisible = false,
+        icono = R.drawable.ocultar,
+        onEmailChange = {},
+        onPasswordChange = {},
+        onPasswordVisibleChange = {}
+    )
+}
+
+
+@Composable
 fun Botones(
     modifier: Modifier = Modifier
 ){
-    AppButton(stringResource(R.string.iniciar_sesion))
-    Spacer(modifier = Modifier.padding(30.dp))
-    Row(
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.Center,
-        modifier = Modifier.fillMaxWidth()
+    Column(
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally,
+        modifier = modifier
     ) {
+        AppButton(stringResource(R.string.iniciar_sesion), onClick = {})
+        Spacer(modifier = Modifier.padding(30.dp))
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.Center,
+            modifier = Modifier.fillMaxWidth()
+        ) {
 
-        AppButtonRow(stringResource(R.string.olvide_la_contrase_a))
-        Spacer(modifier = Modifier.width(30.dp))
-        AppButtonRow(stringResource(R.string.crear_cuenta))
-        Spacer(modifier = Modifier.width(16.dp))
+            AppButtonRow(stringResource(R.string.olvide_la_contrase_a), onClick = {})
+            Spacer(modifier = Modifier.width(30.dp))
+            AppButtonRow(stringResource(R.string.crear_cuenta), onClick = {})
+            Spacer(modifier = Modifier.width(16.dp))
+        }
     }
+}
+
+@Composable
+@Preview(showBackground = true)
+fun BotonesPreview(){
+    Botones()
 }

@@ -14,6 +14,10 @@ import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.ComposableOpenTarget
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.colorResource
@@ -35,6 +39,14 @@ import com.example.tuprofe.ui.utils.TextFieldContraApp
 fun RegisterScreen(
     modifier: Modifier = Modifier
 ) {
+    var email by remember { mutableStateOf("") }
+    var usuario by remember { mutableStateOf("") }
+    var carrera by remember { mutableStateOf("") }
+    var password by remember { mutableStateOf("") }
+    var password2 by remember { mutableStateOf("") }
+    var passwordVisible by remember { mutableStateOf(false) }
+    var passwordVisible2 by remember { mutableStateOf(false) }
+    val icono = if (passwordVisible) R.drawable.mostrar else R.drawable.ocultar
 
     Box(
         modifier = modifier
@@ -47,11 +59,28 @@ fun RegisterScreen(
         ) {
 
             Header()
-            FormularioRegistro()
+            FormularioRegistro(
+                email = email,
+                usuario = usuario,
+                carrera = carrera,
+                password = password,
+                password2 = password2,
+                passwordVisible = passwordVisible,
+                passwordVisible2 = passwordVisible2,
+                onEmailChange = { email = it },
+                onUsuarioChange = { usuario = it },
+                onCarreraChange = { carrera = it },
+                onPasswordChange = { password = it },
+                onPassword2Change = { password2 = it },
+                onPasswordVisibleChange = { passwordVisible = !passwordVisible },
+                onPassword2VisibleChange = { passwordVisible2 = !passwordVisible2 },
+                icono = icono
+            )
+            if (password != password2) {
+                Text(stringResource(R.string.las_contrase_as_no_coinciden))
+            }
             Spacer(modifier = Modifier.padding(15.dp))
-            AppButton(stringResource(R.string.registrarse))
-            AppTextButton(stringResource(R.string.ya_tengo_una_cuenta))
-            AppTextButton(stringResource(R.string.volver))
+            BotonesRegistro()
         }
     }
 
@@ -65,30 +94,136 @@ fun RegisterScreenPreview(){
 
  @Composable
  fun FormularioRegistro(
+     email: String,
+     usuario: String,
+     carrera: String,
+     password: String,
+     password2: String,
+     passwordVisible: Boolean,
+     passwordVisible2: Boolean,
+     onEmailChange : (String) -> Unit,
+     onUsuarioChange : (String) -> Unit,
+     onCarreraChange : (String) -> Unit,
+     onPasswordChange : (String) -> Unit,
+     onPassword2Change : (String) -> Unit,
+     onPasswordVisibleChange : () -> Unit,
+     onPassword2VisibleChange : () -> Unit,
+     icono: Int,
+
+
      modifier: Modifier = Modifier
  ){
+
      Column(
          modifier = modifier
      ) {
-         TextFieldApp(stringResource(R.string.email))
-         TextFieldApp(stringResource(R.string.usuario))
-         TextFieldApp(stringResource(R.string.carrera))
-         TextFieldContraApp(stringResource(R.string.contrase_a))
-         TextFieldContraApp(stringResource(R.string.repetir_contrase_a) )
+         TextFieldApp(
+             stringResource(R.string.email),
+             value = email,
+             onValueChange = onEmailChange
+         )
+         TextFieldApp(
+             stringResource(R.string.usuario),
+             value = usuario,
+             onValueChange = onUsuarioChange
+         )
+         TextFieldApp(
+             stringResource(R.string.carrera),
+             value = carrera,
+             onValueChange = onCarreraChange
+         )
+         TextFieldContraApp(
+             stringResource(R.string.contrase_a),
+             value = password,
+             mostrarPassword = passwordVisible,
+             click = onPasswordVisibleChange,
+             onValueChange = onPasswordChange,
+             icono = icono
+         )
+         TextFieldContraApp(
+             stringResource(R.string.repetir_contrase_a),
+             value = password2,
+             mostrarPassword = passwordVisible2,
+             click = onPassword2VisibleChange,
+             onValueChange = onPassword2Change,
+             icono = icono
+         )
      }
 
 
  }
 
 @Composable
+@Preview (showBackground = true)
+fun FormularioRegistroPreview(){
+    FormularioRegistro(
+        email = "",
+        usuario = "",
+        carrera = "",
+        password = "",
+        password2 = "",
+        passwordVisible = false,
+        passwordVisible2 = false,
+        onEmailChange = {},
+        onUsuarioChange = {},
+        onCarreraChange = {},
+        onPasswordChange = {},
+        onPassword2Change = {},
+        onPasswordVisibleChange = {},
+        onPassword2VisibleChange = {},
+        icono = R.drawable.ocultar
+    )
+}
+
+
+@Composable
 fun Header(
     modifier: Modifier = Modifier
 ){
-    LogoApp()
-    Spacer(modifier = Modifier.padding(10.dp))
-    Text(stringResource(R.string.registrarse),
-        color = colorResource(R.color.verdetp2),
-        fontFamily = BebasNeue,
-        fontSize = 25.sp
-    )
+    Column(
+        modifier = modifier,
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally,
+    ) {
+        LogoApp()
+        Spacer(modifier = Modifier.padding(10.dp))
+        Text(
+            stringResource(R.string.registrarse),
+            color = colorResource(R.color.verdetp2),
+            fontFamily = BebasNeue,
+            fontSize = 25.sp
+        )
+    }
 }
+
+@Composable
+@Preview(showBackground = true)
+fun HeaderPreview(){
+    Header()
+}
+
+
+@Composable
+fun BotonesRegistro(
+    modifier: Modifier = Modifier
+){
+    Column(
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally,
+        modifier = modifier
+    ) {
+        AppButton(
+            stringResource(R.string.registrarse), onClick = {},)
+        AppTextButton(stringResource(R.string.ya_tengo_una_cuenta), onClick = {})
+        AppTextButton(stringResource(R.string.volver), onClick = {})
+    }
+
+}
+
+@Composable
+@Preview(showBackground = true)
+fun BotonesRegistroPreview(){
+    BotonesRegistro()
+}
+
+//State Hoisting

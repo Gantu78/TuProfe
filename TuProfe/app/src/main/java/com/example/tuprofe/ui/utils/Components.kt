@@ -48,10 +48,11 @@ fun LogoLoading(
 @Composable
 fun AppButton(
     textoBoton: String,
+    onClick: () -> Unit = {},
     modifier: Modifier = Modifier
 ){
     Button(
-        onClick =  {/*TODO*/},
+        onClick =  onClick,
         colors = ButtonDefaults.buttonColors(
             containerColor = colorResource(R.color.verdetp)
         ),
@@ -66,10 +67,11 @@ fun AppButton(
 @Composable
 fun AppButtonRow(
     textoBoton: String,
+    onClick: () -> Unit,
     modifier: Modifier = Modifier
 ){
     Button(
-        onClick =  {/*TODO*/},
+        onClick =  onClick,
         colors = ButtonDefaults.buttonColors(
             containerColor = colorResource(R.color.verdetp)
         ),
@@ -88,10 +90,11 @@ fun AppButtonRow(
 @Composable
 fun AppTextButton(
     textoBoton: String,
+    onClick: () -> Unit = {},
     modifier: Modifier = Modifier
 ){
     TextButton(
-        onClick = {/*TODO*/}, // Usamos el parámetro
+        onClick = onClick, // Usamos el parámetro
         modifier = modifier
     ) {
         Text(
@@ -108,11 +111,13 @@ fun AppTextButton(
 @Composable
 fun TextFieldApp(
     texto: String,
+    value: String = "",
+    onValueChange: (String) -> Unit = {},
     modifier: Modifier = Modifier
 ){
     OutlinedTextField(
-        value = "",
-        onValueChange = {},
+        value = value,
+        onValueChange = onValueChange,
         label = { Text(text = texto)},
         colors = TextFieldDefaults.colors(
             unfocusedContainerColor = colorResource(R.color.pastel),
@@ -131,12 +136,16 @@ fun TextFieldApp(
 @Composable
 fun TextFieldContraApp(
     texto: String,
+    mostrarPassword: Boolean,
+    click: () -> Unit,
+    value: String = "",
+    onValueChange: (String) -> Unit = {},
     modifier: Modifier = Modifier,
-    visualTransformation: VisualTransformation = PasswordVisualTransformation()
+    icono: Int
 ){
     OutlinedTextField(
-        value = "",
-        onValueChange = {},
+        value = value,
+        onValueChange = onValueChange,
         label = { Text(text = texto)},
         colors = TextFieldDefaults.colors(
             unfocusedContainerColor = colorResource(R.color.pastel),
@@ -147,11 +156,11 @@ fun TextFieldContraApp(
             focusedIndicatorColor = colorResource(R.color.gris)
         ),
         shape = RoundedCornerShape(30.dp),
-        visualTransformation = visualTransformation,
+        visualTransformation = if(mostrarPassword) VisualTransformation.None else PasswordVisualTransformation(),
         trailingIcon = {
-            IconButton(onClick = {/*TODO*/}) {
+            IconButton(onClick = click) {
                 Icon(
-                    painter = painterResource(R.drawable.mostrar_password),
+                    painter = painterResource(icono),
                     contentDescription = stringResource(R.string.mostrar_password),
                     modifier = Modifier.padding(end = 10.dp)
                 )
