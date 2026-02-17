@@ -65,13 +65,13 @@ Proyecto desarrollado con fines académicos.
 ├── 📱 app/                      # Módulo principal
 │   └── 🛠️ src/
 │       └── 🧠 main/
-│           ├── ☕ java/          # Lógica (Kotlin/Java)
-│           ├── 🎨 res/           # Interfaz y Recursos
+│           ├── ☕ java/              # Lógica (Kotlin/Java)
 │           └── 📄 AndroidManifest.xml
-├── 🐘 gradle/                   # Configuración del Wrapper
-├── ⚙️ build.gradle              # Configuración del Proyecto
-├── ⚙️ settings.gradle           # Ajustes de Módulos
-└── 📖 README.md                 # Documentación
+├── 🎨 res/                           # Interfaz y Recursos
+├── 🐘 gradle/                        # Configuración del Wrapper
+├── ⚙️ build.gradle                   # Configuración del Proyecto
+├── ⚙️ settings.gradle                # Ajustes de Módulos
+└── 📖 README.md                      # Documentación
 
 ```
 
