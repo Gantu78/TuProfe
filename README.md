@@ -60,7 +60,7 @@ Proyecto desarrollado con fines académicos.
 - **Usuarios autenticados activos**: Usuarios que generan contenido e interactúan con la comunidad.
 
 ---
-
+```text
 📂 TuProfe/
 ├── 📱 app/                      # Módulo principal
 │   └── 🛠️ src/
@@ -72,6 +72,8 @@ Proyecto desarrollado con fines académicos.
 ├── ⚙️ build.gradle              # Configuración del Proyecto
 ├── ⚙️ settings.gradle           # Ajustes de Módulos
 └── 📖 README.md                 # Documentación
+
+```
 
 ## 🚀 Instalación y Ejecución
 
