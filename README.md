@@ -60,25 +60,20 @@ Proyecto desarrollado con fines académicos.
 - **Usuarios autenticados activos**: Usuarios que generan contenido e interactúan con la comunidad.
 
 ---
-
-## 📂 Estructura del Proyecto
+```text
+📂 TuProfe/
+├── 📱 app/                      # Módulo principal
+│   └── 🛠️ src/
+│       └── 🧠 main/
+│           ├── ☕ java/              # Lógica (Kotlin/Java)
+│           └── 📄 AndroidManifest.xml
+├── 🎨 res/                           # Interfaz y Recursos
+├── 🐘 gradle/                        # Configuración del Wrapper
+├── ⚙️ build.gradle                   # Configuración del Proyecto
+├── ⚙️ settings.gradle                # Ajustes de Módulos
+└── 📖 README.md                      # Documentación
 
 ```
-TuProfe/
-├── app/
-│   ├── src/
-│   │   ├── main/
-│   │   │   ├── java/
-│   │   │   ├── res/
-│   │   │   └── AndroidManifest.xml
-│   └── build.gradle
-├── gradle/
-├── build.gradle
-├── settings.gradle
-└── README.md
-```
-
----
 
 ## 🚀 Instalación y Ejecución
 
