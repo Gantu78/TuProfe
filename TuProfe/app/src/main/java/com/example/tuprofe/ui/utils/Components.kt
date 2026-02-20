@@ -37,6 +37,7 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.material3.TextButton
+import androidx.compose.material3.VerticalDivider
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
@@ -238,25 +239,53 @@ fun ConfigItem(
 
 @Composable
 fun BottomBar(
-    modifier: Modifier = Modifier,
-    boton1: String,
-    boton2: String ="",
-    boton3: String = "",
-
-    ) {
-    Row(
-        modifier = Modifier
+    on1Click: () -> Unit,
+    on2Click: () -> Unit,
+    on3Click: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+    Card(
+        modifier = modifier
             .fillMaxWidth()
-            .background(colorResource(R.color.verdetp))
-            .padding(vertical = 16.dp),
-        horizontalArrangement = Arrangement.SpaceAround
+            .padding(horizontal = 16.dp, vertical = 8.dp),
+        shape = RoundedCornerShape(50),
+        colors = CardDefaults.cardColors(containerColor = colorResource(id = R.color.verdetp))
     ) {
-        Text("$boton1", color = Color.White)
-        Text("$boton2", color = Color.Black, fontWeight = FontWeight.Bold)
-        Text("$boton3", color = Color.White)
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            TextButton(
+                onClick = on1Click,
+                modifier = Modifier.weight(1f)
+            ) {
+                Text("Incio", color = Color.White, fontSize = 16.sp)
+            }
+            VerticalDivider(
+                modifier = Modifier.height(30.dp),
+                thickness = 1.dp,
+                color = Color.White
+            )
+            TextButton(
+                onClick = on2Click,
+                modifier = Modifier.weight(1f)
+            ) {
+                Text("Profesores", color = Color.White, fontSize = 16.sp)
+            }
+            VerticalDivider(
+                modifier = Modifier.height(30.dp),
+                thickness = 1.dp,
+                color = Color.White
+            )
+            TextButton(
+                onClick = on3Click,
+                modifier = Modifier.weight(1f)
+            ) {
+                Text("Perfil", color = Color.White, fontSize = 16.sp)
+            }
+        }
     }
 }
-
 @Composable
 fun SearchBar(
     modifier: Modifier = Modifier
@@ -341,6 +370,8 @@ fun HeaderSection(
     }
 }
 
+
+
 @Composable
 fun ResenaCardActions(
     likes: Int,
@@ -403,7 +434,7 @@ fun ResenaCard(
                 padding(horizontal = 10.dp),
                 name = reviewInfo.name,
                 carrera = reviewInfo.materia,
-
+                imagen = reviewInfo.imageId
             )
 
             Spacer(modifier = Modifier.height(8.dp))
@@ -418,6 +449,7 @@ fun ResenaCard(
 
             TuProfeCardBody(
                 content = reviewInfo.content,
+                date = reviewInfo.time,
                 modifier = Modifier.padding(horizontal = 10.dp)
             )
 

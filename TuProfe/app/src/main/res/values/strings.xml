@@ -27,4 +27,12 @@
     <string name="a_adir_comentario">Añadir comentario</string>
     <string name="calificar">Calificar</string>
     <string name="atras">Atras</string>
+    <string name="perfil">PERFIL</string>
+    <string name="foto_de_perfil">Foto de perfil</string>
+    <string name="cambiar_foto">CAMBIAR FOTO</string>
+    <string name="cambiar_contrase_a">CAMBIAR CONTRASEÑA</string>
+    <string name="guardar_cambios">GUARDAR CAMBIOS</string>
+    <string name="borrar_cuenta">BORRAR CUENTA</string>
+    <string name="confirmacionBorrar">Esta accion borrará tus datos, estas seguro?</string>
+    <string name="cancelar">Cancelar</string>
 </resources>

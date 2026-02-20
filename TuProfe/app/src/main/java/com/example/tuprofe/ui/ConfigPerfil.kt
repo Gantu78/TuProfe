@@ -17,6 +17,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -28,7 +29,7 @@ import com.example.tuprofe.ui.utils.*
 @Composable
 fun ConfigPerfilScreen(
     modifier: Modifier = Modifier,
-    onBackClick: () -> Unit = {}
+    onBackClick: () -> Unit = { println("Action: Navigate back") }
 ) {
     var email by remember { mutableStateOf("c.jimenez@javeriana.edu.co") }
     var username by remember { mutableStateOf("Gantu970") }
@@ -48,7 +49,7 @@ fun ConfigPerfilScreen(
 
             item {
                 ProfilePicture(
-                    onCambiarFotoClick = { /* logica para poder subir una imagen desde el celular del usuario */ }
+                    onCambiarFotoClick = { println("Action: Change profile picture") }
                 )
             }
 
@@ -65,8 +66,8 @@ fun ConfigPerfilScreen(
 
             item {
                 ActionButtons(
-                    onCambiarContrasenaClick = { /* Redireccionar a ResetPasswordScreen*/ },
-                    onGuardarCambiosClick = { /*Actualizar Base de datos*/ },
+                    onCambiarContrasenaClick = { println("Action: Navigate to change password") },
+                    onGuardarCambiosClick = { println("Action: Save user profile changes for user $username") },
                     onBorrarCuentaClick = { showDeleteDialog = true }
                 )
             }
@@ -77,7 +78,7 @@ fun ConfigPerfilScreen(
                 onDismissRequest = { showDeleteDialog = false },
                 onConfirm = {
                     showDeleteDialog = false
-                    // Lógica para borrar cuenta
+                    println("Action: Delete account for user $username")
                 }
             )
         }
@@ -92,7 +93,6 @@ private fun ConfigPerfilHeader(onBackClick: () -> Unit) {
             .background(colorResource(id = R.color.verdetp))
             .padding(top = 10.dp, bottom = 10.dp)
     ) {
-        //Flecha para ir para atras
         IconButton(
             onClick = onBackClick,
             modifier = Modifier
@@ -101,14 +101,13 @@ private fun ConfigPerfilHeader(onBackClick: () -> Unit) {
         ) {
             Icon(
                 imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                contentDescription = "Atrás",
+                contentDescription = stringResource(R.string.atras),
                 tint = Color.White
             )
         }
 
-        //Titulo de la sección "perfil"
         Text(
-            text = "PERFIL",
+            text = stringResource(R.string.perfil),
             fontSize = 35.sp,
             fontFamily = BebasNeue,
             color = Color.White,
@@ -116,12 +115,6 @@ private fun ConfigPerfilHeader(onBackClick: () -> Unit) {
             modifier = Modifier.align(Alignment.Center)
         )
     }
-}
-
-@Composable
-@Preview(showBackground = true)
-private fun ConfigPerfilHeaderPreview() {
-    ConfigPerfilHeader(onBackClick = {})
 }
 
 @Composable
@@ -134,23 +127,16 @@ private fun ProfilePicture(onCambiarFotoClick: () -> Unit) {
             .background(Color.LightGray)
     ) {
         Image(
-            //Toca cambiar el R.drawable.img por la imagen real del usuario
             painter = painterResource(id = R.drawable.avatar),
-            contentDescription = "Foto de perfil",
+            contentDescription = stringResource(R.string.foto_de_perfil),
             modifier = Modifier.fillMaxSize(),
             contentScale = ContentScale.Crop
         )
     }
     AppTextButton(
-        textoBoton = "CAMBIAR FOTO",
+        textoBoton = stringResource(R.string.cambiar_foto),
         onClick = onCambiarFotoClick
     )
-}
-
-@Preview(showBackground = true)
-@Composable
-private fun ProfilePicturePreview() {
-    ProfilePicture(onCambiarFotoClick = {})
 }
 
 @Composable
@@ -160,8 +146,7 @@ private fun UserInfoForm(
     username: String,
     onUsernameChange: (String) -> Unit,
     carrera: String,
-    onCarreraChange: (String) -> Unit,
-    modifier: Modifier = Modifier
+    onCarreraChange: (String) -> Unit
 ) {
     Spacer(modifier = Modifier.height(10.dp))
     Column(
@@ -171,67 +156,50 @@ private fun UserInfoForm(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         TextFieldApp(
-            texto = "CORREO ELECTRÓNICO",
+            texto = stringResource(R.string.email),
             value = email,
             onValueChange = onEmailChange
         )
         Spacer(modifier = Modifier.height(10.dp))
         TextFieldApp(
-            texto = "NOMBRE DE USUARIO",
+            texto = stringResource(R.string.usuario),
             value = username,
             onValueChange = onUsernameChange
         )
         Spacer(modifier = Modifier.height(10.dp))
         TextFieldApp(
-            texto = "CARRERA",
+            texto = stringResource(R.string.carrera),
             value = carrera,
             onValueChange = onCarreraChange
         )
     }
 }
 
-@Preview(showBackground = true)
-@Composable
-private fun UserInfoFormPreview() {
-    UserInfoForm(
-        email = "c.jimenez@javeriana.edu.co",
-        onEmailChange = {},
-        username = "Gantu780",
-        onUsernameChange = { },
-        carrera = "Comunicación",
-        onCarreraChange = { }
-    )
-}
-
 @Composable
 private fun ActionButtons(
     onCambiarContrasenaClick: () -> Unit,
     onGuardarCambiosClick: () -> Unit,
-    onBorrarCuentaClick: () -> Unit,
-    modifier: Modifier = Modifier
+    onBorrarCuentaClick: () -> Unit
 ) {
-
     Column(
-        modifier = modifier,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Spacer(modifier = Modifier.height(25.dp))
 
         AppTextButton(
-            textoBoton = "CAMBIAR CONTRASEÑA",
+            textoBoton = stringResource(R.string.cambiar_contrase_a),
             onClick = onCambiarContrasenaClick
         )
 
         Spacer(modifier = Modifier.height(10.dp))
 
         AppButton(
-            textoBoton = "GUARDAR CAMBIOS",
+            textoBoton = stringResource(R.string.guardar_cambios),
             onClick = onGuardarCambiosClick
         )
 
         Spacer(modifier = Modifier.height(30.dp))
 
-        //Botón de borrar cuenta
         Button(
             onClick = onBorrarCuentaClick,
             colors = ButtonDefaults.buttonColors(
@@ -239,11 +207,10 @@ private fun ActionButtons(
             ),
             modifier = Modifier
                 .width(110.dp)
-                .height(40.dp),
-
+                .height(40.dp)
         ) {
             Text(
-                text = "BORRAR CUENTA",
+                text = stringResource(R.string.borrar_cuenta),
                 color = Color.White,
                 fontFamily = BebasNeue,
                 fontSize = 12.sp
@@ -251,18 +218,7 @@ private fun ActionButtons(
         }
         Spacer(modifier = Modifier.height(50.dp))
     }
-
 }
-@Preview(showBackground = true)
-@Composable
-private fun ActionButtonsPreview() {
-    ActionButtons(
-        onCambiarContrasenaClick = {},
-        onGuardarCambiosClick = {},
-        onBorrarCuentaClick = {}
-    )
-}
-
 
 @Composable
 private fun DeleteConfirmationDialog(
@@ -271,21 +227,20 @@ private fun DeleteConfirmationDialog(
 ) {
     AlertDialog(
         onDismissRequest = onDismissRequest,
-        title = { Text("¿Eliminar cuenta?") },
-        text = { Text("Esta acción borrará todos tus datos. No se puede deshacer.") },
+        title = { Text(stringResource(R.string.borrar_cuenta)) },
+        text = { Text(stringResource(R.string.confirmacionBorrar)) },
         confirmButton = {
             TextButton(onClick = onConfirm) {
-                Text("ELIMINAR", color = Color.Red)
+                Text(stringResource(R.string.borrar_cuenta), color = Color.Red)
             }
         },
         dismissButton = {
             TextButton(onClick = onDismissRequest) {
-                Text("CANCELAR")
+                Text(stringResource(R.string.cancelar))
             }
         }
     )
 }
-
 
 @Preview(showBackground = true)
 @Composable

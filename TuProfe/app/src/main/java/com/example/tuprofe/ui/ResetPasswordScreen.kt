@@ -1,5 +1,6 @@
 package com.example.tuprofe.ui
 
+import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -54,7 +55,7 @@ fun ResetPasswordScreen(
                     onValueChange = { email = it }
                 )
                 Spacer(modifier = Modifier.padding(20.dp))
-                AppButton(stringResource(R.string.enviar_enlace), onClick = {})
+                AppButton(stringResource(R.string.enviar_enlace), onClick = { Log.d("Boton", "Enviando Enlace")})
                 Spacer(modifier = Modifier.padding(10.dp))
                 AppTextButton(stringResource(R.string.volver))
 

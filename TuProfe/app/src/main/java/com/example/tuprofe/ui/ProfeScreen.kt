@@ -1,5 +1,6 @@
 package com.example.tuprofe.ui
 
+import android.util.Log
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
@@ -20,7 +21,6 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material.icons.filled.Star
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
@@ -51,7 +51,6 @@ import kotlin.math.roundToInt
 @Composable
 fun ProfeScreen(
     modifier: Modifier = Modifier,
-    onBackClick: () -> Unit = {}
 ) {
     val allReviews = LocalReview.Reviews
     val professorName = LocalReview.Reviews[4].name
@@ -63,7 +62,7 @@ fun ProfeScreen(
         BackgroundImage()
         Column(Modifier.fillMaxSize()) {
             ProfeScreenHeader(
-                onBackClick = onBackClick
+                onBackClick = { Log.d("Boton", "Volver")}
             )
             LazyColumn(
                 modifier = Modifier.weight(1f),
@@ -87,8 +86,8 @@ fun ProfeScreen(
         }
 
         ProfeScreenBottomBar(
-            onAddCommentClick = { /* TODO */ },
-            onRateClick = { /* TODO */ },
+            onAddCommentClick = { Log.d("Boton", "Añadir Comentario") },
+            onRateClick = { Log.d("Boton", "Calificar") },
             modifier = Modifier.align(Alignment.BottomCenter)
         )
     }
@@ -121,7 +120,7 @@ private fun ProfeScreenHeader(onBackClick: () -> Unit) {
 }
 
 @Composable
-private fun ProfessorInfoCard(
+fun ProfessorInfoCard(
     professorName: String,
     professorSubjects: String,
     generalRating: Int,
@@ -143,7 +142,8 @@ private fun ProfessorInfoCard(
         Column(
             modifier = Modifier
                 .padding(16.dp)
-                .fillMaxWidth()
+                .fillMaxWidth(),
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Row(
                 modifier = Modifier.fillMaxWidth(),
@@ -191,7 +191,7 @@ private fun GeneralRating(
     modifier: Modifier = Modifier
 ) {
     Column(
-        modifier = modifier,
+        modifier = modifier.fillMaxWidth(),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Text(
@@ -207,7 +207,7 @@ private fun GeneralRating(
 
 
 @Composable
-fun ProfeScreenBottomBar(
+private fun ProfeScreenBottomBar(
     onAddCommentClick: () -> Unit,
     onRateClick: () -> Unit,
     modifier: Modifier = Modifier
@@ -246,7 +246,7 @@ fun ProfeScreenBottomBar(
 
 @Preview(showBackground = true)
 @Composable
-fun ProfeScreenPreview() {
+private fun ProfeScreenPreview() {
     TuProfeTheme {
         ProfeScreen()
     }

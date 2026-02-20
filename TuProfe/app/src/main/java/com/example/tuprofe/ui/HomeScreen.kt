@@ -1,5 +1,6 @@
 package com.example.tuprofe.ui
 
+import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -57,7 +58,11 @@ fun HomeScreen(
                 onPasswordVisibleChange = { passwordVisible = !passwordVisible }
             )
             Spacer(modifier = Modifier.padding(15.dp))
-            Botones()
+            Botones(
+                onLoginClick = { Log.d("Boton", "Iniciando Sesión")},
+                onForgotPasswordClick = {Log.d("Boton", "Olvidé mi contraseña")},
+                onRegisterClick = {Log.d("Boton", "Crear Cuenta")}
+            )
         }
     }
 }
@@ -119,6 +124,10 @@ fun FormularioInicioPreview(){
 
 @Composable
 fun Botones(
+    onLoginClick: () -> Unit = {},
+    onForgotPasswordClick: () -> Unit = {},
+    onRegisterClick: () -> Unit = {},
+
     modifier: Modifier = Modifier
 ){
     Column(
@@ -126,7 +135,7 @@ fun Botones(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = modifier
     ) {
-        AppButton(stringResource(R.string.iniciar_sesion), onClick = {})
+        AppButton(stringResource(R.string.iniciar_sesion), onClick = onLoginClick)
         Spacer(modifier = Modifier.padding(30.dp))
         Row(
             verticalAlignment = Alignment.CenterVertically,
@@ -134,9 +143,9 @@ fun Botones(
             modifier = Modifier.fillMaxWidth()
         ) {
 
-            AppButtonRow(stringResource(R.string.olvide_la_contrase_a), onClick = {})
+            AppButtonRow(stringResource(R.string.olvide_la_contrase_a), onClick = onForgotPasswordClick)
             Spacer(modifier = Modifier.width(30.dp))
-            AppButtonRow(stringResource(R.string.crear_cuenta), onClick = {})
+            AppButtonRow(stringResource(R.string.crear_cuenta), onClick = onRegisterClick)
             Spacer(modifier = Modifier.width(16.dp))
         }
     }

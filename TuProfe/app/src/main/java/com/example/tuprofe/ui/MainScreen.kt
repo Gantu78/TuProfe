@@ -36,7 +36,11 @@ import com.example.tuprofe.ui.utils.ResenaCard
 
 @Composable
 fun MainScreen(
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    onResenaClick: (Int) -> Unit = { println("Clicked on review $it") },
+    onProfileClick: () -> Unit = { println("Clicked on profile") },
+    onTeachersClick: () -> Unit = { println("Clicked on teachers") },
+    onHomeClick: () -> Unit = { println("Clicked on home") }
 ) {
 
     val allReviews = LocalReview.Reviews
@@ -44,9 +48,9 @@ fun MainScreen(
     Scaffold (
         bottomBar = {
             BottomBar(
-                boton1 = ("Inicio"),
-                boton2 = ("Profesores"),
-                boton3 = ("perfil")
+                on1Click = onHomeClick,
+                on2Click = onTeachersClick,
+                on3Click = onProfileClick
             )
         }
     ) { innerPadding ->
@@ -69,14 +73,15 @@ fun MainScreen(
 
                 item {
                     HeaderSection(
-                        title = "TuProfe",
-                        showSearchBar = true,
-                        onBackClick = null
+                        title = stringResource(R.string.tuprofe),
+                        showSearchBar = true
                     )
                 }
 
                 items(allReviews) { review ->
-                    ResenaCard(reviewInfo = review)
+                    ResenaCard(
+                        reviewInfo = review,
+                        onCommentsClick = { onResenaClick(review.imageId) })
                 }
             }
         }
@@ -116,8 +121,8 @@ fun TuProfeCardHeader(
     ) {
         Image(
             painter = painterResource(imagen),
-            contentDescription = null,
-            modifier
+            contentDescription = stringResource(R.string.foto_de_perfil),
+            modifier = modifier
                 .padding(end = 8.dp)
                 .height(40.dp)
                 .width(40.dp)
@@ -140,9 +145,10 @@ fun TuProfeCardHeader(
 @Preview(showBackground = true)
 @Composable
 fun TuProfeCardHeaderPreview(){
+    val review = LocalReview.Reviews[0]
     TuProfeCardHeader(
-        name = "Juan Perez",
-        carrera = "@juanputo"
+        name = review.name,
+        carrera = review.materia
     )
 }
 
@@ -150,6 +156,7 @@ fun TuProfeCardHeaderPreview(){
 @Composable
 fun TuProfeCardBody(
     content: String,
+    date: String,
     modifier: Modifier = Modifier
 ){
     Column(
@@ -159,7 +166,7 @@ fun TuProfeCardBody(
             content
         )
         Text(
-            "8:26 PM * Dec 1 2022",
+            date,
             color= Color.Gray,
             fontSize = 12.sp,
             modifier = Modifier.padding(top = 16.dp),
@@ -170,8 +177,8 @@ fun TuProfeCardBody(
 @Preview(showBackground = true)
 @Composable
 fun TuProfeCardBodyPreview() {
-
-    TuProfeCardBody("Lorem Ipsum Dolor Sit Amet")
+    val review = LocalReview.Reviews[0]
+    TuProfeCardBody(review.content, review.time)
 }
 
 @Composable
@@ -224,9 +231,9 @@ fun TuProfeCardFooter(
 @Preview(showBackground = true)
 @Composable
 fun TuProfeCardFooterPreview(){
+    val review = LocalReview.Reviews[0]
     TuProfeCardFooter(
-
-        likes = 500,
-        comments = 100
+        likes = review.likes,
+        comments = review.comments
     )
 }
