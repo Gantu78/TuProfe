@@ -238,15 +238,15 @@ private fun ActionButtons(
                 containerColor = Color.Red
             ),
             modifier = Modifier
-                .width(280.dp)
-                .height(50.dp),
-            shape = RoundedCornerShape(30.dp)
+                .width(110.dp)
+                .height(40.dp),
+
         ) {
             Text(
                 text = "BORRAR CUENTA",
                 color = Color.White,
                 fontFamily = BebasNeue,
-                fontSize = 20.sp
+                fontSize = 12.sp
             )
         }
         Spacer(modifier = Modifier.height(50.dp))
