@@ -17,6 +17,7 @@ import com.example.tuprofe.ui.ResetPasswordScreen
 import com.example.tuprofe.ui.theme.TuProfeTheme
 import com.example.tuprofe.ui.LoadingScreen
 import com.example.tuprofe.ui.MainScreen
+import com.example.tuprofe.ui.ProfeScreen
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -25,7 +26,7 @@ class MainActivity : ComponentActivity() {
         setContent {
             TuProfeTheme {
                 Scaffold() {
-                    RegisterScreen(
+                    ProfeScreen (
                         modifier = Modifier.padding(it))
                 }
 

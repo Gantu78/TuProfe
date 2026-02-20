@@ -21,4 +21,9 @@
     <string name="las_contrase_as_no_coinciden">Las contraseñas no coinciden</string>
     <string name="likes">likes</string>
     <string name="comentarios">comentarios</string>
+    <string name="tuprofe">TuProfe</string>
+    <string name="calificaci_n_general">Calificación General</string>
+    <string name="foto_de_perfil_del_profesor">Foto de perfil del profesor</string>
+    <string name="a_adir_comentario">Añadir comentario</string>
+    <string name="calificar">Calificar</string>
 </resources>
