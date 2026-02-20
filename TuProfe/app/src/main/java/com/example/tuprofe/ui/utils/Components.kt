@@ -45,9 +45,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextDecoration
 import com.example.tuprofe.R
 import com.example.tuprofe.data.ReviewInfo
-import com.example.tuprofe.ui.TweetCardBody
-import com.example.tuprofe.ui.TweetCardFooter
-import com.example.tuprofe.ui.TweetCardHeader
+import com.example.tuprofe.ui.TuProfeCardBody
+import com.example.tuprofe.ui.TuProfeCardFooter
+import com.example.tuprofe.ui.TuProfeCardHeader
 import com.example.tuprofe.ui.theme.BebasNeue
 
 @Composable
@@ -59,6 +59,9 @@ fun LogoApp(
         contentDescription = stringResource(R.string.logo_tuprofe)
     )
 }
+
+
+
 
 @Composable
 fun LogoLoading(
@@ -259,6 +262,44 @@ fun BottomBar(
 }
 
 @Composable
+fun SearchBar(
+    modifier: Modifier = Modifier
+) {
+    Row(
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(horizontal = 40.dp)
+            .clip(RoundedCornerShape(50))
+            .background(colorResource(R.color.verdetp))
+            .padding(horizontal = 20.dp, vertical = 12.dp),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Text(
+            text = "Busca a TuProfe",
+            color = Color.White,
+            modifier = Modifier.weight(1f)
+        )
+
+        Icon(
+            imageVector = Icons.Default.Search,
+            contentDescription = null,
+            tint = Color.White
+        )
+    }
+}
+
+@Composable
+fun TitleHeader(title: String, modifier: Modifier = Modifier) {
+    Text(
+        text = title,
+        fontSize = 32.sp,
+        fontWeight = FontWeight.Bold,
+        color = colorResource(R.color.verdetp),
+        modifier = modifier
+    )
+}
+
+@Composable
 fun HeaderSection(
     title: String,
     showSearchBar: Boolean = true,
@@ -271,8 +312,6 @@ fun HeaderSection(
             .padding(top = 40.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-
-
         if (onBackClick != null) {
             Row(
                 modifier = Modifier
@@ -290,40 +329,12 @@ fun HeaderSection(
             }
         }
 
-        // Barra búsqueda opcional
         if (showSearchBar) {
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 40.dp)
-                    .clip(RoundedCornerShape(50))
-                    .background(colorResource(R.color.verdetp))
-                    .padding(horizontal = 20.dp, vertical = 12.dp),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Text(
-                    text = "Busca a TuProfe",
-                    color = Color.White,
-                    modifier = Modifier.weight(1f)
-                )
-
-                Icon(
-                    imageVector = Icons.Default.Search,
-                    contentDescription = null,
-                    tint = Color.White
-                )
-            }
-
+            SearchBar()
             Spacer(modifier = Modifier.height(20.dp))
         }
 
-        // Título principal
-        Text(
-            text = title,
-            fontSize = 32.sp,
-            fontWeight = FontWeight.Bold,
-            color = colorResource(R.color.verdetp)
-        )
+        TitleHeader(title = title)
 
         Spacer(modifier = Modifier.height(20.dp))
     }
@@ -356,7 +367,7 @@ fun ResenaCard(
         ) {
 
             // HEADER
-            TweetCardHeader(
+            TuProfeCardHeader(
                 name = reviewInfo.name,
                 username = reviewInfo.materia
 
@@ -373,7 +384,7 @@ fun ResenaCard(
             Spacer(modifier = Modifier.height(8.dp))
 
             // BODY
-            TweetCardBody(
+            TuProfeCardBody(
                 content = reviewInfo.content
             )
 
@@ -389,7 +400,7 @@ fun ResenaCard(
 
                 Row {
 
-                    TweetCardFooter(
+                    TuProfeCardFooter(
                         likes = reviewInfo.likes,
                         comments = reviewInfo.comments
                     )
@@ -409,7 +420,8 @@ fun ResenaCard(
                 }
             }
         }
-    }}
+    }
+}
 @Composable
 fun RatingStars(
     rating: Int,

@@ -44,29 +44,11 @@ import com.example.tuprofe.ui.utils.HeaderSection
 @Composable
 fun ConfigScreen() {
 
-    Scaffold(
-        containerColor = Color.Transparent,
-        bottomBar = {
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .background(Color(0xFFE8E2E6))
-                    .padding(vertical = 16.dp)
-            ) {
-                AppButton(
-                    textoBoton = "CERRAR SESIÓN",
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 30.dp)
-                )
-            }
-        }
-    ) { innerPadding ->
 
         Box(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(innerPadding)
+
         ) {
 
             BackgroundImage()
@@ -87,7 +69,7 @@ fun ConfigScreen() {
                         onBackClick = null)
                 }
 
-                item { Spacer(modifier = Modifier.height(30.dp)) }
+                item { Spacer(modifier = Modifier.height(20.dp)) }
 
                 item {
                     UserCard(
@@ -129,10 +111,23 @@ fun ConfigScreen() {
                         subtitle = "Alertas y novedades"
                     )
                 }
+
+                item { Spacer(modifier = Modifier.height(40.dp)) }
+
+                item {
+                    AppButton(
+                        textoBoton = "CERRAR SESIÓN",
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = 30.dp)
+                    )
+                }
+
+
             }
         }
     }
-}
+
 
 @Composable
 fun UserCard(

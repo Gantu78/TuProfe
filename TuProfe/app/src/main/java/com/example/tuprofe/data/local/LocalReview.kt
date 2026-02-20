@@ -1,16 +1,15 @@
 package com.example.tuprofe.data.local
 
 
+import com.example.tuprofe.R
 import com.example.tuprofe.data.ReviewInfo
-import com.example.twitterfalso.R
-import com.example.twitterfalso.data.CommentInfo
-import com.example.twitterfalso.data.ReviewInfo
+
 
 object LocalReview {
 
     val Reviews = listOf(
         ReviewInfo(
-            imageId = R.drawable.avatar,
+            imageId = R.drawable.img,
             name = "Angarita",
             materia = "Computación Movil",
             likes = 10,
@@ -21,7 +20,7 @@ object LocalReview {
 
             ),
         ReviewInfo(
-            imageId = R.drawable.avatar,
+            imageId = R.drawable.img,
             name = "Angarita",
             materia = "Computación Movil",
             likes = 20,
@@ -31,7 +30,7 @@ object LocalReview {
             comments = 0,
         ),
         ReviewInfo(
-            imageId = R.drawable.avatar,
+            imageId = R.drawable.img,
             name = "Angarita",
             materia = "Computación Movil",
             likes = 100,
@@ -41,7 +40,7 @@ object LocalReview {
             comments = 3,
         ),
         ReviewInfo(
-            imageId = R.drawable.avatar,
+            imageId = R.drawable.img,
             name = "Angarita",
             materia = "Computación Movil",
             likes = 1,
@@ -51,7 +50,7 @@ object LocalReview {
             comments = 10,
         ),
         ReviewInfo(
-            imageId = R.drawable.avatar,
+            imageId = R.drawable.img,
             name = "Angarita",
             materia = "Computación Movil",
             likes = 1000,

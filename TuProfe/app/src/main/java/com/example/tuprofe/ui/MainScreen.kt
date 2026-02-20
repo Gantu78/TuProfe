@@ -2,19 +2,14 @@ package com.example.tuprofe.ui
 
 
 import androidx.annotation.StringRes
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -26,28 +21,18 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-
-import androidx.compose.ui.res.colorResource
-import androidx.compose.ui.res.stringResource
-
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Star
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.filled.MailOutline
-import androidx.compose.ui.Alignment
-
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Scaffold
 import com.example.tuprofe.R
 import com.example.tuprofe.data.local.LocalReview
+import com.example.tuprofe.ui.utils.BackgroundImage
 import com.example.tuprofe.ui.utils.BottomBar
+import com.example.tuprofe.ui.utils.HeaderSection
+import com.example.tuprofe.ui.utils.ResenaCard
+
 
 @Composable
 fun MainScreen() {
@@ -107,7 +92,7 @@ fun MainScreenPreview() {
 
 
 
-@Preview(showBackground = true, backgroundColor = 1)
+@Preview(showBackground = true)
 @Composable
 fun ResenaCardPreview() {
     val example = LocalReview.Reviews[0]
@@ -118,7 +103,7 @@ fun ResenaCardPreview() {
 }
 
 @Composable
-fun TweetCardHeader(
+fun TuProfeCardHeader(
     name: String,
     username: String,
     modifier: Modifier = Modifier
@@ -151,8 +136,8 @@ fun TweetCardHeader(
 
 @Preview(showBackground = true)
 @Composable
-fun TweetCardHeaderPreview(){
-    TweetCardHeader(
+fun TuProfeCardHeaderPreview(){
+    TuProfeCardHeader(
         name = "Juan Perez",
         username = "@juanputo"
     )
@@ -160,7 +145,7 @@ fun TweetCardHeaderPreview(){
 
 
 @Composable
-fun TweetCardBody(
+fun TuProfeCardBody(
     content: String,
     modifier: Modifier = Modifier
 ){
@@ -181,13 +166,13 @@ fun TweetCardBody(
 
 @Preview(showBackground = true)
 @Composable
-fun TweetCardBodyPreview() {
+fun TuProfeCardBodyPreview() {
 
-    TweetCardBody("Lorem Ipsum Dolor Sit Amet")
+    TuProfeCardBody("Lorem Ipsum Dolor Sit Amet")
 }
 
 @Composable
-fun TweetCardFooterItem(
+fun TuProfeCardFooterItem(
     cantidad: Int,
     @StringRes label: Int,
     modifier: Modifier = Modifier
@@ -206,15 +191,15 @@ fun TweetCardFooterItem(
 
 @Preview(showBackground = true)
 @Composable
-fun TweetCardFooterItemPreview(){
-    TweetCardFooterItem(
+fun TuProfeCardFooterItemPreview(){
+    TuProfeCardFooterItem(
         cantidad = 1000,
-        label = R.string.retweets
+        label = R.string.likes
     )
 }
 
 @Composable
-fun TweetCardFooter(
+fun TuProfeCardFooter(
     likes: Int,
     comments: Int,
     modifier: Modifier = Modifier
@@ -222,21 +207,21 @@ fun TweetCardFooter(
     Row(
         modifier = modifier
     ) {
-        TweetCardFooterItem(
+        TuProfeCardFooterItem(
             likes,
             R.string.likes
         )
-        TweetCardFooterItem(
+        TuProfeCardFooterItem(
             comments,
-            label = R.string.comments
+            label = R.string.comentarios
         )
     }
 }
 
 @Preview(showBackground = true)
 @Composable
-fun TweetCardFooterPreview(){
-    TweetCardFooter(
+fun TuProfeCardFooterPreview(){
+    TuProfeCardFooter(
 
         likes = 500,
         comments = 100

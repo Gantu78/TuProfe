@@ -16,13 +16,14 @@ import com.example.tuprofe.ui.RegisterScreen
 import com.example.tuprofe.ui.ResetPasswordScreen
 import com.example.tuprofe.ui.theme.TuProfeTheme
 import com.example.tuprofe.ui.LoadingScreen
+import com.example.tuprofe.ui.MainScreen
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-            ResetPasswordScreen()
+            MainScreen()
         }
     }
 }
