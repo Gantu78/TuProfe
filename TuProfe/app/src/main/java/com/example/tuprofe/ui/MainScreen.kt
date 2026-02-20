@@ -107,14 +107,15 @@ fun ResenaCardPreview() {
 @Composable
 fun TuProfeCardHeader(
     name: String,
-    username: String,
-    modifier: Modifier = Modifier
+    carrera: String,
+    modifier: Modifier = Modifier,
+    imagen: Int = R.drawable.avatar
 ){
     Row(
         modifier = modifier
     ) {
         Image(
-            painter = painterResource(R.drawable.avatar),
+            painter = painterResource(imagen),
             contentDescription = null,
             Modifier
                 .padding(end = 8.dp)
@@ -128,7 +129,7 @@ fun TuProfeCardHeader(
                 fontWeight = FontWeight.Bold
             )
             Text(
-                username,
+                carrera,
                 color = Color.Gray,
                 fontSize = 12.sp
             )
@@ -141,7 +142,7 @@ fun TuProfeCardHeader(
 fun TuProfeCardHeaderPreview(){
     TuProfeCardHeader(
         name = "Juan Perez",
-        username = "@juanputo"
+        carrera = "@juanputo"
     )
 }
 

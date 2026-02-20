@@ -54,10 +54,10 @@ fun ProfeScreen(
     onBackClick: () -> Unit = {}
 ) {
     val allReviews = LocalReview.Reviews
-    val professorName = "Nombre del profesor"
-    val professorSubjects = "Materia(s) que enseña"
-    val professorRating = 5
-    val professorImage = R.drawable.avatar // Placeholder image
+    val professorName = LocalReview.Reviews[4].name
+    val professorSubjects = LocalReview.Reviews[4].materia
+    val professorRating = allReviews.map { it.rating }.average().roundToInt()
+    val professorImage = LocalReview.Reviews[4].imageId
 
     Box(modifier = modifier.fillMaxSize()) {
         BackgroundImage()
@@ -112,7 +112,7 @@ private fun ProfeScreenHeader(onBackClick: () -> Unit) {
         IconButton(onClick = onBackClick) {
             Icon(
                 imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                contentDescription = "Atras",
+                contentDescription = stringResource(R.string.atras),
                 tint = colorResource(id = R.color.verdetp),
                 modifier = Modifier.size(30.dp)
             )

@@ -8,19 +8,9 @@ import com.example.tuprofe.data.ReviewInfo
 object LocalReview {
 
     val Reviews = listOf(
-        ReviewInfo(
-            imageId = R.drawable.img,
-            name = "Angarita",
-            materia = "Computación Movil",
-            likes = 10,
-            content = "El profesor 1 me parece un muy buen maestro, se toma su tiempo para explicar hasta que todos entiendan el tema, no califica muy duro.",
-            time = "8:26 PM",
-            rating = 5,
-            comments = 1,
 
-            ),
         ReviewInfo(
-            imageId = R.drawable.img,
+            imageId = R.drawable.avatar,
             name = "Angarita",
             materia = "Computación Movil",
             likes = 20,
@@ -30,7 +20,7 @@ object LocalReview {
             comments = 0,
         ),
         ReviewInfo(
-            imageId = R.drawable.img,
+            imageId = R.drawable.carlitos,
             name = "Angarita",
             materia = "Computación Movil",
             likes = 100,
@@ -40,7 +30,7 @@ object LocalReview {
             comments = 3,
         ),
         ReviewInfo(
-            imageId = R.drawable.img,
+            imageId = R.drawable.avatar,
             name = "Angarita",
             materia = "Computación Movil",
             likes = 1,
@@ -50,7 +40,7 @@ object LocalReview {
             comments = 10,
         ),
         ReviewInfo(
-            imageId = R.drawable.img,
+            imageId = R.drawable.carlitos,
             name = "Angarita",
             materia = "Computación Movil",
             likes = 1000,
@@ -58,6 +48,16 @@ object LocalReview {
             time = "8:26 PM",
             rating = 1,
             comments = 100,
+        ),
+        ReviewInfo(
+            imageId = R.drawable.carlitos,
+            name = "Juan Hurtado",
+            materia = "Introducción a la programación",
+            likes = 10,
+            content = "El profesor 1 me parece un muy buen maestro, se toma su tiempo para explicar hasta que todos entiendan el tema, no califica muy duro.",
+            time = "8:26 PM",
+            rating = 5,
+            comments = 1,
         ),
     )
 
