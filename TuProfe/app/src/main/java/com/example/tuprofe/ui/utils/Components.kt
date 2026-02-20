@@ -60,9 +60,6 @@ fun LogoApp(
     )
 }
 
-
-
-
 @Composable
 fun LogoLoading(
     modifier: Modifier = Modifier
@@ -110,10 +107,6 @@ fun AppButtonRow(
         Text(textoBoton, fontSize = 15.sp, fontFamily = BebasNeue)
     }
 }
-
-
-
-
 
 
 @Composable
@@ -300,6 +293,24 @@ fun TitleHeader(title: String, modifier: Modifier = Modifier) {
 }
 
 @Composable
+fun BackButtonHeader(onBackClick: () -> Unit, modifier: Modifier = Modifier) {
+    Row(
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(start = 30.dp),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        IconButton(onClick = onBackClick) {
+            Icon(
+                imageVector = Icons.Default.ArrowBack,
+                contentDescription = "Back",
+                tint = colorResource(R.color.verdetp)
+            )
+        }
+    }
+}
+
+@Composable
 fun HeaderSection(
     title: String,
     showSearchBar: Boolean = true,
@@ -313,20 +324,7 @@ fun HeaderSection(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         if (onBackClick != null) {
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(start = 30.dp),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                IconButton(onClick = onBackClick) {
-                    Icon(
-                        imageVector = Icons.Default.ArrowBack,
-                        contentDescription = null,
-                        tint = colorResource(R.color.verdetp)
-                    )
-                }
-            }
+            BackButtonHeader(onBackClick = onBackClick)
         }
 
         if (showSearchBar) {
@@ -339,6 +337,37 @@ fun HeaderSection(
         Spacer(modifier = Modifier.height(20.dp))
     }
 }
+
+@Composable
+fun ResenaCardActions(
+    likes: Int,
+    comments: Int,
+    onCommentsClick: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+    Row(
+        modifier = modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.SpaceBetween,
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        TuProfeCardFooter(
+            likes = likes,
+            comments = comments
+        )
+
+        IconButton(
+            onClick = onCommentsClick,
+            modifier = Modifier.size(30.dp)
+        ) {
+            Icon(
+                imageVector = Icons.Default.MailOutline,
+                contentDescription = "Comments",
+                tint = colorResource(R.color.verdetp)
+            )
+        }
+    }
+}
+
 @Composable
 fun ResenaCard(
     reviewInfo: ReviewInfo,
@@ -366,7 +395,6 @@ fun ResenaCard(
             modifier = Modifier.padding(6.dp)
         ) {
 
-            // HEADER
             TuProfeCardHeader(
                 name = reviewInfo.name,
                 username = reviewInfo.materia
@@ -375,7 +403,6 @@ fun ResenaCard(
 
             Spacer(modifier = Modifier.height(8.dp))
 
-            // STARS
             RatingStars(
                 rating = reviewInfo.rating,
                 starColor = colorResource(R.color.verdetp)
@@ -383,42 +410,17 @@ fun ResenaCard(
 
             Spacer(modifier = Modifier.height(8.dp))
 
-            // BODY
             TuProfeCardBody(
                 content = reviewInfo.content
             )
 
             Spacer(modifier = Modifier.height(16.dp))
 
-
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-
-
-                Row {
-
-                    TuProfeCardFooter(
-                        likes = reviewInfo.likes,
-                        comments = reviewInfo.comments
-                    )
-                }
-
-
-                IconButton(
-                    onClick = onCommentsClick,
-                    modifier = Modifier.size(30.dp)
-                ) {
-                    Icon(
-                        imageVector = Icons.Default.MailOutline,
-                        contentDescription = "Comments",
-                        tint = colorResource(R.color.verdetp)
-                    )
-
-                }
-            }
+            ResenaCardActions(
+                likes = reviewInfo.likes,
+                comments = reviewInfo.comments,
+                onCommentsClick = onCommentsClick
+            )
         }
     }
 }
@@ -437,5 +439,3 @@ fun RatingStars(
         }
     }
 }
-
-
