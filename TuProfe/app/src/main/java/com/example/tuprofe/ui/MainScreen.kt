@@ -117,7 +117,7 @@ fun TuProfeCardHeader(
         Image(
             painter = painterResource(imagen),
             contentDescription = null,
-            Modifier
+            modifier
                 .padding(end = 8.dp)
                 .height(40.dp)
                 .width(40.dp)

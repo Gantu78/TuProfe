@@ -43,8 +43,11 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextDecoration
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.core.os.BuildCompat
 import com.example.tuprofe.R
 import com.example.tuprofe.data.ReviewInfo
+import com.example.tuprofe.data.local.LocalReview
 import com.example.tuprofe.ui.TuProfeCardBody
 import com.example.tuprofe.ui.TuProfeCardFooter
 import com.example.tuprofe.ui.TuProfeCardHeader
@@ -378,7 +381,7 @@ fun ResenaCard(
     Card(
         modifier = modifier
             .fillMaxWidth()
-            .padding(vertical = 5 .dp, horizontal = 40.dp),
+            .padding(vertical = 5 .dp, horizontal = 20.dp),
         shape = RoundedCornerShape(20.dp),
         border = BorderStroke(
             width = 2.5.dp,
@@ -396,8 +399,10 @@ fun ResenaCard(
         ) {
 
             TuProfeCardHeader(
+                modifier = modifier.
+                padding(horizontal = 10.dp),
                 name = reviewInfo.name,
-                username = reviewInfo.materia
+                carrera = reviewInfo.materia,
 
             )
 
@@ -405,18 +410,21 @@ fun ResenaCard(
 
             RatingStars(
                 rating = reviewInfo.rating,
-                starColor = colorResource(R.color.verdetp)
+                starColor = colorResource(R.color.verdetp),
+                modifier = Modifier.padding(horizontal = 10.dp)
             )
 
             Spacer(modifier = Modifier.height(8.dp))
 
             TuProfeCardBody(
-                content = reviewInfo.content
+                content = reviewInfo.content,
+                modifier = Modifier.padding(horizontal = 10.dp)
             )
 
             Spacer(modifier = Modifier.height(16.dp))
 
             ResenaCardActions(
+                modifier = Modifier.padding(horizontal = 10.dp),
                 likes = reviewInfo.likes,
                 comments = reviewInfo.comments,
                 onCommentsClick = onCommentsClick
@@ -424,12 +432,23 @@ fun ResenaCard(
         }
     }
 }
+
+@Preview(showBackground = true)
+@Composable
+fun ResenaCardPreview (){
+    ResenaCard(
+        reviewInfo = LocalReview.Reviews[0]
+    )
+}
+
 @Composable
 fun RatingStars(
     rating: Int,
-    starColor: Color = Color(0xFF1DB954) // verde por defecto
+    starColor: Color = Color(0xFF1DB954), // verde por defecto
+    modifier: Modifier = Modifier
 ) {
-    Row {
+    Row (modifier =  modifier){
+
         repeat(5) { index ->
             Icon(
                 imageVector = Icons.Default.Star,

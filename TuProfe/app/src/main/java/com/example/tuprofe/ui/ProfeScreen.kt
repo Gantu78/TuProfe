@@ -207,7 +207,7 @@ private fun GeneralRating(
 
 
 @Composable
-private fun ProfeScreenBottomBar(
+fun ProfeScreenBottomBar(
     onAddCommentClick: () -> Unit,
     onRateClick: () -> Unit,
     modifier: Modifier = Modifier
