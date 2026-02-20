@@ -90,7 +90,7 @@ private fun ConfigPerfilHeader(onBackClick: () -> Unit) {
         modifier = Modifier
             .fillMaxWidth()
             .background(colorResource(id = R.color.verdetp))
-            .padding(top = 40.dp, bottom = 20.dp)
+            .padding(top = 10.dp, bottom = 10.dp)
     ) {
         //Flecha para ir para atras
         IconButton(
