@@ -23,7 +23,14 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-            MainScreen()
+            TuProfeTheme {
+                Scaffold() {
+                    RegisterScreen(
+                        modifier = Modifier.padding(it))
+                }
+
+            }
+
         }
     }
 }

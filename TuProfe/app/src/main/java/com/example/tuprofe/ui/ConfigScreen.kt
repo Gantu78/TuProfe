@@ -42,11 +42,13 @@ import com.example.tuprofe.ui.utils.HeaderSection
 
 
 @Composable
-fun ConfigScreen() {
+fun ConfigScreen(
+    modifier: Modifier = Modifier
+) {
 
 
         Box(
-            modifier = Modifier
+            modifier = modifier
                 .fillMaxSize()
 
         ) {

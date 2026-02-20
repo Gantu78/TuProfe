@@ -35,7 +35,9 @@ import com.example.tuprofe.ui.utils.ResenaCard
 
 
 @Composable
-fun MainScreen() {
+fun MainScreen(
+    modifier: Modifier = Modifier
+) {
 
     val allReviews = LocalReview.Reviews
 
