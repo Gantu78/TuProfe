@@ -195,6 +195,7 @@ private fun GeneralRating(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Text(
+            modifier = Modifier.padding(horizontal = 8.dp),
             text = stringResource(R.string.calificaci_n_general),
             fontSize = 18.sp,
             fontWeight = FontWeight.Medium
