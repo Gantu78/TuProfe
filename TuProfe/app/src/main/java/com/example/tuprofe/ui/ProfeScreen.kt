@@ -45,7 +45,7 @@ import com.example.tuprofe.data.local.LocalReview
 import com.example.tuprofe.ui.theme.TuProfeTheme
 import com.example.tuprofe.ui.utils.BackgroundImage
 import com.example.tuprofe.ui.utils.RatingStars
-import com.example.tuprofe.ui.utils.ResenaCard
+import com.example.tuprofe.ui.utils.Resena
 import kotlin.math.roundToInt
 
 @Composable

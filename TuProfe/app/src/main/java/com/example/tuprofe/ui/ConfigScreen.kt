@@ -115,7 +115,8 @@ fun ConfigScreen(
                         textoBoton = "CERRAR SESIÓN",
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(horizontal = 30.dp)
+                            .padding(horizontal = 30.dp),
+                        onClick = {""}
                     )
                 }
 

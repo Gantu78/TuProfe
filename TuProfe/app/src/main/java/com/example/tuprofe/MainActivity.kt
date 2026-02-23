@@ -44,109 +44,13 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             TuProfeTheme {
-                Scaffold(
-                    topBar = {
-                        HeaderSection(
-                            title = stringResource(R.string.tuprofe)
-                        )
-                    },
-                    bottomBar = {
-                        BottomBar(
-                            on1Click = { println("Clicked on profile") } ,
-                            on2Click = { println("Clicked on teachers") },
-                            on3Click = { println("Clicked on home") }
-                        )
-                    }
-                ) {
-
-                    MainScreen (
-                        modifier = Modifier.padding(it))
-
-                }
-
+                TuProfeApp(
+                    onHomeClick = { println("Clicked on home") },
+                    onTeachersClick = { println("Clicked on teachers") },
+                    onProfileClick = { println("Clicked on profile") }
+                )
             }
 
-        }
-    }
-}
-
-@Composable
-fun HeaderSection(
-    title: String,
-    showSearchBar: Boolean = true,
-    modifier: Modifier = Modifier,
-    onBackClick: (() -> Unit)? = null
-) {
-
-
-
-    Column(
-        modifier = modifier
-            .fillMaxWidth()
-            .padding(top = 40.dp),
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        if (onBackClick != null) {
-            BackButtonHeader(onBackClick = onBackClick)
-        }
-
-        if (showSearchBar) {
-            SearchBar()
-            Spacer(modifier = Modifier.height(20.dp))
-        }
-
-        TitleHeader(title = title)
-
-        Spacer(modifier = Modifier.height(20.dp))
-    }
-}
-
-@Composable
-fun BottomBar(
-    on1Click: () -> Unit,
-    on2Click: () -> Unit,
-    on3Click: () -> Unit,
-    modifier: Modifier = Modifier
-) {
-    Card(
-        modifier = modifier
-            .fillMaxWidth()
-            .padding(horizontal = 16.dp, vertical = 8.dp),
-        shape = RoundedCornerShape(50),
-        colors = CardDefaults.cardColors(containerColor = colorResource(id = R.color.verdetp))
-    ) {
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            TextButton(
-                onClick = on1Click,
-                modifier = Modifier.weight(1f)
-            ) {
-                Text("Incio", color = Color.White, fontSize = 16.sp)
-            }
-            VerticalDivider(
-                modifier = Modifier.height(30.dp),
-                thickness = 1.dp,
-                color = Color.White
-            )
-            TextButton(
-                onClick = on2Click,
-                modifier = Modifier.weight(1f)
-            ) {
-                Text("Profesores", color = Color.White, fontSize = 16.sp)
-            }
-            VerticalDivider(
-                modifier = Modifier.height(30.dp),
-                thickness = 1.dp,
-                color = Color.White
-            )
-            TextButton(
-                onClick = on3Click,
-                modifier = Modifier.weight(1f)
-            ) {
-                Text("Perfil", color = Color.White, fontSize = 16.sp)
-            }
         }
     }
 }

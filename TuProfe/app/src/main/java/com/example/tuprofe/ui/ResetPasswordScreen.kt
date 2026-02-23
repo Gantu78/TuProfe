@@ -32,10 +32,12 @@ import com.example.tuprofe.ui.utils.TextFieldApp
 
 @Composable
 fun ResetPasswordScreen(
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    onVolverClick: () -> Unit,
     )
     {
         var email by remember { mutableStateOf("") }
+        var mostrarMensaje by remember { mutableStateOf(false) }
         Box(
             modifier = modifier
         ){
@@ -55,9 +57,17 @@ fun ResetPasswordScreen(
                     onValueChange = { email = it }
                 )
                 Spacer(modifier = Modifier.padding(20.dp))
-                AppButton(stringResource(R.string.enviar_enlace), onClick = { Log.d("Boton", "Enviando Enlace")})
+                AppButton(stringResource(R.string.enviar_enlace),
+                    onClick = {
+                        Log.d("Boton", "Enviando Enlace")
+                        mostrarMensaje = true
+                    }
+                )
                 Spacer(modifier = Modifier.padding(10.dp))
-                AppTextButton(stringResource(R.string.volver))
+                AppTextButton(stringResource(R.string.volver), onClick = { onVolverClick() })
+                if (mostrarMensaje) {
+                    Text("tu enlace se envio correctamente", color = colorResource(R.color.verdetp2), fontSize = 16.sp)
+                }
 
             }
         }
@@ -98,6 +108,8 @@ fun TextosPasswordPreview(){
 @Composable
 @Preview (showBackground = true)
 fun RPasswordScreenPreview(){
-    ResetPasswordScreen()
+    ResetPasswordScreen(
+        onVolverClick = {}
+    )
 }
 

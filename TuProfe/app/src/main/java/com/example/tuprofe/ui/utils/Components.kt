@@ -50,9 +50,7 @@ import com.example.tuprofe.HeaderSection
 import com.example.tuprofe.R
 import com.example.tuprofe.data.ReviewInfo
 import com.example.tuprofe.data.local.LocalReview
-import com.example.tuprofe.ui.TuProfeCardBody
-import com.example.tuprofe.ui.TuProfeCardFooter
-import com.example.tuprofe.ui.TuProfeCardHeader
+
 import com.example.tuprofe.ui.theme.BebasNeue
 
 @Composable
@@ -79,7 +77,7 @@ fun LogoLoading(
 @Composable
 fun AppButton(
     textoBoton: String,
-    onClick: () -> Unit = {},
+    onClick: () -> Unit,
     modifier: Modifier = Modifier
 ){
     Button(
@@ -279,6 +277,12 @@ fun TitleHeader(title: String, modifier: Modifier = Modifier) {
     )
 }
 
+@Preview()
+@Composable
+fun TitleHeaderPreview() {
+    SearchBar()
+}
+
 @Composable
 fun BackButtonHeader(onBackClick: () -> Unit, modifier: Modifier = Modifier) {
     Row(
@@ -308,125 +312,9 @@ fun HeaderSectionPreview(){
 }
 
 
-@Composable
-fun ResenaCardActions(
-    likes: Int,
-    comments: Int,
-    onCommentsClick: () -> Unit,
-    modifier: Modifier = Modifier
-) {
-    Row(
-        modifier = modifier.fillMaxWidth(),
-        horizontalArrangement = Arrangement.SpaceBetween,
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        TuProfeCardFooter(
-            likes = likes,
-            comments = comments
-        )
 
-        IconButton(
-            onClick = onCommentsClick,
-            modifier = Modifier.size(30.dp)
-        ) {
-            Icon(
-                imageVector = Icons.Default.MailOutline,
-                contentDescription = "Comments",
-                tint = colorResource(R.color.verdetp)
-            )
-        }
-    }
-}
 
-@Composable
-fun ResenaCard(
-    reviewInfo: ReviewInfo,
-    modifier: Modifier = Modifier,
-    onCommentsClick: () -> Unit = {}
 
-) {
-    Card(
-        modifier = modifier
-            .fillMaxWidth()
-            .padding(vertical = 5 .dp, horizontal = 20.dp),
-        shape = RoundedCornerShape(30.dp),
-        border = BorderStroke(
-            width = 2.5.dp,
-            color = colorResource(R.color.BordeTuProfe)
-        ),
-        colors = CardDefaults.cardColors(
-            containerColor = colorResource(R.color.pastel)
-        ),
-        elevation = CardDefaults.cardElevation(
-            defaultElevation = 10.dp,
-            pressedElevation = 30.dp,
-            hoveredElevation = 10.dp,
-            focusedElevation = 10.dp,
-            disabledElevation = 10.dp
-        )
-    ) {
-        Column(
-            modifier = Modifier.padding(6.dp)
-        ) {
 
-            TuProfeCardHeader(
-                modifier = modifier.
-                padding(horizontal = 10.dp),
-                name = reviewInfo.name,
-                carrera = reviewInfo.materia,
-                imagen = reviewInfo.imageId
-            )
 
-            Spacer(modifier = Modifier.height(8.dp))
 
-            RatingStars(
-                rating = reviewInfo.rating,
-                starColor = colorResource(R.color.verdetp),
-                modifier = Modifier.padding(horizontal = 10.dp)
-            )
-
-            Spacer(modifier = Modifier.height(8.dp))
-
-            TuProfeCardBody(
-                content = reviewInfo.content,
-                date = reviewInfo.time,
-                modifier = Modifier.padding(horizontal = 10.dp)
-            )
-
-            Spacer(modifier = Modifier.height(16.dp))
-
-            ResenaCardActions(
-                modifier = Modifier.padding(horizontal = 10.dp),
-                likes = reviewInfo.likes,
-                comments = reviewInfo.comments,
-                onCommentsClick = onCommentsClick
-            )
-        }
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun ResenaCardPreview (){
-    ResenaCard(
-        reviewInfo = LocalReview.Reviews[0]
-    )
-}
-
-@Composable
-fun RatingStars(
-    rating: Int,
-    starColor: Color = Color(0xFF1DB954), // verde por defecto
-    modifier: Modifier = Modifier
-) {
-    Row (modifier =  modifier){
-
-        repeat(5) { index ->
-            Icon(
-                imageVector = Icons.Default.Star,
-                contentDescription = null,
-                tint = if (index < rating) starColor else Color.LightGray
-            )
-        }
-    }
-}

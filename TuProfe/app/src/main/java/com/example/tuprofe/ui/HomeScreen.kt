@@ -31,6 +31,10 @@ import com.example.tuprofe.ui.utils.LogoApp
 
 @Composable
 fun HomeScreen(
+
+    onLoginClick: () -> Unit = {},
+    onForgotPasswordClick: () -> Unit = {},
+    onRegisterClick: () -> Unit = {},
     modifier: Modifier = Modifier
 ){
     var passwordVisible by remember { mutableStateOf(false) }
@@ -38,7 +42,7 @@ fun HomeScreen(
     var password by remember { mutableStateOf("") }
     val icono = if (passwordVisible) R.drawable.mostrar else R.drawable.ocultar
     Box(
-        modifier = modifier
+        modifier = modifier.fillMaxSize()
     ) {
         BackgroundImage()
         Column(
@@ -59,9 +63,9 @@ fun HomeScreen(
             )
             Spacer(modifier = Modifier.padding(15.dp))
             Botones(
-                onLoginClick = { Log.d("Boton", "Iniciando Sesión")},
-                onForgotPasswordClick = {Log.d("Boton", "Olvidé mi contraseña")},
-                onRegisterClick = {Log.d("Boton", "Crear Cuenta")}
+                onLoginClick,
+                onForgotPasswordClick ,
+                onRegisterClick
             )
         }
     }
@@ -135,7 +139,10 @@ fun Botones(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = modifier
     ) {
-        AppButton(stringResource(R.string.iniciar_sesion), onClick = onLoginClick)
+        AppButton(
+            stringResource(R.string.iniciar_sesion),
+             onLoginClick
+        )
         Spacer(modifier = Modifier.padding(30.dp))
         Row(
             verticalAlignment = Alignment.CenterVertically,

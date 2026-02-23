@@ -2,6 +2,7 @@ package com.example.tuprofe.ui
 
 
 import androidx.annotation.StringRes
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -24,13 +25,18 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Scaffold
+import androidx.compose.ui.res.colorResource
 import com.example.tuprofe.R
+import com.example.tuprofe.data.ReviewInfo
 import com.example.tuprofe.data.local.LocalReview
 import com.example.tuprofe.ui.utils.BackgroundImage
-
-import com.example.tuprofe.ui.utils.ResenaCard
+import com.example.tuprofe.ui.utils.Resena
 
 
 @Composable
@@ -44,36 +50,65 @@ fun MainScreen(
 
     val allReviews = LocalReview.Reviews
 
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(10.dp)
+    ) {
 
+        BackgroundImage()
 
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(10.dp)
+        LazyColumn(
+            modifier = Modifier.fillMaxSize(),
+            contentPadding = PaddingValues(
+                top = 5.dp,
+                bottom = 20.dp
+            )
         ) {
 
-            BackgroundImage()
-
-            LazyColumn(
-                modifier = Modifier.fillMaxSize(),
-                contentPadding = PaddingValues(
-                    top = 5.dp,
-                    bottom = 20.dp
-                )
-            ) {
-
-
-
-                items(allReviews) { review ->
-                    ResenaCard(
-                        reviewInfo = review,
-                        onCommentsClick = { onResenaClick(review.imageId) })
-                }
+            items(allReviews) { review ->
+                ResenaCard(
+                    reviewInfo = review,
+                    onCommentsClick = { onResenaClick(review.imageId) })
             }
         }
+    }
 
 }
 
+@Composable
+fun ResenaCard(
+    reviewInfo: ReviewInfo,
+    modifier: Modifier = Modifier,
+    onCommentsClick: () -> Unit = {}
+
+) {
+    Card(
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(vertical = 5.dp, horizontal = 20.dp),
+        shape = RoundedCornerShape(30.dp),
+        border = BorderStroke(
+            width = 2.5.dp,
+            color = colorResource(R.color.BordeTuProfe)
+        ),
+        colors = CardDefaults.cardColors(
+            containerColor = colorResource(R.color.pastel)
+        ),
+        elevation = CardDefaults.cardElevation(
+            defaultElevation = 10.dp,
+            pressedElevation = 30.dp,
+            hoveredElevation = 10.dp,
+            focusedElevation = 10.dp,
+            disabledElevation = 10.dp
+        )
+    ) {
+        Resena(
+            reviewInfo = reviewInfo,
+            onCommentsClick = onCommentsClick
+        )
+    }
+}
 
 
 @Preview(showBackground = true)
@@ -85,142 +120,10 @@ fun MainScreenPreview() {
 
 
 
-@Preview(showBackground = true)
-@Composable
-fun ResenaCardPreview() {
-    val example = LocalReview.Reviews[0]
-    ResenaCard(
-        reviewInfo = example,
-        onCommentsClick = {}
-    )
-}
-
-@Composable
-fun TuProfeCardHeader(
-    name: String,
-    carrera: String,
-    modifier: Modifier = Modifier,
-    imagen: Int = R.drawable.avatar
-){
-    Row(
-        modifier = modifier
-    ) {
-        Image(
-            painter = painterResource(imagen),
-            contentDescription = stringResource(R.string.foto_de_perfil),
-            modifier = modifier
-                .padding(end = 8.dp)
-                .height(40.dp)
-                .width(40.dp)
-                .clip(CircleShape)
-        )
-        Column() {
-            Text(
-                name,
-                fontWeight = FontWeight.Bold,
-                modifier = modifier.padding(top = 5.dp, )
-            )
-            Text(
-                carrera,
-                color = Color.Gray,
-                fontSize = 12.sp
-            )
-        }
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun TuProfeCardHeaderPreview(){
-    val review = LocalReview.Reviews[0]
-    TuProfeCardHeader(
-        name = review.name,
-        carrera = review.materia
-    )
-}
 
 
-@Composable
-fun TuProfeCardBody(
-    content: String,
-    date: String,
-    modifier: Modifier = Modifier
-){
-    Column(
-        modifier = modifier
-    ) {
-        Text(
-            content
-        )
-        Text(
-            date,
-            color= Color.Gray,
-            fontSize = 12.sp,
-            modifier = Modifier.padding(top = 16.dp),
-        )
-    }
-}
 
-@Preview(showBackground = true)
-@Composable
-fun TuProfeCardBodyPreview() {
-    val review = LocalReview.Reviews[0]
-    TuProfeCardBody(review.content, review.time)
-}
 
-@Composable
-fun TuProfeCardFooterItem(
-    cantidad: Int,
-    @StringRes label: Int,
-    modifier: Modifier = Modifier
-){
-    Row(
-        modifier = modifier.padding(end = 8.dp)
-    ) {
-        Text(
-            cantidad.toString(),
-            fontWeight = FontWeight.Bold,
-            modifier = Modifier.padding(end = 4.dp)
-        )
-        Text(stringResource(label))
-    }
-}
 
-@Preview(showBackground = true)
-@Composable
-fun TuProfeCardFooterItemPreview(){
-    TuProfeCardFooterItem(
-        cantidad = 1000,
-        label = R.string.likes
-    )
-}
 
-@Composable
-fun TuProfeCardFooter(
-    likes: Int,
-    comments: Int,
-    modifier: Modifier = Modifier
-){
-    Row(
-        modifier = modifier
-    ) {
-        TuProfeCardFooterItem(
-            likes,
-            R.string.likes
-        )
-        TuProfeCardFooterItem(
-            comments,
-            label = R.string.comentarios
-        )
-    }
-}
 
-@Preview(showBackground = true)
-@Composable
-fun TuProfeCardFooterPreview(){
-    val review = LocalReview.Reviews[0]
-    TuProfeCardFooter(
-        likes = review.likes,
-        comments = review.comments
-    )
-}

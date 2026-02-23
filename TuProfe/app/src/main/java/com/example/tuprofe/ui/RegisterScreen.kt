@@ -34,6 +34,9 @@ import com.example.tuprofe.ui.utils.TextFieldContraApp
 @Composable
 fun RegisterScreen(
     modifier: Modifier = Modifier,
+    onRegisterClick: () -> Unit,
+    onAlreadyAccountClick: () -> Unit,
+    onBackClick: () -> Unit
 ) {
     var email by remember { mutableStateOf("") }
     var usuario by remember { mutableStateOf("") }
@@ -79,9 +82,9 @@ fun RegisterScreen(
             }
             Spacer(modifier = Modifier.padding(15.dp))
             BotonesRegistro(
-                onRegisterClick =  {(Log.d("Boton", "Registrando Usuario")) },
-                onAlreadyAccountClick = {Log.d("Boton", "Ya tengo una cuenta")},
-                onBackClick = {Log.d("Boton", "Volver")}
+                onRegisterClick =  onRegisterClick,
+                onAlreadyAccountClick = onAlreadyAccountClick,
+                onBackClick = onBackClick
             )
         }
     }
@@ -91,7 +94,11 @@ fun RegisterScreen(
 @Composable
 @Preview
 fun RegisterScreenPreview() {
-    RegisterScreen()
+    RegisterScreen(
+        onRegisterClick = {},
+        onAlreadyAccountClick = {},
+        onBackClick = {}
+    )
 }
 
 @Composable
