@@ -238,55 +238,9 @@ fun ConfigItem(
     }
 }
 
-@Composable
-fun BottomBar(
-    on1Click: () -> Unit,
-    on2Click: () -> Unit,
-    on3Click: () -> Unit,
-    modifier: Modifier = Modifier
-) {
-    Card(
-        modifier = modifier
-            .fillMaxWidth()
-            .padding(horizontal = 16.dp, vertical = 8.dp),
-        shape = RoundedCornerShape(50),
-        colors = CardDefaults.cardColors(containerColor = colorResource(id = R.color.verdetp))
-    ) {
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            TextButton(
-                onClick = on1Click,
-                modifier = Modifier.weight(1f)
-            ) {
-                Text("Incio", color = Color.White, fontSize = 16.sp)
-            }
-            VerticalDivider(
-                modifier = Modifier.height(30.dp),
-                thickness = 1.dp,
-                color = Color.White
-            )
-            TextButton(
-                onClick = on2Click,
-                modifier = Modifier.weight(1f)
-            ) {
-                Text("Profesores", color = Color.White, fontSize = 16.sp)
-            }
-            VerticalDivider(
-                modifier = Modifier.height(30.dp),
-                thickness = 1.dp,
-                color = Color.White
-            )
-            TextButton(
-                onClick = on3Click,
-                modifier = Modifier.weight(1f)
-            ) {
-                Text("Perfil", color = Color.White, fontSize = 16.sp)
-            }
-        }
-    }
-}
+
+
+
 @Composable
 fun SearchBar(
     modifier: Modifier = Modifier

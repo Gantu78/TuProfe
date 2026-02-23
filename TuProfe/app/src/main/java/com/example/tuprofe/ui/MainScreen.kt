@@ -29,7 +29,7 @@ import androidx.compose.material3.Scaffold
 import com.example.tuprofe.R
 import com.example.tuprofe.data.local.LocalReview
 import com.example.tuprofe.ui.utils.BackgroundImage
-import com.example.tuprofe.ui.utils.BottomBar
+
 import com.example.tuprofe.ui.utils.ResenaCard
 
 
@@ -44,20 +44,12 @@ fun MainScreen(
 
     val allReviews = LocalReview.Reviews
 
-    Scaffold (
-        bottomBar = {
-            BottomBar(
-                on1Click = onHomeClick,
-                on2Click = onTeachersClick,
-                on3Click = onProfileClick
-            )
-        }
-    ) { innerPadding ->
+
 
         Box(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(innerPadding)
+                .padding(10.dp)
         ) {
 
             BackgroundImage()
@@ -79,7 +71,7 @@ fun MainScreen(
                 }
             }
         }
-    }
+
 }
 
 
