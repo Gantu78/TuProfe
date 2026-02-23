@@ -38,7 +38,6 @@ import com.example.tuprofe.R
 import com.example.tuprofe.ui.utils.AppButton
 import com.example.tuprofe.ui.utils.BackgroundImage
 import com.example.tuprofe.ui.utils.ConfigItem
-import com.example.tuprofe.ui.utils.HeaderSection
 
 
 @Composable
@@ -65,11 +64,6 @@ fun ConfigScreen(
                 )
             ) {
 
-                item {
-                    HeaderSection(title = "Configuración",
-                        showSearchBar = false,
-                        onBackClick = null)
-                }
 
                 item { Spacer(modifier = Modifier.height(20.dp)) }
 

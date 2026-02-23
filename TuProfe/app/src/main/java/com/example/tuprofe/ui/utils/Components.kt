@@ -46,6 +46,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.core.os.BuildCompat
+import com.example.tuprofe.HeaderSection
 import com.example.tuprofe.R
 import com.example.tuprofe.data.ReviewInfo
 import com.example.tuprofe.data.local.LocalReview
@@ -342,34 +343,15 @@ fun BackButtonHeader(onBackClick: () -> Unit, modifier: Modifier = Modifier) {
     }
 }
 
+
+
 @Composable
-fun HeaderSection(
-    title: String,
-    showSearchBar: Boolean = true,
-    modifier: Modifier = Modifier,
-    onBackClick: (() -> Unit)? = null
-) {
-    Column(
-        modifier = modifier
-            .fillMaxWidth()
-            .padding(top = 40.dp),
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        if (onBackClick != null) {
-            BackButtonHeader(onBackClick = onBackClick)
-        }
-
-        if (showSearchBar) {
-            SearchBar()
-            Spacer(modifier = Modifier.height(20.dp))
-        }
-
-        TitleHeader(title = title)
-
-        Spacer(modifier = Modifier.height(20.dp))
-    }
+@Preview()
+fun HeaderSectionPreview(){
+    HeaderSection(
+        title = stringResource(R.string.tuprofe)
+    )
 }
-
 
 
 @Composable
@@ -413,7 +395,7 @@ fun ResenaCard(
         modifier = modifier
             .fillMaxWidth()
             .padding(vertical = 5 .dp, horizontal = 20.dp),
-        shape = RoundedCornerShape(20.dp),
+        shape = RoundedCornerShape(30.dp),
         border = BorderStroke(
             width = 2.5.dp,
             color = colorResource(R.color.BordeTuProfe)
@@ -422,7 +404,11 @@ fun ResenaCard(
             containerColor = colorResource(R.color.pastel)
         ),
         elevation = CardDefaults.cardElevation(
-            defaultElevation = 8.dp
+            defaultElevation = 10.dp,
+            pressedElevation = 30.dp,
+            hoveredElevation = 10.dp,
+            focusedElevation = 10.dp,
+            disabledElevation = 10.dp
         )
     ) {
         Column(

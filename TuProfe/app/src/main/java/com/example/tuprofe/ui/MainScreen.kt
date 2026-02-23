@@ -30,7 +30,6 @@ import com.example.tuprofe.R
 import com.example.tuprofe.data.local.LocalReview
 import com.example.tuprofe.ui.utils.BackgroundImage
 import com.example.tuprofe.ui.utils.BottomBar
-import com.example.tuprofe.ui.utils.HeaderSection
 import com.example.tuprofe.ui.utils.ResenaCard
 
 
@@ -71,12 +70,7 @@ fun MainScreen(
                 )
             ) {
 
-                item {
-                    HeaderSection(
-                        title = stringResource(R.string.tuprofe),
-                        showSearchBar = true
-                    )
-                }
+
 
                 items(allReviews) { review ->
                     ResenaCard(
@@ -131,7 +125,8 @@ fun TuProfeCardHeader(
         Column() {
             Text(
                 name,
-                fontWeight = FontWeight.Bold
+                fontWeight = FontWeight.Bold,
+                modifier = modifier.padding(top = 5.dp, )
             )
             Text(
                 carrera,
