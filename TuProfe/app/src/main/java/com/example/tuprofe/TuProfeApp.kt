@@ -33,6 +33,7 @@ import com.example.tuprofe.ui.utils.SearchBar
 import com.example.tuprofe.ui.utils.TitleHeader
 import androidx.compose.material3.*
 import androidx.compose.material3.CheckboxDefaults.colors
+import com.example.tuprofe.navegation.TuProfeBottomBar
 
 
 
@@ -54,13 +55,7 @@ fun TuProfeApp(
 
         },
         bottomBar = {
-            BottomBar(
-                modifier = Modifier.padding(bottom = 18.dp),
-                on1Click = { navController.navigate("Main") },
-                on2Click = { navController.navigate("Profe") },
-                on3Click = { navController.navigate("Profile") }
-
-            )
+            TuProfeBottomBar(navController = navController)
         }
     ) { paddingValues ->
 
