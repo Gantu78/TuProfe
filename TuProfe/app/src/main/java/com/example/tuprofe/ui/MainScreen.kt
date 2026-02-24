@@ -24,6 +24,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.lazy.items
@@ -31,6 +32,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Scaffold
+import androidx.compose.ui.draw.scale
 import androidx.compose.ui.res.colorResource
 import com.example.tuprofe.R
 import com.example.tuprofe.data.ReviewInfo
@@ -59,10 +61,12 @@ fun MainScreen(
         BackgroundImage()
 
         LazyColumn(
-            modifier = Modifier.fillMaxSize(),
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(top = 80.dp, bottom = 70.dp, start = 20.dp, end = 20.dp),
             contentPadding = PaddingValues(
-                top = 5.dp,
-                bottom = 20.dp
+                top = 10.dp,
+                bottom = 0.dp
             )
         ) {
 
@@ -83,10 +87,11 @@ fun ResenaCard(
     onCommentsClick: (Int) -> Unit
 
 ) {
+    Spacer(modifier.scale(1F))
     Card(
         modifier = modifier
             .fillMaxWidth()
-            .padding(vertical = 5.dp, horizontal = 20.dp),
+            .padding(vertical = 5.dp, horizontal = 18.dp),
         shape = RoundedCornerShape(30.dp),
         border = BorderStroke(
             width = 2.5.dp,

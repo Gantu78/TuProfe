@@ -48,8 +48,7 @@ fun TuProfeApp(
         topBar = {
 
             HeaderSection(
-                title = stringResource(R.string.tuprofe)
-
+                title = ""
 
             )
 
@@ -70,6 +69,7 @@ fun TuProfeApp(
         AppNavegation(
             navController = navController,
             modifier = Modifier.fillMaxSize()
+
 
 
         )

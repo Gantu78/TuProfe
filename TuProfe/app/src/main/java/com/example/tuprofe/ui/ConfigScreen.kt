@@ -1,8 +1,9 @@
 package com.example.tuprofe.ui
 
 
-
+import com.example.tuprofe.ui.utils.ProfileHeaderCard
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -18,8 +19,11 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material.icons.filled.MailOutline
+import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.material.icons.filled.Star
+import androidx.compose.material.icons.filled.ThumbsUpDown
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
@@ -59,11 +63,28 @@ fun ConfigScreen(
                     .fillMaxSize()
                     .padding(horizontal = 30.dp),
                 contentPadding = PaddingValues(
-                    top = 40.dp,
+                    top = 55.dp,
                     bottom = 120.dp
                 )
             ) {
 
+
+                item { Spacer(modifier = Modifier.height(20.dp)) }
+
+
+
+                item { Spacer(modifier = Modifier.height(20.dp)) }
+
+                // NUEVA tarjeta de perfil (antes de las opciones)
+                item {
+                    ProfileHeaderCard(
+                        username = "Gantu870",
+                        email = "c.jimenez@javeriana.edu.co",
+                        carrera = "Ing. de Sistemas",
+                        imageRes = R.drawable.ic_launcher_foreground,
+
+                    )
+                }
 
                 item { Spacer(modifier = Modifier.height(20.dp)) }
 
@@ -78,7 +99,7 @@ fun ConfigScreen(
 
                 item {
                     ConfigItem(
-                        icon = Icons.Default.Star,
+                        icon = Icons.Default.ThumbsUpDown,
                         title = "Historial de calificaciones",
                         subtitle = "¿Qué profes has calificado?"
                     )
@@ -94,7 +115,7 @@ fun ConfigScreen(
 
                 item {
                     ConfigItem(
-                        icon = Icons.Default.Star,
+                        icon = Icons.Default.Lock,
                         title = "Privacidad",
                         subtitle = "Perfil Anónimo, Visibilidad..."
                     )
@@ -102,7 +123,7 @@ fun ConfigScreen(
 
                 item {
                     ConfigItem(
-                        icon = Icons.Default.Star,
+                        icon = Icons.Default.Notifications,
                         title = "Notificaciones",
                         subtitle = "Alertas y novedades"
                     )
@@ -155,9 +176,11 @@ fun UserCard(
 
             Spacer(modifier = Modifier.width(20.dp))
 
+
             Column() {
                 Text(username, fontWeight = FontWeight.Bold)
                 Text(email, color = Color.Gray)
+
             }
         }
     }

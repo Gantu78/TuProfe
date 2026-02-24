@@ -1,16 +1,23 @@
 package com.example.tuprofe.ui
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Check
 import androidx.compose.material.icons.outlined.Comment
 import androidx.compose.material.icons.outlined.Share
 import androidx.compose.material.icons.outlined.ThumbUp
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -18,12 +25,14 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.tuprofe.R
 import com.example.tuprofe.data.ReviewInfo
 import com.example.tuprofe.data.local.LocalReview
+import com.example.tuprofe.ui.utils.BackgroundImage
 import com.example.tuprofe.ui.utils.Resena
 
 @Composable
@@ -36,36 +45,89 @@ fun DetalleScreen (
     responseReviews: List<ReviewInfo>,
     modifier: Modifier = Modifier
 
-){
+) {
+    Box() {
+        BackgroundImage()
+        LazyColumn(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(top = 80.dp, bottom = 70.dp, start = 20.dp, end = 20.dp),
+            contentPadding = PaddingValues(
+                top = 10.dp,
+                bottom = 0.dp
+            )
+        ) {
 
-    LazyColumn(
-        modifier = modifier
-    ) {
+            item {
+                Card(
+                    modifier = modifier
+                        .fillMaxWidth()
+                        .padding(vertical = 0.dp, horizontal = 0.dp),
+                    shape = RoundedCornerShape(20.dp),
+                    border = BorderStroke(
+                        width = 2.5.dp,
+                        color = colorResource(R.color.BordeTuProfe),
 
-        item {
-            Resena(
-                ReviewInfo
-            )
-            HorizontalDivider(thickness = 1.dp)
-            ReviewActionBar(
-                onLike = {/*TODO¨*/},
-                onComment = {/*TODO¨*/},
-                onShare = {/*TODO¨*/}
-            )
-            HorizontalDivider(thickness = 1.dp)
-            Text(
-                "Comentarios mas relevantes",
-                style = MaterialTheme.typography.titleMedium,
-                modifier = Modifier.padding(top = 6.dp, bottom = 6.dp)
-            )
-        }
-        items(responseReviews.size){
+                    ),
 
-            Resena(
-                reviewInfo = responseReviews[it],
-                modifier = Modifier.padding(top = 6.dp, bottom = 6.dp)
-            )
-            HorizontalDivider(thickness = 1.dp)
+                    elevation = CardDefaults.cardElevation(
+                        defaultElevation = 10.dp,
+                        pressedElevation = 30.dp,
+                        hoveredElevation = 10.dp,
+                        focusedElevation = 10.dp,
+                        disabledElevation = 10.dp
+                    ),
+                    onClick = {},
+                    colors = CardDefaults.cardColors(containerColor = Color(0xFFFDF5E6).copy(alpha = 0.8f))
+
+                ) {
+                    Resena(
+                        reviewInfo = ReviewInfo
+                    )
+                }
+                HorizontalDivider(thickness = 1.dp)
+                ReviewActionBar(
+                    onLike = {/*TODO¨*/ },
+                    onComment = {/*TODO¨*/ },
+                    onShare = {/*TODO¨*/ }
+                )
+                HorizontalDivider(thickness = 1.dp)
+                Text(
+                    "Comentarios mas relevantes",
+                    style = MaterialTheme.typography.titleMedium,
+                    modifier = Modifier.padding(top = 6.dp, bottom = 6.dp)
+                )
+            }
+            items(responseReviews.size) {
+                Card(
+                    modifier = modifier
+                        .fillMaxWidth()
+                        .padding(vertical = 5.dp, horizontal = 20.dp),
+                    shape = RoundedCornerShape(30.dp),
+                    border = BorderStroke(
+                        width = 2.5.dp,
+                        color = colorResource(R.color.BordeTuProfe)
+                    ),
+                    colors = CardDefaults.cardColors(
+                        containerColor = colorResource(R.color.pastel)
+                    ),
+                    elevation = CardDefaults.cardElevation(
+                        defaultElevation = 10.dp,
+                        pressedElevation = 30.dp,
+                        hoveredElevation = 10.dp,
+                        focusedElevation = 10.dp,
+                        disabledElevation = 10.dp
+                    ),
+                    onClick = {}
+                ) {
+                    Resena(
+                        reviewInfo = responseReviews[it],
+                        modifier = Modifier.padding(top = 6.dp, bottom = 6.dp)
+                    )
+                }
+                HorizontalDivider(thickness = 1.dp)
+
+            }
 
         }
 

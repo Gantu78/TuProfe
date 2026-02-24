@@ -3,6 +3,7 @@ package com.example.tuprofe.ui.utils
 import androidx.annotation.StringRes
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -38,6 +39,69 @@ import com.example.tuprofe.R
 import com.example.tuprofe.data.ReviewInfo
 import com.example.tuprofe.data.local.LocalReview
 
+
+
+@Composable
+fun ProfileHeaderCard(
+    username: String,
+    email: String,
+    carrera: String,
+    imageRes: Int,
+    modifier: Modifier = Modifier
+) {
+    Card(
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(vertical = 10.dp),
+        shape = RoundedCornerShape(28.dp),
+        border = BorderStroke(2.5.dp, colorResource(R.color.BordeTuProfe)),
+        colors = CardDefaults.cardColors(
+            containerColor = colorResource(R.color.pastel)
+        ),
+        elevation = CardDefaults.cardElevation(defaultElevation = 14.dp)
+    ) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 20.dp, vertical = 18.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Image(
+                painter = painterResource(id = imageRes),
+                contentDescription = "Foto de perfil",
+                modifier = Modifier
+                    .size(84.dp)
+                    .clip(CircleShape)
+                    .background(Color.White)
+                    .padding(8.dp)
+            )
+
+            Spacer(modifier = Modifier.width(16.dp))
+
+            Column(
+                modifier = Modifier.weight(1f)
+            ) {
+                Text(
+                    text = username,
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 20.sp,
+                    color = colorResource(R.color.verdetp)
+                )
+                Spacer(modifier = Modifier.height(6.dp))
+                Text(text = email, color = Color.Gray, fontSize = 14.sp)
+                Spacer(modifier = Modifier.height(2.dp))
+                Text(text = carrera, color = Color.Gray, fontSize = 14.sp)
+            }
+
+            Icon(
+                imageVector = Icons.Default.Star,
+                contentDescription = null,
+                tint = colorResource(R.color.verdetp),
+                modifier = Modifier.size(24.dp)
+            )
+        }
+    }
+}
 
 @Composable
 fun Resena(
