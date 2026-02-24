@@ -10,6 +10,7 @@ object LocalReview {
     val Reviews = listOf(
 
         ReviewInfo(
+            reviewId = 0,
             imageId = R.drawable.avatar,
             name = "Angarita",
             materia = "Computación Movil",
@@ -20,6 +21,7 @@ object LocalReview {
             comments = 0,
         ),
         ReviewInfo(
+            reviewId = 0,
             imageId = R.drawable.carlitos,
             name = "Angarita",
             materia = "Computación Movil",
@@ -30,6 +32,7 @@ object LocalReview {
             comments = 3,
         ),
         ReviewInfo(
+            reviewId = 0,
             imageId = R.drawable.avatar,
             name = "Angarita",
             materia = "Computación Movil",
@@ -40,6 +43,7 @@ object LocalReview {
             comments = 10,
         ),
         ReviewInfo(
+            reviewId = 0,
             imageId = R.drawable.carlitos,
             name = "Angarita",
             materia = "Computación Movil",
@@ -50,6 +54,7 @@ object LocalReview {
             comments = 100,
         ),
         ReviewInfo(
+            reviewId = 0,
             imageId = R.drawable.carlitos,
             name = "Juan Hurtado",
             materia = "Introducción a la programación",

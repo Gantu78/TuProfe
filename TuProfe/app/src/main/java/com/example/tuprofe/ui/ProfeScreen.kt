@@ -79,7 +79,7 @@ fun ProfeScreen(
                 }
 
                 items(allReviews) { review ->
-                    ResenaCard(reviewInfo = review)
+                    ResenaCard(reviewInfo = review, onCommentsClick = {})
                     Spacer(modifier = Modifier.height(16.dp))
                 }
             }

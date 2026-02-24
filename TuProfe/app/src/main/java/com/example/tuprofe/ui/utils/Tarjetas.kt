@@ -132,16 +132,6 @@ fun ResenaCardActions(
             comments = comments
         )
 
-        IconButton(
-            onClick = onCommentsClick,
-            modifier = Modifier.size(30.dp)
-        ) {
-            Icon(
-                imageVector = Icons.Default.MailOutline,
-                contentDescription = "Comments",
-                tint = colorResource(R.color.verdetp)
-            )
-        }
     }
 }
 

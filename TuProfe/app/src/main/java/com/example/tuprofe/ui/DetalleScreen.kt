@@ -14,6 +14,8 @@ import androidx.compose.material.icons.outlined.ThumbUp
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.colorResource
@@ -27,6 +29,9 @@ import com.example.tuprofe.ui.utils.Resena
 @Composable
 fun DetalleScreen (
 
+    onLike: () -> Unit,
+    onShare: () -> Unit,
+    onComment: () -> Unit,
     ReviewInfo: ReviewInfo,
     responseReviews: List<ReviewInfo>,
     modifier: Modifier = Modifier
@@ -41,7 +46,27 @@ fun DetalleScreen (
             Resena(
                 ReviewInfo
             )
-            HorizontalDivider(thickness = 3.dp)
+            HorizontalDivider(thickness = 1.dp)
+            ReviewActionBar(
+                onLike = {/*TODO¨*/},
+                onComment = {/*TODO¨*/},
+                onShare = {/*TODO¨*/}
+            )
+            HorizontalDivider(thickness = 1.dp)
+            Text(
+                "Comentarios mas relevantes",
+                style = MaterialTheme.typography.titleMedium,
+                modifier = Modifier.padding(top = 6.dp, bottom = 6.dp)
+            )
+        }
+        items(responseReviews.size){
+
+            Resena(
+                reviewInfo = responseReviews[it],
+                modifier = Modifier.padding(top = 6.dp, bottom = 6.dp)
+            )
+            HorizontalDivider(thickness = 1.dp)
+
         }
 
     }
@@ -55,8 +80,12 @@ fun DetalleScreenPreview(){
     val respuestas = LocalReview.Reviews
 
     DetalleScreen(
-        review,
-        respuestas
+        onLike = {},
+        onComment = {},
+        onShare = {},
+        ReviewInfo = review,
+        responseReviews = respuestas
+
     )
 }
 

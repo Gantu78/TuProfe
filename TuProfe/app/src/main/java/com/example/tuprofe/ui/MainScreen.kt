@@ -42,7 +42,7 @@ import com.example.tuprofe.ui.utils.Resena
 @Composable
 fun MainScreen(
     modifier: Modifier = Modifier,
-    onResenaClick: (Int) -> Unit = { println("Clicked on review $it") },
+    onResenaClick: (Int) -> Unit,
     onProfileClick: () -> Unit = { println("Clicked on profile") },
     onTeachersClick: () -> Unit = { println("Clicked on teachers") },
     onHomeClick: () -> Unit = { println("Clicked on home") }
@@ -69,7 +69,7 @@ fun MainScreen(
             items(allReviews) { review ->
                 ResenaCard(
                     reviewInfo = review,
-                    onCommentsClick = { onResenaClick(review.imageId) })
+                    onCommentsClick = onResenaClick)
             }
         }
     }
@@ -80,7 +80,7 @@ fun MainScreen(
 fun ResenaCard(
     reviewInfo: ReviewInfo,
     modifier: Modifier = Modifier,
-    onCommentsClick: () -> Unit = {}
+    onCommentsClick: (Int) -> Unit
 
 ) {
     Card(
@@ -101,11 +101,11 @@ fun ResenaCard(
             hoveredElevation = 10.dp,
             focusedElevation = 10.dp,
             disabledElevation = 10.dp
-        )
+        ),
+        onClick = {onCommentsClick(reviewInfo.reviewId)}
     ) {
         Resena(
-            reviewInfo = reviewInfo,
-            onCommentsClick = onCommentsClick
+            reviewInfo = reviewInfo
         )
     }
 }
@@ -114,7 +114,9 @@ fun ResenaCard(
 @Preview(showBackground = true)
 @Composable
 fun MainScreenPreview() {
-    MainScreen()
+    MainScreen(
+        onResenaClick = {}
+    )
 }
 
 
