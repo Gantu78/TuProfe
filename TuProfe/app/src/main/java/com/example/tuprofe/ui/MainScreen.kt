@@ -53,7 +53,7 @@ fun MainScreen(
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .padding(10.dp)
+
     ) {
 
         BackgroundImage()

@@ -44,11 +44,7 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             TuProfeTheme {
-                TuProfeApp(
-                    onHomeClick = { println("Clicked on home") },
-                    onTeachersClick = { println("Clicked on teachers") },
-                    onProfileClick = { println("Clicked on profile") }
-                )
+                TuProfeApp()
             }
 
         }

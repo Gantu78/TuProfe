@@ -40,10 +40,9 @@ import androidx.compose.material3.CheckboxDefaults.colors
 @OptIn(ExperimentalMaterial3Api::class)
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 fun TuProfeApp(
-    onHomeClick: () -> Unit,
-    onTeachersClick: () -> Unit,
-    onProfileClick: () -> Unit
+
 ){
+    val navController = rememberNavController()
     Scaffold(
         containerColor = Color.Transparent,
         topBar = {
@@ -57,19 +56,21 @@ fun TuProfeApp(
         },
         bottomBar = {
             BottomBar(
-                on1Click = onHomeClick,
-                on2Click = onTeachersClick,
-                on3Click = onProfileClick
+                modifier = Modifier.padding(bottom = 18.dp),
+                on1Click = { navController.navigate("Main") },
+                on2Click = { navController.navigate("Profe") },
+                on3Click = { navController.navigate("Profile") }
 
             )
         }
     ) { paddingValues ->
 
-    val navController = rememberNavController()
+
 
         AppNavegation(
             navController = navController,
             modifier = Modifier.fillMaxSize()
+
 
         )
 
@@ -79,9 +80,6 @@ fun TuProfeApp(
 @Composable
 fun TuProfeAppPreview(){
     TuProfeApp(
-        onHomeClick = {},
-        onTeachersClick = {},
-        onProfileClick = {}
     )
 }
 
