@@ -185,6 +185,7 @@ fun ResenaCardActions(
     comments: Int,
     onCommentsClick: () -> Unit,
     modifier: Modifier = Modifier
+
 ) {
     Row(
         modifier = modifier.fillMaxWidth(),

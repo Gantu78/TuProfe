@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
@@ -21,6 +22,23 @@ import com.example.tuprofe.ui.ProfeScreen
 import com.example.tuprofe.ui.RegisterScreen
 import com.example.tuprofe.ui.ResetPasswordScreen
 
+
+
+sealed class Screen(val route: String){
+    object Home : Screen("Home")
+    object Register : Screen("Register")
+    object PasswordReset : Screen("PasswordReset")
+    object Main : Screen("Main")
+    object Profe : Screen("Profe")
+    object Profile : Screen("Profile")
+    object Loading : Screen("Loading")
+    object Configuracion : Screen("Configuracion")
+    object Detalle : Screen("Detalle/{reviewId}"){
+        fun createRoute(reviewId: Int) = "Detalle/$reviewId"
+        }
+    }
+
+
 @Composable
 fun AppNavegation(
     navController: NavHostController,
@@ -28,27 +46,27 @@ fun AppNavegation(
 ){
     NavHost(
         navController = navController,
-        startDestination = "start",
+        startDestination = Screen.Home.route,
         modifier = modifier
     ){
-        composable(route = "start"){
+        composable(route = Screen.Home.route){
             HomeScreen(
                 onLoginClick = {
-                    navController.navigate("Main"){
+                    navController.navigate(Screen.Main.route){
                         popUpTo(0){
                             inclusive = true
                         }
                     }
                 },
                 onRegisterClick = {
-                    navController.navigate("Register"){
+                    navController.navigate(Screen.Register.route){
                         popUpTo(0){
                             inclusive = true
                         }
                     }
                 },
                 onForgotPasswordClick = {
-                    navController.navigate("PasswordReset"){
+                    navController.navigate(Screen.PasswordReset.route){
                         popUpTo(0){
                             inclusive = true
                         }
@@ -56,69 +74,69 @@ fun AppNavegation(
                 }
             )
         }
-        composable(route = "Register"){
+        composable(route = Screen.Register.route){
             RegisterScreen(
-                    onRegisterClick = {navController.navigate("start"){
+                    onRegisterClick = {navController.navigate(Screen.Home.route){
                         popUpTo(0){
                             inclusive = true
                         }
                     }},
-                    onAlreadyAccountClick = {navController.navigate("start"){
+                    onAlreadyAccountClick = {navController.navigate(Screen.Home.route){
                         popUpTo(0){
                             inclusive = true
                         }
                     }},
-                    onBackClick = {navController.navigate("start"){
+                    onBackClick = {navController.navigate(Screen.Home.route){
                         popUpTo(0){
                             inclusive = true
                         }
                     }}
             )
         }
-        composable(route = "PasswordReset"){
+        composable(route = Screen.PasswordReset.route){
             ResetPasswordScreen(
-                onVolverClick = {navController.navigate("start"){
+                onVolverClick = {navController.navigate(Screen.Home.route){
                     popUpTo(0){
                         inclusive = true
                     }
                 }}
             )
         }
-        composable(route = "Main"){
+        composable(route = Screen.Main.route){
             MainScreen(
                 onResenaClick = { reviewId ->
-                    navController.navigate("Detalle/$reviewId")
+                    navController.navigate(Screen.Detalle.createRoute(reviewId))
                 }
             )
         }
-        composable(route = "Profe"){
+        composable(route = Screen.Profe.route){
             ProfeScreen()
         }
-        composable(route = "Profile"){
+        composable(route = Screen.Profile.route){
             ConfigScreen()
         }
-        composable(route = "Loading"){
+        composable(route = Screen.Loading.route){
             LoadingScreen()
         }
-        composable(route = "Configuracion"){
+        composable(route = Screen.Configuracion.route){
             ConfigScreen()
         }
         composable(
-            route = "Detalle/{ReviewId}",
-            arguments = listOf(navArgument("ReviewId"){type = NavType.IntType})
+            route = Screen.Detalle.route,
+            arguments = listOf(navArgument("reviewId"){type = NavType.IntType})
         ){
-            val ReviewId = it.arguments?.getInt("ReviewId")?: 0
-
-            val review = LocalReview.Reviews.find { it.reviewId == ReviewId }
+            val reviewId = it.arguments?.getInt("reviewId")?: 0
+            val review = LocalReview.Reviews.find { it.reviewId == reviewId }
 
             if(review != null){
+
                 DetalleScreen(
                     onLike = {},
                     onComment = {},
                     onShare = {},
                     ReviewInfo = review,
                     responseReviews = LocalReview.Reviews,
-                    modifier = Modifier.padding(12.dp)
+
                 )
 
             } else (Text("Reseña no encontrada"))
