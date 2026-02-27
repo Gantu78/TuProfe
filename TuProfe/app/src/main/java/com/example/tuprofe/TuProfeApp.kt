@@ -105,7 +105,7 @@ fun TuProfeTopBar(
         ),
         modifier = modifier
             .fillMaxWidth()
-            .padding(top = 40.dp),
+            .padding(top = 10.dp),
         title = {
             Text(
                 text = texto,
