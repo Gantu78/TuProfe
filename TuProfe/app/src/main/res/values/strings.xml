@@ -35,4 +35,17 @@
     <string name="borrar_cuenta">BORRAR CUENTA</string>
     <string name="confirmacionBorrar">Esta accion borrará tus datos, estas seguro?</string>
     <string name="cancelar">Cancelar</string>
+    <string name="historial_de_calificaciones">Historial de calificaciones</string>
+    <string name="qu_profes_has_calificado">¿Qué profes has calificado?</string>
+    <string name="ayuda_y_soporte">Ayuda y Soporte</string>
+    <string name="faq_t_rminos_y_condiciones">FAQ, Términos y condiciones</string>
+    <string name="privacidad">Privacidad</string>
+    <string name="perfil_an_nimo_visibilidad">Perfil Anónimo, Visibilidad...</string>
+    <string name="notificaciones">Notificaciones</string>
+    <string name="alertas_y_novedades">Alertas y novedades</string>
+    <string name="cerrar_sesi_n">CERRAR SESIÓN</string>
+    <string name="rese_a_no_encontrada">Reseña no encontrada</string>
+    <string name="ver_calificaci_n">VER CALIFICACIÓN</string>
+    <string name="filtrar">FILTRAR</string>
+    <string name="texto_calificaciones">Aquí puedes ver todos los profes que has calificado para llevar un seguimiento de tus favoritos</string>
 </resources>

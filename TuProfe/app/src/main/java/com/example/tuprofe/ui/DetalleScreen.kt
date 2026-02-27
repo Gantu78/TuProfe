@@ -67,7 +67,9 @@ fun DetalleScreen (
                     border = BorderStroke(
                         width = 2.5.dp,
                         color = colorResource(R.color.BordeTuProfe),
-
+                    ),
+                    colors = CardDefaults.cardColors(
+                        MaterialTheme.colorScheme.surface
                     ),
 
                     elevation = CardDefaults.cardElevation(
@@ -78,7 +80,6 @@ fun DetalleScreen (
                         disabledElevation = 10.dp
                     ),
                     onClick = {},
-                    colors = CardDefaults.cardColors(containerColor = Color(0xFFFDF5E6).copy(alpha = 0.8f))
 
                 ) {
                     Resena(
@@ -110,8 +111,9 @@ fun DetalleScreen (
                         color = colorResource(R.color.BordeTuProfe)
                     ),
                     colors = CardDefaults.cardColors(
-                        containerColor = colorResource(R.color.pastel)
+                        MaterialTheme.colorScheme.surface
                     ),
+
                     elevation = CardDefaults.cardElevation(
                         defaultElevation = 10.dp,
                         pressedElevation = 30.dp,

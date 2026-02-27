@@ -24,6 +24,7 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextFieldDefaults
@@ -209,8 +210,8 @@ fun ConfigItem(
         shape = RoundedCornerShape(20.dp),
         border = BorderStroke(2.dp, colorResource(R.color.BordeTuProfe)),
         colors = CardDefaults.cardColors(
-            containerColor = colorResource(R.color.pastel)
-        )
+            MaterialTheme.colorScheme.surface
+        ),
     ) {
         Row(
             modifier = Modifier

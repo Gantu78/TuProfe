@@ -1,11 +1,12 @@
 package com.example.tuprofe.ui
 
+import android.util.Log
+import android.widget.Space
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.*
@@ -28,28 +29,32 @@ import com.example.tuprofe.ui.utils.*
 
 @Composable
 fun ConfigPerfilScreen(
+    onChangePassword: () -> Unit,
+    onGuardarCambiosClick: () -> Unit,
+    onBorrarCuentaClick: () -> Unit,
     modifier: Modifier = Modifier,
-    onBackClick: () -> Unit = { println("Action: Navigate back") }
+
 ) {
     var email by remember { mutableStateOf("c.jimenez@javeriana.edu.co") }
     var username by remember { mutableStateOf("Gantu970") }
     var carrera by remember { mutableStateOf("Ingenieria Mecatrónica") }
     var showDeleteDialog by remember { mutableStateOf(false) }
 
-    Box(modifier = modifier.fillMaxSize()) {
+    Box(
+        modifier = modifier.fillMaxSize(),
+        contentAlignment = Alignment.Center,
+        ) {
         BackgroundImage()
+
 
         LazyColumn(
             modifier = Modifier.fillMaxSize(),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            item {
-                ConfigPerfilHeader(onBackClick = onBackClick)
-            }
 
             item {
                 ProfilePicture(
-                    onCambiarFotoClick = { println("Action: Change profile picture") }
+                    onCambiarFotoClick = { Log.d("ConfigPerfilScreen", "Action: Change profile picture") }
                 )
             }
 
@@ -66,8 +71,8 @@ fun ConfigPerfilScreen(
 
             item {
                 ActionButtons(
-                    onCambiarContrasenaClick = { println("Action: Navigate to change password") },
-                    onGuardarCambiosClick = { println("Action: Save user profile changes for user $username") },
+                    onCambiarContrasenaClick = onChangePassword,
+                    onGuardarCambiosClick = onGuardarCambiosClick,
                     onBorrarCuentaClick = { showDeleteDialog = true }
                 )
             }
@@ -78,42 +83,10 @@ fun ConfigPerfilScreen(
                 onDismissRequest = { showDeleteDialog = false },
                 onConfirm = {
                     showDeleteDialog = false
-                    println("Action: Delete account for user $username")
+                    onBorrarCuentaClick()
                 }
             )
         }
-    }
-}
-
-@Composable
-private fun ConfigPerfilHeader(onBackClick: () -> Unit) {
-    Box(
-        modifier = Modifier
-            .fillMaxWidth()
-            .background(colorResource(id = R.color.verdetp))
-            .padding(top = 10.dp, bottom = 10.dp)
-    ) {
-        IconButton(
-            onClick = onBackClick,
-            modifier = Modifier
-                .align(Alignment.CenterStart)
-                .padding(start = 10.dp)
-        ) {
-            Icon(
-                imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                contentDescription = stringResource(R.string.atras),
-                tint = Color.White
-            )
-        }
-
-        Text(
-            text = stringResource(R.string.perfil),
-            fontSize = 35.sp,
-            fontFamily = BebasNeue,
-            color = Color.White,
-            fontWeight = FontWeight.Bold,
-            modifier = Modifier.align(Alignment.Center)
-        )
     }
 }
 
@@ -221,6 +194,39 @@ private fun ActionButtons(
 }
 
 @Composable
+@Preview (showBackground = true)
+fun ActionIconButtonsPreview() {
+    ActionButtons(
+        onCambiarContrasenaClick = {},
+        onGuardarCambiosClick = {},
+        onBorrarCuentaClick = {}
+
+    )
+}
+
+@Composable
+@Preview(showBackground = true)
+fun ProfilePicturePreview() {
+    ProfilePicture(
+        onCambiarFotoClick = {}
+    )
+}
+
+
+@Composable
+@Preview(showBackground = true)
+fun UserInfoFormPreview() {
+    UserInfoForm(
+        email = "c.jimenez@javeriana.edu.co",
+        onEmailChange = {},
+        username = "Gantu970",
+        onUsernameChange = {},
+        carrera = "Ingenieria Mecatrónica",
+        onCarreraChange = {}
+    )
+}
+
+@Composable
 private fun DeleteConfirmationDialog(
     onDismissRequest: () -> Unit,
     onConfirm: () -> Unit
@@ -245,5 +251,10 @@ private fun DeleteConfirmationDialog(
 @Preview(showBackground = true)
 @Composable
 fun ConfigPerfilPreview() {
-    ConfigPerfilScreen()
+    ConfigPerfilScreen(
+        onChangePassword = {},
+        onGuardarCambiosClick = {},
+        onBorrarCuentaClick = {},
+        modifier = Modifier
+    )
 }

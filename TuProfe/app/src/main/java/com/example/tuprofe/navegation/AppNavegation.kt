@@ -6,7 +6,6 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.offset
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
@@ -21,9 +20,9 @@ import androidx.compose.material.icons.outlined.Search
 import androidx.compose.material.icons.outlined.Send
 import androidx.compose.material.icons.outlined.Settings
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
-import androidx.compose.material3.NavigationBarItemColors
 import androidx.compose.material3.NavigationBarItemDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -33,9 +32,9 @@ import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
@@ -45,8 +44,10 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.example.tuprofe.R
 import com.example.tuprofe.data.local.LocalReview
+import com.example.tuprofe.ui.ConfigPerfilScreen
 import com.example.tuprofe.ui.ConfigScreen
 import com.example.tuprofe.ui.DetalleScreen
+import com.example.tuprofe.ui.HistorialScreen
 import com.example.tuprofe.ui.HomeScreen
 import com.example.tuprofe.ui.LoadingScreen
 import com.example.tuprofe.ui.MainScreen
@@ -64,6 +65,7 @@ sealed class Screen(val route: String){
     object Profe : Screen("Profe")
     object Profile : Screen("Profile")
     object Loading : Screen("Loading")
+    object ConfigPerfil : Screen("ConfigPerfil")
     object Configuracion : Screen("Configuracion")
     object Detalle : Screen("Detalle/{reviewId}"){
         fun createRoute(reviewId: Int) = "Detalle/$reviewId"
@@ -145,13 +147,49 @@ fun AppNavegation(
             ProfeScreen()
         }
         composable(route = Screen.Profile.route){
-            ConfigScreen()
+            HistorialScreen(
+                onFilterClick = {},
+                onVerCalificacionClick = { review ->
+                    navController.navigate(Screen.Detalle.createRoute(review.reviewId))
+                }
+            )
         }
+
+        composable(route = Screen.ConfigPerfil.route){
+            ConfigPerfilScreen(
+                onChangePassword = {
+                    navController.navigate(Screen.PasswordReset.route)
+                },
+                onGuardarCambiosClick = {
+                    navController.navigate(Screen.Configuracion.route) {
+                        popUpTo(0){
+                            inclusive = true
+                        }
+                    }
+                },
+                onBorrarCuentaClick = {
+                    navController.navigate(Screen.Home.route)
+                }
+            )
+        }
+
         composable(route = Screen.Loading.route){
             LoadingScreen()
         }
         composable(route = Screen.Configuracion.route){
-            ConfigScreen()
+            ConfigScreen(
+                onProfileClick = {
+                    navController.navigate(Screen.ConfigPerfil.route)
+                },
+                onLogoutClick = {
+                    navController.navigate(Screen.Home.route) {
+                        popUpTo(0){
+                        inclusive = true
+                    }
+                    }
+                }
+
+            )
         }
         composable(
             route = Screen.Detalle.route,
@@ -171,7 +209,7 @@ fun AppNavegation(
 
                 )
 
-            } else (Text("Reseña no encontrada"))
+            } else (Text(stringResource(R.string.rese_a_no_encontrada)))
 
         }
     }
@@ -204,7 +242,7 @@ fun TuProfeBottomBar(
     Box {
 
         NavigationBar(
-            containerColor = Color(0xFFF2F2F2),
+            containerColor = MaterialTheme.colorScheme.surface,
             tonalElevation = 8.dp
         ) {
 

@@ -31,6 +31,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.res.colorResource
@@ -45,9 +46,6 @@ import com.example.tuprofe.ui.utils.Resena
 fun MainScreen(
     modifier: Modifier = Modifier,
     onResenaClick: (Int) -> Unit,
-    onProfileClick: () -> Unit = { println("Clicked on profile") },
-    onTeachersClick: () -> Unit = { println("Clicked on teachers") },
-    onHomeClick: () -> Unit = { println("Clicked on home") }
 ) {
 
     val allReviews = LocalReview.Reviews
@@ -62,8 +60,7 @@ fun MainScreen(
 
         LazyColumn(
             modifier = Modifier
-                .fillMaxSize()
-                .padding(top = 80.dp, bottom = 70.dp, start = 20.dp, end = 20.dp),
+                .fillMaxSize(),
             contentPadding = PaddingValues(
                 top = 10.dp,
                 bottom = 0.dp
@@ -98,7 +95,7 @@ fun ResenaCard(
             color = colorResource(R.color.BordeTuProfe)
         ),
         colors = CardDefaults.cardColors(
-            containerColor = colorResource(R.color.pastel)
+            MaterialTheme.colorScheme.surface
         ),
         elevation = CardDefaults.cardElevation(
             defaultElevation = 10.dp,

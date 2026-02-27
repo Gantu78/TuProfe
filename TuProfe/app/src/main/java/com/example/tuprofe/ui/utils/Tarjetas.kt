@@ -22,6 +22,7 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -47,16 +48,18 @@ fun ProfileHeaderCard(
     email: String,
     carrera: String,
     imageRes: Int,
+    onProfileClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     Card(
         modifier = modifier
             .fillMaxWidth()
             .padding(vertical = 10.dp),
+        onClick = onProfileClick,
         shape = RoundedCornerShape(28.dp),
         border = BorderStroke(2.5.dp, colorResource(R.color.BordeTuProfe)),
         colors = CardDefaults.cardColors(
-            containerColor = colorResource(R.color.pastel)
+            MaterialTheme.colorScheme.surface
         ),
         elevation = CardDefaults.cardElevation(defaultElevation = 14.dp)
     ) {
@@ -289,7 +292,6 @@ fun TuProfeCardBody(
         )
         Text(
             date,
-            color= Color.Gray,
             fontSize = 12.sp,
             modifier = Modifier.padding(top = 16.dp),
         )

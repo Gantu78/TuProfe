@@ -27,6 +27,7 @@ import androidx.compose.material.icons.filled.ThumbsUpDown
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -34,6 +35,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -46,6 +48,8 @@ import com.example.tuprofe.ui.utils.ConfigItem
 
 @Composable
 fun ConfigScreen(
+    onProfileClick: () -> Unit,
+    onLogoutClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
 
@@ -53,7 +57,6 @@ fun ConfigScreen(
         Box(
             modifier = modifier
                 .fillMaxSize()
-
         ) {
 
             BackgroundImage()
@@ -63,26 +66,17 @@ fun ConfigScreen(
                     .fillMaxSize()
                     .padding(horizontal = 30.dp),
                 contentPadding = PaddingValues(
-                    top = 55.dp,
                     bottom = 120.dp
                 )
             ) {
 
-
-                item { Spacer(modifier = Modifier.height(20.dp)) }
-
-
-
-                item { Spacer(modifier = Modifier.height(20.dp)) }
-
-                // NUEVA tarjeta de perfil (antes de las opciones)
                 item {
                     ProfileHeaderCard(
                         username = "Gantu870",
                         email = "c.jimenez@javeriana.edu.co",
                         carrera = "Ing. de Sistemas",
                         imageRes = R.drawable.ic_launcher_foreground,
-
+                        onProfileClick = onProfileClick,
                     )
                 }
 
@@ -95,49 +89,48 @@ fun ConfigScreen(
                     )
                 }
 
-                item { Spacer(modifier = Modifier.height(20.dp)) }
 
                 item {
                     ConfigItem(
                         icon = Icons.Default.ThumbsUpDown,
-                        title = "Historial de calificaciones",
-                        subtitle = "¿Qué profes has calificado?"
+                        title = stringResource(R.string.historial_de_calificaciones),
+                        subtitle = stringResource(R.string.qu_profes_has_calificado)
                     )
                 }
 
                 item {
                     ConfigItem(
                         icon = Icons.Default.MailOutline,
-                        title = "Ayuda y Soporte",
-                        subtitle = "FAQ, Términos y condiciones"
+                        title = stringResource(R.string.ayuda_y_soporte),
+                        subtitle = stringResource(R.string.faq_t_rminos_y_condiciones)
                     )
                 }
 
                 item {
                     ConfigItem(
                         icon = Icons.Default.Lock,
-                        title = "Privacidad",
-                        subtitle = "Perfil Anónimo, Visibilidad..."
+                        title = stringResource(R.string.privacidad),
+                        subtitle = stringResource(R.string.perfil_an_nimo_visibilidad)
                     )
                 }
 
                 item {
                     ConfigItem(
                         icon = Icons.Default.Notifications,
-                        title = "Notificaciones",
-                        subtitle = "Alertas y novedades"
+                        title = stringResource(R.string.notificaciones),
+                        subtitle = stringResource(R.string.alertas_y_novedades)
                     )
                 }
 
-                item { Spacer(modifier = Modifier.height(40.dp)) }
+                item { Spacer(modifier = Modifier.height(20.dp)) }
 
                 item {
                     AppButton(
-                        textoBoton = "CERRAR SESIÓN",
+                        textoBoton = stringResource(R.string.cerrar_sesi_n),
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(horizontal = 30.dp),
-                        onClick = {""}
+                        onClick = onLogoutClick
                     )
                 }
 
@@ -159,8 +152,8 @@ fun UserCard(
         shape = RoundedCornerShape(20.dp),
         border = BorderStroke(2.dp, colorResource(R.color.BordeTuProfe)),
         colors = CardDefaults.cardColors(
-            containerColor = colorResource(R.color.pastel)
-        )
+            MaterialTheme.colorScheme.surface
+        ),
     ) {
         Row (
             modifier = Modifier.padding(20.dp),
@@ -189,6 +182,9 @@ fun UserCard(
 @Preview (showBackground = true)
 @Composable
 fun ConfigScreenPreview() {
-    ConfigScreen()
+    ConfigScreen(
+        onProfileClick = {},
+        onLogoutClick = {}
+    )
 }
 

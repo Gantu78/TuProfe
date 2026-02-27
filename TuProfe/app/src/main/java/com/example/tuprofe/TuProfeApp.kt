@@ -56,42 +56,33 @@ fun TuProfeApp(
     val currentRoute = currentBackStackEntry.value?.destination?.route
 
     Box(modifier = Modifier.fillMaxSize()) {
-    BackgroundImage()
+        BackgroundImage()
 
-    Scaffold(
-        containerColor = Color.Transparent,
-        contentWindowInsets = WindowInsets(0),
-        topBar = {
-            if(NavigationLogic.ShouldShowTopBar(currentRoute)){
-                Surface(
-                    color = Color.Transparent,
-                    tonalElevation = 10.dp,
-                    shadowElevation = 10.dp,
-
-                ) {
+        Scaffold(
+            containerColor = Color.Transparent,
+            contentWindowInsets = WindowInsets(0),
+            topBar = {
+                if(NavigationLogic.ShouldShowTopBar(currentRoute)){
+                    // Eliminamos el Surface que causaba el tinte grisáceo/transparente raro
                     TuProfeTopBar()
                 }
+            },
+            bottomBar = {
+                if(NavigationLogic.ShouldShowBottomBar(currentRoute)){
+                    TuProfeBottomBar(navController = navController)
+                }
             }
-
-        },
-        bottomBar = {
-            if(NavigationLogic.ShouldShowBottomBar(currentRoute)){
-                TuProfeBottomBar(navController = navController)
-            }
+        ) { paddingValues ->
+            AppNavegation(
+                navController = navController,
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(paddingValues) // Aplicamos el padding para que no se solape
+            )
         }
-    ) { paddingValues ->
-
-
-
-        AppNavegation(
-            navController = navController,
-            modifier = Modifier.fillMaxSize()
-
-        )
-
-    }
     }
 }
+
 @Preview()
 @Composable
 fun TuProfeAppPreview(){
@@ -105,22 +96,26 @@ fun TuProfeTopBar(
     texto: String = "TuProfe",
     modifier: Modifier = Modifier
 ){
-
     CenterAlignedTopAppBar(
+        colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
+            containerColor = Color.Transparent,
+            titleContentColor = colorResource(R.color.verdetp), // Color del título aquí
+            navigationIconContentColor = colorResource(R.color.verdetp),
+            actionIconContentColor = colorResource(R.color.verdetp)
+        ),
         modifier = modifier
-                .fillMaxWidth()
+            .fillMaxWidth()
             .padding(top = 40.dp),
         title = {
             Text(
                 text = texto,
                 fontWeight = FontWeight.Bold,
                 fontFamily = BebasNeue,
-                style = MaterialTheme.typography.titleLarge,
-                color = colorResource(R.color.verdetp)
+                style = MaterialTheme.typography.titleLarge
+                // Quitamos el color de aquí para que use el titleContentColor de la TopAppBar
             )
         }
     )
-
 }
 
 @Preview
@@ -136,9 +131,6 @@ fun HeaderSection(
     modifier: Modifier = Modifier,
     onBackClick: (() -> Unit)? = null
 ) {
-
-
-
     Column(
         modifier = modifier
             .fillMaxWidth()
