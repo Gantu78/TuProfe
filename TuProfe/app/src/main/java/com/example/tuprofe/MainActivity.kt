@@ -40,8 +40,8 @@ import com.example.tuprofe.ui.utils.TitleHeader
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
         enableEdgeToEdge()
+        super.onCreate(savedInstanceState)
         setContent {
             TuProfeTheme {
                 TuProfeApp()

@@ -1,9 +1,11 @@
 package com.example.tuprofe
 
 import android.annotation.SuppressLint
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -33,8 +35,13 @@ import com.example.tuprofe.ui.utils.SearchBar
 import com.example.tuprofe.ui.utils.TitleHeader
 import androidx.compose.material3.*
 import androidx.compose.material3.CheckboxDefaults.colors
+import androidx.compose.ui.text.font.FontWeight
+import androidx.navigation.compose.currentBackStackEntryAsState
+import com.example.tuprofe.navegation.NavigationLogic
+import com.example.tuprofe.navegation.Screen
 import com.example.tuprofe.navegation.TuProfeBottomBar
-
+import com.example.tuprofe.ui.theme.BebasNeue
+import com.example.tuprofe.ui.utils.BackgroundImage
 
 
 @Composable
@@ -44,18 +51,33 @@ fun TuProfeApp(
 
 ){
     val navController = rememberNavController()
+
+    val currentBackStackEntry = navController.currentBackStackEntryAsState()
+    val currentRoute = currentBackStackEntry.value?.destination?.route
+
+    Box(modifier = Modifier.fillMaxSize()) {
+    BackgroundImage()
+
     Scaffold(
         containerColor = Color.Transparent,
+        contentWindowInsets = WindowInsets(0),
         topBar = {
+            if(NavigationLogic.ShouldShowTopBar(currentRoute)){
+                Surface(
+                    color = Color.Transparent,
+                    tonalElevation = 10.dp,
+                    shadowElevation = 10.dp,
 
-            HeaderSection(
-                title = ""
-
-            )
+                ) {
+                    TuProfeTopBar()
+                }
+            }
 
         },
         bottomBar = {
-            TuProfeBottomBar(navController = navController)
+            if(NavigationLogic.ShouldShowBottomBar(currentRoute)){
+                TuProfeBottomBar(navController = navController)
+            }
         }
     ) { paddingValues ->
 
@@ -65,10 +87,9 @@ fun TuProfeApp(
             navController = navController,
             modifier = Modifier.fillMaxSize()
 
-
-
         )
 
+    }
     }
 }
 @Preview()
@@ -78,6 +99,35 @@ fun TuProfeAppPreview(){
     )
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun TuProfeTopBar(
+    texto: String = "TuProfe",
+    modifier: Modifier = Modifier
+){
+
+    CenterAlignedTopAppBar(
+        modifier = modifier
+                .fillMaxWidth()
+            .padding(top = 40.dp),
+        title = {
+            Text(
+                text = texto,
+                fontWeight = FontWeight.Bold,
+                fontFamily = BebasNeue,
+                style = MaterialTheme.typography.titleLarge,
+                color = colorResource(R.color.verdetp)
+            )
+        }
+    )
+
+}
+
+@Preview
+@Composable
+fun TuProfeTopBarPreview(){
+    TuProfeTopBar()
+}
 
 @Composable
 fun HeaderSection(
