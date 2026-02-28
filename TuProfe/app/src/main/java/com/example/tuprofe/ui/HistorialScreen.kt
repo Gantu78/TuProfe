@@ -28,6 +28,7 @@ import com.example.tuprofe.data.local.LocalReview
 import com.example.tuprofe.ui.utils.AppButton
 import com.example.tuprofe.ui.utils.AppButtonRow
 import com.example.tuprofe.ui.utils.BackgroundImage
+import com.example.tuprofe.ui.utils.RatingStars
 
 @Composable
 fun HistorialScreen(
@@ -42,7 +43,7 @@ fun HistorialScreen(
 
         Column(
             modifier = Modifier
-                .padding(horizontal = 24.dp)
+                .padding(horizontal = 10.dp)
         ) {
 
             Spacer(modifier = Modifier.height(24.dp))
@@ -99,7 +100,8 @@ fun HistorialHeader(
             textAlign = TextAlign.Center,
             modifier = Modifier.fillMaxWidth(),
             lineHeight = 22.sp,
-            color = Color.Gray
+            color = MaterialTheme.colorScheme.onSurface,
+
         )
     }
 }
@@ -147,7 +149,24 @@ fun HistorialCard(
                 onVerCalificacionClick = { onVerCalificacionClick(review) },
                 modifier = Modifier.weight(1f)
             )
+            HistorialCardDetalle(
+                review = review,
+                modifier = Modifier.padding(start = 16.dp)
+            )
+
         }
+    }
+}
+
+@Composable
+fun HistorialCardDetalle(
+    review: ReviewInfo,
+    modifier: Modifier = Modifier
+){
+    Column(
+        modifier = modifier
+    ) {
+        RatingStars(review.rating)
     }
 }
 
@@ -160,7 +179,7 @@ fun HistorialCardBody(
 
     Column(modifier = modifier) {
         Text(
-            text = review.name,
+            text = review.profeName,
             fontWeight = FontWeight.Bold,
             fontSize = 18.sp
         )
@@ -171,7 +190,7 @@ fun HistorialCardBody(
         )
         Spacer(modifier = Modifier.height(8.dp))
         AppButtonRow(
-            textoBoton = stringResource(R.string.ver_calificaci_n),
+            textoBoton = stringResource(R.string.ver_rese_a),
             onClick = onVerCalificacionClick,
             modifier = Modifier.height(36.dp)
         )

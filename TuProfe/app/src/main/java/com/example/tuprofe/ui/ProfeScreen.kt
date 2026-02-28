@@ -51,9 +51,11 @@ import kotlin.math.roundToInt
 @Composable
 fun ProfeScreen(
     modifier: Modifier = Modifier,
+    onResenaClick: (Int) -> Unit,
+    onProfileClick: () -> Unit
 ) {
     val allReviews = LocalReview.Reviews
-    val professorName = LocalReview.Reviews[4].name
+    val professorName = LocalReview.Reviews[4].profeName
     val professorSubjects = LocalReview.Reviews[4].materia
     val professorRating = allReviews.map { it.rating }.average().roundToInt()
     val professorImage = LocalReview.Reviews[4].imageId
@@ -79,7 +81,7 @@ fun ProfeScreen(
                 }
 
                 items(allReviews) { review ->
-                    ResenaCard(reviewInfo = review, onCommentsClick = {})
+                    ResenaCard(reviewInfo = review, onCommentsClick = onResenaClick, onProfileClick = onProfileClick )
                     Spacer(modifier = Modifier.height(16.dp))
                 }
             }
@@ -249,6 +251,9 @@ private fun ProfeScreenBottomBar(
 @Composable
 private fun ProfeScreenPreview() {
     TuProfeTheme {
-        ProfeScreen()
+        ProfeScreen(
+            onResenaClick = {},
+            onProfileClick = {}
+        )
     }
 }

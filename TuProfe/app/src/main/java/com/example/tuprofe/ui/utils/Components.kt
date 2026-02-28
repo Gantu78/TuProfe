@@ -201,7 +201,7 @@ fun ConfigItem(
     title: String,
     subtitle: String,
     modifier: Modifier = Modifier,
-    onClick: () -> Unit = {}
+    onClick: () -> Unit
 ) {
     Card(
         modifier = modifier

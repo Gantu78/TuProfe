@@ -50,6 +50,10 @@ import com.example.tuprofe.ui.utils.ConfigItem
 fun ConfigScreen(
     onProfileClick: () -> Unit,
     onLogoutClick: () -> Unit,
+    onCalifClick: () ->Unit,
+    onAyudaClick: () -> Unit,
+    onPrivacidadClick: () -> Unit,
+    onNotificacionesClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
 
@@ -94,7 +98,8 @@ fun ConfigScreen(
                     ConfigItem(
                         icon = Icons.Default.ThumbsUpDown,
                         title = stringResource(R.string.historial_de_calificaciones),
-                        subtitle = stringResource(R.string.qu_profes_has_calificado)
+                        subtitle = stringResource(R.string.qu_profes_has_calificado),
+                        onClick = onCalifClick
                     )
                 }
 
@@ -102,7 +107,8 @@ fun ConfigScreen(
                     ConfigItem(
                         icon = Icons.Default.MailOutline,
                         title = stringResource(R.string.ayuda_y_soporte),
-                        subtitle = stringResource(R.string.faq_t_rminos_y_condiciones)
+                        subtitle = stringResource(R.string.faq_t_rminos_y_condiciones),
+                        onClick = onAyudaClick
                     )
                 }
 
@@ -110,7 +116,8 @@ fun ConfigScreen(
                     ConfigItem(
                         icon = Icons.Default.Lock,
                         title = stringResource(R.string.privacidad),
-                        subtitle = stringResource(R.string.perfil_an_nimo_visibilidad)
+                        subtitle = stringResource(R.string.perfil_an_nimo_visibilidad),
+                        onClick = onPrivacidadClick
                     )
                 }
 
@@ -118,7 +125,8 @@ fun ConfigScreen(
                     ConfigItem(
                         icon = Icons.Default.Notifications,
                         title = stringResource(R.string.notificaciones),
-                        subtitle = stringResource(R.string.alertas_y_novedades)
+                        subtitle = stringResource(R.string.alertas_y_novedades),
+                        onClick = onNotificacionesClick
                     )
                 }
 
@@ -184,7 +192,11 @@ fun UserCard(
 fun ConfigScreenPreview() {
     ConfigScreen(
         onProfileClick = {},
-        onLogoutClick = {}
+        onLogoutClick = {},
+        onCalifClick = {},
+        onAyudaClick = {},
+        onPrivacidadClick = {},
+        onNotificacionesClick = {}
     )
 }
 

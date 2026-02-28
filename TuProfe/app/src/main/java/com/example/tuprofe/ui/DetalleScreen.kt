@@ -43,7 +43,8 @@ fun DetalleScreen (
     onComment: () -> Unit,
     ReviewInfo: ReviewInfo,
     responseReviews: List<ReviewInfo>,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    onProfileClick: () -> Unit
 
 ) {
     Box() {
@@ -83,7 +84,8 @@ fun DetalleScreen (
 
                 ) {
                     Resena(
-                        reviewInfo = ReviewInfo
+                        reviewInfo = ReviewInfo,
+                        onProfileClick = onProfileClick
                     )
                 }
                 HorizontalDivider(thickness = 1.dp)
@@ -125,7 +127,8 @@ fun DetalleScreen (
                 ) {
                     Resena(
                         reviewInfo = responseReviews[it],
-                        modifier = Modifier.padding(top = 6.dp, bottom = 6.dp)
+                        modifier = Modifier.padding(top = 6.dp, bottom = 6.dp),
+                        onProfileClick = onProfileClick
                     )
                 }
                 HorizontalDivider(thickness = 1.dp)
@@ -149,7 +152,8 @@ fun DetalleScreenPreview(){
         onComment = {},
         onShare = {},
         ReviewInfo = review,
-        responseReviews = respuestas
+        responseReviews = respuestas,
+        onProfileClick = {}
 
     )
 }

@@ -46,12 +46,13 @@ import com.example.tuprofe.ui.utils.Resena
 fun MainScreen(
     modifier: Modifier = Modifier,
     onResenaClick: (Int) -> Unit,
+    onProfileClick: () -> Unit
 ) {
 
     val allReviews = LocalReview.Reviews
 
     Box(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxSize()
 
     ) {
@@ -70,7 +71,9 @@ fun MainScreen(
             items(allReviews) { review ->
                 ResenaCard(
                     reviewInfo = review,
-                    onCommentsClick = onResenaClick)
+                    onCommentsClick = onResenaClick,
+                    onProfileClick = onProfileClick
+                )
             }
         }
     }
@@ -81,7 +84,8 @@ fun MainScreen(
 fun ResenaCard(
     reviewInfo: ReviewInfo,
     modifier: Modifier = Modifier,
-    onCommentsClick: (Int) -> Unit
+    onCommentsClick: (Int) -> Unit,
+    onProfileClick: () -> Unit
 
 ) {
     Spacer(modifier.scale(1F))
@@ -107,7 +111,8 @@ fun ResenaCard(
         onClick = {onCommentsClick(reviewInfo.reviewId)}
     ) {
         Resena(
-            reviewInfo = reviewInfo
+            reviewInfo = reviewInfo,
+            onProfileClick = onProfileClick
         )
     }
 }
@@ -117,7 +122,8 @@ fun ResenaCard(
 @Composable
 fun MainScreenPreview() {
     MainScreen(
-        onResenaClick = {}
+        onResenaClick = {},
+        onProfileClick = {}
     )
 }
 

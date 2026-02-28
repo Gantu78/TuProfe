@@ -48,4 +48,7 @@
     <string name="ver_calificaci_n">VER CALIFICACIÓN</string>
     <string name="filtrar">FILTRAR</string>
     <string name="texto_calificaciones">Aquí puedes ver todos los profes que has calificado para llevar un seguimiento de tus favoritos</string>
+    <string name="por">Por:</string>
+    <string name="arroba">:@</string>
+    <string name="ver_rese_a">VER RESEÑA</string>
 </resources>

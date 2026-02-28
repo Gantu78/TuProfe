@@ -4,6 +4,7 @@ import androidx.annotation.StringRes
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -110,7 +111,8 @@ fun ProfileHeaderCard(
 fun Resena(
     reviewInfo: ReviewInfo,
     modifier: Modifier = Modifier,
-    onCommentsClick: () -> Unit = {}
+    onCommentsClick: () -> Unit = {},
+    onProfileClick: () -> Unit
 
 ) {
 
@@ -121,9 +123,11 @@ fun Resena(
             TuProfeCardHeader(
                 modifier = modifier.
                 padding(horizontal = 10.dp),
-                name = reviewInfo.name,
+                profeName = reviewInfo.profeName,
+                userName = reviewInfo.userName,
                 carrera = reviewInfo.materia,
-                imagen = reviewInfo.imageId
+                imagen = reviewInfo.imageId,
+                onProfileClick = onProfileClick
             )
 
             Spacer(modifier = Modifier.height(8.dp))
@@ -160,7 +164,8 @@ fun ResenaPreview() {
     val example = LocalReview.Reviews[0]
     Resena(
         reviewInfo = example,
-        onCommentsClick = {}
+        onCommentsClick = {},
+        onProfileClick = {}
     )
 }
 
@@ -235,10 +240,12 @@ fun TuProfeCardFooterPreview(){
 
 @Composable
 fun TuProfeCardHeader(
-    name: String,
+    profeName: String,
+    userName: String,
     carrera: String,
     modifier: Modifier = Modifier,
-    imagen: Int = R.drawable.avatar
+    imagen: Int = R.drawable.avatar,
+    onProfileClick: () -> Unit
 ){
     Row(
         modifier = modifier
@@ -251,10 +258,13 @@ fun TuProfeCardHeader(
                 .height(40.dp)
                 .width(40.dp)
                 .clip(CircleShape)
+                .clickable(
+                    onClick = onProfileClick
+                )
         )
         Column() {
             Text(
-                name,
+                profeName,
                 fontWeight = FontWeight.Bold,
                 modifier = modifier.padding(top = 5.dp, )
             )
@@ -264,6 +274,19 @@ fun TuProfeCardHeader(
                 fontSize = 12.sp
             )
         }
+        Spacer(modifier = Modifier.weight(1f))
+        Text(
+            stringResource(R.string.por),
+            fontWeight = FontWeight.Bold,
+            fontSize = 12.sp,
+        )
+        Spacer(modifier = Modifier.width(4.dp))
+        Text(
+            stringResource(R.string.arroba) +
+            userName,
+            color = Color.Gray,
+            fontSize = 12.sp
+        )
     }
 }
 
@@ -272,8 +295,11 @@ fun TuProfeCardHeader(
 fun TuProfeCardHeaderPreview(){
     val review = LocalReview.Reviews[0]
     TuProfeCardHeader(
-        name = review.name,
-        carrera = review.materia
+        profeName = review.profeName,
+        userName = review.userName,
+        carrera = review.materia,
+        imagen = review.imageId,
+        onProfileClick = {}
     )
 }
 

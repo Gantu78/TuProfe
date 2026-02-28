@@ -140,11 +140,21 @@ fun AppNavegation(
             MainScreen(
                 onResenaClick = { reviewId ->
                     navController.navigate(Screen.Detalle.createRoute(reviewId))
+                },
+                onProfileClick = {
+                    navController.navigate(Screen.Profe.route)
                 }
             )
         }
         composable(route = Screen.Profe.route){
-            ProfeScreen()
+            ProfeScreen(
+                onResenaClick = { reviewId ->
+                    navController.navigate(Screen.Detalle.createRoute(reviewId))
+                },
+                onProfileClick = {
+                    navController.navigate(Screen.Profile.route)
+                }
+            )
         }
         composable(route = Screen.Profile.route){
             HistorialScreen(
@@ -187,7 +197,18 @@ fun AppNavegation(
                         inclusive = true
                     }
                     }
+                },
+                onCalifClick = {
+                    navController.navigate(Screen.Profile.route)
+                },
+                onAyudaClick = {
+                },
+                onPrivacidadClick = {
+                },
+                onNotificacionesClick = {
                 }
+
+
 
             )
         }
@@ -206,7 +227,9 @@ fun AppNavegation(
                     onShare = {},
                     ReviewInfo = review,
                     responseReviews = LocalReview.Reviews,
-
+                    onProfileClick = {
+                        navController.navigate(Screen.Profe.route)
+                    }
                 )
 
             } else (Text(stringResource(R.string.rese_a_no_encontrada)))
