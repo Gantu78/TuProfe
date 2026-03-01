@@ -38,3 +38,6 @@ val Typography = Typography(
 val BebasNeue = FontFamily(
     Font(R.font.bebasneueregular, FontWeight.Normal)
 )
+
+val Montserrat = FontFamily(Font(R.font.montserrat, FontWeight.Normal)
+)

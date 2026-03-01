@@ -35,6 +35,8 @@ import com.example.tuprofe.ui.utils.SearchBar
 import com.example.tuprofe.ui.utils.TitleHeader
 import androidx.compose.material3.*
 import androidx.compose.material3.CheckboxDefaults.colors
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.Shadow
 import androidx.compose.ui.text.font.FontWeight
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.example.tuprofe.navegation.NavigationLogic
@@ -42,6 +44,7 @@ import com.example.tuprofe.navegation.Screen
 import com.example.tuprofe.navegation.TuProfeBottomBar
 import com.example.tuprofe.ui.theme.BebasNeue
 import com.example.tuprofe.ui.utils.BackgroundImage
+import com.example.tuprofe.ui.theme.Montserrat
 
 
 @Composable
@@ -57,28 +60,35 @@ fun TuProfeApp(
 
     Box(modifier = Modifier.fillMaxSize()) {
         BackgroundImage()
-
         Scaffold(
             containerColor = Color.Transparent,
+            contentColor = Color.Unspecified,
             contentWindowInsets = WindowInsets(0),
             topBar = {
-                if(NavigationLogic.ShouldShowTopBar(currentRoute)){
-                    // Eliminamos el Surface que causaba el tinte grisáceo/transparente raro
+                if (NavigationLogic.ShouldShowTopBar(currentRoute)) {
                     TuProfeTopBar()
                 }
             },
             bottomBar = {
-                if(NavigationLogic.ShouldShowBottomBar(currentRoute)){
+                if (NavigationLogic.ShouldShowBottomBar(currentRoute)) {
                     TuProfeBottomBar(navController = navController)
                 }
             }
         ) { paddingValues ->
-            AppNavegation(
-                navController = navController,
+
+            Box(
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(paddingValues) // Aplicamos el padding para que no se solape
-            )
+                    .padding(paddingValues)
+            ) {
+
+  // 👈 ahora está dentro
+
+                AppNavegation(
+                    navController = navController,
+                    modifier = Modifier.fillMaxSize()
+                )
+            }
         }
     }
 }
@@ -95,27 +105,31 @@ fun TuProfeAppPreview(){
 fun TuProfeTopBar(
     texto: String = "TuProfe",
     modifier: Modifier = Modifier
-){
-    CenterAlignedTopAppBar(
-        colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
-            containerColor = Color.Transparent,
-            titleContentColor = colorResource(R.color.verdetp), // Color del título aquí
-            navigationIconContentColor = colorResource(R.color.verdetp),
-            actionIconContentColor = colorResource(R.color.verdetp)
-        ),
-        modifier = modifier
-            .fillMaxWidth()
-            .padding(top = 10.dp),
-        title = {
-            Text(
-                text = texto,
-                fontWeight = FontWeight.Bold,
-                fontFamily = BebasNeue,
-                style = MaterialTheme.typography.titleLarge
-                // Quitamos el color de aquí para que use el titleContentColor de la TopAppBar
-            )
-        }
-    )
+) {
+
+    Column {
+        CenterAlignedTopAppBar(
+            expandedHeight = 90.dp,
+            colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
+                containerColor = Color.Transparent,
+                titleContentColor = colorResource(R.color.verdetp)
+            ),
+            title = {
+                Text(
+                    text = texto,
+                    fontWeight = FontWeight.ExtraBold,
+                    fontFamily = Montserrat,
+                    fontSize = 60.sp,
+                    letterSpacing = 0.5.sp
+                )
+            }
+        )
+
+        HorizontalDivider(
+            thickness = 1.dp,
+            color = Color.Black.copy(alpha = 0.08f)
+        )
+    }
 }
 
 @Preview
@@ -127,7 +141,6 @@ fun TuProfeTopBarPreview(){
 @Composable
 fun HeaderSection(
     title: String,
-    showSearchBar: Boolean = true,
     modifier: Modifier = Modifier,
     onBackClick: (() -> Unit)? = null
 ) {
@@ -139,11 +152,6 @@ fun HeaderSection(
     ) {
         if (onBackClick != null) {
             BackButtonHeader(onBackClick = onBackClick)
-        }
-
-        if (showSearchBar) {
-            SearchBar()
-            Spacer(modifier = Modifier.height(20.dp))
         }
 
         TitleHeader(title = title)

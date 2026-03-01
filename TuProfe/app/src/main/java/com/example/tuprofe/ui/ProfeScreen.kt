@@ -63,9 +63,7 @@ fun ProfeScreen(
     Box(modifier = modifier.fillMaxSize()) {
         BackgroundImage()
         Column(Modifier.fillMaxSize()) {
-            ProfeScreenHeader(
-                onBackClick = { Log.d("Boton", "Volver")}
-            )
+
             LazyColumn(
                 modifier = Modifier.weight(1f),
                 horizontalAlignment = Alignment.CenterHorizontally,
@@ -95,31 +93,7 @@ fun ProfeScreen(
     }
 }
 
-@Composable
-private fun ProfeScreenHeader(onBackClick: () -> Unit) {
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(16.dp),
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.SpaceBetween
-    ) {
-        Text(
-            text = stringResource(R.string.tuprofe),
-            fontSize = 30.sp,
-            fontWeight = FontWeight.Bold,
-            color = colorResource(id = R.color.verdetp)
-        )
-        IconButton(onClick = onBackClick) {
-            Icon(
-                imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                contentDescription = stringResource(R.string.atras),
-                tint = colorResource(id = R.color.verdetp),
-                modifier = Modifier.size(30.dp)
-            )
-        }
-    }
-}
+
 
 @Composable
 fun ProfessorInfoCard(

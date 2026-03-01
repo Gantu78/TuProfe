@@ -41,34 +41,30 @@ fun HistorialScreen(
     Box(modifier = modifier.fillMaxSize()) {
         BackgroundImage()
 
-        Column(
+        LazyColumn(
             modifier = Modifier
-                .padding(horizontal = 10.dp)
+                .fillMaxSize()
+                .padding(horizontal = 10.dp),
+            verticalArrangement = Arrangement.spacedBy(16.dp),
+            contentPadding = PaddingValues(
+                top = 24.dp,
+                bottom = 80.dp
+            )
         ) {
 
-            Spacer(modifier = Modifier.height(24.dp))
+            item {
+                HistorialHeader(
+                    onFilterClick = onFilterClick
+                )
+            }
 
-            HistorialHeader(
-                onFilterClick = onFilterClick
-            )
-
-            // Reviews List
-            LazyColumn(
-                modifier = Modifier.weight(1f),
-                verticalArrangement = Arrangement.spacedBy(16.dp),
-                contentPadding = PaddingValues(bottom = 80.dp)
-            ) {
-                items(reviews) { review ->
-                    HistorialCard(
-                        review = review,
-                        onVerCalificacionClick = { onVerCalificacionClick(review) }
-                    )
-                }
+            items(reviews) { review ->
+                HistorialCard(
+                    review = review,
+                    onVerCalificacionClick = { onVerCalificacionClick(review) }
+                )
             }
         }
-
-
-
     }
 }
 
@@ -77,7 +73,6 @@ fun HistorialHeader(
     onFilterClick: () -> Unit,
     modifier: Modifier = Modifier
 ){
-
     Column(
         modifier = Modifier
             .padding(horizontal = 24.dp)
@@ -88,7 +83,6 @@ fun HistorialHeader(
             onClick = onFilterClick,
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(16.dp)
                 .height(56.dp)
         )
 
@@ -101,7 +95,14 @@ fun HistorialHeader(
             modifier = Modifier.fillMaxWidth(),
             lineHeight = 22.sp,
             color = MaterialTheme.colorScheme.onSurface,
+        )
 
+        Spacer(modifier = Modifier.height(12.dp))
+
+        HorizontalDivider(
+            thickness = 1.dp,
+            color = colorResource(R.color.BordeTuProfe),
+            modifier = Modifier.fillMaxWidth()
         )
     }
 }

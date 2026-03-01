@@ -88,7 +88,6 @@ fun ResenaCard(
     onProfileClick: () -> Unit
 
 ) {
-    Spacer(modifier.scale(1F))
     Card(
         modifier = modifier
             .fillMaxWidth()

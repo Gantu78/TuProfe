@@ -66,7 +66,7 @@ fun ResetPasswordScreen(
                 Spacer(modifier = Modifier.padding(10.dp))
                 AppTextButton(stringResource(R.string.volver), onClick = { onVolverClick() })
                 if (mostrarMensaje) {
-                    Text("tu enlace se envio correctamente", color = colorResource(R.color.verdetp2), fontSize = 16.sp)
+                    Text("Tu enlace se envio correctamente", color = colorResource(R.color.verdetp2), fontSize = 16.sp)
                 }
 
             }

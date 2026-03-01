@@ -204,6 +204,7 @@ fun ConfigItem(
     onClick: () -> Unit
 ) {
     Card(
+        onClick = onClick,
         modifier = modifier
             .fillMaxWidth()
             .padding(vertical = 8.dp),
@@ -242,29 +243,33 @@ fun ConfigItem(
 
 @Composable
 fun SearchBar(
-    modifier: Modifier = Modifier
+query: String,
+onQueryChange: (String) -> Unit,
+modifier: Modifier = Modifier,
+placeholder: String = "Busca a TuProfe"
 ) {
-    Row(
+    OutlinedTextField(
+        value = query,
+        onValueChange = onQueryChange,
+        placeholder = { Text(placeholder) },
+        leadingIcon = {
+            Icon(
+                imageVector = Icons.Default.Search,
+                contentDescription = null,
+                tint = colorResource(R.color.verdetp)
+            )
+        },
+        shape = RoundedCornerShape(50.dp),
+        singleLine = true,
+        colors = TextFieldDefaults.colors(
+            unfocusedContainerColor = colorResource(R.color.pastel),
+            focusedContainerColor = colorResource(R.color.pastel),
+            unfocusedIndicatorColor = Color.Transparent,
+            focusedIndicatorColor = colorResource(R.color.verdetp)
+        ),
         modifier = modifier
             .fillMaxWidth()
-            .padding(horizontal = 40.dp)
-            .clip(RoundedCornerShape(50))
-            .background(colorResource(R.color.verdetp))
-            .padding(horizontal = 20.dp, vertical = 12.dp),
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        Text(
-            text = "Busca a TuProfe",
-            color = Color.White,
-            modifier = Modifier.weight(1f)
-        )
-
-        Icon(
-            imageVector = Icons.Default.Search,
-            contentDescription = null,
-            tint = Color.White
-        )
-    }
+    )
 }
 
 @Composable
@@ -278,11 +283,7 @@ fun TitleHeader(title: String, modifier: Modifier = Modifier) {
     )
 }
 
-@Preview()
-@Composable
-fun TitleHeaderPreview() {
-    SearchBar()
-}
+
 
 @Composable
 fun BackButtonHeader(onBackClick: () -> Unit, modifier: Modifier = Modifier) {
