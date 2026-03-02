@@ -1,6 +1,7 @@
 package com.example.tuprofe
 
 import android.annotation.SuppressLint
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -23,26 +24,22 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.compose.rememberNavController
 import com.example.tuprofe.navegation.AppNavegation
-import com.example.tuprofe.ui.MainScreen
 import com.example.tuprofe.ui.utils.BackButtonHeader
-import com.example.tuprofe.ui.utils.SearchBar
 import com.example.tuprofe.ui.utils.TitleHeader
 import androidx.compose.material3.*
-import androidx.compose.material3.CheckboxDefaults.colors
-import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.graphics.Shadow
+import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.text.PlatformTextStyle
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.example.tuprofe.navegation.NavigationLogic
-import com.example.tuprofe.navegation.Screen
 import com.example.tuprofe.navegation.TuProfeBottomBar
-import com.example.tuprofe.ui.theme.BebasNeue
 import com.example.tuprofe.ui.utils.BackgroundImage
 import com.example.tuprofe.ui.theme.Montserrat
 
@@ -51,7 +48,6 @@ import com.example.tuprofe.ui.theme.Montserrat
 @OptIn(ExperimentalMaterial3Api::class)
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 fun TuProfeApp(
-
 ){
     val navController = rememberNavController()
 
@@ -82,7 +78,6 @@ fun TuProfeApp(
                     .padding(paddingValues)
             ) {
 
-  // 👈 ahora está dentro
 
                 AppNavegation(
                     navController = navController,
@@ -106,28 +101,31 @@ fun TuProfeTopBar(
     texto: String = "TuProfe",
     modifier: Modifier = Modifier
 ) {
+    Column(
+        modifier = modifier
+            .fillMaxWidth()
+            .height(70.dp),
+        verticalArrangement = Arrangement.Bottom
+    ) {
 
-    Column {
-        CenterAlignedTopAppBar(
-            expandedHeight = 90.dp,
-            colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
-                containerColor = Color.Transparent,
-                titleContentColor = colorResource(R.color.verdetp)
-            ),
-            title = {
-                Text(
-                    text = texto,
-                    fontWeight = FontWeight.ExtraBold,
-                    fontFamily = Montserrat,
-                    fontSize = 60.sp,
-                    letterSpacing = 0.5.sp
+        Text(
+            text = texto,
+            fontWeight = FontWeight.Bold,
+            fontFamily = Montserrat,
+            fontSize = 26.sp,
+            color = colorResource(R.color.verdetp),
+            textAlign = TextAlign.Center,
+            modifier = Modifier.fillMaxWidth(),
+            style = TextStyle(
+                platformStyle = PlatformTextStyle(
+                    includeFontPadding = false
                 )
-            }
+            )
         )
 
         HorizontalDivider(
             thickness = 1.dp,
-            color = Color.Black.copy(alpha = 0.08f)
+            color = MaterialTheme.colorScheme.outlineVariant
         )
     }
 }

@@ -4,7 +4,8 @@ import android.util.Log
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -19,12 +20,9 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.VerticalDivider
@@ -32,7 +30,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -45,7 +45,6 @@ import com.example.tuprofe.data.local.LocalReview
 import com.example.tuprofe.ui.theme.TuProfeTheme
 import com.example.tuprofe.ui.utils.BackgroundImage
 import com.example.tuprofe.ui.utils.RatingStars
-import com.example.tuprofe.ui.utils.Resena
 import kotlin.math.roundToInt
 
 @Composable
@@ -106,31 +105,75 @@ fun ProfessorInfoCard(
     Card(
         modifier = modifier
             .fillMaxWidth()
-            .padding(16.dp),
+            .padding(horizontal = 16.dp, vertical = 12.dp),
+        shape = RoundedCornerShape(28.dp),
         border = BorderStroke(
-            width = 2.5.dp,
-            color = colorResource(R.color.BordeTuProfe)
+            2.dp,
+            colorResource(R.color.BordeTuProfe)
         ),
-        shape = RoundedCornerShape(16.dp),
-
-        colors = CardDefaults.cardColors(containerColor = Color(0xFFFDF5E6).copy(alpha = 0.8f)) // Beige background
+        colors = CardDefaults.cardColors(
+            containerColor = MaterialTheme.colorScheme.surface
+        ),
+        elevation = CardDefaults.cardElevation(12.dp)
     ) {
+
         Column(
             modifier = Modifier
-                .padding(16.dp)
+                .padding(20.dp)
                 .fillMaxWidth(),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.SpaceEvenly
-            ) {
-                ProfessorImage(imageRes = professorImageRes)
-                ProfessorNameAndSubject(name = professorName, subjects = professorSubjects)
-            }
+
+            // Avatar premium
+            Image(
+                painter = painterResource(professorImageRes),
+                contentDescription = null,
+                contentScale = ContentScale.Crop,
+                modifier = Modifier
+                    .size(110.dp)
+                    .shadow(6.dp, CircleShape, clip = false)
+                    .clip(CircleShape)
+                    .background(MaterialTheme.colorScheme.surfaceVariant)
+                    .border(
+                        2.dp,
+                        MaterialTheme.colorScheme.outline.copy(alpha = 0.3f),
+                        CircleShape
+                    )
+            )
+
             Spacer(modifier = Modifier.height(16.dp))
-            GeneralRating(rating = generalRating)
+
+            Text(
+                text = professorName,
+                fontSize = 22.sp,
+                fontWeight = FontWeight.SemiBold,
+                color = MaterialTheme.colorScheme.onSurface,
+                maxLines = 1
+            )
+
+            Spacer(modifier = Modifier.height(4.dp))
+
+            Text(
+                text = professorSubjects,
+                fontSize = 15.sp,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                maxLines = 1
+            )
+
+            Spacer(modifier = Modifier.height(18.dp))
+
+            Text(
+                text = stringResource(R.string.calificaci_n_general),
+                fontSize = 14.sp,
+                color = MaterialTheme.colorScheme.onSurfaceVariant
+            )
+
+            Spacer(modifier = Modifier.height(8.dp))
+
+            RatingStars(
+                rating = generalRating,
+                starColor = colorResource(R.color.verdetp)
+            )
         }
     }
 }
@@ -192,30 +235,46 @@ private fun ProfeScreenBottomBar(
     Card(
         modifier = modifier
             .fillMaxWidth()
-            .padding(horizontal = 16.dp, vertical = 8.dp),
-        shape = RoundedCornerShape(50),
-        colors = CardDefaults.cardColors(containerColor = colorResource(id = R.color.verdetp))
+            .padding(horizontal = 20.dp, vertical = 12.dp),
+        shape = RoundedCornerShape(50.dp),
+        elevation = CardDefaults.cardElevation(10.dp),
+        colors = CardDefaults.cardColors(
+            containerColor = colorResource(R.color.verdetp)
+        )
     ) {
         Row(
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(54.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
+
             TextButton(
                 onClick = onAddCommentClick,
                 modifier = Modifier.weight(1f)
             ) {
-                Text(stringResource(R.string.a_adir_comentario), color = Color.White, fontSize = 16.sp)
+                Text(
+                    stringResource(R.string.a_adir_comentario),
+                    color = Color.White,
+                    fontWeight = FontWeight.SemiBold
+                )
             }
+
             VerticalDivider(
-                modifier = Modifier.height(30.dp),
+                modifier = Modifier.height(28.dp),
                 thickness = 1.dp,
-                color = Color.White
+                color = Color.White.copy(alpha = 0.4f)
             )
+
             TextButton(
                 onClick = onRateClick,
                 modifier = Modifier.weight(1f)
             ) {
-                Text(stringResource(R.string.calificar), color = Color.White, fontSize = 16.sp)
+                Text(
+                    stringResource(R.string.calificar),
+                    color = Color.White,
+                    fontWeight = FontWeight.SemiBold
+                )
             }
         }
     }

@@ -12,7 +12,6 @@ object NavigationLogic {
         Screen.Home.route,
         Screen.PasswordReset.route,
         Screen.Register.route,
-        Screen.Detalle.route
     )
 
     fun ShouldShowTopBar(route: String?) = !NoTopBar.contains(route)

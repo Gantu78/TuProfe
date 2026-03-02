@@ -19,6 +19,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -122,11 +123,11 @@ fun HistorialCard(
 ) {
     Card(
         modifier = modifier.fillMaxWidth(),
-        shape = RoundedCornerShape(32.dp),
+        shape = RoundedCornerShape(28.dp),
         border = BorderStroke(1.dp, colorResource(R.color.BordeTuProfe)),
         colors = CardDefaults.cardColors(
-            MaterialTheme.colorScheme.surface
-        ),
+            containerColor = MaterialTheme.colorScheme.surface
+        )
     ) {
         Row(
             modifier = Modifier
@@ -134,27 +135,62 @@ fun HistorialCard(
                 .fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically
         ) {
+
             Image(
                 painter = painterResource(review.imageId),
                 contentDescription = null,
                 modifier = Modifier
-                    .size(80.dp)
+                    .size(72.dp)
                     .clip(CircleShape),
                 contentScale = ContentScale.Crop
             )
 
-            Spacer(modifier = Modifier.width(16.dp))
+            Spacer(modifier = Modifier.width(14.dp))
 
-            HistorialCardBody(
-                review = review,
-                onVerCalificacionClick = { onVerCalificacionClick(review) },
+            Column(
                 modifier = Modifier.weight(1f)
-            )
-            HistorialCardDetalle(
-                review = review,
-                modifier = Modifier.padding(start = 16.dp)
-            )
+            ) {
 
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+
+                    Text(
+                        text = review.profeName,
+                        fontWeight = FontWeight.SemiBold,
+                        fontSize = 17.sp,
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis,
+                        modifier = Modifier.weight(1f)
+                    )
+
+                    Spacer(modifier = Modifier.width(8.dp))
+
+                    RatingStars(
+                        rating = review.rating,
+                        modifier = Modifier.height(16.dp)
+                    )
+                }
+
+                Spacer(modifier = Modifier.height(4.dp))
+
+                Text(
+                    text = review.materia,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    fontSize = 13.sp,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis
+                )
+
+                Spacer(modifier = Modifier.height(8.dp))
+
+                AppButtonRow(
+                    textoBoton = stringResource(R.string.ver_rese_a),
+                    onClick = { onVerCalificacionClick(review) },
+                    modifier = Modifier.height(34.dp)
+                )
+            }
         }
     }
 }

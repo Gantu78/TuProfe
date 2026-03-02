@@ -4,6 +4,7 @@ import androidx.annotation.StringRes
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -17,23 +18,24 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.MailOutline
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -56,54 +58,85 @@ fun ProfileHeaderCard(
     Card(
         modifier = modifier
             .fillMaxWidth()
-            .padding(vertical = 10.dp),
+            .padding(vertical = 12.dp),
         onClick = onProfileClick,
-        shape = RoundedCornerShape(28.dp),
-        border = BorderStroke(2.5.dp, colorResource(R.color.BordeTuProfe)),
-        colors = CardDefaults.cardColors(
-            MaterialTheme.colorScheme.surface
+        shape = RoundedCornerShape(32.dp),
+        border = BorderStroke(
+            2.dp,
+            colorResource(R.color.BordeTuProfe)
         ),
-        elevation = CardDefaults.cardElevation(defaultElevation = 14.dp)
+        colors = CardDefaults.cardColors(
+            containerColor = MaterialTheme.colorScheme.surface
+        ),
+        elevation = CardDefaults.cardElevation(defaultElevation = 10.dp)
     ) {
+
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = 20.dp, vertical = 18.dp),
+                .padding(horizontal = 22.dp, vertical = 20.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
+
+            // 🔹 Avatar Premium
             Image(
                 painter = painterResource(id = imageRes),
-                contentDescription = "Foto de perfil",
+                contentDescription = null,
+                contentScale = ContentScale.Crop,
                 modifier = Modifier
-                    .size(84.dp)
+                    .size(88.dp)
+                    .shadow(6.dp, CircleShape, clip = false)
                     .clip(CircleShape)
-                    .background(Color.White)
-                    .padding(8.dp)
+                    .background(MaterialTheme.colorScheme.surfaceVariant)
+                    .border(
+                        2.dp,
+                        MaterialTheme.colorScheme.outline.copy(alpha = 0.25f),
+                        CircleShape
+                    )
             )
 
-            Spacer(modifier = Modifier.width(16.dp))
+            Spacer(modifier = Modifier.width(18.dp))
 
             Column(
-                modifier = Modifier.weight(1f)
+                modifier = Modifier.weight(1f),
+                verticalArrangement = Arrangement.spacedBy(4.dp)
             ) {
-                Text(
-                    text = username,
-                    fontWeight = FontWeight.Bold,
-                    fontSize = 20.sp,
-                    color = colorResource(R.color.verdetp)
-                )
-                Spacer(modifier = Modifier.height(6.dp))
-                Text(text = email, color = Color.Gray, fontSize = 14.sp)
-                Spacer(modifier = Modifier.height(2.dp))
-                Text(text = carrera, color = Color.Gray, fontSize = 14.sp)
-            }
 
-            if (showStar) {
-                Icon(
-                    imageVector = Icons.Default.Star,
-                    contentDescription = null,
-                    tint = colorResource(R.color.verdetp),
-                    modifier = Modifier.size(24.dp)
+                Row(verticalAlignment = Alignment.CenterVertically) {
+
+                    Text(
+                        text = username,
+                        fontSize = 20.sp,
+                        fontWeight = FontWeight.SemiBold,
+                        color = MaterialTheme.colorScheme.onSurface
+                    )
+
+                    if (showStar) {
+                        Spacer(modifier = Modifier.width(6.dp))
+
+                        Icon(
+                            imageVector = Icons.Default.Star,
+                            contentDescription = null,
+                            tint = colorResource(R.color.verdetp),
+                            modifier = Modifier.size(18.dp)
+                        )
+                    }
+                }
+
+                Text(
+                    text = email,
+                    fontSize = 14.sp,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis
+                )
+
+                Text(
+                    text = carrera,
+                    fontSize = 14.sp,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis
                 )
             }
         }
@@ -166,7 +199,7 @@ fun ResenaPreview() {
 @Composable
 fun RatingStars(
     rating: Int,
-    starColor: Color = Color(0xFF1DB954), // verde por defecto
+    starColor: Color = Color(0xFF1DB954),
     modifier: Modifier = Modifier
 ) {
     Row (modifier =  modifier){
@@ -238,61 +271,79 @@ fun TuProfeCardHeader(
     profeName: String,
     userName: String,
     carrera: String,
-    modifier: Modifier = Modifier.fillMaxWidth(),
     imagen: Int = R.drawable.avatar,
-    onProfileClick: () -> Unit
+    onProfileClick: () -> Unit,
+    modifier: Modifier = Modifier.fillMaxWidth()
 ) {
+
     Row(
-        modifier = modifier
+        modifier = modifier,
+        verticalAlignment = Alignment.CenterVertically
     ) {
-        Row(
-            verticalAlignment = Alignment.CenterVertically
+
+        // 🔹 Avatar premium
+        Image(
+            painter = painterResource(imagen),
+            contentDescription = null,
+            contentScale = ContentScale.Crop,
+            modifier = Modifier
+                .size(48.dp)
+                .shadow(
+                    elevation = 4.dp,
+                    shape = CircleShape,
+                    clip = false
+                )
+                .clip(CircleShape)
+                .background(MaterialTheme.colorScheme.surfaceVariant)
+                .border(
+                    width = 1.5.dp,
+                    color = MaterialTheme.colorScheme.outline.copy(alpha = 0.3f),
+                    shape = CircleShape
+                )
+                .clickable(onClick = onProfileClick)
+        )
+
+        Spacer(modifier = Modifier.width(12.dp))
+
+        Column(
+            modifier = Modifier.weight(1f),
+            verticalArrangement = Arrangement.spacedBy(3.dp)
         ) {
 
-            Image(
-                painter = painterResource(imagen),
-                contentDescription = null,
-                modifier = Modifier
-                    .padding(end = 8.dp)
-                    .size(40.dp)
-                    .clip(CircleShape)
-                    .clickable(onClick = onProfileClick)
-            )
-
-            Column(
-                verticalArrangement = Arrangement.spacedBy(1.dp)
+            // 🔹 Fila superior
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically
             ) {
+
                 Text(
                     text = profeName,
-                    fontSize = 16.sp,
-                    lineHeight = 16.sp,
-                    fontWeight = FontWeight.Bold
+                    fontSize = 17.sp,
+                    fontWeight = FontWeight.SemiBold,
+                    color = MaterialTheme.colorScheme.onSurface,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
+                    modifier = Modifier.weight(1f)
                 )
+
+                Spacer(modifier = Modifier.width(8.dp))
 
                 Text(
-                    text = carrera,
+                    text = "Por: @$userName",
                     fontSize = 12.sp,
-                    lineHeight = 12.sp,
-                    color = Color.Gray
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis
                 )
             }
-        }
 
-        Spacer(modifier = Modifier.weight(1f))
-
-        Row(
-            verticalAlignment = Alignment.Top
-        ) {
+            // 🔹 Materia
             Text(
-                stringResource(R.string.por),
-                fontWeight = FontWeight.Bold,
-                fontSize = 12.sp
-            )
-            Spacer(modifier = Modifier.width(4.dp))
-            Text(
-                stringResource(R.string.arroba) + userName,
-                color = Color.Gray,
-                fontSize = 12.sp
+                text = carrera,
+                fontSize = 13.sp,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis
             )
         }
     }

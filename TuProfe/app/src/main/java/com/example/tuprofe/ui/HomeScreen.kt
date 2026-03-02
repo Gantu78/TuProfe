@@ -1,6 +1,5 @@
 package com.example.tuprofe.ui
 
-import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -23,7 +22,6 @@ import androidx.compose.ui.unit.dp
 import com.example.tuprofe.R
 import com.example.tuprofe.ui.utils.AppButton
 import com.example.tuprofe.ui.utils.AppButtonRow
-import com.example.tuprofe.ui.utils.AppTextButton
 import com.example.tuprofe.ui.utils.BackgroundImage
 import com.example.tuprofe.ui.utils.TextFieldApp
 import com.example.tuprofe.ui.utils.TextFieldContraApp
@@ -131,7 +129,6 @@ fun Botones(
     onLoginClick: () -> Unit = {},
     onForgotPasswordClick: () -> Unit = {},
     onRegisterClick: () -> Unit = {},
-
     modifier: Modifier = Modifier
 ){
     Column(
