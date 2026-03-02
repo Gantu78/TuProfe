@@ -47,8 +47,9 @@ fun DetalleScreen (
     onProfileClick: () -> Unit
 
 ) {
-    Box() {
-        BackgroundImage()
+
+    Box(
+    ) {
         LazyColumn(
             modifier = Modifier
                 .fillMaxSize()

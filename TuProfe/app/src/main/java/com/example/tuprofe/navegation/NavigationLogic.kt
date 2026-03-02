@@ -6,7 +6,6 @@ object NavigationLogic {
         Screen.Home.route,
         Screen.PasswordReset.route,
         Screen.Register.route,
-        Screen.Profile.route,
     )
 
     private val NoBottomBar = listOf(

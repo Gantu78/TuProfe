@@ -50,7 +50,8 @@ fun ProfileHeaderCard(
     carrera: String,
     imageRes: Int,
     onProfileClick: () -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    showStar: Boolean = true
 ) {
     Card(
         modifier = modifier
@@ -97,12 +98,14 @@ fun ProfileHeaderCard(
                 Text(text = carrera, color = Color.Gray, fontSize = 14.sp)
             }
 
-            Icon(
-                imageVector = Icons.Default.Star,
-                contentDescription = null,
-                tint = colorResource(R.color.verdetp),
-                modifier = Modifier.size(24.dp)
-            )
+            if (showStar) {
+                Icon(
+                    imageVector = Icons.Default.Star,
+                    contentDescription = null,
+                    tint = colorResource(R.color.verdetp),
+                    modifier = Modifier.size(24.dp)
+                )
+            }
         }
     }
 }
@@ -116,46 +119,37 @@ fun Resena(
 
 ) {
 
-        Column(
-            modifier = Modifier.padding(6.dp)
-        ) {
+    Column(
+        modifier = Modifier
+            .padding(horizontal = 16.dp, vertical = 10.dp),
+        verticalArrangement = Arrangement.spacedBy(8.dp)
+    ) {
 
-            TuProfeCardHeader(
-                modifier = modifier.
-                padding(horizontal = 10.dp),
-                profeName = reviewInfo.profeName,
-                userName = reviewInfo.userName,
-                carrera = reviewInfo.materia,
-                imagen = reviewInfo.imageId,
-                onProfileClick = onProfileClick
-            )
+        TuProfeCardHeader(
+            profeName = reviewInfo.profeName,
+            userName = reviewInfo.userName,
+            carrera = reviewInfo.materia,
+            imagen = reviewInfo.imageId,
+            onProfileClick = onProfileClick
+        )
 
-            Spacer(modifier = Modifier.height(8.dp))
+        RatingStars(
+            rating = reviewInfo.rating,
+            starColor = colorResource(R.color.verdetp)
+        )
 
-            RatingStars(
-                rating = reviewInfo.rating,
-                starColor = colorResource(R.color.verdetp),
-                modifier = Modifier.padding(horizontal = 10.dp)
-            )
+        TuProfeCardBody(
+            content = reviewInfo.content,
+            date = reviewInfo.time
+        )
 
-            Spacer(modifier = Modifier.height(8.dp))
-
-            TuProfeCardBody(
-                content = reviewInfo.content,
-                date = reviewInfo.time,
-                modifier = Modifier.padding(horizontal = 10.dp)
-            )
-
-            Spacer(modifier = Modifier.height(16.dp))
-
-            ResenaCardActions(
-                modifier = Modifier.padding(horizontal = 10.dp),
-                likes = reviewInfo.likes,
-                comments = reviewInfo.comments,
-                onCommentsClick = onCommentsClick
-            )
-        }
+        ResenaCardActions(
+            likes = reviewInfo.likes,
+            comments = reviewInfo.comments,
+            onCommentsClick = onCommentsClick
+        )
     }
+}
 
 
 @Preview(showBackground = true)
@@ -196,7 +190,8 @@ fun ResenaCardActions(
 
 ) {
     Row(
-        modifier = modifier.fillMaxWidth(),
+        modifier = modifier.fillMaxWidth()
+        .padding(start = 2.dp),
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically
     ) {
@@ -243,50 +238,63 @@ fun TuProfeCardHeader(
     profeName: String,
     userName: String,
     carrera: String,
-    modifier: Modifier = Modifier,
+    modifier: Modifier = Modifier.fillMaxWidth(),
     imagen: Int = R.drawable.avatar,
     onProfileClick: () -> Unit
-){
+) {
     Row(
         modifier = modifier
     ) {
-        Image(
-            painter = painterResource(imagen),
-            contentDescription = stringResource(R.string.foto_de_perfil),
-            modifier = modifier
-                .padding(end = 8.dp)
-                .height(40.dp)
-                .width(40.dp)
-                .clip(CircleShape)
-                .clickable(
-                    onClick = onProfileClick
-                )
-        )
-        Column() {
-            Text(
-                profeName,
-                fontWeight = FontWeight.Bold,
-                modifier = modifier.padding(top = 5.dp, )
+        Row(
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+
+            Image(
+                painter = painterResource(imagen),
+                contentDescription = null,
+                modifier = Modifier
+                    .padding(end = 8.dp)
+                    .size(40.dp)
+                    .clip(CircleShape)
+                    .clickable(onClick = onProfileClick)
             )
+
+            Column(
+                verticalArrangement = Arrangement.spacedBy(1.dp)
+            ) {
+                Text(
+                    text = profeName,
+                    fontSize = 16.sp,
+                    lineHeight = 16.sp,
+                    fontWeight = FontWeight.Bold
+                )
+
+                Text(
+                    text = carrera,
+                    fontSize = 12.sp,
+                    lineHeight = 12.sp,
+                    color = Color.Gray
+                )
+            }
+        }
+
+        Spacer(modifier = Modifier.weight(1f))
+
+        Row(
+            verticalAlignment = Alignment.Top
+        ) {
             Text(
-                carrera,
+                stringResource(R.string.por),
+                fontWeight = FontWeight.Bold,
+                fontSize = 12.sp
+            )
+            Spacer(modifier = Modifier.width(4.dp))
+            Text(
+                stringResource(R.string.arroba) + userName,
                 color = Color.Gray,
                 fontSize = 12.sp
             )
         }
-        Spacer(modifier = Modifier.weight(1f))
-        Text(
-            stringResource(R.string.por),
-            fontWeight = FontWeight.Bold,
-            fontSize = 12.sp,
-        )
-        Spacer(modifier = Modifier.width(4.dp))
-        Text(
-            stringResource(R.string.arroba) +
-            userName,
-            color = Color.Gray,
-            fontSize = 12.sp
-        )
     }
 }
 
@@ -311,15 +319,16 @@ fun TuProfeCardBody(
     modifier: Modifier = Modifier
 ){
     Column(
-        modifier = modifier
+        modifier = modifier.padding(start = 2.dp),
+        verticalArrangement = Arrangement.spacedBy(10.dp)
     ) {
+        Text(content)
+
         Text(
-            content
-        )
-        Text(
-            date,
+            text = date,
             fontSize = 12.sp,
-            modifier = Modifier.padding(top = 16.dp),
+            lineHeight = 12.sp,
+            color = Color.Gray
         )
     }
 }

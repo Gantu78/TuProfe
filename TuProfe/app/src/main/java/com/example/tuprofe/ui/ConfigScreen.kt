@@ -5,6 +5,7 @@ import com.example.tuprofe.ui.utils.ProfileHeaderCard
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -22,7 +23,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material.icons.filled.MailOutline
 import androidx.compose.material.icons.filled.Notifications
-import androidx.compose.material.icons.filled.Star
 import androidx.compose.material.icons.filled.ThumbsUpDown
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -79,19 +79,14 @@ fun ConfigScreen(
                         username = "Gantu870",
                         email = "c.jimenez@javeriana.edu.co",
                         carrera = "Ing. de Sistemas",
-                        imageRes = R.drawable.ic_launcher_foreground,
+                        imageRes = R.drawable.carlitos,
                         onProfileClick = onProfileClick,
+                        showStar = false
                     )
                 }
 
                 item { Spacer(modifier = Modifier.height(20.dp)) }
 
-                item {
-                    UserCard(
-                        username = "Gantu870",
-                        email = "c.jimenez@javeriana.edu.co"
-                    )
-                }
 
 
                 item {

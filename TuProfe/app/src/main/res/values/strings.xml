@@ -19,8 +19,8 @@
     <string name="loading">loading</string>
     <string name="iniciar_sesion">INICIAR SESIÓN</string>
     <string name="las_contrase_as_no_coinciden">Las contraseñas no coinciden</string>
-    <string name="likes">likes</string>
-    <string name="comentarios">comentarios</string>
+    <string name="likes">Likes</string>
+    <string name="comentarios">Comentarios</string>
     <string name="tuprofe">TuProfe</string>
     <string name="calificaci_n_general">Calificación General</string>
     <string name="foto_de_perfil_del_profesor">Foto de perfil del profesor</string>

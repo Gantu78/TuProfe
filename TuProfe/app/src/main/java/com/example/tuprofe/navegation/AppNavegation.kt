@@ -9,12 +9,16 @@ import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.filled.Message
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.Send
 import androidx.compose.material.icons.filled.Settings
+import androidx.compose.material.icons.outlined.Add
 import androidx.compose.material.icons.outlined.Home
+import androidx.compose.material.icons.outlined.Message
 import androidx.compose.material.icons.outlined.Person
 import androidx.compose.material.icons.outlined.Search
 import androidx.compose.material.icons.outlined.Send
@@ -54,6 +58,7 @@ import com.example.tuprofe.ui.MainScreen
 import com.example.tuprofe.ui.ProfeScreen
 import com.example.tuprofe.ui.RegisterScreen
 import com.example.tuprofe.ui.ResetPasswordScreen
+import com.example.tuprofe.ui.SearchScreen
 
 
 
@@ -62,8 +67,9 @@ sealed class Screen(val route: String){
     object Register : Screen("Register")
     object PasswordReset : Screen("PasswordReset")
     object Main : Screen("Main")
+    object Search: Screen("Search")
     object Profe : Screen("Profe")
-    object Profile : Screen("Profile")
+    object Historial : Screen("Historial")
     object Loading : Screen("Loading")
     object ConfigPerfil : Screen("ConfigPerfil")
     object Configuracion : Screen("Configuracion")
@@ -107,6 +113,10 @@ fun AppNavegation(
                     }
                 }
             )
+        }
+
+        composable(route = Screen.Search.route){
+            SearchScreen()
         }
         composable(route = Screen.Register.route){
             RegisterScreen(
@@ -152,11 +162,11 @@ fun AppNavegation(
                     navController.navigate(Screen.Detalle.createRoute(reviewId))
                 },
                 onProfileClick = {
-                    navController.navigate(Screen.Profile.route)
+                    navController.navigate(Screen.Historial.route)
                 }
             )
         }
-        composable(route = Screen.Profile.route){
+        composable(route = Screen.Historial.route){
             HistorialScreen(
                 onFilterClick = {},
                 onVerCalificacionClick = { review ->
@@ -199,9 +209,14 @@ fun AppNavegation(
                     }
                 },
                 onCalifClick = {
-                    navController.navigate(Screen.Profile.route)
+                    navController.navigate(Screen.Historial.route){
+                        popUpTo(0){
+                            inclusive = true
+                        }
+                    }
                 },
                 onAyudaClick = {
+
                 },
                 onPrivacidadClick = {
                 },
@@ -247,10 +262,10 @@ data class BottomNavItem(
 
 val bottomNavItems = listOf(
     BottomNavItem(filledIcon = Icons.Filled.Home, outLinedIcon = Icons.Outlined.Home, route = Screen.Main.route),
-    BottomNavItem(filledIcon = Icons.Filled.Search, outLinedIcon = Icons.Outlined.Search, route = Screen.PasswordReset.route),
-    BottomNavItem(filledIcon = Icons.Filled.Send, outLinedIcon = Icons.Outlined.Send, route = Screen.Profe.route),
-    BottomNavItem(filledIcon = Icons.Filled.Person, outLinedIcon = Icons.Outlined.Person, route = Screen.Profile.route),
-    BottomNavItem(filledIcon = Icons.Filled.Settings, outLinedIcon = Icons.Outlined.Settings, route = Screen.Configuracion.route)
+    BottomNavItem(filledIcon = Icons.Filled.Search, outLinedIcon = Icons.Outlined.Search, route = Screen.Search.route),
+    BottomNavItem(filledIcon = Icons.Filled.Add, outLinedIcon = Icons.Outlined.Add, route = Screen.Profe.route),
+    BottomNavItem(filledIcon = Icons.Filled.Message, outLinedIcon = Icons.Outlined.Message, route = Screen.Loading.route),
+    BottomNavItem(filledIcon = Icons.Filled.Person, outLinedIcon = Icons.Outlined.Person, route = Screen.Configuracion.route)
 )
 
 @Composable
