@@ -154,8 +154,8 @@ fun AppNavegation(
                 onResenaClick = { reviewId ->
                     navController.navigate(Screen.Detalle.createRoute(reviewId))
                 },
-                onProfileClick = {
-                    navController.navigate(Screen.Profe.route)
+                onProfileClick = { profesor ->
+                    navController.navigate(Screen.Profe.createRoute(profesor.profeId))
                 }
             )
         }
@@ -173,8 +173,8 @@ fun AppNavegation(
                     onResenaClick = { reviewId ->
                         navController.navigate(Screen.Detalle.createRoute(reviewId))
                     },
-                    onProfileClick = {
-                        navController.navigate(Screen.Historial.route)
+                    onProfileClick = { profesor ->
+                        navController.navigate(Screen.Profe.createRoute(profesor.profeId))
                     }
                 )
 
@@ -258,8 +258,8 @@ fun AppNavegation(
                     onShare = {},
                     ReviewInfo = review,
                     responseReviews = LocalReview.Reviews,
-                    onProfileClick = {
-                        navController.navigate(Screen.Profe.route)
+                    onProfileClick = { profesor ->
+                        navController.navigate(Screen.Profe.createRoute(profesor.profeId))
                     }
                 )
 

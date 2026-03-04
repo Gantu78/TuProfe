@@ -37,6 +37,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.tuprofe.R
+import com.example.tuprofe.data.Profesor
 import com.example.tuprofe.data.ReviewInfo
 import com.example.tuprofe.data.local.LocalReview
 import com.example.tuprofe.ui.utils.Resena
@@ -49,7 +50,7 @@ fun DetalleScreen(
     ReviewInfo: ReviewInfo,
     responseReviews: List<ReviewInfo>,
     modifier: Modifier = Modifier,
-    onProfileClick: () -> Unit
+    onProfileClick: (Profesor) -> Unit
 ) {
 
     LazyColumn(
@@ -80,7 +81,7 @@ fun DetalleScreen(
 
                     Resena(
                         reviewInfo = ReviewInfo,
-                        onProfileClick = onProfileClick
+                        onProfileClick = { onProfileClick(ReviewInfo.profesor) }
                     )
 
                     HorizontalDivider(
@@ -144,7 +145,7 @@ fun DetalleScreen(
                 Resena(
                     reviewInfo = review,
                     modifier = Modifier.padding(vertical = 8.dp),
-                    onProfileClick = onProfileClick
+                    onProfileClick = { onProfileClick(ReviewInfo.profesor) }
                 )
             }
         }

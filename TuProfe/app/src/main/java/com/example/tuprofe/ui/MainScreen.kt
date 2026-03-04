@@ -19,6 +19,7 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.ui.res.colorResource
 import com.example.tuprofe.R
+import com.example.tuprofe.data.Profesor
 import com.example.tuprofe.data.ReviewInfo
 import com.example.tuprofe.data.local.LocalReview
 import com.example.tuprofe.ui.utils.BackgroundImage
@@ -29,7 +30,7 @@ import com.example.tuprofe.ui.utils.Resena
 fun MainScreen(
     modifier: Modifier = Modifier,
     onResenaClick: (Int) -> Unit,
-    onProfileClick: () -> Unit
+    onProfileClick: (Profesor) -> Unit
 ) {
 
     val allReviews = LocalReview.Reviews
@@ -55,7 +56,7 @@ fun MainScreen(
                 ResenaCard(
                     reviewInfo = review,
                     onCommentsClick = onResenaClick,
-                    onProfileClick = onProfileClick
+                    onProfileClick = { onProfileClick(review.profesor) }
                 )
             }
         }
