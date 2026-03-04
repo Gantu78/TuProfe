@@ -137,7 +137,7 @@ fun HistorialCard(
         ) {
 
             Image(
-                painter = painterResource(review.imageId),
+                painter = painterResource(review.profesor.imageprofeId),
                 contentDescription = null,
                 modifier = Modifier
                     .size(72.dp)
@@ -157,7 +157,7 @@ fun HistorialCard(
                 ) {
 
                     Text(
-                        text = review.profeName,
+                        text = review.profesor.nombreProfe,
                         fontWeight = FontWeight.SemiBold,
                         fontSize = 17.sp,
                         maxLines = 1,
@@ -176,7 +176,7 @@ fun HistorialCard(
                 Spacer(modifier = Modifier.height(4.dp))
 
                 Text(
-                    text = review.materia,
+                    text = review.profesor.materia,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                     fontSize = 13.sp,
                     maxLines = 1,
@@ -216,12 +216,12 @@ fun HistorialCardBody(
 
     Column(modifier = modifier) {
         Text(
-            text = review.profeName,
+            text = review.profesor.nombreProfe,
             fontWeight = FontWeight.Bold,
             fontSize = 18.sp
         )
         Text(
-            text = review.materia,
+            text = review.profesor.materia,
             color = Color.Gray,
             fontSize = 14.sp
         )

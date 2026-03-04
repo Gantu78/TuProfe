@@ -47,6 +47,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.example.tuprofe.R
+import com.example.tuprofe.data.local.LocalProfesor
 import com.example.tuprofe.data.local.LocalReview
 import com.example.tuprofe.ui.ConfigPerfilScreen
 import com.example.tuprofe.ui.ConfigScreen
@@ -68,7 +69,9 @@ sealed class Screen(val route: String){
     object PasswordReset : Screen("PasswordReset")
     object Main : Screen("Main")
     object Search: Screen("Search")
-    object Profe : Screen("Profe")
+    object Profe : Screen("profe/{profeId}") {
+        fun createRoute(profeId: Int) = "profe/$profeId"
+    }
     object Historial : Screen("Historial")
     object Loading : Screen("Loading")
     object ConfigPerfil : Screen("ConfigPerfil")
@@ -156,15 +159,28 @@ fun AppNavegation(
                 }
             )
         }
-        composable(route = Screen.Profe.route){
-            ProfeScreen(
-                onResenaClick = { reviewId ->
-                    navController.navigate(Screen.Detalle.createRoute(reviewId))
-                },
-                onProfileClick = {
-                    navController.navigate(Screen.Historial.route)
-                }
-            )
+        composable(
+            route = Screen.Profe.route,
+            arguments = listOf(navArgument("profeId"){ type = NavType.IntType })
+        ){
+            val profeId = it.arguments?.getInt("profeId") ?: 0
+            val profesor = LocalProfesor.profesores.find { it.profeId == profeId }
+
+            if(profesor != null){
+
+                ProfeScreen(
+                    profesor = profesor,
+                    onResenaClick = { reviewId ->
+                        navController.navigate(Screen.Detalle.createRoute(reviewId))
+                    },
+                    onProfileClick = {
+                        navController.navigate(Screen.Historial.route)
+                    }
+                )
+
+            } else {
+                Text("Profesor no encontrado")
+            }
         }
         composable(route = Screen.Historial.route){
             HistorialScreen(

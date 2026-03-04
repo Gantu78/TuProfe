@@ -41,6 +41,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.tuprofe.R
+import com.example.tuprofe.data.Profesor
 import com.example.tuprofe.data.local.LocalReview
 import com.example.tuprofe.ui.theme.TuProfeTheme
 import com.example.tuprofe.ui.utils.BackgroundImage
@@ -49,25 +50,37 @@ import kotlin.math.roundToInt
 
 @Composable
 fun ProfeScreen(
+    profesor: Profesor,
     modifier: Modifier = Modifier,
     onResenaClick: (Int) -> Unit,
-    onProfileClick: () -> Unit
+    onProfileClick: (Profesor) -> Unit
 ) {
+
     val allReviews = LocalReview.Reviews
-    val professorName = LocalReview.Reviews[4].profeName
-    val professorSubjects = LocalReview.Reviews[4].materia
-    val professorRating = allReviews.map { it.rating }.average().roundToInt()
-    val professorImage = LocalReview.Reviews[4].imageId
+
+    // Solo las reviews de este profesor
+    val professorReviews = allReviews.filter { it.profesor.profeId == profesor.profeId }
+
+    val professorName = profesor.nombreProfe
+    val professorSubjects = profesor.materia
+    val professorImage = profesor.imageprofeId
+
+    val professorRating =
+        if (professorReviews.isNotEmpty())
+            professorReviews.map { it.rating }.average().roundToInt()
+        else 0
 
     Box(modifier = modifier.fillMaxSize()) {
         BackgroundImage()
+
         Column(Modifier.fillMaxSize()) {
 
             LazyColumn(
                 modifier = Modifier.weight(1f),
                 horizontalAlignment = Alignment.CenterHorizontally,
-                contentPadding = PaddingValues(bottom = 80.dp) // Add padding for the bottom bar
+                contentPadding = PaddingValues(bottom = 80.dp)
             ) {
+
                 item {
                     ProfessorInfoCard(
                         professorName = professorName,
@@ -77,8 +90,13 @@ fun ProfeScreen(
                     )
                 }
 
-                items(allReviews) { review ->
-                    ResenaCard(reviewInfo = review, onCommentsClick = onResenaClick, onProfileClick = onProfileClick )
+                items(professorReviews) { review ->
+                    ResenaCard(
+                        reviewInfo = review,
+                        onCommentsClick = onResenaClick,
+                        onProfileClick = { onProfileClick(review.profesor) }
+                    )
+
                     Spacer(modifier = Modifier.height(16.dp))
                 }
             }
@@ -283,8 +301,17 @@ private fun ProfeScreenBottomBar(
 @Preview(showBackground = true)
 @Composable
 private fun ProfeScreenPreview() {
+
+    val profesorPreview = Profesor(
+        profeId = 1,
+        nombreProfe = "Carlos Parra",
+        materia = "Computación Movil",
+        imageprofeId = R.drawable.avatar
+    )
+
     TuProfeTheme {
         ProfeScreen(
+            profesor = profesorPreview,
             onResenaClick = {},
             onProfileClick = {}
         )

@@ -3,6 +3,7 @@ package com.example.tuprofe.data.local
 
 import com.example.tuprofe.R
 import com.example.tuprofe.data.ReviewInfo
+import com.example.tuprofe.data.local.LocalProfesor.profesores
 
 
 object LocalReview {
@@ -11,118 +12,107 @@ object LocalReview {
 
         ReviewInfo(
             reviewId = 1,
-            imageId = R.drawable.avatar,
-            userName = "Paco22",
-            profeName = "Juan Sebastian Angarita",
-            materia = "Computación Movil",
+            profesor = profesores[1],
+            username = "Golosina33",
             likes = 20,
-            content = "Angarita me parece un muy bueno.",
+            content = "Gran profe me parece un muy bueno.",
             time = "8:26 PM",
             rating = 4,
             comments = 0,
         ),
+
         ReviewInfo(
             reviewId = 2,
-            imageId = R.drawable.carlitos,
-            userName = "Pablosexto",
-            profeName = "Carlos Parra",
-            materia = "Computación Movil",
+            profesor = profesores[0],
+            username = "Pablosexto",
             likes = 100,
-            content = "El profesor Carlos me parece un muy buen maestro, se toma su tiempo para explicar hasta que todos entiendan el tema, no califica muy duro.",
+            content = "El profesor es un excelente maestro, me parece un muy buen maestro, se toma su tiempo para explicar hasta que todos entiendan el tema, no califica muy duro.",
             time = "8:26 PM",
             rating = 3,
             comments = 3,
         ),
+
         ReviewInfo(
             reviewId = 3,
-            imageId = R.drawable.avatar,
-            userName = "JuanGuti",
-            profeName = "Juan Sebastian Angarita",
-            materia = "Computación Movil",
+            profesor = profesores[6],
+            username = "JuanGuti",
             likes = 1,
-            content = "El profe me parece un muy buen maestro, se toma su tiempo para explicar hasta que todos entiendan el tema, no califica muy duro.",
+            content = "El profe me parece un muy buen maestro, se toma su tiempo para explicar hasta que todos entiendan el tema.",
             time = "8:26 PM",
             rating = 2,
             comments = 10,
         ),
+
         ReviewInfo(
             reviewId = 4,
-            imageId = R.drawable.carlitos,
-            userName = "HQL",
-            profeName = "Pablo Picasso",
-            materia = "Computación Movil",
+            profesor = profesores[0],
+            username = "HQL",
             likes = 1000,
-            content = "El profesor me parece un muy buen maestro, se toma su tiempo para explicar hasta que todos entiendan el tema, no califica muy duro.",
+            content = "Explica bien pero las evaluaciones son difíciles.",
             time = "8:26 PM",
             rating = 1,
             comments = 100,
         ),
+
         ReviewInfo(
             reviewId = 5,
-            imageId = R.drawable.carlitos,
-            userName = "Jp23",
-            profeName = "Juan Hurtado",
-            materia = "Introducción a la programación",
+            profesor = profesores[2],
+            username = "Jp23",
             likes = 10,
-            content = "El profe me parece un muy buen maestro, se toma su tiempo para explicar hasta que todos entiendan el tema, no califica muy duro.",
+            content = "Buen profesor para empezar a programar.",
             time = "8:26 PM",
             rating = 5,
             comments = 1,
         ),
+
         ReviewInfo(
             reviewId = 6,
-            imageId = R.drawable.avatar,
-            userName = "Maria Garcia",
-            profeName = "Martha Smith",
-            materia = "Cálculo Diferencial",
+            profesor = profesores[3],
+            username = "MariaGarcia",
             likes = 45,
             content = "Excelente explicación de las derivadas, muy paciente.",
             time = "10:15 AM",
             rating = 5,
             comments = 2,
         ),
+
         ReviewInfo(
             reviewId = 7,
-            imageId = R.drawable.carlitos,
-            userName = "Pedro Perez",
-            profeName = "Andres Rodriguez",
-            materia = "Estructuras de Datos",
+            profesor = profesores[4],
+            username = "PedroPerez",
             likes = 12,
-            content = "Las tareas son un poco largas pero se aprende mucho.",
+            content = "Las tareas son largas pero se aprende mucho.",
             time = "2:30 PM",
             rating = 4,
             comments = 5,
         ),
+
         ReviewInfo(
             reviewId = 8,
-            imageId = R.drawable.avatar,
-            userName = "Lucia Mendez",
-            profeName = "Luis Fernandez",
-            materia = "Historia Universal",
+            profesor = profesores[5],
+            username = "LuciaMendez",
             likes = 8,
             content = "Muy aburrida la clase, solo lee las diapositivas.",
             time = "11:00 AM",
             rating = 2,
             comments = 1,
         ),
+
         ReviewInfo(
             reviewId = 9,
-            imageId = R.drawable.carlitos,
-            userName = "Roberto Gomez",
-            profeName = "Emiliano Martinez",
-            materia = "Física Mecánica",
+            profesor = profesores[1],
+            username = "RobertoGomez",
             likes = 67,
-            content = "El mejor profesor de física que he tenido, hace experimentos en clase.",
+            content = "La mejor profesora que he tenido.",
             time = "4:45 PM",
             rating = 5,
             comments = 12,
         ),
+
         ReviewInfo(
             reviewId = 10,
-            imageId = R.drawable.avatar,
-            userName = "Elena Rivas",
-            profeName = "Leonidas Castro",
-            materia = "Química Orgánica",
+            profesor = profesores[7],
+            username = "ElenaRivas",
             likes = 3,
             content = "Explica muy rápido y es difícil seguirle el ritmo.",
             time = "9:00 AM",
@@ -130,5 +120,4 @@ object LocalReview {
             comments = 0,
         )
     )
-
 }

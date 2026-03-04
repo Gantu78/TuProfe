@@ -40,6 +40,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.tuprofe.R
+import com.example.tuprofe.data.Profesor
 import com.example.tuprofe.data.ReviewInfo
 import com.example.tuprofe.data.local.LocalReview
 
@@ -159,10 +160,10 @@ fun Resena(
     ) {
 
         TuProfeCardHeader(
-            profeName = reviewInfo.profeName,
-            userName = reviewInfo.userName,
-            carrera = reviewInfo.materia,
-            imagen = reviewInfo.imageId,
+            profeName = reviewInfo.profesor.nombreProfe,
+            userName = reviewInfo.username,
+            carrera = reviewInfo.profesor.materia,
+            imagen = reviewInfo.profesor.imageprofeId,
             onProfileClick = onProfileClick
         )
 
@@ -354,10 +355,10 @@ fun TuProfeCardHeader(
 fun TuProfeCardHeaderPreview(){
     val review = LocalReview.Reviews[0]
     TuProfeCardHeader(
-        profeName = review.profeName,
-        userName = review.userName,
-        carrera = review.materia,
-        imagen = review.imageId,
+        profeName = review.profesor.nombreProfe,
+        userName = review.username,
+        carrera = review.profesor.materia,
+        imagen = review.profesor.imageprofeId,
         onProfileClick = {}
     )
 }
