@@ -5,5 +5,5 @@ import com.example.tuprofe.data.ReviewInfo
 data class DetalleState(
     val selectedReview: ReviewInfo? = null,
     val respuestas: List<ReviewInfo> = emptyList(),
-    val isLoading: Boolean = false
+    val isLoading: Boolean = true
 )

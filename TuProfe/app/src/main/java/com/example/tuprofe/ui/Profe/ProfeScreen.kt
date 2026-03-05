@@ -30,6 +30,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.tuprofe.R
 import com.example.tuprofe.data.Profesor
 import com.example.tuprofe.data.local.LocalProfesor
+import com.example.tuprofe.data.local.LocalReview
 import com.example.tuprofe.ui.Main.ResenaCard
 import com.example.tuprofe.ui.utils.BackgroundImage
 import com.example.tuprofe.ui.utils.RatingStars
@@ -48,6 +49,23 @@ fun ProfeScreen(
         profeViewModel.cargarDatosProfesor(profesor.profeId)
     }
 
+    ProfeContent(
+        profesor = profesor,
+        uiState = uiState,
+        onResenaClick = onResenaClick,
+        onProfileClick = onProfileClick,
+        modifier = modifier
+    )
+}
+
+@Composable
+fun ProfeContent(
+    profesor: Profesor,
+    uiState: ProfeState,
+    onResenaClick: (Int) -> Unit,
+    onProfileClick: (Profesor) -> Unit,
+    modifier: Modifier = Modifier
+) {
     Box(modifier = modifier.fillMaxSize()) {
         BackgroundImage()
 
@@ -158,8 +176,14 @@ private fun ProfeScreenBottomBar(
 @Composable
 fun ProfeScreenPreview() {
     val profeEjemplo = LocalProfesor.profesores[0]
-    ProfeScreen(
+    val mockState = ProfeState(
+        professorReviews = LocalReview.Reviews.filter { it.profesor.profeId == profeEjemplo.profeId },
+        averageRating = 4,
+        isLoading = false
+    )
+    ProfeContent(
         profesor = profeEjemplo,
+        uiState = mockState,
         onResenaClick = {},
         onProfileClick = {}
     )
