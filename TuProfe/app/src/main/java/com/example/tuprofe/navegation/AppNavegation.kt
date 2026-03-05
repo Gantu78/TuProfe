@@ -14,15 +14,11 @@ import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Message
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Search
-import androidx.compose.material.icons.filled.Send
-import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.outlined.Add
 import androidx.compose.material.icons.outlined.Home
 import androidx.compose.material.icons.outlined.Message
 import androidx.compose.material.icons.outlined.Person
 import androidx.compose.material.icons.outlined.Search
-import androidx.compose.material.icons.outlined.Send
-import androidx.compose.material.icons.outlined.Settings
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
@@ -30,6 +26,7 @@ import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.NavigationBarItemDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
@@ -39,6 +36,7 @@ import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
@@ -49,18 +47,23 @@ import androidx.navigation.navArgument
 import com.example.tuprofe.R
 import com.example.tuprofe.data.local.LocalProfesor
 import com.example.tuprofe.data.local.LocalReview
-import com.example.tuprofe.ui.ConfigPerfilScreen
-import com.example.tuprofe.ui.ConfigScreen
+import com.example.tuprofe.ui.ConfigPerfil.ConfigPerfilScreen
+import com.example.tuprofe.ui.Config.ConfigScreen
 import com.example.tuprofe.ui.DetalleScreen
 import com.example.tuprofe.ui.HistorialScreen
-import com.example.tuprofe.ui.HomeScreen
+import com.example.tuprofe.ui.Login.HomeScreen
 import com.example.tuprofe.ui.LoadingScreen
 import com.example.tuprofe.ui.MainScreen
 import com.example.tuprofe.ui.ProfeScreen
-import com.example.tuprofe.ui.RegisterScreen
-import com.example.tuprofe.ui.ResetPasswordScreen
+import com.example.tuprofe.ui.Register.RegisterScreen
+import com.example.tuprofe.ui.Register.RegisterViewModel
+import com.example.tuprofe.ui.ResetPassword.ResetPasswordScreen
 import com.example.tuprofe.ui.SearchScreen
-
+import androidx.compose.runtime.getValue
+import com.example.tuprofe.ui.Config.ConfigViewModel
+import com.example.tuprofe.ui.ConfigPerfil.ConfigPerfilViewModel
+import com.example.tuprofe.ui.Login.LoginViewModel
+import com.example.tuprofe.ui.ResetPassword.ResetPasswordViewModel
 
 
 sealed class Screen(val route: String){
@@ -93,60 +96,73 @@ fun AppNavegation(
         modifier = modifier
     ){
         composable(route = Screen.Home.route){
-            HomeScreen(
-                onLoginClick = {
-                    navController.navigate(Screen.Main.route){
-                        popUpTo(0){
-                            inclusive = true
-                        }
+            val loginViewModel: LoginViewModel = viewModel()
+            val state by loginViewModel.uiState.collectAsState()
+
+            if(state.navigate) {
+                navController.navigate(Screen.Main.route) {
+                    popUpTo(0) {
+                        inclusive = true
                     }
-                },
-                onRegisterClick = {
-                    navController.navigate(Screen.Register.route){
-                        popUpTo(0){
-                            inclusive = true
-                        }
-                    }
-                },
-                onForgotPasswordClick = {
-                    navController.navigate(Screen.PasswordReset.route){
-                        popUpTo(0){
+                }
+            }
+                if (state.register) {
+                    navController.navigate(Screen.Register.route) {
+                        popUpTo(0) {
                             inclusive = true
                         }
                     }
                 }
-            )
+
+                if (state.forgotPassword) {
+                    navController.navigate(Screen.PasswordReset.route) {
+                        popUpTo(0) {
+                            inclusive = true
+                        }
+                    }
+                }
+
+                HomeScreen(
+                    loginViewModel = loginViewModel
+                )
+
+
+
         }
 
         composable(route = Screen.Search.route){
             SearchScreen()
         }
         composable(route = Screen.Register.route){
-            RegisterScreen(
-                    onRegisterClick = {navController.navigate(Screen.Home.route){
-                        popUpTo(0){
-                            inclusive = true
-                        }
-                    }},
-                    onAlreadyAccountClick = {navController.navigate(Screen.Home.route){
-                        popUpTo(0){
-                            inclusive = true
-                        }
-                    }},
-                    onBackClick = {navController.navigate(Screen.Home.route){
-                        popUpTo(0){
-                            inclusive = true
-                        }
-                    }}
-            )
-        }
-        composable(route = Screen.PasswordReset.route){
-            ResetPasswordScreen(
-                onVolverClick = {navController.navigate(Screen.Home.route){
+            val registerViewModel: RegisterViewModel = viewModel()
+            val state by registerViewModel.uiState.collectAsState()
+            if(state.navigateHome){
+                navController.navigate(Screen.Home.route){
                     popUpTo(0){
                         inclusive = true
                     }
-                }}
+                }
+            }
+
+            RegisterScreen(
+                    registerViewModel = registerViewModel
+
+            )
+        }
+        composable(route = Screen.PasswordReset.route){
+
+            val resetPasswordViewModel: ResetPasswordViewModel = viewModel()
+            val state by resetPasswordViewModel.uiState.collectAsState()
+
+            if(state.navigate){
+                navController.navigate(Screen.Home.route){
+                    popUpTo(0){
+                        inclusive = true
+                    }
+                }
+            }
+            ResetPasswordScreen(
+                resetPasswordViewModel = resetPasswordViewModel
             )
         }
         composable(route = Screen.Main.route){
@@ -192,20 +208,14 @@ fun AppNavegation(
         }
 
         composable(route = Screen.ConfigPerfil.route){
+
+            val configPerfilViewModel: ConfigPerfilViewModel = viewModel()
+            val state by configPerfilViewModel.uiState.collectAsState()
+
+            if(state.navigate)navController.navigate(Screen.Configuracion.route){popUpTo(0){ inclusive = true }}
+
             ConfigPerfilScreen(
-                onChangePassword = {
-                    navController.navigate(Screen.PasswordReset.route)
-                },
-                onGuardarCambiosClick = {
-                    navController.navigate(Screen.Configuracion.route) {
-                        popUpTo(0){
-                            inclusive = true
-                        }
-                    }
-                },
-                onBorrarCuentaClick = {
-                    navController.navigate(Screen.Home.route)
-                }
+                configPerfilViewModel = configPerfilViewModel
             )
         }
 
@@ -213,34 +223,19 @@ fun AppNavegation(
             LoadingScreen()
         }
         composable(route = Screen.Configuracion.route){
+
+            val configViewModel: ConfigViewModel = viewModel()
+            val state by configViewModel.uiState.collectAsState()
+
+            if(state.Profile) navController.navigate(Screen.ConfigPerfil.route){popUpTo(0){ inclusive = true }}
+            if(state.Logout) navController.navigate(Screen.Home.route){popUpTo(0){ inclusive = true }}
+            if(state.Ayuda) navController.navigate(Screen.Loading.route){popUpTo(0){ inclusive = true }}
+            if(state.calificacion) navController.navigate(Screen.Historial.route){popUpTo(0){ inclusive = true }}
+            if(state.Notificaciones) navController.navigate(Screen.Loading.route){popUpTo(0){ inclusive = true }}
+            if(state.Privacidad) navController.navigate(Screen.Loading.route){popUpTo(0){ inclusive = true }}
+
             ConfigScreen(
-                onProfileClick = {
-                    navController.navigate(Screen.ConfigPerfil.route)
-                },
-                onLogoutClick = {
-                    navController.navigate(Screen.Home.route) {
-                        popUpTo(0){
-                        inclusive = true
-                    }
-                    }
-                },
-                onCalifClick = {
-                    navController.navigate(Screen.Historial.route){
-                        popUpTo(0){
-                            inclusive = true
-                        }
-                    }
-                },
-                onAyudaClick = {
-
-                },
-                onPrivacidadClick = {
-                },
-                onNotificacionesClick = {
-                }
-
-
-
+                configViewModel = configViewModel
             )
         }
         composable(

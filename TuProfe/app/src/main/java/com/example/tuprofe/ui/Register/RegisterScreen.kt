@@ -1,7 +1,6 @@
-package com.example.tuprofe.ui
+package com.example.tuprofe.ui.Register
 
 
-import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -10,6 +9,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -22,6 +22,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.tuprofe.R
 import com.example.tuprofe.ui.theme.BebasNeue
 import com.example.tuprofe.ui.utils.AppButton
@@ -33,20 +35,14 @@ import com.example.tuprofe.ui.utils.TextFieldContraApp
 
 @Composable
 fun RegisterScreen(
-    modifier: Modifier = Modifier,
-    onRegisterClick: () -> Unit,
-    onAlreadyAccountClick: () -> Unit,
-    onBackClick: () -> Unit
+    registerViewModel: RegisterViewModel,
+    modifier: Modifier = Modifier
 ) {
-    var email by remember { mutableStateOf("") }
-    var usuario by remember { mutableStateOf("") }
-    var carrera by remember { mutableStateOf("") }
-    var password by remember { mutableStateOf("") }
-    var password2 by remember { mutableStateOf("") }
-    var passwordVisible by remember { mutableStateOf(false) }
-    var passwordVisible2 by remember { mutableStateOf(false) }
-    val passwordIcon = if (passwordVisible) R.drawable.mostrar else R.drawable.ocultar
-    val password2Icon = if (passwordVisible2) R.drawable.mostrar else R.drawable.ocultar
+
+    val state by registerViewModel.uiState.collectAsState()
+
+    val passwordIcon = if (state.passwordVisible) R.drawable.mostrar else R.drawable.ocultar
+    val password2Icon = if (state.passwordVisible) R.drawable.mostrar else R.drawable.ocultar
 
     Box(
         modifier = modifier
@@ -60,31 +56,33 @@ fun RegisterScreen(
 
             Header()
             FormularioRegistro(
-                email = email,
-                usuario = usuario,
-                carrera = carrera,
-                password = password,
-                password2 = password2,
-                passwordVisible = passwordVisible,
-                passwordVisible2 = passwordVisible2,
+                email = state.email,
+                usuario = state.usuario,
+                carrera = state.carrera,
+                password = state.password1,
+                password2 = state.password2,
+                passwordVisible = state.passwordVisible,
                 passwordIcon = passwordIcon,
                 password2Icon = password2Icon,
-                onEmailChange = { email = it },
-                onUsuarioChange = { usuario = it },
-                onCarreraChange = { carrera = it },
-                onPasswordChange = { password = it },
-                onPassword2Change = { password2 = it },
-                onPasswordVisibleChange = { passwordVisible = !passwordVisible },
-                onPassword2VisibleChange = { passwordVisible2 = !passwordVisible2 }
+                onEmailChange = { registerViewModel.setEmail(it) },
+                onUsuarioChange = { registerViewModel.setUsuario(it) },
+                onCarreraChange = { registerViewModel.setCarrera(it) },
+                onPasswordChange = { registerViewModel.setPassword1(it) },
+                onPassword2Change = { registerViewModel.setPassword2(it) },
+                onPasswordVisibleChange = { registerViewModel.togglePasswordVisibility() }
+
             )
-            if (password.isNotEmpty() && password != password2) {
-                Text(stringResource(R.string.las_contrase_as_no_coinciden), color = Color.Red)
+            if (state.mostrarMensajeError) {
+                Text(state.errorMessage, color = Color.Red)
+            } else if(state.mostrarMensaje){
+                Text("Su cuenta ha sido creada con exito", color = Color.Green)
             }
+
             Spacer(modifier = Modifier.padding(15.dp))
             BotonesRegistro(
-                onRegisterClick =  onRegisterClick,
-                onAlreadyAccountClick = onAlreadyAccountClick,
-                onBackClick = onBackClick
+                onRegisterClick =  {registerViewModel.onRegisterClick()},
+                onAlreadyAccountClick = {registerViewModel.onAlreadyAccountClick()},
+                onBackClick = {registerViewModel.onBackClick()}
             )
         }
     }
@@ -95,9 +93,7 @@ fun RegisterScreen(
 @Preview
 fun RegisterScreenPreview() {
     RegisterScreen(
-        onRegisterClick = {},
-        onAlreadyAccountClick = {},
-        onBackClick = {}
+        registerViewModel = viewModel()
     )
 }
 
@@ -109,7 +105,6 @@ fun FormularioRegistro(
     password: String,
     password2: String,
     passwordVisible: Boolean,
-    passwordVisible2: Boolean,
     passwordIcon: Int,
     password2Icon: Int,
     onEmailChange: (String) -> Unit,
@@ -118,7 +113,6 @@ fun FormularioRegistro(
     onPasswordChange: (String) -> Unit,
     onPassword2Change: (String) -> Unit,
     onPasswordVisibleChange: () -> Unit,
-    onPassword2VisibleChange: () -> Unit,
     modifier: Modifier = Modifier
 ) {
 
@@ -151,8 +145,8 @@ fun FormularioRegistro(
         TextFieldContraApp(
             stringResource(R.string.repetir_contrase_a),
             value = password2,
-            mostrarPassword = passwordVisible2,
-            click = onPassword2VisibleChange,
+            mostrarPassword = passwordVisible,
+            click = onPasswordVisibleChange,
             onValueChange = onPassword2Change,
             icono = password2Icon
         )
@@ -171,7 +165,6 @@ fun FormularioRegistroPreview() {
         password = "",
         password2 = "",
         passwordVisible = false,
-        passwordVisible2 = false,
         passwordIcon = R.drawable.ocultar,
         password2Icon = R.drawable.ocultar,
         onEmailChange = {},
@@ -180,7 +173,6 @@ fun FormularioRegistroPreview() {
         onPasswordChange = {},
         onPassword2Change = {},
         onPasswordVisibleChange = {},
-        onPassword2VisibleChange = {}
     )
 }
 
