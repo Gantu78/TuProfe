@@ -1,4 +1,4 @@
-package com.example.tuprofe.ui
+package com.example.tuprofe.ui.Config
 
 
 import com.example.tuprofe.ui.utils.ProfileHeaderCard
@@ -27,6 +27,8 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -35,6 +37,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.tuprofe.R
 import com.example.tuprofe.ui.utils.AppButton
 import com.example.tuprofe.ui.utils.BackgroundImage
@@ -43,15 +46,11 @@ import com.example.tuprofe.ui.utils.ConfigItem
 
 @Composable
 fun ConfigScreen(
-    onProfileClick: () -> Unit,
-    onLogoutClick: () -> Unit,
-    onCalifClick: () ->Unit,
-    onAyudaClick: () -> Unit,
-    onPrivacidadClick: () -> Unit,
-    onNotificacionesClick: () -> Unit,
+    configViewModel: ConfigViewModel,
     modifier: Modifier = Modifier
 ) {
 
+       val state by configViewModel.uiState.collectAsState()
 
         Box(
             modifier = modifier
@@ -75,7 +74,7 @@ fun ConfigScreen(
                         email = "c.jimenez@javeriana.edu.co",
                         carrera = "Ing. de Sistemas",
                         imageRes = R.drawable.carlitos,
-                        onProfileClick = onProfileClick,
+                        onProfileClick = {configViewModel.onProfileClick()},
                         showStar = false
                     )
                 }
@@ -89,7 +88,7 @@ fun ConfigScreen(
                         icon = Icons.Default.ThumbsUpDown,
                         title = stringResource(R.string.historial_de_calificaciones),
                         subtitle = stringResource(R.string.qu_profes_has_calificado),
-                        onClick = onCalifClick
+                        onClick = {configViewModel.onCalifClick()}
                     )
                 }
 
@@ -98,7 +97,7 @@ fun ConfigScreen(
                         icon = Icons.Default.MailOutline,
                         title = stringResource(R.string.ayuda_y_soporte),
                         subtitle = stringResource(R.string.faq_t_rminos_y_condiciones),
-                        onClick = onAyudaClick
+                        onClick = {configViewModel.onAyudaClick()}
                     )
                 }
 
@@ -107,7 +106,7 @@ fun ConfigScreen(
                         icon = Icons.Default.Lock,
                         title = stringResource(R.string.privacidad),
                         subtitle = stringResource(R.string.perfil_an_nimo_visibilidad),
-                        onClick = onPrivacidadClick
+                        onClick = {configViewModel.onPrivacidadClick()}
                     )
                 }
 
@@ -116,7 +115,7 @@ fun ConfigScreen(
                         icon = Icons.Default.Notifications,
                         title = stringResource(R.string.notificaciones),
                         subtitle = stringResource(R.string.alertas_y_novedades),
-                        onClick = onNotificacionesClick
+                        onClick = {configViewModel.onNotificacionesClick()}
                     )
                 }
 
@@ -128,7 +127,7 @@ fun ConfigScreen(
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(horizontal = 30.dp),
-                        onClick = onLogoutClick
+                        onClick = {configViewModel.onLogoutClick()}
                     )
                 }
 
@@ -181,12 +180,7 @@ fun UserCard(
 @Composable
 fun ConfigScreenPreview() {
     ConfigScreen(
-        onProfileClick = {},
-        onLogoutClick = {},
-        onCalifClick = {},
-        onAyudaClick = {},
-        onPrivacidadClick = {},
-        onNotificacionesClick = {}
+        configViewModel = viewModel()
     )
 }
 

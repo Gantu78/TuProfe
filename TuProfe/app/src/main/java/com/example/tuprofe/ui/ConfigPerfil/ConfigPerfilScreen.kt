@@ -1,4 +1,4 @@
-package com.example.tuprofe.ui
+package com.example.tuprofe.ui.ConfigPerfil
 
 import android.util.Log
 import androidx.compose.foundation.Image
@@ -18,22 +18,19 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.tuprofe.R
 import com.example.tuprofe.ui.theme.BebasNeue
 import com.example.tuprofe.ui.utils.*
 
 @Composable
 fun ConfigPerfilScreen(
-    onChangePassword: () -> Unit,
-    onGuardarCambiosClick: () -> Unit,
-    onBorrarCuentaClick: () -> Unit,
+    configPerfilViewModel: ConfigPerfilViewModel,
     modifier: Modifier = Modifier,
 
 ) {
-    var email by remember { mutableStateOf("c.jimenez@javeriana.edu.co") }
-    var username by remember { mutableStateOf("Gantu970") }
-    var carrera by remember { mutableStateOf("Ingenieria Mecatrónica") }
-    var showDeleteDialog by remember { mutableStateOf(false) }
+    val state by configPerfilViewModel.uiState.collectAsState()
+
 
     Box(
         modifier = modifier.fillMaxSize(),
@@ -55,32 +52,43 @@ fun ConfigPerfilScreen(
 
             item {
                 UserInfoForm(
-                    email = email,
-                    onEmailChange = { email = it },
-                    username = username,
-                    onUsernameChange = { username = it },
-                    carrera = carrera,
-                    onCarreraChange = { carrera = it }
+                    email = state.email,
+                    onEmailChange = { configPerfilViewModel.setEmail(it) },
+                    username = state.username,
+                    onUsernameChange = { configPerfilViewModel.setUsuario(it) },
+                    carrera = state.carrera,
+                    onCarreraChange = { configPerfilViewModel.setCarrera(it) }
                 )
             }
 
             item {
                 ActionButtons(
-                    onCambiarContrasenaClick = onChangePassword,
-                    onGuardarCambiosClick = onGuardarCambiosClick,
-                    onBorrarCuentaClick = { showDeleteDialog = true }
+                    onCambiarContrasenaClick = {configPerfilViewModel.onCambiarContrasenaClick()},
+                    onGuardarCambiosClick = {configPerfilViewModel.onGuardarCambiosClick()},
+                    onBorrarCuentaClick = {configPerfilViewModel.onBorrarCuentaClick()}
                 )
             }
         }
 
-        if (showDeleteDialog) {
+        if (state.showDeleteDialog) {
             DeleteConfirmationDialog(
-                onDismissRequest = { showDeleteDialog = false },
+                onDismissRequest = { configPerfilViewModel.toggleShowDelete() },
                 onConfirm = {
-                    showDeleteDialog = false
-                    onBorrarCuentaClick()
+                    configPerfilViewModel.toggleShowDelete()
+                    configPerfilViewModel.onBorrarCuentaClick()
                 }
             )
+        }
+        if(state.showSaveDialog) {
+
+            DeleteConfirmationDialog(
+                onDismissRequest = { configPerfilViewModel.toggleShowSave() },
+                onConfirm = {
+                    configPerfilViewModel.toggleShowSave()
+                    configPerfilViewModel.onGuardarCambiosClick()
+                }
+            )
+
         }
     }
 }
@@ -247,9 +255,6 @@ private fun DeleteConfirmationDialog(
 @Composable
 fun ConfigPerfilPreview() {
     ConfigPerfilScreen(
-        onChangePassword = {},
-        onGuardarCambiosClick = {},
-        onBorrarCuentaClick = {},
-        modifier = Modifier
+        configPerfilViewModel = viewModel()
     )
 }
