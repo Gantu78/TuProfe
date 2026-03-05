@@ -33,7 +33,6 @@ import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.colorResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -46,19 +45,18 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.example.tuprofe.R
 import com.example.tuprofe.data.local.LocalProfesor
-import com.example.tuprofe.data.local.LocalReview
 import com.example.tuprofe.ui.ConfigPerfil.ConfigPerfilScreen
 import com.example.tuprofe.ui.Config.ConfigScreen
-import com.example.tuprofe.ui.DetalleScreen
-import com.example.tuprofe.ui.HistorialScreen
+import com.example.tuprofe.ui.Detalle.DetalleScreen
+import com.example.tuprofe.ui.Historia.HistorialScreen
 import com.example.tuprofe.ui.Login.HomeScreen
 import com.example.tuprofe.ui.LoadingScreen
-import com.example.tuprofe.ui.MainScreen
-import com.example.tuprofe.ui.ProfeScreen
+import com.example.tuprofe.ui.Main.MainScreen
+import com.example.tuprofe.ui.Profe.ProfeScreen
 import com.example.tuprofe.ui.Register.RegisterScreen
 import com.example.tuprofe.ui.Register.RegisterViewModel
 import com.example.tuprofe.ui.ResetPassword.ResetPasswordScreen
-import com.example.tuprofe.ui.SearchScreen
+import com.example.tuprofe.ui.Search.SearchScreen
 import androidx.compose.runtime.getValue
 import com.example.tuprofe.ui.Config.ConfigViewModel
 import com.example.tuprofe.ui.ConfigPerfil.ConfigPerfilViewModel
@@ -243,23 +241,16 @@ fun AppNavegation(
             arguments = listOf(navArgument("reviewId"){type = NavType.IntType})
         ){
             val reviewId = it.arguments?.getInt("reviewId")?: 0
-            val review = LocalReview.Reviews.find { it.reviewId == reviewId }
 
-            if(review != null){
-
-                DetalleScreen(
-                    onLike = {},
-                    onComment = {},
-                    onShare = {},
-                    ReviewInfo = review,
-                    responseReviews = LocalReview.Reviews,
-                    onProfileClick = { profesor ->
-                        navController.navigate(Screen.Profe.createRoute(profesor.profeId))
-                    }
-                )
-
-            } else (Text(stringResource(R.string.rese_a_no_encontrada)))
-
+            DetalleScreen(
+                reviewId = reviewId,
+                onLike = {},
+                onComment = {},
+                onShare = {},
+                onProfileClick = { profesor ->
+                    navController.navigate(Screen.Profe.createRoute(profesor.profeId))
+                }
+            )
         }
     }
 
