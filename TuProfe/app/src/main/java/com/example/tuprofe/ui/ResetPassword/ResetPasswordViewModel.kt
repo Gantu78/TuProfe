@@ -19,8 +19,4 @@ class ResetPasswordViewModel: ViewModel() {
         _uiState.update { it.copy(mostrarMensaje = !_uiState.value.mostrarMensaje) }
     }
 
-    fun onVolverClick(){
-        _uiState.update { it.copy(navigate = true) }
-    }
-
 }

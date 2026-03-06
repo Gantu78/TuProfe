@@ -24,14 +24,16 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 @Composable
 fun SearchScreen(
     modifier: Modifier = Modifier,
-    searchViewModel: SearchViewModel = viewModel()
+    searchViewModel: SearchViewModel = viewModel(),
+    onProfessorClick: (Int) -> Unit
+
 ) {
     val uiState by searchViewModel.uiState.collectAsState()
 
     SearchContent(
         uiState = uiState,
         onQueryChange = { searchViewModel.onQueryChange(it) },
-        onProfessorClick = { searchViewModel.onProfileClick(it.profeId) },
+        onProfessorClick = { onProfessorClick(it.profeId) },
         modifier = modifier
     )
 }

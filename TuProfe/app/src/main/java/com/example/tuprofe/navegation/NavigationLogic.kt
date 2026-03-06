@@ -3,13 +3,13 @@ package com.example.tuprofe.navegation
 object NavigationLogic {
 
     private val NoTopBar = listOf(
-        Screen.Home.route,
+        Screen.Login.route,
         Screen.PasswordReset.route,
         Screen.Register.route,
     )
 
     private val NoBottomBar = listOf(
-        Screen.Home.route,
+        Screen.Login.route,
         Screen.PasswordReset.route,
         Screen.Register.route,
     )

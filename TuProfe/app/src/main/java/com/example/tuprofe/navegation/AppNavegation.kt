@@ -62,14 +62,18 @@ import com.example.tuprofe.ui.Login.HomeScreen
 import com.example.tuprofe.ui.LoadingScreen
 import com.example.tuprofe.ui.Login.LoginViewModel
 import com.example.tuprofe.ui.Main.MainScreen
+import com.example.tuprofe.ui.Main.MainViewModel
 import com.example.tuprofe.ui.Profe.ProfeScreen
+import com.example.tuprofe.ui.Profe.ProfeViewModel
 import com.example.tuprofe.ui.Register.RegisterScreen
+import com.example.tuprofe.ui.Register.RegisterViewModel
 import com.example.tuprofe.ui.ResetPassword.ResetPasswordScreen
+import com.example.tuprofe.ui.ResetPassword.ResetPasswordViewModel
 import com.example.tuprofe.ui.Search.SearchScreen
 
 
 sealed class Screen(val route: String){
-    object Home : Screen("Home")
+    object Login : Screen("Login")
     object Register : Screen("Register")
     object PasswordReset : Screen("PasswordReset")
     object Main : Screen("Main")
@@ -94,10 +98,10 @@ fun AppNavegation(
 ){
     NavHost(
         navController = navController,
-        startDestination = Screen.Home.route,
+        startDestination = Screen.Login.route,
         modifier = modifier
     ){
-        composable(route = Screen.Home.route){
+        composable(route = Screen.Login.route){
             val loginViewModel: LoginViewModel = viewModel()
             HomeScreen(
                 loginViewModel = loginViewModel,
@@ -126,21 +130,30 @@ fun AppNavegation(
         }
 
         composable(route = Screen.Search.route){
-            SearchScreen()
+            SearchScreen(
+                onProfessorClick = { profeId ->
+                    navController.navigate(Screen.Profe.createRoute(profeId))
+                }
+            )
         }
         composable(route = Screen.Register.route){
+            val registerViewModel: RegisterViewModel = viewModel()
             RegisterScreen(
-                onRegisterClick = {navController.navigate(Screen.Home.route){
+                registerViewModel = registerViewModel,
+                onRegisterClick = {
+                    if(registerViewModel.onRegisterClickSecure()){
+                    navController.navigate(Screen.Login.route) {
+                        popUpTo(0) {
+                            inclusive = true
+                        }
+                    }
+                }},
+                onAlreadyAccountClick = {navController.navigate(Screen.Login.route){
                     popUpTo(0){
                         inclusive = true
                     }
                 }},
-                onAlreadyAccountClick = {navController.navigate(Screen.Home.route){
-                    popUpTo(0){
-                        inclusive = true
-                    }
-                }},
-                onBackClick = {navController.navigate(Screen.Home.route){
+                onBackClick = {navController.navigate(Screen.Login.route){
                     popUpTo(0){
                         inclusive = true
                     }
@@ -148,8 +161,10 @@ fun AppNavegation(
             )
         }
         composable(route = Screen.PasswordReset.route){
+            val resetPasswordViewModel: ResetPasswordViewModel = viewModel()
             ResetPasswordScreen(
-                onVolverClick = {navController.navigate(Screen.Home.route){
+                resetPasswordViewModel = resetPasswordViewModel,
+                onVolverClick = {navController.navigate(Screen.Login.route){
                     popUpTo(0){
                         inclusive = true
                     }
@@ -157,7 +172,9 @@ fun AppNavegation(
             )
         }
         composable(route = Screen.Main.route){
+            val mainViewModel: MainViewModel = viewModel()
             MainScreen(
+                mainViewModel = mainViewModel,
                 onResenaClick = { reviewId ->
                     navController.navigate(Screen.Detalle.createRoute(reviewId))
                 },
@@ -175,7 +192,9 @@ fun AppNavegation(
 
             if(profesor != null){
 
+                val profeViewModel: ProfeViewModel = viewModel()
                 ProfeScreen(
+                    profeViewModel = profeViewModel,
                     profesor = profesor,
                     onResenaClick = { reviewId ->
                         navController.navigate(Screen.Detalle.createRoute(reviewId))
@@ -215,7 +234,7 @@ fun AppNavegation(
                     }
                 },
                 onBorrarCuentaClick = {
-                    navController.navigate(Screen.Home.route)
+                    navController.navigate(Screen.Login.route)
                 }
             )
         }
@@ -232,7 +251,7 @@ fun AppNavegation(
                     navController.navigate(Screen.ConfigPerfil.route)
                 },
                 onLogoutClick = {
-                    navController.navigate(Screen.Home.route) {
+                    navController.navigate(Screen.Login.route) {
                         popUpTo(0){
                             inclusive = true
                         }

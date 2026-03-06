@@ -34,7 +34,8 @@ import com.example.tuprofe.ui.utils.TextFieldApp
 @Composable
 fun ResetPasswordScreen(
     resetPasswordViewModel: ResetPasswordViewModel,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    onVolverClick: () -> Unit,
     )
     {
         val state by resetPasswordViewModel.uiState.collectAsState()
@@ -64,7 +65,7 @@ fun ResetPasswordScreen(
                     }
                 )
                 Spacer(modifier = Modifier.padding(10.dp))
-                AppTextButton(stringResource(R.string.volver), onClick = { resetPasswordViewModel.onVolverClick() })
+                AppTextButton(stringResource(R.string.volver), onClick = onVolverClick )
                 if (state.mostrarMensaje) {
                     Text("Tu enlace se envio correctamente", color = colorResource(R.color.verdetp2), fontSize = 16.sp)
                 }
@@ -109,6 +110,7 @@ fun TextosPasswordPreview(){
 @Preview (showBackground = true)
 fun RPasswordScreenPreview(){
     ResetPasswordScreen(
+        onVolverClick = {},
         resetPasswordViewModel = viewModel()
     )
 }

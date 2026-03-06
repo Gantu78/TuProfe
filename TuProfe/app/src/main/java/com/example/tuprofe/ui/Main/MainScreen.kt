@@ -16,6 +16,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.tuprofe.R
+import com.example.tuprofe.data.Profesor
 import com.example.tuprofe.data.ReviewInfo
 import com.example.tuprofe.data.local.LocalReview
 import com.example.tuprofe.ui.utils.BackgroundImage
@@ -24,25 +25,12 @@ import com.example.tuprofe.ui.utils.Resena
 @Composable
 fun MainScreen(
     modifier: Modifier = Modifier,
-    mainViewModel: MainViewModel = viewModel()
+    onResenaClick: (Int) -> Unit,
+    onProfileClick: (Profesor) -> Unit,
+    mainViewModel: MainViewModel
 ) {
+    val allReviews = LocalReview.Reviews
     val uiState by mainViewModel.uiState.collectAsState()
-
-    MainContent(
-        uiState = uiState,
-        onReviewClick = { mainViewModel.onReviewClick(it) },
-        onProfileClick = { mainViewModel.onProfileClick(it) },
-        modifier = modifier
-    )
-}
-
-@Composable
-fun MainContent(
-    uiState: MainState,
-    onReviewClick: (Int) -> Unit,
-    onProfileClick: (Int) -> Unit,
-    modifier: Modifier = Modifier
-) {
     Box(modifier = modifier.fillMaxSize()) {
         BackgroundImage()
 
@@ -56,8 +44,8 @@ fun MainContent(
                 items(uiState.reviews) { review ->
                     ResenaCard(
                         reviewInfo = review,
-                        onCommentsClick = { onReviewClick(review.reviewId) },
-                        onProfileClick = { onProfileClick(review.profesor.profeId) }
+                        onCommentsClick = { onResenaClick(review.reviewId) },
+                        onProfileClick = { onProfileClick(review.profesor) }
                     )
                 }
             }
@@ -100,10 +88,5 @@ fun MainScreenPreview() {
     val mockState = MainState(
         reviews = LocalReview.Reviews,
         isLoading = false
-    )
-    MainContent(
-        uiState = mockState,
-        onReviewClick = {},
-        onProfileClick = {}
     )
 }

@@ -28,6 +28,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.tuprofe.R
+import com.example.tuprofe.data.Profesor
 import com.example.tuprofe.data.local.LocalProfesor
 import com.example.tuprofe.data.local.LocalReview
 import com.example.tuprofe.ui.Main.ResenaCard
@@ -36,26 +37,13 @@ import com.example.tuprofe.ui.utils.RatingStars
 
 @Composable
 fun ProfeScreen(
+    profesor: Profesor,
     modifier: Modifier = Modifier,
-    profeViewModel: ProfeViewModel = viewModel()
+    onResenaClick: (Int) -> Unit,
+    onProfileClick: (Profesor) -> Unit,
+    profeViewModel: ProfeViewModel
 ) {
     val uiState by profeViewModel.uiState.collectAsState()
-
-    ProfeContent(
-        uiState = uiState,
-        onReviewClick = { profeViewModel.onReviewClick(it) },
-        onProfileClick = { profeViewModel.onProfileClick(it) },
-        modifier = modifier
-    )
-}
-
-@Composable
-fun ProfeContent(
-    uiState: ProfeState,
-    onReviewClick: (Int) -> Unit,
-    onProfileClick: (Int) -> Unit,
-    modifier: Modifier = Modifier
-) {
     Box(modifier = modifier.fillMaxSize()) {
         BackgroundImage()
 
@@ -81,8 +69,8 @@ fun ProfeContent(
                         items(uiState.professorReviews) { review ->
                             ResenaCard(
                                 reviewInfo = review,
-                                onCommentsClick = { onReviewClick(review.reviewId) },
-                                onProfileClick = { onProfileClick(review.profesor.profeId) }
+                                onCommentsClick = onResenaClick,
+                                onProfileClick = { onProfileClick(review.profesor) }
                             )
                             Spacer(modifier = Modifier.height(16.dp))
                         }
@@ -175,9 +163,5 @@ fun ProfeScreenPreview() {
         averageRating = 4,
         isLoading = false
     )
-    ProfeContent(
-        uiState = mockState,
-        onReviewClick = {},
-        onProfileClick = {}
-    )
+
 }

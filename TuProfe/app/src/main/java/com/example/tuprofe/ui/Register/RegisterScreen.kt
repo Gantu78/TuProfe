@@ -36,7 +36,10 @@ import com.example.tuprofe.ui.utils.TextFieldContraApp
 @Composable
 fun RegisterScreen(
     registerViewModel: RegisterViewModel,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    onRegisterClick: () -> Unit,
+    onAlreadyAccountClick: () -> Unit,
+    onBackClick: () -> Unit
 ) {
 
     val state by registerViewModel.uiState.collectAsState()
@@ -80,9 +83,9 @@ fun RegisterScreen(
 
             Spacer(modifier = Modifier.padding(15.dp))
             BotonesRegistro(
-                onRegisterClick =  {registerViewModel.onRegisterClick()},
-                onAlreadyAccountClick = {registerViewModel.onAlreadyAccountClick()},
-                onBackClick = {registerViewModel.onBackClick()}
+                onRegisterClick =  onRegisterClick,
+                onAlreadyAccountClick = onAlreadyAccountClick,
+                onBackClick = onBackClick
             )
         }
     }
@@ -93,7 +96,10 @@ fun RegisterScreen(
 @Preview
 fun RegisterScreenPreview() {
     RegisterScreen(
-        registerViewModel = viewModel()
+        registerViewModel = viewModel(),
+        onRegisterClick = {},
+        onAlreadyAccountClick = {},
+        onBackClick = {}
     )
 }
 

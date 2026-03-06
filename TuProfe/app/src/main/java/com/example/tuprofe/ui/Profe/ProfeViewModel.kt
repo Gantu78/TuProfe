@@ -39,15 +39,4 @@ class ProfeViewModel(savedStateHandle: SavedStateHandle) : ViewModel() {
         ) }
     }
 
-    fun onReviewClick(reviewId: Int) {
-        _uiState.update { it.copy(navigateToReviewId = reviewId) }
-    }
-
-    fun onProfileClick(profeId: Int) {
-        _uiState.update { it.copy(navigateToProfileId = profeId) }
-    }
-
-    fun onNavigationHandled() {
-        _uiState.update { it.copy(navigateToReviewId = null, navigateToProfileId = null) }
-    }
 }

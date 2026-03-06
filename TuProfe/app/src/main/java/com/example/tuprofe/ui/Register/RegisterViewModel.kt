@@ -42,7 +42,7 @@ class RegisterViewModel: ViewModel() {
         _uiState.update { it.copy(errorMessage = newErrorMessage) }
     }
 
-    fun onRegisterClick(){
+    fun onRegisterClickSecure(): Boolean{
 
         if(_uiState.value.password1.isNullOrEmpty() || _uiState.value.password2.isNullOrEmpty()|| _uiState.value.email.isNullOrEmpty()||_uiState.value.usuario.isNullOrEmpty()||_uiState.value.carrera.isNullOrEmpty()){
             _uiState.update{ it.copy(mostrarMensajeError = true, errorMessage = "Por favor complete todos los campos") }
@@ -52,15 +52,8 @@ class RegisterViewModel: ViewModel() {
         } else {
             _uiState.update{ it.copy(mostrarMensajeError = false, mostrarMensaje = true, navigateHome = true) }
         }
+        return _uiState.value.navigateHome
     }
 
-    fun onAlreadyAccountClick(){
-        _uiState.update{ it.copy(navigateHome = true) }
-    }
+}
 
-    fun onBackClick(){
-        _uiState.update{ it.copy(navigateHome = true) }
-    }
-
-
-    }
