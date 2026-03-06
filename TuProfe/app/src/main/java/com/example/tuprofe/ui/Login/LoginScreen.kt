@@ -32,6 +32,9 @@ import com.example.tuprofe.ui.utils.LogoApp
 @Composable
 fun HomeScreen(
     loginViewModel: LoginViewModel,
+    onLoginClick: () -> Unit,
+    onRegisterClick: () -> Unit,
+    onForgotPasswordClick: () -> Unit,
     modifier: Modifier = Modifier
 ){
 
@@ -60,9 +63,9 @@ fun HomeScreen(
             )
             Spacer(modifier = Modifier.padding(15.dp))
             Botones(
-                onLoginClick = { loginViewModel.onLoginClick() },
-                onForgotPasswordClick = { loginViewModel.onForgotPasswordClick() },
-                onRegisterClick = { loginViewModel.onRegisterClick() }
+                onLoginClick =  onLoginClick ,
+                onForgotPasswordClick = onForgotPasswordClick ,
+                onRegisterClick =  onRegisterClick
             )
         }
     }
@@ -72,7 +75,10 @@ fun HomeScreen(
 @Preview
 fun HomeScreenPreview(){
     HomeScreen(
-        loginViewModel = viewModel()
+        loginViewModel = viewModel(),
+        onLoginClick = {},
+        onRegisterClick = {},
+        onForgotPasswordClick = {}
     )
 }
 

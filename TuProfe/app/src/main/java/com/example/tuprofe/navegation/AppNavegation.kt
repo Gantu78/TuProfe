@@ -14,25 +14,29 @@ import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Message
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Search
+import androidx.compose.material.icons.filled.Send
+import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.outlined.Add
 import androidx.compose.material.icons.outlined.Home
 import androidx.compose.material.icons.outlined.Message
 import androidx.compose.material.icons.outlined.Person
 import androidx.compose.material.icons.outlined.Search
+import androidx.compose.material.icons.outlined.Send
+import androidx.compose.material.icons.outlined.Settings
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.NavigationBarItemDefaults
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -44,29 +48,20 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.example.tuprofe.R
+import com.example.tuprofe.data.local.LocalProfesor
+import com.example.tuprofe.data.local.LocalReview
 import com.example.tuprofe.ui.ConfigPerfil.ConfigPerfilScreen
 import com.example.tuprofe.ui.Config.ConfigScreen
 import com.example.tuprofe.ui.Detalle.DetalleScreen
-
+import com.example.tuprofe.ui.HistorialScreen
 import com.example.tuprofe.ui.Login.HomeScreen
 import com.example.tuprofe.ui.LoadingScreen
+import com.example.tuprofe.ui.Login.LoginViewModel
 import com.example.tuprofe.ui.Main.MainScreen
 import com.example.tuprofe.ui.Profe.ProfeScreen
 import com.example.tuprofe.ui.Register.RegisterScreen
-import com.example.tuprofe.ui.Register.RegisterViewModel
 import com.example.tuprofe.ui.ResetPassword.ResetPasswordScreen
 import com.example.tuprofe.ui.Search.SearchScreen
-import androidx.compose.runtime.getValue
-import com.example.tuprofe.ui.Config.ConfigViewModel
-import com.example.tuprofe.ui.ConfigPerfil.ConfigPerfilViewModel
-import com.example.tuprofe.ui.Detalle.DetalleViewModel
-import com.example.tuprofe.ui.Historia.HistorialViewModel
-import com.example.tuprofe.ui.HistorialScreen
-import com.example.tuprofe.ui.Login.LoginViewModel
-import com.example.tuprofe.ui.Main.MainViewModel
-import com.example.tuprofe.ui.Profe.ProfeViewModel
-import com.example.tuprofe.ui.ResetPassword.ResetPasswordViewModel
-import com.example.tuprofe.ui.Search.SearchViewModel
 
 
 sealed class Screen(val route: String){
@@ -84,8 +79,8 @@ sealed class Screen(val route: String){
     object Configuracion : Screen("Configuracion")
     object Detalle : Screen("Detalle/{reviewId}"){
         fun createRoute(reviewId: Int) = "Detalle/$reviewId"
-        }
     }
+}
 
 
 @Composable
@@ -100,147 +95,120 @@ fun AppNavegation(
     ){
         composable(route = Screen.Home.route){
             val loginViewModel: LoginViewModel = viewModel()
-            val state by loginViewModel.uiState.collectAsState()
-
-            if(state.navigate) {
-                navController.navigate(Screen.Main.route) {
-                    popUpTo(0) {
-                        inclusive = true
+            HomeScreen(
+                loginViewModel = loginViewModel,
+                onLoginClick = {
+                    navController.navigate(Screen.Main.route){
+                        popUpTo(0){
+                            inclusive = true
+                        }
                     }
-                }
-            }
-                if (state.register) {
-                    navController.navigate(Screen.Register.route) {
-                        popUpTo(0) {
+                },
+                onRegisterClick = {
+                    navController.navigate(Screen.Register.route){
+                        popUpTo(0){
+                            inclusive = true
+                        }
+                    }
+                },
+                onForgotPasswordClick = {
+                    navController.navigate(Screen.PasswordReset.route){
+                        popUpTo(0){
                             inclusive = true
                         }
                     }
                 }
-
-                if (state.forgotPassword) {
-                    navController.navigate(Screen.PasswordReset.route) {
-                        popUpTo(0) {
-                            inclusive = true
-                        }
-                    }
-                }
-
-                HomeScreen(
-                    loginViewModel = loginViewModel
-                )
+            )
         }
 
         composable(route = Screen.Search.route){
-            val searchViewModel: SearchViewModel = viewModel()
-            val state by searchViewModel.uiState.collectAsState()
-
-            LaunchedEffect(state.navigateToProfileId) {
-                state.navigateToProfileId?.let { id ->
-                    navController.navigate(Screen.Profe.createRoute(id))
-                    searchViewModel.onNavigationHandled()
-                }
-            }
-
-            SearchScreen(searchViewModel = searchViewModel)
+            SearchScreen()
         }
         composable(route = Screen.Register.route){
-            val registerViewModel: RegisterViewModel = viewModel()
-            val state by registerViewModel.uiState.collectAsState()
-            if(state.navigateHome){
-                navController.navigate(Screen.Home.route){
+            RegisterScreen(
+                onRegisterClick = {navController.navigate(Screen.Home.route){
                     popUpTo(0){
                         inclusive = true
                     }
-                }
-            }
-
-            RegisterScreen(
-                    registerViewModel = registerViewModel
-
+                }},
+                onAlreadyAccountClick = {navController.navigate(Screen.Home.route){
+                    popUpTo(0){
+                        inclusive = true
+                    }
+                }},
+                onBackClick = {navController.navigate(Screen.Home.route){
+                    popUpTo(0){
+                        inclusive = true
+                    }
+                }}
             )
         }
         composable(route = Screen.PasswordReset.route){
-
-            val resetPasswordViewModel: ResetPasswordViewModel = viewModel()
-            val state by resetPasswordViewModel.uiState.collectAsState()
-
-            if(state.navigate){
-                navController.navigate(Screen.Home.route){
+            ResetPasswordScreen(
+                onVolverClick = {navController.navigate(Screen.Home.route){
                     popUpTo(0){
                         inclusive = true
                     }
-                }
-            }
-            ResetPasswordScreen(
-                resetPasswordViewModel = resetPasswordViewModel
+                }}
             )
         }
         composable(route = Screen.Main.route){
-            val mainViewModel: MainViewModel = viewModel()
-            val state by mainViewModel.uiState.collectAsState()
-
-            LaunchedEffect(state.navigateToReviewId) {
-                state.navigateToReviewId?.let { id ->
-                    navController.navigate(Screen.Detalle.createRoute(id))
-                    mainViewModel.onNavigationHandled()
+            MainScreen(
+                onResenaClick = { reviewId ->
+                    navController.navigate(Screen.Detalle.createRoute(reviewId))
+                },
+                onProfileClick = { profesor ->
+                    navController.navigate(Screen.Profe.createRoute(profesor.profeId))
                 }
-            }
-
-            LaunchedEffect(state.navigateToProfileId) {
-                state.navigateToProfileId?.let { id ->
-                    navController.navigate(Screen.Profe.createRoute(id))
-                    mainViewModel.onNavigationHandled()
-                }
-            }
-
-            MainScreen(mainViewModel = mainViewModel)
+            )
         }
         composable(
             route = Screen.Profe.route,
             arguments = listOf(navArgument("profeId"){ type = NavType.IntType })
         ){
-            val profeViewModel: ProfeViewModel = viewModel()
-            val state by profeViewModel.uiState.collectAsState()
+            val profeId = it.arguments?.getInt("profeId") ?: 0
+            val profesor = LocalProfesor.profesores.find { it.profeId == profeId }
 
-            LaunchedEffect(state.navigateToReviewId) {
-                state.navigateToReviewId?.let { id ->
-                    navController.navigate(Screen.Detalle.createRoute(id))
-                    profeViewModel.onNavigationHandled()
-                }
+            if(profesor != null){
+
+                ProfeScreen(
+                    profesor = profesor,
+                    onResenaClick = { reviewId ->
+                        navController.navigate(Screen.Detalle.createRoute(reviewId))
+                    },
+                    onProfileClick = { profesor ->
+                        navController.navigate(Screen.Profe.createRoute(profesor.profeId))
+                    }
+                )
+
+            } else {
+                Text("Profesor no encontrado")
             }
-
-            LaunchedEffect(state.navigateToProfileId) {
-                state.navigateToProfileId?.let { id ->
-                    navController.navigate(Screen.Profe.createRoute(id))
-                    profeViewModel.onNavigationHandled()
-                }
-            }
-
-            ProfeScreen(profeViewModel = profeViewModel)
         }
         composable(route = Screen.Historial.route){
-            val historialViewModel: HistorialViewModel = viewModel()
-            val state by historialViewModel.uiState.collectAsState()
-
-            LaunchedEffect(state.navigateToReviewId) {
-                state.navigateToReviewId?.let { id ->
-                    navController.navigate(Screen.Detalle.createRoute(id))
-                    historialViewModel.onNavigationHandled()
+            HistorialScreen(
+                onFilterClick = {},
+                onVerCalificacionClick = { review ->
+                    navController.navigate(Screen.Detalle.createRoute(review.reviewId))
                 }
-            }
-
-            HistorialScreen(historialViewModel = historialViewModel)
+            )
         }
 
         composable(route = Screen.ConfigPerfil.route){
-
-            val configPerfilViewModel: ConfigPerfilViewModel = viewModel()
-            val state by configPerfilViewModel.uiState.collectAsState()
-
-            if(state.navigate)navController.navigate(Screen.Configuracion.route){popUpTo(0){ inclusive = true }}
-
             ConfigPerfilScreen(
-                configPerfilViewModel = configPerfilViewModel
+                onChangePassword = {
+                    navController.navigate(Screen.PasswordReset.route)
+                },
+                onGuardarCambiosClick = {
+                    navController.navigate(Screen.Configuracion.route) {
+                        popUpTo(0){
+                            inclusive = true
+                        }
+                    }
+                },
+                onBorrarCuentaClick = {
+                    navController.navigate(Screen.Home.route)
+                }
             )
         }
 
@@ -248,43 +216,58 @@ fun AppNavegation(
             LoadingScreen()
         }
         composable(route = Screen.Configuracion.route){
-
-            val configViewModel: ConfigViewModel = viewModel()
-            val state by configViewModel.uiState.collectAsState()
-
-            if(state.Profile) navController.navigate(Screen.ConfigPerfil.route){popUpTo(0){ inclusive = true }}
-            if(state.Logout) navController.navigate(Screen.Home.route){popUpTo(0){ inclusive = true }}
-            if(state.Ayuda) navController.navigate(Screen.Loading.route){popUpTo(0){ inclusive = true }}
-            if(state.calificacion) navController.navigate(Screen.Historial.route){popUpTo(0){ inclusive = true }}
-            if(state.Notificaciones) navController.navigate(Screen.Loading.route){popUpTo(0){ inclusive = true }}
-            if(state.Privacidad) navController.navigate(Screen.Loading.route){popUpTo(0){ inclusive = true }}
-
             ConfigScreen(
-                configViewModel = configViewModel
+                onProfileClick = {
+                    navController.navigate(Screen.ConfigPerfil.route)
+                },
+                onLogoutClick = {
+                    navController.navigate(Screen.Home.route) {
+                        popUpTo(0){
+                            inclusive = true
+                        }
+                    }
+                },
+                onCalifClick = {
+                    navController.navigate(Screen.Historial.route){
+                        popUpTo(0){
+                            inclusive = true
+                        }
+                    }
+                },
+                onAyudaClick = {
+
+                },
+                onPrivacidadClick = {
+                },
+                onNotificacionesClick = {
+                }
+
+
+
             )
         }
         composable(
             route = Screen.Detalle.route,
             arguments = listOf(navArgument("reviewId"){type = NavType.IntType})
         ){
-            val detalleViewModel: DetalleViewModel = viewModel()
-            val state by detalleViewModel.uiState.collectAsState()
+            val reviewId = it.arguments?.getInt("reviewId")?: 0
+            val review = LocalReview.Reviews.find { it.reviewId == reviewId }
 
-            LaunchedEffect(state.navigateToProfile) {
-                state.navigateToProfile?.let { id ->
-                    navController.navigate(Screen.Profe.createRoute(id))
-                    detalleViewModel.onNavigationHandled()
-                }
-            }
+            if(review != null){
 
-            LaunchedEffect(state.navigateBack) {
-                if (state.navigateBack) {
-                    navController.popBackStack()
-                    detalleViewModel.onNavigationHandled()
-                }
-            }
+                DetalleScreen(
+                    onLike = {},
+                    onComment = {},
+                    onShare = {},
+                    ReviewInfo = review,
+                    responseReviews = LocalReview.Reviews,
+                    onProfileClick = { profesor ->
+                        navController.navigate(Screen.Profe.createRoute(profesor.profeId))
+                    }
+                )
 
-            DetalleScreen(detalleViewModel = detalleViewModel)
+            } else (Text(stringResource(R.string.rese_a_no_encontrada)))
+
         }
     }
 
