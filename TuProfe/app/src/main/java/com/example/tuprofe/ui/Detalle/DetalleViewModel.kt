@@ -1,5 +1,6 @@
 package com.example.tuprofe.ui.Detalle
 
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import com.example.tuprofe.data.local.LocalReview
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -7,12 +8,16 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 
-class DetalleViewModel : ViewModel() {
+class DetalleViewModel(savedStateHandle: SavedStateHandle) : ViewModel() {
 
     private val _uiState = MutableStateFlow(DetalleState())
     val uiState: StateFlow<DetalleState> = _uiState.asStateFlow()
 
-    fun cargarDetalle(reviewId: Int) {
+    init {
+        savedStateHandle.get<Int>("reviewId")?.let { cargarDetalle(it) }
+    }
+
+    private fun cargarDetalle(reviewId: Int) {
         _uiState.update { it.copy(isLoading = true) }
         
         val review = LocalReview.Reviews.find { it.reviewId == reviewId }
@@ -23,5 +28,17 @@ class DetalleViewModel : ViewModel() {
             respuestas = respuestas,
             isLoading = false
         ) }
+    }
+
+    fun onProfileClick(profeId: Int) {
+        _uiState.update { it.copy(navigateToProfile = profeId) }
+    }
+
+    fun onNavigationHandled() {
+        _uiState.update { it.copy(navigateToProfile = null, navigateBack = false) }
+    }
+
+    fun onBackClick() {
+        _uiState.update { it.copy(navigateBack = true) }
     }
 }

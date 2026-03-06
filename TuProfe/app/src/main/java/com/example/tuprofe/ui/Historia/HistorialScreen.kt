@@ -12,16 +12,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.example.tuprofe.data.ReviewInfo
 import com.example.tuprofe.ui.utils.BackgroundImage
 import com.example.tuprofe.ui.utils.Resena
 
 @Composable
 fun HistorialScreen(
     modifier: Modifier = Modifier,
-    historialViewModel: HistorialViewModel = viewModel(),
-    onFilterClick: () -> Unit,
-    onVerCalificacionClick: (ReviewInfo) -> Unit
+    historialViewModel: HistorialViewModel = viewModel()
 ) {
     val uiState by historialViewModel.uiState.collectAsState()
 
@@ -38,8 +35,8 @@ fun HistorialScreen(
                 items(uiState.userReviews) { review ->
                     Resena(
                         reviewInfo = review,
-                        onProfileClick = { /* Acción al hacer click en el perfil */ },
-                        onCommentsClick = { onVerCalificacionClick(review) }
+                        onProfileClick = { /* En el ViewModel */ },
+                        onCommentsClick = { historialViewModel.onReviewClick(review.reviewId) }
                     )
                 }
             }
@@ -50,8 +47,5 @@ fun HistorialScreen(
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
 fun HistorialScreenPreview() {
-    HistorialScreen(
-        onFilterClick = { },
-        onVerCalificacionClick = { }
-    )
+    HistorialScreen()
 }

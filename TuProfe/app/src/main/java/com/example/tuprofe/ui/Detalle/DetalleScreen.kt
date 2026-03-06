@@ -7,6 +7,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.outlined.Comment
 import androidx.compose.material.icons.outlined.Comment
 import androidx.compose.material.icons.outlined.Share
 import androidx.compose.material.icons.outlined.ThumbUp
@@ -22,26 +23,36 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.tuprofe.R
-import com.example.tuprofe.data.Profesor
+import com.example.tuprofe.data.local.LocalReview
 import com.example.tuprofe.ui.utils.Resena
 import com.example.tuprofe.ui.utils.BackgroundImage
 
 @Composable
 fun DetalleScreen(
-    reviewId: Int,
     modifier: Modifier = Modifier,
-    detalleViewModel: DetalleViewModel = viewModel(),
-    onLike: () -> Unit,
-    onShare: () -> Unit,
-    onComment: () -> Unit,
-    onProfileClick: (Profesor) -> Unit
+    detalleViewModel: DetalleViewModel = viewModel()
 ) {
     val uiState by detalleViewModel.uiState.collectAsState()
 
-    LaunchedEffect(reviewId) {
-        detalleViewModel.cargarDetalle(reviewId)
-    }
+    DetalleContent(
+        uiState = uiState,
+        onLike = { },
+        onShare = { },
+        onComment = { },
+        onProfileClick = { id -> detalleViewModel.onProfileClick(id) },
+        modifier = modifier
+    )
+}
 
+@Composable
+fun DetalleContent(
+    uiState: DetalleState,
+    onLike: () -> Unit,
+    onShare: () -> Unit,
+    onComment: () -> Unit,
+    onProfileClick: (Int) -> Unit,
+    modifier: Modifier = Modifier
+) {
     Box(modifier = modifier.fillMaxSize()) {
         BackgroundImage()
 
@@ -65,7 +76,7 @@ fun DetalleScreen(
                             Column {
                                 Resena(
                                     reviewInfo = review,
-                                    onProfileClick = { onProfileClick(review.profesor) }
+                                    onProfileClick = { onProfileClick(review.profesor.profeId) }
                                 )
                                 HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant)
                                 ReviewActionBar(onLike = onLike, onComment = onComment, onShare = onShare)
@@ -107,7 +118,7 @@ fun DetalleScreen(
                             Resena(
                                 reviewInfo = respuesta,
                                 modifier = Modifier.padding(vertical = 8.dp),
-                                onProfileClick = { onProfileClick(respuesta.profesor) }
+                                onProfileClick = { onProfileClick(respuesta.profesor.profeId) }
                             )
                         }
                     }
@@ -133,7 +144,7 @@ fun ReviewActionBar(
             Icon(imageVector = Icons.Outlined.ThumbUp, contentDescription = "Like", tint = colorResource(R.color.verdetp))
         }
         IconButton(onClick = onComment) {
-            Icon(imageVector = Icons.Outlined.Comment, contentDescription = "Comment", tint = colorResource(R.color.verdetp))
+            Icon(imageVector = Icons.AutoMirrored.Outlined.Comment, contentDescription = "Comment", tint = colorResource(R.color.verdetp))
         }
         IconButton(onClick = onShare) {
             Icon(imageVector = Icons.Outlined.Share, contentDescription = "Share", tint = colorResource(R.color.verdetp))
@@ -144,8 +155,13 @@ fun ReviewActionBar(
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
 fun DetalleScreenPreview() {
-    DetalleScreen(
-        reviewId = 1,
+    val mockState = DetalleState(
+        selectedReview = LocalReview.Reviews[0],
+        respuestas = LocalReview.Reviews.drop(1),
+        isLoading = false
+    )
+    DetalleContent(
+        uiState = mockState,
         onLike = {},
         onShare = {},
         onComment = {},

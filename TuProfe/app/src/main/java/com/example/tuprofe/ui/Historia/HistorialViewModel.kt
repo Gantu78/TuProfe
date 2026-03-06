@@ -22,4 +22,12 @@ class HistorialViewModel : ViewModel() {
             isLoading = false
         ) }
     }
+
+    fun onReviewClick(reviewId: Int) {
+        _uiState.update { it.copy(navigateToReviewId = reviewId) }
+    }
+
+    fun onNavigationHandled() {
+        _uiState.update { it.copy(navigateToReviewId = null) }
+    }
 }

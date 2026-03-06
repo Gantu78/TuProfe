@@ -24,11 +24,25 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 @Composable
 fun SearchScreen(
     modifier: Modifier = Modifier,
-    searchViewModel: SearchViewModel = viewModel(),
-    onProfessorClick: (Profesor) -> Unit = {}
+    searchViewModel: SearchViewModel = viewModel()
 ) {
     val uiState by searchViewModel.uiState.collectAsState()
 
+    SearchContent(
+        uiState = uiState,
+        onQueryChange = { searchViewModel.onQueryChange(it) },
+        onProfessorClick = { searchViewModel.onProfileClick(it.profeId) },
+        modifier = modifier
+    )
+}
+
+@Composable
+fun SearchContent(
+    uiState: SearchState,
+    onQueryChange: (String) -> Unit,
+    onProfessorClick: (Profesor) -> Unit,
+    modifier: Modifier = Modifier
+) {
     Box(modifier = modifier.fillMaxSize()) {
         BackgroundImage()
 
@@ -37,7 +51,7 @@ fun SearchScreen(
 
             SearchBar(
                 query = uiState.searchQuery,
-                onQueryChange = { searchViewModel.onQueryChange(it) },
+                onQueryChange = onQueryChange,
                 modifier = Modifier.padding(horizontal = 24.dp)
             )
 
@@ -83,5 +97,9 @@ fun ProfessorSearchResultItem(profesor: Profesor, onClick: () -> Unit) {
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
 fun SearchScreenPreview() {
-    SearchScreen()
+    SearchContent(
+        uiState = SearchState(),
+        onQueryChange = {},
+        onProfessorClick = {}
+    )
 }

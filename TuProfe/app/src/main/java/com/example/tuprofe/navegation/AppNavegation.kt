@@ -24,8 +24,8 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.NavigationBarItemDefaults
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -44,7 +44,6 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.example.tuprofe.R
-import com.example.tuprofe.data.local.LocalProfesor
 import com.example.tuprofe.ui.ConfigPerfil.ConfigPerfilScreen
 import com.example.tuprofe.ui.Config.ConfigScreen
 import com.example.tuprofe.ui.Detalle.DetalleScreen
@@ -60,8 +59,13 @@ import com.example.tuprofe.ui.Search.SearchScreen
 import androidx.compose.runtime.getValue
 import com.example.tuprofe.ui.Config.ConfigViewModel
 import com.example.tuprofe.ui.ConfigPerfil.ConfigPerfilViewModel
+import com.example.tuprofe.ui.Detalle.DetalleViewModel
+import com.example.tuprofe.ui.Historia.HistorialViewModel
 import com.example.tuprofe.ui.Login.LoginViewModel
+import com.example.tuprofe.ui.Main.MainViewModel
+import com.example.tuprofe.ui.Profe.ProfeViewModel
 import com.example.tuprofe.ui.ResetPassword.ResetPasswordViewModel
+import com.example.tuprofe.ui.Search.SearchViewModel
 
 
 sealed class Screen(val route: String){
@@ -123,13 +127,20 @@ fun AppNavegation(
                 HomeScreen(
                     loginViewModel = loginViewModel
                 )
-
-
-
         }
 
         composable(route = Screen.Search.route){
-            SearchScreen()
+            val searchViewModel: SearchViewModel = viewModel()
+            val state by searchViewModel.uiState.collectAsState()
+
+            LaunchedEffect(state.navigateToProfileId) {
+                state.navigateToProfileId?.let { id ->
+                    navController.navigate(Screen.Profe.createRoute(id))
+                    searchViewModel.onNavigationHandled()
+                }
+            }
+
+            SearchScreen(searchViewModel = searchViewModel)
         }
         composable(route = Screen.Register.route){
             val registerViewModel: RegisterViewModel = viewModel()
@@ -164,45 +175,60 @@ fun AppNavegation(
             )
         }
         composable(route = Screen.Main.route){
-            MainScreen(
-                onResenaClick = { reviewId ->
-                    navController.navigate(Screen.Detalle.createRoute(reviewId))
-                },
-                onProfileClick = { profesor ->
-                    navController.navigate(Screen.Profe.createRoute(profesor.profeId))
+            val mainViewModel: MainViewModel = viewModel()
+            val state by mainViewModel.uiState.collectAsState()
+
+            LaunchedEffect(state.navigateToReviewId) {
+                state.navigateToReviewId?.let { id ->
+                    navController.navigate(Screen.Detalle.createRoute(id))
+                    mainViewModel.onNavigationHandled()
                 }
-            )
+            }
+
+            LaunchedEffect(state.navigateToProfileId) {
+                state.navigateToProfileId?.let { id ->
+                    navController.navigate(Screen.Profe.createRoute(id))
+                    mainViewModel.onNavigationHandled()
+                }
+            }
+
+            MainScreen(mainViewModel = mainViewModel)
         }
         composable(
             route = Screen.Profe.route,
             arguments = listOf(navArgument("profeId"){ type = NavType.IntType })
         ){
-            val profeId = it.arguments?.getInt("profeId") ?: 0
-            val profesor = LocalProfesor.profesores.find { it.profeId == profeId }
+            val profeViewModel: ProfeViewModel = viewModel()
+            val state by profeViewModel.uiState.collectAsState()
 
-            if(profesor != null){
-
-                ProfeScreen(
-                    profesor = profesor,
-                    onResenaClick = { reviewId ->
-                        navController.navigate(Screen.Detalle.createRoute(reviewId))
-                    },
-                    onProfileClick = { profesor ->
-                        navController.navigate(Screen.Profe.createRoute(profesor.profeId))
-                    }
-                )
-
-            } else {
-                Text("Profesor no encontrado")
+            LaunchedEffect(state.navigateToReviewId) {
+                state.navigateToReviewId?.let { id ->
+                    navController.navigate(Screen.Detalle.createRoute(id))
+                    profeViewModel.onNavigationHandled()
+                }
             }
+
+            LaunchedEffect(state.navigateToProfileId) {
+                state.navigateToProfileId?.let { id ->
+                    navController.navigate(Screen.Profe.createRoute(id))
+                    profeViewModel.onNavigationHandled()
+                }
+            }
+
+            ProfeScreen(profeViewModel = profeViewModel)
         }
         composable(route = Screen.Historial.route){
-            HistorialScreen(
-                onFilterClick = {},
-                onVerCalificacionClick = { review ->
-                    navController.navigate(Screen.Detalle.createRoute(review.reviewId))
+            val historialViewModel: HistorialViewModel = viewModel()
+            val state by historialViewModel.uiState.collectAsState()
+
+            LaunchedEffect(state.navigateToReviewId) {
+                state.navigateToReviewId?.let { id ->
+                    navController.navigate(Screen.Detalle.createRoute(id))
+                    historialViewModel.onNavigationHandled()
                 }
-            )
+            }
+
+            HistorialScreen(historialViewModel = historialViewModel)
         }
 
         composable(route = Screen.ConfigPerfil.route){
@@ -240,17 +266,24 @@ fun AppNavegation(
             route = Screen.Detalle.route,
             arguments = listOf(navArgument("reviewId"){type = NavType.IntType})
         ){
-            val reviewId = it.arguments?.getInt("reviewId")?: 0
+            val detalleViewModel: DetalleViewModel = viewModel()
+            val state by detalleViewModel.uiState.collectAsState()
 
-            DetalleScreen(
-                reviewId = reviewId,
-                onLike = {},
-                onComment = {},
-                onShare = {},
-                onProfileClick = { profesor ->
-                    navController.navigate(Screen.Profe.createRoute(profesor.profeId))
+            LaunchedEffect(state.navigateToProfile) {
+                state.navigateToProfile?.let { id ->
+                    navController.navigate(Screen.Profe.createRoute(id))
+                    detalleViewModel.onNavigationHandled()
                 }
-            )
+            }
+
+            LaunchedEffect(state.navigateBack) {
+                if (state.navigateBack) {
+                    navController.popBackStack()
+                    detalleViewModel.onNavigationHandled()
+                }
+            }
+
+            DetalleScreen(detalleViewModel = detalleViewModel)
         }
     }
 

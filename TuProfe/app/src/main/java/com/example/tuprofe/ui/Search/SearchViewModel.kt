@@ -27,4 +27,12 @@ class SearchViewModel : ViewModel() {
             searchResults = results
         ) }
     }
+
+    fun onProfileClick(profeId: Int) {
+        _uiState.update { it.copy(navigateToProfileId = profeId) }
+    }
+
+    fun onNavigationHandled() {
+        _uiState.update { it.copy(navigateToProfileId = null) }
+    }
 }

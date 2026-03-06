@@ -28,7 +28,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.tuprofe.R
-import com.example.tuprofe.data.Profesor
 import com.example.tuprofe.data.local.LocalProfesor
 import com.example.tuprofe.data.local.LocalReview
 import com.example.tuprofe.ui.Main.ResenaCard
@@ -37,33 +36,24 @@ import com.example.tuprofe.ui.utils.RatingStars
 
 @Composable
 fun ProfeScreen(
-    profesor: Profesor,
     modifier: Modifier = Modifier,
-    profeViewModel: ProfeViewModel = viewModel(),
-    onResenaClick: (Int) -> Unit,
-    onProfileClick: (Profesor) -> Unit
+    profeViewModel: ProfeViewModel = viewModel()
 ) {
     val uiState by profeViewModel.uiState.collectAsState()
 
-    LaunchedEffect(profesor.profeId) {
-        profeViewModel.cargarDatosProfesor(profesor.profeId)
-    }
-
     ProfeContent(
-        profesor = profesor,
         uiState = uiState,
-        onResenaClick = onResenaClick,
-        onProfileClick = onProfileClick,
+        onReviewClick = { profeViewModel.onReviewClick(it) },
+        onProfileClick = { profeViewModel.onProfileClick(it) },
         modifier = modifier
     )
 }
 
 @Composable
 fun ProfeContent(
-    profesor: Profesor,
     uiState: ProfeState,
-    onResenaClick: (Int) -> Unit,
-    onProfileClick: (Profesor) -> Unit,
+    onReviewClick: (Int) -> Unit,
+    onProfileClick: (Int) -> Unit,
     modifier: Modifier = Modifier
 ) {
     Box(modifier = modifier.fillMaxSize()) {
@@ -72,30 +62,34 @@ fun ProfeContent(
         if (uiState.isLoading) {
             CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
         } else {
-            Column(Modifier.fillMaxSize()) {
-                LazyColumn(
-                    modifier = Modifier.weight(1f),
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                    contentPadding = PaddingValues(bottom = 80.dp)
-                ) {
-                    item {
-                        ProfessorInfoCard(
-                            professorName = profesor.nombreProfe,
-                            professorSubjects = profesor.materia,
-                            generalRating = uiState.averageRating,
-                            professorImageRes = profesor.imageprofeId
-                        )
-                    }
+            uiState.profesor?.let { profesor ->
+                Column(Modifier.fillMaxSize()) {
+                    LazyColumn(
+                        modifier = Modifier.weight(1f),
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        contentPadding = PaddingValues(bottom = 80.dp)
+                    ) {
+                        item {
+                            ProfessorInfoCard(
+                                professorName = profesor.nombreProfe,
+                                professorSubjects = profesor.materia,
+                                generalRating = uiState.averageRating,
+                                professorImageRes = profesor.imageprofeId
+                            )
+                        }
 
-                    items(uiState.professorReviews) { review ->
-                        ResenaCard(
-                            reviewInfo = review,
-                            onCommentsClick = onResenaClick,
-                            onProfileClick = { onProfileClick(review.profesor) }
-                        )
-                        Spacer(modifier = Modifier.height(16.dp))
+                        items(uiState.professorReviews) { review ->
+                            ResenaCard(
+                                reviewInfo = review,
+                                onCommentsClick = { onReviewClick(review.reviewId) },
+                                onProfileClick = { onProfileClick(review.profesor.profeId) }
+                            )
+                            Spacer(modifier = Modifier.height(16.dp))
+                        }
                     }
                 }
+            } ?: Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                Text(text = "Profesor no encontrado")
             }
         }
 
@@ -175,16 +169,15 @@ private fun ProfeScreenBottomBar(
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
 fun ProfeScreenPreview() {
-    val profeEjemplo = LocalProfesor.profesores[0]
     val mockState = ProfeState(
-        professorReviews = LocalReview.Reviews.filter { it.profesor.profeId == profeEjemplo.profeId },
+        profesor = LocalProfesor.profesores[0],
+        professorReviews = LocalReview.Reviews.filter { it.profesor.profeId == 1 },
         averageRating = 4,
         isLoading = false
     )
     ProfeContent(
-        profesor = profeEjemplo,
         uiState = mockState,
-        onResenaClick = {},
+        onReviewClick = {},
         onProfileClick = {}
     )
 }

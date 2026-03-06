@@ -16,20 +16,33 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.tuprofe.R
-import com.example.tuprofe.data.Profesor
 import com.example.tuprofe.data.ReviewInfo
+import com.example.tuprofe.data.local.LocalReview
 import com.example.tuprofe.ui.utils.BackgroundImage
 import com.example.tuprofe.ui.utils.Resena
 
 @Composable
 fun MainScreen(
     modifier: Modifier = Modifier,
-    mainViewModel: MainViewModel = viewModel(),
-    onResenaClick: (Int) -> Unit,
-    onProfileClick: (Profesor) -> Unit
+    mainViewModel: MainViewModel = viewModel()
 ) {
     val uiState by mainViewModel.uiState.collectAsState()
 
+    MainContent(
+        uiState = uiState,
+        onReviewClick = { mainViewModel.onReviewClick(it) },
+        onProfileClick = { mainViewModel.onProfileClick(it) },
+        modifier = modifier
+    )
+}
+
+@Composable
+fun MainContent(
+    uiState: MainState,
+    onReviewClick: (Int) -> Unit,
+    onProfileClick: (Int) -> Unit,
+    modifier: Modifier = Modifier
+) {
     Box(modifier = modifier.fillMaxSize()) {
         BackgroundImage()
 
@@ -43,8 +56,8 @@ fun MainScreen(
                 items(uiState.reviews) { review ->
                     ResenaCard(
                         reviewInfo = review,
-                        onCommentsClick = onResenaClick,
-                        onProfileClick = { onProfileClick(review.profesor) }
+                        onCommentsClick = { onReviewClick(review.reviewId) },
+                        onProfileClick = { onProfileClick(review.profesor.profeId) }
                     )
                 }
             }
@@ -84,5 +97,13 @@ fun ResenaCard(
 @Preview(showBackground = true)
 @Composable
 fun MainScreenPreview() {
-    MainScreen(onResenaClick = {}, onProfileClick = {})
+    val mockState = MainState(
+        reviews = LocalReview.Reviews,
+        isLoading = false
+    )
+    MainContent(
+        uiState = mockState,
+        onReviewClick = {},
+        onProfileClick = {}
+    )
 }

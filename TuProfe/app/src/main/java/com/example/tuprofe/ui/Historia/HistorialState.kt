@@ -4,5 +4,6 @@ import com.example.tuprofe.data.ReviewInfo
 
 data class HistorialState(
     val userReviews: List<ReviewInfo> = emptyList(),
-    val isLoading: Boolean = true
+    val isLoading: Boolean = true,
+    val navigateToReviewId: Int? = null
 )
