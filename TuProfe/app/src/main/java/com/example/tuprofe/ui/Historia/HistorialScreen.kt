@@ -38,6 +38,7 @@ import com.example.tuprofe.ui.utils.RatingStars
 @Composable
 fun HistorialScreen(
     historialViewModel: HistorialViewModel,
+    onVerCalificacionClick: (ReviewInfo) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val state by historialViewModel.uiState.collectAsState()
@@ -65,7 +66,7 @@ fun HistorialScreen(
             items(state.userReviews) { review ->
                 HistorialCard(
                     review = review,
-                    onVerCalificacionClick = { historialViewModel.onCalificacionClick(review.reviewId) }
+                    onVerCalificacionClick = onVerCalificacionClick
                 )
             }
         }
@@ -260,5 +261,6 @@ fun HistorialCardPreview() {
 fun HistorialScreenPreview() {
     HistorialScreen(
         historialViewModel = viewModel(),
+        onVerCalificacionClick = {}
     )
 }

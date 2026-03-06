@@ -28,9 +28,6 @@ class ConfigPerfilViewModel: ViewModel() {
 
     }
 
-    fun onCambiarContrasenaClick() {
-        _uiState.update { it.copy(showChangePasswordDialog = true) }
-    }
 
     fun onGuardarCambiosClick() {
         _uiState.update { it.copy(navigate = true )}

@@ -52,7 +52,11 @@ import com.example.tuprofe.data.local.LocalProfesor
 import com.example.tuprofe.data.local.LocalReview
 import com.example.tuprofe.ui.ConfigPerfil.ConfigPerfilScreen
 import com.example.tuprofe.ui.Config.ConfigScreen
+import com.example.tuprofe.ui.Config.ConfigViewModel
+import com.example.tuprofe.ui.ConfigPerfil.ConfigPerfilViewModel
 import com.example.tuprofe.ui.Detalle.DetalleScreen
+import com.example.tuprofe.ui.Detalle.DetalleViewModel
+import com.example.tuprofe.ui.Historia.HistorialViewModel
 import com.example.tuprofe.ui.HistorialScreen
 import com.example.tuprofe.ui.Login.HomeScreen
 import com.example.tuprofe.ui.LoadingScreen
@@ -186,8 +190,10 @@ fun AppNavegation(
             }
         }
         composable(route = Screen.Historial.route){
+            val historialViewModel: HistorialViewModel = viewModel()
+
             HistorialScreen(
-                onFilterClick = {},
+                historialViewModel = historialViewModel,
                 onVerCalificacionClick = { review ->
                     navController.navigate(Screen.Detalle.createRoute(review.reviewId))
                 }
@@ -195,7 +201,9 @@ fun AppNavegation(
         }
 
         composable(route = Screen.ConfigPerfil.route){
+            val configPerfilViewModel: ConfigPerfilViewModel = viewModel()
             ConfigPerfilScreen(
+                configPerfilViewModel = configPerfilViewModel,
                 onChangePassword = {
                     navController.navigate(Screen.PasswordReset.route)
                 },
@@ -216,7 +224,10 @@ fun AppNavegation(
             LoadingScreen()
         }
         composable(route = Screen.Configuracion.route){
+            val configViewModel: ConfigViewModel = viewModel()
+
             ConfigScreen(
+                configViewModel = configViewModel,
                 onProfileClick = {
                     navController.navigate(Screen.ConfigPerfil.route)
                 },
@@ -233,16 +244,7 @@ fun AppNavegation(
                             inclusive = true
                         }
                     }
-                },
-                onAyudaClick = {
-
-                },
-                onPrivacidadClick = {
-                },
-                onNotificacionesClick = {
                 }
-
-
 
             )
         }
@@ -252,15 +254,12 @@ fun AppNavegation(
         ){
             val reviewId = it.arguments?.getInt("reviewId")?: 0
             val review = LocalReview.Reviews.find { it.reviewId == reviewId }
+            val detalleViewModel: DetalleViewModel = viewModel()
 
             if(review != null){
 
                 DetalleScreen(
-                    onLike = {},
-                    onComment = {},
-                    onShare = {},
-                    ReviewInfo = review,
-                    responseReviews = LocalReview.Reviews,
+                    detalleViewModel = detalleViewModel,
                     onProfileClick = { profesor ->
                         navController.navigate(Screen.Profe.createRoute(profesor.profeId))
                     }

@@ -15,14 +15,6 @@ class ConfigViewModel: ViewModel() {
         _uiState.update { it.copy(Profile = true) }
     }
 
-    fun onLogoutClick() {
-        _uiState.update { it.copy(Logout = true) }
-    }
-
-    fun onCalifClick(){
-        _uiState.update { it.copy(calificacion = true) }
-    }
-
     fun onAyudaClick() {
         _uiState.update { it.copy(Ayuda = true) }
     }

@@ -23,6 +23,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.tuprofe.R
+import com.example.tuprofe.data.Profesor
 import com.example.tuprofe.data.local.LocalReview
 import com.example.tuprofe.ui.utils.Resena
 import com.example.tuprofe.ui.utils.BackgroundImage
@@ -30,7 +31,8 @@ import com.example.tuprofe.ui.utils.BackgroundImage
 @Composable
 fun DetalleScreen(
     modifier: Modifier = Modifier,
-    detalleViewModel: DetalleViewModel = viewModel()
+    detalleViewModel: DetalleViewModel = viewModel(),
+    onProfileClick: (Profesor) -> Unit
 ) {
     val uiState by detalleViewModel.uiState.collectAsState()
 
@@ -39,7 +41,7 @@ fun DetalleScreen(
         onLike = { },
         onShare = { },
         onComment = { },
-        onProfileClick = { id -> detalleViewModel.onProfileClick(id) },
+        onProfileClick = onProfileClick,
         modifier = modifier
     )
 }
@@ -50,7 +52,7 @@ fun DetalleContent(
     onLike: () -> Unit,
     onShare: () -> Unit,
     onComment: () -> Unit,
-    onProfileClick: (Int) -> Unit,
+    onProfileClick: (Profesor) -> Unit,
     modifier: Modifier = Modifier
 ) {
     Box(modifier = modifier.fillMaxSize()) {
@@ -76,7 +78,7 @@ fun DetalleContent(
                             Column {
                                 Resena(
                                     reviewInfo = review,
-                                    onProfileClick = { onProfileClick(review.profesor.profeId) }
+                                    onProfileClick = {onProfileClick(review.profesor)}
                                 )
                                 HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant)
                                 ReviewActionBar(onLike = onLike, onComment = onComment, onShare = onShare)
@@ -119,7 +121,7 @@ fun DetalleContent(
                             Resena(
                                 reviewInfo = respuesta,
                                 modifier = Modifier.padding(vertical = 8.dp),
-                                onProfileClick = { onProfileClick(respuesta.profesor.profeId) }
+                                onProfileClick = {onProfileClick(respuesta.profesor)}
                             )
                         }
                     }

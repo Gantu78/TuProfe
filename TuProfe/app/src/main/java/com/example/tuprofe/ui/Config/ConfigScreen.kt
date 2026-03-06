@@ -47,6 +47,9 @@ import com.example.tuprofe.ui.utils.ConfigItem
 @Composable
 fun ConfigScreen(
     configViewModel: ConfigViewModel,
+    onProfileClick: () -> Unit,
+    onLogoutClick: () -> Unit,
+    onCalifClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
 
@@ -74,7 +77,7 @@ fun ConfigScreen(
                         email = "c.jimenez@javeriana.edu.co",
                         carrera = "Ing. de Sistemas",
                         imageRes = R.drawable.carlitos,
-                        onProfileClick = {configViewModel.onProfileClick()},
+                        onProfileClick = onProfileClick,
                         showStar = false
                     )
                 }
@@ -88,7 +91,7 @@ fun ConfigScreen(
                         icon = Icons.Default.ThumbsUpDown,
                         title = stringResource(R.string.historial_de_calificaciones),
                         subtitle = stringResource(R.string.qu_profes_has_calificado),
-                        onClick = {configViewModel.onCalifClick()}
+                        onClick = onCalifClick
                     )
                 }
 
@@ -127,7 +130,7 @@ fun ConfigScreen(
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(horizontal = 30.dp),
-                        onClick = {configViewModel.onLogoutClick()}
+                        onClick = onLogoutClick
                     )
                 }
 
@@ -180,7 +183,10 @@ fun UserCard(
 @Composable
 fun ConfigScreenPreview() {
     ConfigScreen(
-        configViewModel = viewModel()
+        configViewModel = viewModel(),
+        onProfileClick = {},
+        onLogoutClick = {},
+        onCalifClick = {}
     )
 }
 

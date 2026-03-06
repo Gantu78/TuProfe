@@ -26,6 +26,9 @@ import com.example.tuprofe.ui.utils.*
 @Composable
 fun ConfigPerfilScreen(
     configPerfilViewModel: ConfigPerfilViewModel,
+    onChangePassword: () -> Unit,
+    onGuardarCambiosClick: () -> Unit,
+    onBorrarCuentaClick: () -> Unit,
     modifier: Modifier = Modifier,
 
 ) {
@@ -63,9 +66,9 @@ fun ConfigPerfilScreen(
 
             item {
                 ActionButtons(
-                    onCambiarContrasenaClick = {configPerfilViewModel.onCambiarContrasenaClick()},
-                    onGuardarCambiosClick = {configPerfilViewModel.onGuardarCambiosClick()},
-                    onBorrarCuentaClick = {configPerfilViewModel.onBorrarCuentaClick()}
+                    onCambiarContrasenaClick = onChangePassword,
+                    onGuardarCambiosClick = onGuardarCambiosClick,
+                    onBorrarCuentaClick = onBorrarCuentaClick
                 )
             }
         }
@@ -255,6 +258,9 @@ private fun DeleteConfirmationDialog(
 @Composable
 fun ConfigPerfilPreview() {
     ConfigPerfilScreen(
-        configPerfilViewModel = viewModel()
+        configPerfilViewModel = viewModel(),
+        onChangePassword = {},
+        onGuardarCambiosClick = {},
+        onBorrarCuentaClick = {}
     )
 }

@@ -19,26 +19,17 @@ class DetalleViewModel(savedStateHandle: SavedStateHandle) : ViewModel() {
 
     private fun cargarDetalle(reviewId: Int) {
         _uiState.update { it.copy(isLoading = true) }
-        
+
         val review = LocalReview.Reviews.find { it.reviewId == reviewId }
         val respuestas = LocalReview.Reviews.filter { it.reviewId != reviewId }
-        
-        _uiState.update { it.copy(
-            selectedReview = review,
-            respuestas = respuestas,
-            isLoading = false
-        ) }
+
+        _uiState.update {
+            it.copy(
+                selectedReview = review,
+                respuestas = respuestas,
+                isLoading = false
+            )
+        }
     }
 
-    fun onProfileClick(profeId: Int) {
-        _uiState.update { it.copy(navigateToProfile = profeId) }
-    }
-
-    fun onNavigationHandled() {
-        _uiState.update { it.copy(navigateToProfile = null, navigateBack = false) }
-    }
-
-    fun onBackClick() {
-        _uiState.update { it.copy(navigateBack = true) }
-    }
 }

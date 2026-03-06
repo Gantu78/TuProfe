@@ -26,17 +26,4 @@ class LoginViewModel: ViewModel(){
         _uiState.update { it.copy(passwordVisible = !_uiState.value.passwordVisible) }
     }
 
-    fun onLoginClick() {
-        if(_uiState.value.email.isNotBlank() && _uiState.value.password.isNotBlank())
-            _uiState.update { it.copy(navigate = true) }
-    }
-
-    fun onForgotPasswordClick() {
-        _uiState.update { it.copy(forgotPassword = true) }
-    }
-
-    fun onRegisterClick (){
-        _uiState.update { it.copy(register = true) }
-    }
-
 }

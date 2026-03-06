@@ -28,12 +28,4 @@ class HistorialViewModel : ViewModel() {
         _uiState.update { it.copy(selectedFilter = filter) }
     }
 
-    fun onCalificacionClick(reviewId: Int) {
-        _uiState.update { it.copy(navigateToReviewId = reviewId) }
-    }
-
-
-    fun onNavigationHandled() {
-        _uiState.update { it.copy(navigateToReviewId = null) }
-    }
 }
