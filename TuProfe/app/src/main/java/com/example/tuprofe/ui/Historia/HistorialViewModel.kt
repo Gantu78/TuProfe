@@ -1,6 +1,7 @@
 package com.example.tuprofe.ui.Historia
 
 import androidx.lifecycle.ViewModel
+import com.example.tuprofe.data.ReviewInfo
 import com.example.tuprofe.data.local.LocalReview
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -9,7 +10,7 @@ import kotlinx.coroutines.flow.update
 
 class HistorialViewModel : ViewModel() {
     private val _uiState = MutableStateFlow(HistorialState())
-    val uiState: StateFlow<HistorialState> = _uiState.asStateFlow()
+    val uiState: StateFlow<HistorialState> = _uiState
 
     init {
         cargarHistorial()
@@ -23,9 +24,14 @@ class HistorialViewModel : ViewModel() {
         ) }
     }
 
-    fun onReviewClick(reviewId: Int) {
+    fun onFilterClick(filter: String) {
+        _uiState.update { it.copy(selectedFilter = filter) }
+    }
+
+    fun onCalificacionClick(reviewId: Int) {
         _uiState.update { it.copy(navigateToReviewId = reviewId) }
     }
+
 
     fun onNavigationHandled() {
         _uiState.update { it.copy(navigateToReviewId = null) }

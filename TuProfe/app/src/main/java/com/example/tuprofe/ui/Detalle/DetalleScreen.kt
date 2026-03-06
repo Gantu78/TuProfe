@@ -100,7 +100,8 @@ fun DetalleContent(
                             Text(
                                 text = stringResource(R.string.comentarios_m_s_relevantes),
                                 fontSize = 19.sp,
-                                fontWeight = FontWeight.Bold
+                                fontWeight = FontWeight.Bold,
+                                color = MaterialTheme.colorScheme.onSurface
                             )
                         }
                         Spacer(modifier = Modifier.height(8.dp))

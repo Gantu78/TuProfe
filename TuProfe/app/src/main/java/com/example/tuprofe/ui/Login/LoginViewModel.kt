@@ -28,7 +28,7 @@ class LoginViewModel: ViewModel(){
 
     fun onLoginClick() {
         if(_uiState.value.email.isNotBlank() && _uiState.value.password.isNotBlank())
-        _uiState.update { it.copy(navigate = true) }
+            _uiState.update { it.copy(navigate = true) }
     }
 
     fun onForgotPasswordClick() {

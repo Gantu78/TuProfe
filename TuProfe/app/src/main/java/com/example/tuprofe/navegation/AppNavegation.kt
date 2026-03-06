@@ -47,7 +47,7 @@ import com.example.tuprofe.R
 import com.example.tuprofe.ui.ConfigPerfil.ConfigPerfilScreen
 import com.example.tuprofe.ui.Config.ConfigScreen
 import com.example.tuprofe.ui.Detalle.DetalleScreen
-import com.example.tuprofe.ui.Historia.HistorialScreen
+
 import com.example.tuprofe.ui.Login.HomeScreen
 import com.example.tuprofe.ui.LoadingScreen
 import com.example.tuprofe.ui.Main.MainScreen
@@ -61,6 +61,7 @@ import com.example.tuprofe.ui.Config.ConfigViewModel
 import com.example.tuprofe.ui.ConfigPerfil.ConfigPerfilViewModel
 import com.example.tuprofe.ui.Detalle.DetalleViewModel
 import com.example.tuprofe.ui.Historia.HistorialViewModel
+import com.example.tuprofe.ui.HistorialScreen
 import com.example.tuprofe.ui.Login.LoginViewModel
 import com.example.tuprofe.ui.Main.MainViewModel
 import com.example.tuprofe.ui.Profe.ProfeViewModel
