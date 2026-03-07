@@ -162,7 +162,7 @@ fun Resena(
         TuProfeCardHeader(
             profeName = reviewInfo.profesor.nombreProfe,
             userName = reviewInfo.username,
-            carrera = reviewInfo.profesor.materia,
+            carrera = reviewInfo.materia.nombreMateria,
             imagen = reviewInfo.profesor.imageprofeId,
             onProfileClick = onProfileClick
         )
@@ -357,7 +357,7 @@ fun TuProfeCardHeaderPreview(){
     TuProfeCardHeader(
         profeName = review.profesor.nombreProfe,
         userName = review.username,
-        carrera = review.profesor.materia,
+        carrera = review.materia.nombreMateria,
         imagen = review.profesor.imageprofeId,
         onProfileClick = {}
     )
