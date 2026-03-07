@@ -17,8 +17,7 @@ class SearchViewModel : ViewModel() {
             emptyList()
         } else {
             LocalProfesor.profesores.filter {
-                it.nombreProfe.contains(newQuery, ignoreCase = true) ||
-                        it.materia.contains(newQuery, ignoreCase = true)
+                it.nombreProfe.contains(newQuery, ignoreCase = true)
             }
         }
 

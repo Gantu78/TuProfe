@@ -91,7 +91,6 @@ fun ProfessorSearchResultItem(profesor: Profesor, onClick: () -> Unit) {
         Row(modifier = Modifier.padding(16.dp)) {
             Text(text = profesor.nombreProfe, fontWeight = FontWeight.Bold)
             Spacer(modifier = Modifier.width(8.dp))
-            Text(text = "- ${profesor.materia}", color = Color.Gray)
         }
     }
 }

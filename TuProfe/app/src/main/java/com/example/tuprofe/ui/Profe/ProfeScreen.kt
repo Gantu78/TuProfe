@@ -60,7 +60,6 @@ fun ProfeScreen(
                         item {
                             ProfessorInfoCard(
                                 professorName = profesor.nombreProfe,
-                                professorSubjects = profesor.materia,
                                 generalRating = uiState.averageRating,
                                 professorImageRes = profesor.imageprofeId
                             )
@@ -92,7 +91,6 @@ fun ProfeScreen(
 @Composable
 fun ProfessorInfoCard(
     professorName: String,
-    professorSubjects: String,
     generalRating: Int,
     @DrawableRes professorImageRes: Int,
     modifier: Modifier = Modifier
@@ -121,7 +119,6 @@ fun ProfessorInfoCard(
             )
             Spacer(modifier = Modifier.height(16.dp))
             Text(text = professorName, fontSize = 22.sp, fontWeight = FontWeight.SemiBold)
-            Text(text = professorSubjects, fontSize = 15.sp, color = MaterialTheme.colorScheme.onSurfaceVariant)
             Spacer(modifier = Modifier.height(18.dp))
             RatingStars(rating = generalRating, starColor = colorResource(R.color.verdetp))
         }
