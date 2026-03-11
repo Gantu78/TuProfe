@@ -22,21 +22,21 @@ class ProfeViewModel(savedStateHandle: SavedStateHandle) : ViewModel() {
 
     private fun cargarDatosProfesor(profeId: Int) {
         _uiState.update { it.copy(isLoading = true) }
-        
+
         val profesor = LocalProfesor.profesores.find { it.profeId == profeId }
         val reviews = LocalReview.Reviews.filter { it.profesor.profeId == profeId }
         val average = if (reviews.isNotEmpty()) {
             reviews.map { it.rating }.average().roundToInt()
-        } else {
-            0
-        }
+        } else 0
 
-        _uiState.update { it.copy(
-            profesor = profesor,
-            professorReviews = reviews,
-            averageRating = average,
-            isLoading = false
-        ) }
+        _uiState.update {
+            it.copy(
+                profesor = profesor,
+                professorReviews = reviews,
+                averageRating = average,
+                isLoading = false
+            )
+        }
     }
 
 }

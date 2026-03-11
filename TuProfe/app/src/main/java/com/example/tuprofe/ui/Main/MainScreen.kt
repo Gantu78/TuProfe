@@ -29,7 +29,6 @@ fun MainScreen(
     onProfileClick: (Profesor) -> Unit,
     mainViewModel: MainViewModel
 ) {
-    val allReviews = LocalReview.Reviews
     val uiState by mainViewModel.uiState.collectAsState()
     Box(modifier = modifier.fillMaxSize()) {
         BackgroundImage()
@@ -82,11 +81,22 @@ fun ResenaCard(
     }
 }
 
+@Preview
+@Composable
+fun ResenaCardPreview() {
+    ResenaCard(
+        reviewInfo = LocalReview.Reviews[0],
+        onCommentsClick = {},
+        onProfileClick = {}
+    )
+}
+
 @Preview(showBackground = true)
 @Composable
 fun MainScreenPreview() {
-    val mockState = MainState(
-        reviews = LocalReview.Reviews,
-        isLoading = false
+    MainScreen(
+        onResenaClick = {},
+        onProfileClick = {},
+        mainViewModel = viewModel()
     )
 }

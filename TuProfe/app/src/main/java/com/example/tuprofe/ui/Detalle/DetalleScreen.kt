@@ -8,7 +8,6 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.Comment
-import androidx.compose.material.icons.outlined.Comment
 import androidx.compose.material.icons.outlined.Share
 import androidx.compose.material.icons.outlined.ThumbUp
 import androidx.compose.material3.*
@@ -24,6 +23,7 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.tuprofe.R
 import com.example.tuprofe.data.Profesor
+import com.example.tuprofe.data.ReviewInfo
 import com.example.tuprofe.data.local.LocalReview
 import com.example.tuprofe.ui.utils.Resena
 import com.example.tuprofe.ui.utils.BackgroundImage
@@ -69,61 +69,28 @@ fun DetalleContent(
                     contentPadding = PaddingValues(top = 16.dp, bottom = 120.dp)
                 ) {
                     item {
-                        Card(
-                            modifier = Modifier.fillMaxWidth(),
-                            shape = RoundedCornerShape(20.dp),
-                            border = BorderStroke(1.5.dp, colorResource(R.color.BordeTuProfe)),
-                            colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)
-                        ) {
-                            Column {
-                                Resena(
-                                    reviewInfo = review,
-                                    onProfileClick = {onProfileClick(review.profesor)}
-                                )
-                                HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant)
-                                ReviewActionBar(onLike = onLike, onComment = onComment, onShare = onShare)
-                            }
-                        }
+                        ReviewCard(
+                            review = review,
+                            onLike = onLike,
+                            onComment = onComment,
+                            onShare = onShare,
+                            onProfileClick = {onProfileClick(review.profesor)}
+                        )
+
                         Spacer(modifier = Modifier.height(28.dp))
                     }
 
                     item {
-                        Row(
-                            verticalAlignment = Alignment.CenterVertically,
-                            modifier = Modifier.padding(vertical = 12.dp)
-                        ) {
-                            Box(
-                                modifier = Modifier
-                                    .width(4.dp)
-                                    .height(22.dp)
-                                    .background(colorResource(R.color.verdetp))
-                            )
-                            Spacer(modifier = Modifier.width(10.dp))
-                            Text(
-                                text = stringResource(R.string.comentarios_m_s_relevantes),
-                                fontSize = 19.sp,
-                                fontWeight = FontWeight.Bold,
-                                color = MaterialTheme.colorScheme.onSurface
-                            )
-                        }
-                        Spacer(modifier = Modifier.height(8.dp))
+                        CommentsHeader(
+                            modifier = Modifier.padding(bottom = 16.dp)
+                        )
                     }
 
                     items(uiState.respuestas) { respuesta ->
-                        Card(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(vertical = 8.dp),
-                            shape = RoundedCornerShape(18.dp),
-                            border = BorderStroke(1.dp, colorResource(R.color.BordeTuProfe)),
-                            colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)
-                        ) {
-                            Resena(
-                                reviewInfo = respuesta,
-                                modifier = Modifier.padding(vertical = 8.dp),
-                                onProfileClick = {onProfileClick(respuesta.profesor)}
-                            )
-                        }
+                        CommentCard(
+                            respuesta = respuesta,
+                            onProfileClick = {onProfileClick(respuesta.profesor)}
+                        )
                     }
                 }
             } ?: Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
@@ -132,6 +99,109 @@ fun DetalleContent(
         }
     }
 }
+
+@Composable
+private fun ReviewCard(
+    review: ReviewInfo,
+    onLike: () -> Unit,
+    onComment: () -> Unit,
+    onShare: () -> Unit,
+    onProfileClick: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+    Card(
+        modifier = modifier.fillMaxWidth(),
+        shape = RoundedCornerShape(20.dp),
+        border = BorderStroke(1.5.dp, colorResource(R.color.BordeTuProfe)),
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)
+    ) {
+        Column {
+            Resena(
+                reviewInfo = review,
+                onProfileClick = onProfileClick
+            )
+            HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant)
+            ReviewActionBar(
+                onLike = onLike,
+                onComment = onComment,
+                onShare = onShare
+            )
+        }
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun ReviewCardPreview() {
+    ReviewCard(
+        review = LocalReview.Reviews[0],
+        onLike = {},
+        onComment = {},
+        onShare = {},
+        onProfileClick = {}
+    )
+}
+
+@Composable
+private fun CommentsHeader(modifier: Modifier = Modifier) {
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        modifier = modifier.padding(vertical = 12.dp)
+    ) {
+        Box(
+            modifier = Modifier
+                .width(4.dp)
+                .height(22.dp)
+                .background(colorResource(R.color.verdetp))
+        )
+        Spacer(modifier = Modifier.width(10.dp))
+        Text(
+            text = stringResource(R.string.comentarios_m_s_relevantes),
+            fontSize = 19.sp,
+            fontWeight = FontWeight.Bold,
+            color = MaterialTheme.colorScheme.onSurface
+        )
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun CommentsHeaderPreview() {
+    CommentsHeader()
+}
+
+
+@Composable
+private fun CommentCard(
+    respuesta: ReviewInfo,
+    onProfileClick: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+    Card(
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(vertical = 8.dp),
+        shape = RoundedCornerShape(18.dp),
+        border = BorderStroke(1.dp, colorResource(R.color.BordeTuProfe)),
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)
+    ) {
+        Resena(
+            reviewInfo = respuesta,
+            modifier = Modifier.padding(vertical = 8.dp),
+            onProfileClick = onProfileClick
+        )
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun CommentCardPreview() {
+    CommentCard(
+        respuesta = LocalReview.Reviews[1],
+        onProfileClick = {}
+    )
+}
+
 
 @Composable
 fun ReviewActionBar(
@@ -154,6 +224,13 @@ fun ReviewActionBar(
         }
     }
 }
+
+@Preview
+@Composable
+fun ReviewActionBarPreview() {
+    ReviewActionBar(onLike = {}, onComment = {}, onShare = {})
+}
+
 
 @Preview(showBackground = true, showSystemUi = true)
 @Composable

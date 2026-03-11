@@ -84,41 +84,13 @@ fun ConfigScreen(
 
                 item { Spacer(modifier = Modifier.height(20.dp)) }
 
-
-
                 item {
-                    ConfigItem(
-                        icon = Icons.Default.ThumbsUpDown,
-                        title = stringResource(R.string.historial_de_calificaciones),
-                        subtitle = stringResource(R.string.qu_profes_has_calificado),
-                        onClick = onCalifClick
-                    )
-                }
-
-                item {
-                    ConfigItem(
-                        icon = Icons.Default.MailOutline,
-                        title = stringResource(R.string.ayuda_y_soporte),
-                        subtitle = stringResource(R.string.faq_t_rminos_y_condiciones),
-                        onClick = {configViewModel.onAyudaClick()}
-                    )
-                }
-
-                item {
-                    ConfigItem(
-                        icon = Icons.Default.Lock,
-                        title = stringResource(R.string.privacidad),
-                        subtitle = stringResource(R.string.perfil_an_nimo_visibilidad),
-                        onClick = {configViewModel.onPrivacidadClick()}
-                    )
-                }
-
-                item {
-                    ConfigItem(
-                        icon = Icons.Default.Notifications,
-                        title = stringResource(R.string.notificaciones),
-                        subtitle = stringResource(R.string.alertas_y_novedades),
-                        onClick = {configViewModel.onNotificacionesClick()}
+                    ConfigBody(
+                        onCalifClick = onCalifClick,
+                        onAyudaClick = {configViewModel.onAyudaClick()},
+                        onPrivacidadClick = {configViewModel.onPrivacidadClick()},
+                        onNotisClick = {configViewModel.onNotificacionesClick()},
+                        modifier = Modifier
                     )
                 }
 
@@ -139,45 +111,58 @@ fun ConfigScreen(
         }
     }
 
-
 @Composable
-fun UserCard(
-    username: String,
-    email: String
-) {
-    Card (
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(vertical = 8.dp),
-        shape = RoundedCornerShape(20.dp),
-        border = BorderStroke(2.dp, colorResource(R.color.BordeTuProfe)),
-        colors = CardDefaults.cardColors(
-            MaterialTheme.colorScheme.surface
-        ),
-    ) {
-        Row (
-            modifier = Modifier.padding(20.dp),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
+fun ConfigBody(
+    onCalifClick: () -> Unit,
+    onAyudaClick: () -> Unit,
+    onPrivacidadClick: () -> Unit,
+    onNotisClick: () -> Unit,
+    modifier: Modifier
+){
+    Column(
+        modifier = modifier,
 
-            Icon(
-                imageVector = Icons.Default.MailOutline,
-                contentDescription = null,
-                tint = colorResource(R.color.verdetp),
-                modifier = Modifier.size(40.dp)
+    ) {
+
+            ConfigItem(
+                icon = Icons.Default.ThumbsUpDown,
+                title = stringResource(R.string.historial_de_calificaciones),
+                subtitle = stringResource(R.string.qu_profes_has_calificado),
+                onClick = onCalifClick
             )
 
-            Spacer(modifier = Modifier.width(20.dp))
 
 
-            Column() {
-                Text(username, fontWeight = FontWeight.Bold)
-                Text(email, color = Color.Gray)
+            ConfigItem(
+                icon = Icons.Default.MailOutline,
+                title = stringResource(R.string.ayuda_y_soporte),
+                subtitle = stringResource(R.string.faq_t_rminos_y_condiciones),
+                onClick = onAyudaClick
+            )
 
-            }
-        }
+
+
+            ConfigItem(
+                icon = Icons.Default.Lock,
+                title = stringResource(R.string.privacidad),
+                subtitle = stringResource(R.string.perfil_an_nimo_visibilidad),
+                onClick = onPrivacidadClick
+            )
+
+
+
+            ConfigItem(
+                icon = Icons.Default.Notifications,
+                title = stringResource(R.string.notificaciones),
+                subtitle = stringResource(R.string.alertas_y_novedades),
+                onClick = onNotisClick
+            )
+
+
     }
+
 }
+
 
 @Preview (showBackground = true)
 @Composable

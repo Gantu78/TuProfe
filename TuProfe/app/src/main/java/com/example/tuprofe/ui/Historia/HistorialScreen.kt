@@ -129,118 +129,91 @@ fun HistorialCard(
         modifier = modifier.fillMaxWidth(),
         shape = RoundedCornerShape(28.dp),
         border = BorderStroke(1.dp, colorResource(R.color.BordeTuProfe)),
-        colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.surface
-        )
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)
     ) {
         Row(
-            modifier = Modifier
-                .padding(16.dp)
-                .fillMaxWidth(),
+            modifier = Modifier.padding(16.dp).fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically
         ) {
-
-            Image(
-                painter = painterResource(review.profesor.imageprofeId),
-                contentDescription = null,
-                modifier = Modifier
-                    .size(72.dp)
-                    .clip(CircleShape),
-                contentScale = ContentScale.Crop
-            )
+            ProfesorAvatar(imageRes = review.profesor.imageprofeId)
 
             Spacer(modifier = Modifier.width(14.dp))
 
-            Column(
-                modifier = Modifier.weight(1f)
-            ) {
-
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-
-                    Text(
-                        text = review.profesor.nombreProfe,
-                        fontWeight = FontWeight.SemiBold,
-                        fontSize = 17.sp,
-                        maxLines = 1,
-                        overflow = TextOverflow.Ellipsis,
-                        modifier = Modifier.weight(1f)
-                    )
-
-                    Spacer(modifier = Modifier.width(8.dp))
-
-                    RatingStars(
-                        rating = review.rating,
-                        modifier = Modifier.height(16.dp)
-                    )
-                }
-
-                Spacer(modifier = Modifier.height(4.dp))
-
-                Text(
-                    text = review.materia.nombreMateria,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
-                    fontSize = 13.sp,
-                    maxLines = 1,
-                    overflow = TextOverflow.Ellipsis
-                )
-
-                Spacer(modifier = Modifier.height(8.dp))
-
-                AppButtonRow(
-                    textoBoton = stringResource(R.string.ver_rese_a),
-                    onClick = { onVerCalificacionClick(review) },
-                    modifier = Modifier.height(34.dp)
-                )
-            }
+            HistorialCardBody(
+                review = review,
+                onVerCalificacionClick = { onVerCalificacionClick(review) }
+            )
         }
     }
 }
 
-@Composable
-fun HistorialCardDetalle(
-    review: ReviewInfo,
-    modifier: Modifier = Modifier
-){
-    Column(
-        modifier = modifier
-    ) {
-        RatingStars(review.rating)
-    }
-}
 
 @Composable
-fun HistorialCardBody(
+private fun ProfesorAvatar(
+    imageRes: Int,
+    modifier: Modifier = Modifier
+) {
+    Image(
+        painter = painterResource(imageRes),
+        contentDescription = null,
+        modifier = modifier.size(72.dp).clip(CircleShape),
+        contentScale = ContentScale.Crop
+    )
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun ProfesorAvatarPreview() {
+    ProfesorAvatar(imageRes = R.drawable.avatar)
+}
+
+
+@Composable
+private fun HistorialCardBody(
     review: ReviewInfo,
     onVerCalificacionClick: () -> Unit,
     modifier: Modifier = Modifier
-){
-
+) {
     Column(modifier = modifier) {
-        Text(
-            text = review.profesor.nombreProfe,
-            fontWeight = FontWeight.Bold,
-            fontSize = 18.sp
-        )
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Text(
+                text = review.profesor.nombreProfe,
+                fontWeight = FontWeight.SemiBold,
+                fontSize = 17.sp,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis,
+                modifier = Modifier.weight(1f)
+            )
+            Spacer(modifier = Modifier.width(8.dp))
+            RatingStars(rating = review.rating, modifier = Modifier.height(16.dp))
+        }
+
+        Spacer(modifier = Modifier.height(4.dp))
+
         Text(
             text = review.materia.nombreMateria,
-            color = Color.Gray,
-            fontSize = 14.sp
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
+            fontSize = 13.sp,
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis
         )
+
         Spacer(modifier = Modifier.height(8.dp))
+
         AppButtonRow(
             textoBoton = stringResource(R.string.ver_rese_a),
             onClick = onVerCalificacionClick,
-            modifier = Modifier.height(36.dp)
+            modifier = Modifier.height(34.dp)
         )
     }
 }
 
+@Preview(showBackground = true)
 @Composable
-@Preview (showBackground = true)
-fun HistorialCardBodyPreview() {
+private fun HistorialCardBodyPreview() {
     HistorialCardBody(
         review = LocalReview.Reviews[0],
         onVerCalificacionClick = {}

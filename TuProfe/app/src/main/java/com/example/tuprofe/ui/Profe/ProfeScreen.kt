@@ -35,58 +35,82 @@ import com.example.tuprofe.ui.Main.ResenaCard
 import com.example.tuprofe.ui.utils.BackgroundImage
 import com.example.tuprofe.ui.utils.RatingStars
 
+
 @Composable
 fun ProfeScreen(
+    profeViewModel: ProfeViewModel,
     profesor: Profesor,
-    modifier: Modifier = Modifier,
     onResenaClick: (Int) -> Unit,
     onProfileClick: (Profesor) -> Unit,
-    profeViewModel: ProfeViewModel
+    modifier: Modifier = Modifier
 ) {
     val uiState by profeViewModel.uiState.collectAsState()
+    ProfeContent(
+        uiState = uiState,
+        onResenaClick = onResenaClick,
+        onProfileClick = onProfileClick,
+        onAddCommentClick = { Log.d("Boton", "Añadir Comentario") },
+        onRateClick = { Log.d("Boton", "Calificar") },
+        modifier = modifier
+    )
+}
+
+
+@Composable
+fun ProfeContent(
+    uiState: ProfeState,
+    onResenaClick: (Int) -> Unit,
+    onProfileClick: (Profesor) -> Unit,
+    onAddCommentClick: () -> Unit,
+    onRateClick: () -> Unit,
+    modifier: Modifier = Modifier
+) {
     Box(modifier = modifier.fillMaxSize()) {
         BackgroundImage()
 
-        if (uiState.isLoading) {
-            CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
-        } else {
-            uiState.profesor?.let { profesor ->
-                Column(Modifier.fillMaxSize()) {
-                    LazyColumn(
-                        modifier = Modifier.weight(1f),
-                        horizontalAlignment = Alignment.CenterHorizontally,
-                        contentPadding = PaddingValues(bottom = 80.dp)
-                    ) {
-                        item {
-                            ProfessorInfoCard(
-                                professorName = profesor.nombreProfe,
-                                generalRating = uiState.averageRating,
-                                professorImageRes = profesor.imageprofeId
-                            )
-                        }
+        when {
+            uiState.isLoading -> CircularProgressIndicator(
+                modifier = Modifier.align(Alignment.Center)
+            )
 
-                        items(uiState.professorReviews) { review ->
-                            ResenaCard(
-                                reviewInfo = review,
-                                onCommentsClick = onResenaClick,
-                                onProfileClick = { onProfileClick(review.profesor) }
-                            )
-                            Spacer(modifier = Modifier.height(16.dp))
-                        }
-                    }
+            uiState.profesor != null -> LazyColumn(
+                modifier = Modifier.fillMaxSize(),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                contentPadding = PaddingValues(bottom = 100.dp)
+            ) {
+                item {
+                    ProfessorInfoCard(
+                        professorName = uiState.profesor.nombreProfe,
+                        generalRating = uiState.averageRating,
+                        professorImageRes = uiState.profesor.imageprofeId
+                    )
                 }
-            } ?: Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                Text(text = "Profesor no encontrado")
+                items(uiState.professorReviews) { review ->
+                    ResenaCard(
+                        reviewInfo = review,
+                        onCommentsClick = onResenaClick,
+                        onProfileClick = { onProfileClick(review.profesor) }
+                    )
+                    Spacer(modifier = Modifier.height(16.dp))
+                }
+            }
+
+            else -> Box(
+                modifier = Modifier.fillMaxSize(),
+                contentAlignment = Alignment.Center
+            ) {
+                Text(text = stringResource(R.string.rese_a_no_encontrada))
             }
         }
 
         ProfeScreenBottomBar(
-            onAddCommentClick = { Log.d("Boton", "Añadir Comentario") },
-            onRateClick = { Log.d("Boton", "Calificar") },
+            onAddCommentClick = onAddCommentClick,
+            onRateClick = onRateClick,
             modifier = Modifier.align(Alignment.BottomCenter)
         )
     }
 }
+
 
 @Composable
 fun ProfessorInfoCard(
@@ -96,7 +120,9 @@ fun ProfessorInfoCard(
     modifier: Modifier = Modifier
 ) {
     Card(
-        modifier = modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 12.dp),
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(horizontal = 16.dp, vertical = 12.dp),
         shape = RoundedCornerShape(28.dp),
         border = BorderStroke(2.dp, colorResource(R.color.BordeTuProfe)),
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
@@ -125,6 +151,17 @@ fun ProfessorInfoCard(
     }
 }
 
+@Preview(showBackground = true)
+@Composable
+private fun ProfessorInfoCardPreview() {
+    ProfessorInfoCard(
+        professorName = "Carlos Parra",
+        generalRating = 4,
+        professorImageRes = R.drawable.carlitos
+    )
+}
+
+
 @Composable
 private fun ProfeScreenBottomBar(
     onAddCommentClick: () -> Unit,
@@ -132,7 +169,9 @@ private fun ProfeScreenBottomBar(
     modifier: Modifier = Modifier
 ) {
     Card(
-        modifier = modifier.fillMaxWidth().padding(horizontal = 20.dp, vertical = 12.dp),
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(horizontal = 20.dp, vertical = 12.dp),
         shape = RoundedCornerShape(50.dp),
         colors = CardDefaults.cardColors(containerColor = colorResource(R.color.verdetp))
     ) {
@@ -143,7 +182,10 @@ private fun ProfeScreenBottomBar(
             TextButton(onClick = onAddCommentClick, modifier = Modifier.weight(1f)) {
                 Text(stringResource(R.string.a_adir_comentario), color = Color.White)
             }
-            VerticalDivider(modifier = Modifier.height(28.dp), color = Color.White.copy(alpha = 0.4f))
+            VerticalDivider(
+                modifier = Modifier.height(28.dp),
+                color = Color.White.copy(alpha = 0.4f)
+            )
             TextButton(onClick = onRateClick, modifier = Modifier.weight(1f)) {
                 Text(stringResource(R.string.calificar), color = Color.White)
             }
@@ -151,14 +193,26 @@ private fun ProfeScreenBottomBar(
     }
 }
 
+@Preview(showBackground = true)
+@Composable
+private fun ProfeScreenBottomBarPreview() {
+    ProfeScreenBottomBar(onAddCommentClick = {}, onRateClick = {})
+}
+
+
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
-fun ProfeScreenPreview() {
-    val mockState = ProfeState(
-        profesor = LocalProfesor.profesores[0],
-        professorReviews = LocalReview.Reviews.filter { it.profesor.profeId == 1 },
-        averageRating = 4,
-        isLoading = false
+private fun ProfeContentPreview() {
+    ProfeContent(
+        uiState = ProfeState(
+            profesor = LocalProfesor.profesores[0],
+            professorReviews = LocalReview.Reviews.take(3),
+            averageRating = 4,
+            isLoading = false
+        ),
+        onResenaClick = {},
+        onProfileClick = {},
+        onAddCommentClick = {},
+        onRateClick = {}
     )
-
 }
