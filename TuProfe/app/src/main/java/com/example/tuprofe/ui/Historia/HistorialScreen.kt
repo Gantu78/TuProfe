@@ -180,7 +180,7 @@ fun HistorialCard(
                 Spacer(modifier = Modifier.height(4.dp))
 
                 Text(
-                    text = review.profesor.materia,
+                    text = review.materia.nombreMateria,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                     fontSize = 13.sp,
                     maxLines = 1,
@@ -225,7 +225,7 @@ fun HistorialCardBody(
             fontSize = 18.sp
         )
         Text(
-            text = review.profesor.materia,
+            text = review.materia.nombreMateria,
             color = Color.Gray,
             fontSize = 14.sp
         )

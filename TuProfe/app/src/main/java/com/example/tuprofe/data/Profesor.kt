@@ -5,6 +5,5 @@ import androidx.annotation.DrawableRes
 data class Profesor(
     val profeId: Int,
     val nombreProfe: String,
-    val materia: String,
     @DrawableRes val imageprofeId: Int,
 )
