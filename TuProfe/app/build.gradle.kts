@@ -1,5 +1,6 @@
 plugins {
     alias(libs.plugins.android.application)
+    alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.dagger)
     kotlin("kapt")
@@ -11,16 +12,12 @@ plugins {
 
 android {
     namespace = "com.example.tuprofe"
-    compileSdk {
-        version = release(36) {
-            minorApiLevel = 1
-        }
-    }
+    compileSdk = 35
 
     defaultConfig {
         applicationId = "com.example.tuprofe"
         minSdk = 26
-        targetSdk = 36
+        targetSdk = 35
         versionCode = 1
         versionName = "1.0"
 
@@ -64,8 +61,8 @@ dependencies {
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.6.2")
 
     //Hilt
-    implementation(libs.dagger.hilt.android)
-    implementation(libs.hilt.navigation.compose)
+    implementation(libs.dagger.hilt)
+    implementation(libs.hilt.compose.navigation)
     kapt(libs.dagger.kapt)
 
     //Firebase
