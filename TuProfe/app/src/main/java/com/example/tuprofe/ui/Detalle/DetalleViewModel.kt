@@ -3,12 +3,15 @@ package com.example.tuprofe.ui.Detalle
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import com.example.tuprofe.data.local.LocalReview
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
+import javax.inject.Inject
 
-class DetalleViewModel(savedStateHandle: SavedStateHandle) : ViewModel() {
+@HiltViewModel
+class DetalleViewModel @Inject constructor(savedStateHandle: SavedStateHandle) : ViewModel() {
 
     private val _uiState = MutableStateFlow(DetalleState())
     val uiState: StateFlow<DetalleState> = _uiState.asStateFlow()

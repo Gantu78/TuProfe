@@ -39,6 +39,7 @@ import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
@@ -102,14 +103,16 @@ fun AppNavegation(
         modifier = modifier
     ){
         composable(route = Screen.Login.route){
-            val loginViewModel: LoginViewModel = viewModel()
+            val loginViewModel: LoginViewModel = hiltViewModel()
             HomeScreen(
                 loginViewModel = loginViewModel,
                 onLoginClick = {
+                    if(loginViewModel.loginClick()){
                     navController.navigate(Screen.Main.route){
                         popUpTo(0){
                             inclusive = true
                         }
+                    }
                     }
                 },
                 onRegisterClick = {
@@ -137,7 +140,7 @@ fun AppNavegation(
             )
         }
         composable(route = Screen.Register.route){
-            val registerViewModel: RegisterViewModel = viewModel()
+            val registerViewModel: RegisterViewModel = hiltViewModel()
             RegisterScreen(
                 registerViewModel = registerViewModel,
                 onRegisterClick = {
@@ -161,7 +164,7 @@ fun AppNavegation(
             )
         }
         composable(route = Screen.PasswordReset.route){
-            val resetPasswordViewModel: ResetPasswordViewModel = viewModel()
+            val resetPasswordViewModel: ResetPasswordViewModel = hiltViewModel()
             ResetPasswordScreen(
                 resetPasswordViewModel = resetPasswordViewModel,
                 onVolverClick = {navController.navigate(Screen.Login.route){
@@ -172,7 +175,7 @@ fun AppNavegation(
             )
         }
         composable(route = Screen.Main.route){
-            val mainViewModel: MainViewModel = viewModel()
+            val mainViewModel: MainViewModel = hiltViewModel()
             MainScreen(
                 mainViewModel = mainViewModel,
                 onResenaClick = { reviewId ->
@@ -192,7 +195,7 @@ fun AppNavegation(
 
             if(profesor != null){
 
-                val profeViewModel: ProfeViewModel = viewModel()
+                val profeViewModel: ProfeViewModel = hiltViewModel()
                 ProfeScreen(
                     profeViewModel = profeViewModel,
                     profesor = profesor,
@@ -209,7 +212,7 @@ fun AppNavegation(
             }
         }
         composable(route = Screen.Historial.route){
-            val historialViewModel: HistorialViewModel = viewModel()
+            val historialViewModel: HistorialViewModel = hiltViewModel()
 
             HistorialScreen(
                 historialViewModel = historialViewModel,
@@ -220,7 +223,7 @@ fun AppNavegation(
         }
 
         composable(route = Screen.ConfigPerfil.route){
-            val configPerfilViewModel: ConfigPerfilViewModel = viewModel()
+            val configPerfilViewModel: ConfigPerfilViewModel = hiltViewModel()
             ConfigPerfilScreen(
                 configPerfilViewModel = configPerfilViewModel,
                 onChangePassword = {
@@ -243,7 +246,7 @@ fun AppNavegation(
             LoadingScreen()
         }
         composable(route = Screen.Configuracion.route){
-            val configViewModel: ConfigViewModel = viewModel()
+            val configViewModel: ConfigViewModel = hiltViewModel()
 
             ConfigScreen(
                 configViewModel = configViewModel,
@@ -273,7 +276,7 @@ fun AppNavegation(
         ){
             val reviewId = it.arguments?.getInt("reviewId")?: 0
             val review = LocalReview.Reviews.find { it.reviewId == reviewId }
-            val detalleViewModel: DetalleViewModel = viewModel()
+            val detalleViewModel: DetalleViewModel = hiltViewModel()
 
             if(review != null){
 

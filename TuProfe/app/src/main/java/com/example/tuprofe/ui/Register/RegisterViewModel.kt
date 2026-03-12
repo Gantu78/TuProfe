@@ -5,11 +5,20 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.example.tuprofe.data.repository.AuthRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class RegisterViewModel: ViewModel() {
+
+@HiltViewModel
+class RegisterViewModel @Inject constructor(
+    private val authRepository: AuthRepository
+): ViewModel() {
 
     private val _uiState = MutableStateFlow(RegisterState())
     val uiState: StateFlow<RegisterState> = _uiState
@@ -50,7 +59,16 @@ class RegisterViewModel: ViewModel() {
         } else if(_uiState.value.password1 != _uiState.value.password2){
             _uiState.update{ it.copy(mostrarMensajeError = true, errorMessage = "Las contraseñas no coinciden") }
         } else {
-            _uiState.update{ it.copy(mostrarMensajeError = false, mostrarMensaje = true, navigateHome = true) }
+            viewModelScope.launch {
+                try {
+                    authRepository.signUp(_uiState.value.email, _uiState.value.password1)
+                    _uiState.update{ it.copy(mostrarMensajeError = false, mostrarMensaje = true, navigateHome = true) }
+                }catch (e: Exception){
+                    _uiState.update{ it.copy(mostrarMensajeError = true, errorMessage = e.message.toString()) }
+                }
+
+            }
+
         }
         return _uiState.value.navigateHome
     }

@@ -3,12 +3,15 @@ package com.example.tuprofe.ui.Historia
 import androidx.lifecycle.ViewModel
 import com.example.tuprofe.data.ReviewInfo
 import com.example.tuprofe.data.local.LocalReview
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
+import javax.inject.Inject
 
-class HistorialViewModel : ViewModel() {
+@HiltViewModel
+class HistorialViewModel @Inject constructor(): ViewModel() {
     private val _uiState = MutableStateFlow(HistorialState())
     val uiState: StateFlow<HistorialState> = _uiState
 

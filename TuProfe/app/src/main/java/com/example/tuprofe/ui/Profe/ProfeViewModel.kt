@@ -4,13 +4,16 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import com.example.tuprofe.data.local.LocalProfesor
 import com.example.tuprofe.data.local.LocalReview
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
+import javax.inject.Inject
 import kotlin.math.roundToInt
 
-class ProfeViewModel(savedStateHandle: SavedStateHandle) : ViewModel() {
+@HiltViewModel
+class ProfeViewModel @Inject constructor(savedStateHandle: SavedStateHandle) : ViewModel() {
 
     private val _uiState = MutableStateFlow(ProfeState())
     val uiState: StateFlow<ProfeState> = _uiState.asStateFlow()

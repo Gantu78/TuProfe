@@ -1,15 +1,19 @@
 package com.example.tuprofe.ui.Login
 
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.example.tuprofe.data.repository.AuthRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class LoginViewModel: ViewModel(){
+@HiltViewModel
+class LoginViewModel @Inject constructor(
+    private val authRepository: AuthRepository
+): ViewModel() {
 
     private val _uiState = MutableStateFlow(LoginState())
     val uiState: StateFlow<LoginState> = _uiState
@@ -26,4 +30,29 @@ class LoginViewModel: ViewModel(){
         _uiState.update { it.copy(passwordVisible = !_uiState.value.passwordVisible) }
     }
 
+    fun loginClick(): Boolean{
+        if (_uiState.value.email.isNullOrEmpty() || _uiState.value.password.isNullOrEmpty()) {
+            _uiState.update {
+                it.copy(
+                    mostrarMensajeError = true,
+                    errorMessage = "Por favor complete todos los campos"
+                )
+            }
+        } else {
+            viewModelScope.launch {
+                try {
+                    authRepository.signIn(_uiState.value.email, _uiState.value.password)
+                    _uiState.update { it.copy(mostrarMensajeError = false, navigate = true) }
+                } catch (e: Exception) {
+                    _uiState.update {
+                        it.copy(
+                            mostrarMensajeError = true,
+                            errorMessage = e.message.toString()
+                        )
+                    }
+                }
+            }
+        }
+        return _uiState.value.navigate
+    }
 }
