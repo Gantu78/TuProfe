@@ -11,14 +11,14 @@ import javax.inject.Inject
 
 @HiltViewModel
 class ConfigViewModel @Inject constructor(
-    private val authRepository: AuthRepository // ← agregar esto
+    private val authRepository: AuthRepository
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(ConfigState())
     val uiState: StateFlow<ConfigState> = _uiState.asStateFlow()
 
     fun onLogoutClick() {
-        authRepository.signOut() // ← agregar esto
+        authRepository.signOut()
     }
 
     fun onProfileClick() {

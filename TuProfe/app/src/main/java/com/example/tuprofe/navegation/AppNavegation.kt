@@ -270,7 +270,7 @@ fun AppNavegation(
                     navController.navigate(Screen.ConfigPerfil.route)
                 },
                 onLogoutClick = {
-                    configViewModel.onLogoutClick() // ← primero cerrar sesión en Firebase
+                    configViewModel.onLogoutClick() // Cerrar sesion en la firebase
                     navController.navigate(Screen.Login.route) {
                         popUpTo(0) { inclusive = true }
                     }
