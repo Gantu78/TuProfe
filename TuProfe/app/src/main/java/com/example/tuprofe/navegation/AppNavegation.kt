@@ -71,9 +71,12 @@ import com.example.tuprofe.ui.Register.RegisterViewModel
 import com.example.tuprofe.ui.ResetPassword.ResetPasswordScreen
 import com.example.tuprofe.ui.ResetPassword.ResetPasswordViewModel
 import com.example.tuprofe.ui.Search.SearchScreen
+import com.example.tuprofe.ui.Splash.SplashScreen
+import com.example.tuprofe.ui.Splash.SplashViewModel
 
 
 sealed class Screen(val route: String){
+    object Splash : Screen("Splash")
     object Login : Screen("Login")
     object Register : Screen("Register")
     object PasswordReset : Screen("PasswordReset")
@@ -99,9 +102,22 @@ fun AppNavegation(
 ){
     NavHost(
         navController = navController,
-        startDestination = Screen.Login.route,
+        startDestination = Screen.Splash.route,
         modifier = modifier
     ){
+        composable(route = Screen.Splash.route){
+            val viewModel: SplashViewModel = hiltViewModel()
+            SplashScreen(navigateToLogin = {
+                navController.navigate(Screen.Login.route)
+                }, navigateToMain = {
+                navController.navigate(Screen.Main.route)
+            })
+
+        }
+        composable(route = Screen.ConfigPerfil.route){
+
+        }
+
         composable(route = Screen.Login.route){
             val loginViewModel: LoginViewModel = hiltViewModel()
             HomeScreen(
@@ -254,10 +270,9 @@ fun AppNavegation(
                     navController.navigate(Screen.ConfigPerfil.route)
                 },
                 onLogoutClick = {
+                    configViewModel.onLogoutClick() // ← primero cerrar sesión en Firebase
                     navController.navigate(Screen.Login.route) {
-                        popUpTo(0){
-                            inclusive = true
-                        }
+                        popUpTo(0) { inclusive = true }
                     }
                 },
                 onCalifClick = {

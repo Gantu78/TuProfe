@@ -1,6 +1,7 @@
 package com.example.tuprofe.ui.Config
 
 import androidx.lifecycle.ViewModel
+import com.example.tuprofe.data.repository.AuthRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -9,10 +10,16 @@ import kotlinx.coroutines.flow.update
 import javax.inject.Inject
 
 @HiltViewModel
-class ConfigViewModel @Inject constructor() : ViewModel() {
+class ConfigViewModel @Inject constructor(
+    private val authRepository: AuthRepository // ← agregar esto
+) : ViewModel() {
 
     private val _uiState = MutableStateFlow(ConfigState())
     val uiState: StateFlow<ConfigState> = _uiState.asStateFlow()
+
+    fun onLogoutClick() {
+        authRepository.signOut() // ← agregar esto
+    }
 
     fun onProfileClick() {
         _uiState.update { it.copy(Profile = true) }
