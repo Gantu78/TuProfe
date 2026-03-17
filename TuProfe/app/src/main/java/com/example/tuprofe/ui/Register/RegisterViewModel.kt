@@ -47,53 +47,62 @@ class RegisterViewModel @Inject constructor(
         _uiState.update { it.copy(passwordVisible = !_uiState.value.passwordVisible) }
     }
 
-    fun setErrorMessage(newErrorMessage: String) {
-        _uiState.update { it.copy(errorMessage = newErrorMessage) }
-    }
 
-    fun onRegisterClickSecure(): Boolean {
+    fun onRegisterClickSecure() {
 
-        if (_uiState.value.password1.isNullOrEmpty() || _uiState.value.password2.isNullOrEmpty() || _uiState.value.email.isNullOrEmpty() || _uiState.value.usuario.isNullOrEmpty() || _uiState.value.carrera.isNullOrEmpty()) {
+        if (
+            _uiState.value.password1.isBlank() ||
+            _uiState.value.password2.isBlank() ||
+            _uiState.value.email.isBlank() ||
+            _uiState.value.usuario.isBlank() ||
+            _uiState.value.carrera.isBlank()
+        ) {
             _uiState.update {
                 it.copy(
                     mostrarMensajeError = true,
                     errorMessage = "Por favor complete todos los campos"
                 )
             }
+            return
+        }
 
-        } else if (_uiState.value.password1 != _uiState.value.password2) {
+        if (_uiState.value.password1 != _uiState.value.password2) {
             _uiState.update {
                 it.copy(
                     mostrarMensajeError = true,
                     errorMessage = "Las contraseñas no coinciden"
                 )
             }
-        } else {
-            viewModelScope.launch {
+            return
+        }
 
-                val result = authRepository.signUp(_uiState.value.email, _uiState.value.password1)
-                if (result.isSuccess) {
-                    authRepository.signUp(_uiState.value.email, _uiState.value.password1)
-                    _uiState.update {
-                        it.copy(
-                            mostrarMensajeError = false,
-                            mostrarMensaje = true,
-                            navigateHome = true
-                        )
-                    }
-                } else {
-                    val errorMessage =
-                        result.exceptionOrNull()?.message ?: "Error al registrar el usuario"
-                    _uiState.update {
-                        it.copy(
-                            mostrarMensajeError = true,
-                            errorMessage = errorMessage
-                        )
-                    }
+        viewModelScope.launch {
+
+            val result = authRepository.signUp(
+                _uiState.value.email,
+                _uiState.value.password1
+            )
+
+            if (result.isSuccess) {
+                _uiState.update {
+                    it.copy(
+                        mostrarMensajeError = false,
+                        mostrarMensaje = true,
+                        navigateHome = true
+                    )
+                }
+            } else {
+                val errorMessage =
+                    result.exceptionOrNull()?.message ?: "Error al registrar el usuario"
+
+                _uiState.update {
+                    it.copy(
+                        mostrarMensajeError = true,
+                        errorMessage = errorMessage
+                    )
                 }
             }
         }
-            return _uiState.value.navigateHome
     }
 }
 

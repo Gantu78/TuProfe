@@ -39,7 +39,7 @@ fun RegisterScreen(
     modifier: Modifier = Modifier,
     onRegisterClick: () -> Unit,
     onAlreadyAccountClick: () -> Unit,
-    onBackClick: () -> Unit
+    onBackClick: () -> Unit,
 ) {
 
     val state by registerViewModel.uiState.collectAsState()
@@ -78,7 +78,7 @@ fun RegisterScreen(
             if (state.mostrarMensajeError) {
                 Text(state.errorMessage, color = Color.Red)
             } else if(state.mostrarMensaje){
-                Text("Su cuenta ha sido creada con exito", color = Color.Green)
+                Text(stringResource(R.string.su_cuenta_ha_sido_creada_con_exito), color = Color.Green)
             }
 
             Spacer(modifier = Modifier.padding(15.dp))

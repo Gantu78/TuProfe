@@ -107,7 +107,7 @@ fun FormularioInicio(
         modifier = modifier
     ) {
         TextFieldApp(
-            stringResource(R.string.usuario),
+            stringResource(R.string.email),
             value = email,
             onValueChange = onEmailChange
         )

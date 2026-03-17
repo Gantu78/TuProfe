@@ -6,8 +6,12 @@ import com.google.firebase.auth.FirebaseAuthInvalidUserException
 import com.google.firebase.FirebaseTooManyRequestsException
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.FirebaseNetworkException
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseAuthRecentLoginRequiredException
 import com.google.firebase.auth.FirebaseAuthUserCollisionException
 import com.google.firebase.auth.FirebaseAuthWeakPasswordException
+import kotlinx.coroutines.tasks.await
+
 import javax.inject.Inject
 
 class AuthRepository @Inject constructor(
@@ -65,6 +69,20 @@ class AuthRepository @Inject constructor(
 
     fun signOut() {
         authRemoteDataSource.signOut()
+    }
+
+    suspend fun deleteAccount(): Result<Unit> {
+        return try {
+            val user = FirebaseAuth.getInstance().currentUser
+            user?.delete()?.await()
+            Result.success(Unit)
+        } catch (e: FirebaseAuthRecentLoginRequiredException) {
+            Result.failure(Exception("Debes iniciar sesión nuevamente"))
+        } catch (e: FirebaseNetworkException) {
+            Result.failure(Exception("Error de conexión"))
+        } catch (e: Exception) {
+            Result.failure(Exception("Error al eliminar la cuenta"))
+        }
     }
 
 

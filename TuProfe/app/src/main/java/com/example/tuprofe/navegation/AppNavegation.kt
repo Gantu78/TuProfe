@@ -157,26 +157,22 @@ fun AppNavegation(
         }
         composable(route = Screen.Register.route){
             val registerViewModel: RegisterViewModel = hiltViewModel()
+
             RegisterScreen(
                 registerViewModel = registerViewModel,
                 onRegisterClick = {
-                    if(registerViewModel.onRegisterClickSecure()){
-                    navController.navigate(Screen.Login.route) {
-                        popUpTo(0) {
-                            inclusive = true
-                        }
+                    registerViewModel.onRegisterClickSecure()
+                },
+                onAlreadyAccountClick = {
+                    navController.navigate(Screen.Login.route){
+                        popUpTo(0){ inclusive = true }
                     }
-                }},
-                onAlreadyAccountClick = {navController.navigate(Screen.Login.route){
-                    popUpTo(0){
-                        inclusive = true
+                },
+                onBackClick = {
+                    navController.navigate(Screen.Login.route){
+                        popUpTo(0){ inclusive = true }
                     }
-                }},
-                onBackClick = {navController.navigate(Screen.Login.route){
-                    popUpTo(0){
-                        inclusive = true
-                    }
-                }}
+                }
             )
         }
         composable(route = Screen.PasswordReset.route){
@@ -302,7 +298,9 @@ fun AppNavegation(
                     }
                 )
 
-            } else (Text(stringResource(R.string.rese_a_no_encontrada)))
+            } else{
+                (Text(stringResource(R.string.rese_a_no_encontrada)))
+            }
 
         }
     }

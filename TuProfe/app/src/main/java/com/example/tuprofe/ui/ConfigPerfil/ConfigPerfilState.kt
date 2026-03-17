@@ -6,8 +6,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 
 data class ConfigPerfilState(
-    val email: String = "c.jimenez@javeriana.edu.co",
-    val username: String = "Gantu970",
+    val email: String = "",
+    val username: String = "Gantu20",
     val carrera: String = "Ingenieria Mecatrónica",
     val showDeleteDialog: Boolean = false,
     val navigate: Boolean = false,
