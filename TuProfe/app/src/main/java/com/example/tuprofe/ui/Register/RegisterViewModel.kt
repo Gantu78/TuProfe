@@ -51,27 +51,49 @@ class RegisterViewModel @Inject constructor(
         _uiState.update { it.copy(errorMessage = newErrorMessage) }
     }
 
-    fun onRegisterClickSecure(): Boolean{
+    fun onRegisterClickSecure(): Boolean {
 
-        if(_uiState.value.password1.isNullOrEmpty() || _uiState.value.password2.isNullOrEmpty()|| _uiState.value.email.isNullOrEmpty()||_uiState.value.usuario.isNullOrEmpty()||_uiState.value.carrera.isNullOrEmpty()){
-            _uiState.update{ it.copy(mostrarMensajeError = true, errorMessage = "Por favor complete todos los campos") }
-
-        } else if(_uiState.value.password1 != _uiState.value.password2){
-            _uiState.update{ it.copy(mostrarMensajeError = true, errorMessage = "Las contraseñas no coinciden") }
-        } else {
-            viewModelScope.launch {
-                try {
-                    authRepository.signUp(_uiState.value.email, _uiState.value.password1)
-                    _uiState.update{ it.copy(mostrarMensajeError = false, mostrarMensaje = true, navigateHome = true) }
-                }catch (e: Exception){
-                    _uiState.update{ it.copy(mostrarMensajeError = true, errorMessage = e.message.toString()) }
-                }
-
+        if (_uiState.value.password1.isNullOrEmpty() || _uiState.value.password2.isNullOrEmpty() || _uiState.value.email.isNullOrEmpty() || _uiState.value.usuario.isNullOrEmpty() || _uiState.value.carrera.isNullOrEmpty()) {
+            _uiState.update {
+                it.copy(
+                    mostrarMensajeError = true,
+                    errorMessage = "Por favor complete todos los campos"
+                )
             }
 
-        }
-        return _uiState.value.navigateHome
-    }
+        } else if (_uiState.value.password1 != _uiState.value.password2) {
+            _uiState.update {
+                it.copy(
+                    mostrarMensajeError = true,
+                    errorMessage = "Las contraseñas no coinciden"
+                )
+            }
+        } else {
+            viewModelScope.launch {
 
+                val result = authRepository.signUp(_uiState.value.email, _uiState.value.password1)
+                if (result.isSuccess) {
+                    authRepository.signUp(_uiState.value.email, _uiState.value.password1)
+                    _uiState.update {
+                        it.copy(
+                            mostrarMensajeError = false,
+                            mostrarMensaje = true,
+                            navigateHome = true
+                        )
+                    }
+                } else {
+                    val errorMessage =
+                        result.exceptionOrNull()?.message ?: "Error al registrar el usuario"
+                    _uiState.update {
+                        it.copy(
+                            mostrarMensajeError = true,
+                            errorMessage = errorMessage
+                        )
+                    }
+                }
+            }
+        }
+            return _uiState.value.navigateHome
+    }
 }
 

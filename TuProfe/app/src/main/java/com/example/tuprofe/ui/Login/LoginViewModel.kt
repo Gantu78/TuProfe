@@ -40,14 +40,17 @@ class LoginViewModel @Inject constructor(
             }
         } else {
             viewModelScope.launch {
-                try {
-                    authRepository.signIn(_uiState.value.email, _uiState.value.password)
+
+                val result = authRepository.signIn(_uiState.value.email, _uiState.value.password)
+
+                if(result.isSuccess){
                     _uiState.update { it.copy(mostrarMensajeError = false, navigate = true) }
-                } catch (e: Exception) {
+                } else{
+                    val mensaje = result.exceptionOrNull()?.message?: "Error al iniciar sesión"
                     _uiState.update {
                         it.copy(
                             mostrarMensajeError = true,
-                            errorMessage = e.message.toString()
+                            errorMessage = mensaje
                         )
                     }
                 }
