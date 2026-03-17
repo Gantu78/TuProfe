@@ -62,6 +62,8 @@ dependencies {
 
     implementation("androidx.compose.runtime:runtime-livedata:1.8.3")
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.6.2")
+    implementation("io.coil-kt:coil-compose:2.4.0")
+    implementation("com.google.firebase:firebase-storage-ktx")
 
     //Hilt
     implementation(libs.dagger.hilt)
