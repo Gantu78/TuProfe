@@ -3,6 +3,8 @@ package com.example.tuprofe.data.injection
 import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.auth
+import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.storage.storage
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -14,4 +16,7 @@ class FireBaseHiltModule {
 
     @Provides
     fun auth() : FirebaseAuth = Firebase.auth
+
+    @Provides
+    fun firestore() : FirebaseStorage = Firebase.storage
 }

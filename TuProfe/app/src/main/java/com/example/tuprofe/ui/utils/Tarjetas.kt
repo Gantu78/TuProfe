@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -39,6 +40,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import coil.compose.AsyncImage
 import com.example.tuprofe.R
 import com.example.tuprofe.data.Profesor
 import com.example.tuprofe.data.ReviewInfo
@@ -51,7 +53,7 @@ fun ProfileHeaderCard(
     username: String,
     email: String,
     carrera: String,
-    imageRes: Int,
+    imageUrl: String?,
     onProfileClick: () -> Unit,
     modifier: Modifier = Modifier,
     showStar: Boolean = true
@@ -78,12 +80,11 @@ fun ProfileHeaderCard(
                 .padding(horizontal = 22.dp, vertical = 20.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-
-            // 🔹 Avatar Premium
-            Image(
-                painter = painterResource(id = imageRes),
-                contentDescription = null,
-                contentScale = ContentScale.Crop,
+            AsyncImage(
+                model = imageUrl,
+                contentDescription = stringResource(R.string.foto_de_perfil),
+                placeholder = painterResource(R.drawable.loading_img),
+                error = painterResource(R.drawable.avatar),
                 modifier = Modifier
                     .size(88.dp)
                     .shadow(6.dp, CircleShape, clip = false)
@@ -93,7 +94,8 @@ fun ProfileHeaderCard(
                         2.dp,
                         MaterialTheme.colorScheme.outline.copy(alpha = 0.25f),
                         CircleShape
-                    )
+                    ),
+                contentScale = ContentScale.Crop
             )
 
             Spacer(modifier = Modifier.width(18.dp))
@@ -163,7 +165,7 @@ fun Resena(
             profeName = reviewInfo.profesor.nombreProfe,
             userName = reviewInfo.username,
             carrera = reviewInfo.materia.nombreMateria,
-            imagen = reviewInfo.profesor.imageprofeId,
+            imageUrl = reviewInfo.profesor.imageprofeUrl,
             onProfileClick = onProfileClick
         )
 
@@ -272,7 +274,7 @@ fun TuProfeCardHeader(
     profeName: String,
     userName: String,
     carrera: String,
-    imagen: Int = R.drawable.avatar,
+    imageUrl: String?,
     onProfileClick: () -> Unit,
     modifier: Modifier = Modifier.fillMaxWidth()
 ) {
@@ -282,10 +284,12 @@ fun TuProfeCardHeader(
         verticalAlignment = Alignment.CenterVertically
     ) {
 
-        // 🔹 Avatar premium
-        Image(
-            painter = painterResource(imagen),
-            contentDescription = null,
+
+        AsyncImage(
+            model = imageUrl,
+            contentDescription = stringResource(R.string.foto_de_perfil),
+            placeholder = painterResource(R.drawable.loading_img),
+            error = painterResource(R.drawable.avatar),
             contentScale = ContentScale.Crop,
             modifier = Modifier
                 .size(48.dp)
@@ -302,6 +306,7 @@ fun TuProfeCardHeader(
                     shape = CircleShape
                 )
                 .clickable(onClick = onProfileClick)
+
         )
 
         Spacer(modifier = Modifier.width(12.dp))
@@ -358,7 +363,7 @@ fun TuProfeCardHeaderPreview(){
         profeName = review.profesor.nombreProfe,
         userName = review.username,
         carrera = review.materia.nombreMateria,
-        imagen = review.profesor.imageprofeId,
+        imageUrl = "https://co.linkedin.com/in/gerardo-tole-galvis-ms-c-94239452",
         onProfileClick = {}
     )
 }

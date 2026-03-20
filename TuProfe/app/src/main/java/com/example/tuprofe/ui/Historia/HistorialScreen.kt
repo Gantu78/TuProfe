@@ -26,6 +26,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import coil.compose.AsyncImage
 import com.example.tuprofe.R
 import com.example.tuprofe.data.ReviewInfo
 import com.example.tuprofe.data.local.LocalReview
@@ -135,7 +136,7 @@ fun HistorialCard(
             modifier = Modifier.padding(16.dp).fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            ProfesorAvatar(imageRes = review.profesor.imageprofeId)
+            ProfesorAvatar(imageUrl = review.profesor.imageprofeUrl)
 
             Spacer(modifier = Modifier.width(14.dp))
 
@@ -150,12 +151,14 @@ fun HistorialCard(
 
 @Composable
 private fun ProfesorAvatar(
-    imageRes: Int,
+    imageUrl: String?,
     modifier: Modifier = Modifier
 ) {
-    Image(
-        painter = painterResource(imageRes),
-        contentDescription = null,
+    AsyncImage(
+        model = imageUrl,
+        contentDescription = stringResource(R.string.foto_de_perfil),
+        placeholder = painterResource(R.drawable.loading_img),
+        error = painterResource(R.drawable.avatar),
         modifier = modifier.size(72.dp).clip(CircleShape),
         contentScale = ContentScale.Crop
     )
@@ -164,7 +167,7 @@ private fun ProfesorAvatar(
 @Preview(showBackground = true)
 @Composable
 private fun ProfesorAvatarPreview() {
-    ProfesorAvatar(imageRes = R.drawable.avatar)
+    ProfesorAvatar(imageUrl = " https://img.lalr.co/cms/2017/06/16184524/1280x1440_CARLOS-PARRA.jpg?r=6_5&ns=1&w=372&d=2.625")
 }
 
 

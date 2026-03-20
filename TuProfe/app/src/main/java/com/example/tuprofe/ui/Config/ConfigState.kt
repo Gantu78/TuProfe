@@ -1,10 +1,8 @@
 package com.example.tuprofe.ui.Config
 
 data class ConfigState(
-    val Profile: Boolean = false,
-    val Logout: Boolean = false,
-    val calificacion: Boolean = false,
-    val Ayuda: Boolean = false,
-    val Privacidad: Boolean = false,
-    val Notificaciones: Boolean = false
+    val username: String = "Gantu20",
+    val email: String = "",
+    val carrera: String = "Ingenieria Industrial",
+    val profileImageUrl: String? = null
 )

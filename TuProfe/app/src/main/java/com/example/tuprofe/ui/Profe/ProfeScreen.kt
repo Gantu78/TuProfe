@@ -27,6 +27,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import coil.compose.AsyncImage
 import com.example.tuprofe.R
 import com.example.tuprofe.data.Profesor
 import com.example.tuprofe.data.local.LocalProfesor
@@ -82,7 +83,7 @@ fun ProfeContent(
                     ProfessorInfoCard(
                         professorName = uiState.profesor.nombreProfe,
                         generalRating = uiState.averageRating,
-                        professorImageRes = uiState.profesor.imageprofeId
+                        professorImageUrl = uiState.profesor.imageprofeUrl
                     )
                 }
                 items(uiState.professorReviews) { review ->
@@ -116,7 +117,7 @@ fun ProfeContent(
 fun ProfessorInfoCard(
     professorName: String,
     generalRating: Int,
-    @DrawableRes professorImageRes: Int,
+    professorImageUrl: String?,
     modifier: Modifier = Modifier
 ) {
     Card(
@@ -132,16 +133,19 @@ fun ProfessorInfoCard(
             modifier = Modifier.padding(20.dp).fillMaxWidth(),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Image(
-                painter = painterResource(professorImageRes),
-                contentDescription = null,
-                contentScale = ContentScale.Crop,
+
+            AsyncImage(
+                model = professorImageUrl,
+                contentDescription = stringResource(R.string.foto_de_perfil),
+                placeholder = painterResource(R.drawable.loading_img),
+                error = painterResource(R.drawable.avatar),
                 modifier = Modifier
                     .size(110.dp)
                     .shadow(6.dp, CircleShape, clip = false)
                     .clip(CircleShape)
                     .background(MaterialTheme.colorScheme.surfaceVariant)
-                    .border(2.dp, MaterialTheme.colorScheme.outline.copy(alpha = 0.3f), CircleShape)
+                    .border(2.dp, MaterialTheme.colorScheme.outline.copy(alpha = 0.3f), CircleShape),
+                contentScale = ContentScale.Crop
             )
             Spacer(modifier = Modifier.height(16.dp))
             Text(text = professorName, fontSize = 22.sp, fontWeight = FontWeight.SemiBold)
@@ -157,7 +161,7 @@ private fun ProfessorInfoCardPreview() {
     ProfessorInfoCard(
         professorName = "Carlos Parra",
         generalRating = 4,
-        professorImageRes = R.drawable.carlitos
+        professorImageUrl = "https://img.lalr.co/cms/2017/06/16184524/1280x1440_CARLOS-PARRA.jpg?r=6_5&ns=1&w=372&d=2.625"
     )
 }
 

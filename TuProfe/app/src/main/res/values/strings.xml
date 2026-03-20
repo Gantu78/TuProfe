@@ -53,4 +53,9 @@
     <string name="ver_rese_a">VER RESEÑA</string>
     <string name="comentarios_m_s_relevantes">Comentarios más relevantes</string>
     <string name="su_cuenta_ha_sido_creada_con_exito">Su cuenta ha sido creada con exito</string>
+    <string name="eliminar_cuenta">Eliminar cuenta</string>
+    <string name="ingresa_tu_contrase_a_para_confirmar">Ingresa tu contraseña para confirmar</string>
+    <string name="eliminar">Eliminar</string>
+    <string name="guardar">Guardar</string>
+    <string name="deseas_guardar_los_cambios">¿Deseas guardar los cambios?</string>
 </resources>

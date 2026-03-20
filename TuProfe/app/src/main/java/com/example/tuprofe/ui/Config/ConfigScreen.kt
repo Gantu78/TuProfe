@@ -73,10 +73,10 @@ fun ConfigScreen(
 
                 item {
                     ProfileHeaderCard(
-                        username = "Gantu870",
-                        email = "c.jimenez@javeriana.edu.co",
-                        carrera = "Ing. de Sistemas",
-                        imageRes = R.drawable.carlitos,
+                        username = state.username,
+                        email = state.email,
+                        carrera = state.carrera,
+                        imageUrl = state.profileImageUrl,
                         onProfileClick = onProfileClick,
                         showStar = false
                     )

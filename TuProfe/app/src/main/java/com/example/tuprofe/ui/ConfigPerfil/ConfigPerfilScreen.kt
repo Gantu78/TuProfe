@@ -1,7 +1,7 @@
 package com.example.tuprofe.ui.ConfigPerfil
 
-import android.util.Log
-import androidx.compose.foundation.Image
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -19,20 +19,29 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import coil.compose.AsyncImage
 import com.example.tuprofe.R
 import com.example.tuprofe.ui.theme.BebasNeue
 import com.example.tuprofe.ui.utils.*
+import android.net.Uri
 
 @Composable
 fun ConfigPerfilScreen(
     configPerfilViewModel: ConfigPerfilViewModel,
     onChangePassword: () -> Unit,
     onGuardarCambiosClick: () -> Unit,
-    onBorrarCuentaClick: () -> Unit,
+    onNavigateToLogin: () -> Unit,
     modifier: Modifier = Modifier,
 
 ) {
     val state by configPerfilViewModel.uiState.collectAsState()
+
+    LaunchedEffect(state.navigate) {
+        if (state.navigate) {
+            onNavigateToLogin()
+            configPerfilViewModel.onNavigationDone()
+        }
+    }
 
 
     Box(
@@ -49,7 +58,10 @@ fun ConfigPerfilScreen(
 
             item {
                 ProfilePicture(
-                    onCambiarFotoClick = { Log.d("ConfigPerfilScreen", "Action: Change profile picture") }
+                    imageUrl = state.profileImage,
+                    onImageSelected = { uri ->
+                        configPerfilViewModel.uploadImageToFirebase(uri)
+                    }
                 )
             }
 
@@ -68,53 +80,171 @@ fun ConfigPerfilScreen(
                 ActionButtons(
                     onCambiarContrasenaClick = onChangePassword,
                     onGuardarCambiosClick = onGuardarCambiosClick,
-                    onBorrarCuentaClick = onBorrarCuentaClick
+                    onBorrarCuentaClick = {
+                        configPerfilViewModel.toggleShowDelete()
+                    }
                 )
             }
         }
 
         if (state.showDeleteDialog) {
             DeleteConfirmationDialog(
-                onDismissRequest = { configPerfilViewModel.toggleShowDelete() },
-                onConfirm = {
+                errorMessage = state.errorMessage,
+                onDismissRequest = {
                     configPerfilViewModel.toggleShowDelete()
-                    configPerfilViewModel.onBorrarCuentaClick()
-                }
+                    configPerfilViewModel.clearError()
+                },
+                onConfirm = { password ->
+                    configPerfilViewModel.clearError()
+                    configPerfilViewModel.onBorrarCuentaClick(
+                        state.email,
+                        password
+                    )
+                },
             )
         }
-        if(state.showSaveDialog) {
 
-            DeleteConfirmationDialog(
+        if (state.showSaveDialog) {
+            SaveConfirmationDialog(
                 onDismissRequest = { configPerfilViewModel.toggleShowSave() },
                 onConfirm = {
-                    configPerfilViewModel.toggleShowSave()
                     configPerfilViewModel.onGuardarCambiosClick()
                 }
             )
+        }
 
+        if (state.isLoading) {
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(Color.Black.copy(alpha = 0.4f)),
+                contentAlignment = Alignment.Center
+            ) {
+                CircularProgressIndicator()
+            }
         }
     }
 }
 
 @Composable
-private fun ProfilePicture(onCambiarFotoClick: () -> Unit) {
+private fun DeleteConfirmationDialog(
+    errorMessage: String?,
+    onDismissRequest: () -> Unit,
+    onConfirm: (String) -> Unit
+) {
+    var password by remember { mutableStateOf("") }
+    var passwordVisible by remember { mutableStateOf(false) }
+
+    val icono = if (passwordVisible) R.drawable.mostrar else R.drawable.ocultar
+
+    AlertDialog(
+        onDismissRequest = onDismissRequest,
+        title = { Text(stringResource(R.string.eliminar_cuenta)) },
+        text = {
+            Column {
+                Text(stringResource(R.string.ingresa_tu_contrase_a_para_confirmar))
+
+                Spacer(modifier = Modifier.height(8.dp))
+
+                TextFieldContraApp(
+                    texto = stringResource(R.string.contrase_a),
+                    value = password,
+                    onValueChange = { password = it },
+                    mostrarPassword = passwordVisible,
+                    click = { passwordVisible = !passwordVisible },
+                    icono = icono,
+                    modifier = Modifier.fillMaxWidth()
+                )
+
+                if (!errorMessage.isNullOrEmpty()) {
+                    Spacer(modifier = Modifier.height(6.dp))
+                    Text(
+                        text = errorMessage,
+                        color = Color.Red,
+                        fontSize = 12.sp
+                    )
+                }
+            }
+        },
+        confirmButton = {
+            TextButton(
+                onClick = { onConfirm(password) },
+                enabled = password.isNotBlank()
+            ) {
+                Text(stringResource(R.string.eliminar), color = Color.Red)
+            }
+        },
+        dismissButton = {
+            TextButton(onClick = onDismissRequest) {
+                Text(stringResource(R.string.cancelar))
+            }
+        }
+    )
+}
+
+@Composable
+private fun SaveConfirmationDialog(
+    onDismissRequest: () -> Unit,
+    onConfirm: () -> Unit
+) {
+    AlertDialog(
+        onDismissRequest = onDismissRequest,
+        title = { Text(stringResource(R.string.guardar_cambios)) },
+        text = { Text(stringResource(R.string.deseas_guardar_los_cambios)) },
+        confirmButton = {
+            TextButton(onClick = onConfirm) {
+                Text(stringResource(R.string.guardar))
+            }
+        },
+        dismissButton = {
+            TextButton(onClick = onDismissRequest) {
+                Text(stringResource(R.string.cancelar))
+            }
+        }
+    )
+}
+
+@Composable
+private fun ProfilePicture(
+    imageUrl: String?,
+    onImageSelected: (Uri) -> Unit
+) {
     Spacer(modifier = Modifier.height(30.dp))
+
     Box(
         modifier = Modifier
             .size(150.dp)
             .clip(CircleShape)
             .background(Color.LightGray)
     ) {
-        Image(
-            painter = painterResource(id = R.drawable.avatar),
+        AsyncImage(
+            model = imageUrl,
             contentDescription = stringResource(R.string.foto_de_perfil),
+            placeholder = painterResource(R.drawable.loading_img),
+            error = painterResource(R.drawable.avatar),
             modifier = Modifier.fillMaxSize(),
             contentScale = ContentScale.Crop
         )
     }
+
+    CambiarFoto(action = onImageSelected)
+}
+
+@Composable
+private fun CambiarFoto(
+    action: (Uri) -> Unit,
+) {
+    val launcher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.GetContent()
+    ) { uri: Uri? ->
+        uri?.let { action(it) }
+    }
+
     AppTextButton(
         textoBoton = stringResource(R.string.cambiar_foto),
-        onClick = onCambiarFotoClick
+        onClick = {
+            launcher.launch("image/*")
+        }
     )
 }
 
@@ -214,7 +344,8 @@ fun ActionIconButtonsPreview() {
 @Preview(showBackground = true)
 fun ProfilePicturePreview() {
     ProfilePicture(
-        onCambiarFotoClick = {}
+        imageUrl = null,
+        onImageSelected = {}
     )
 }
 
@@ -232,27 +363,7 @@ fun UserInfoFormPreview() {
     )
 }
 
-@Composable
-private fun DeleteConfirmationDialog(
-    onDismissRequest: () -> Unit,
-    onConfirm: () -> Unit
-) {
-    AlertDialog(
-        onDismissRequest = onDismissRequest,
-        title = { Text(stringResource(R.string.borrar_cuenta)) },
-        text = { Text(stringResource(R.string.confirmacionBorrar)) },
-        confirmButton = {
-            TextButton(onClick = onConfirm) {
-                Text(stringResource(R.string.borrar_cuenta), color = Color.Red)
-            }
-        },
-        dismissButton = {
-            TextButton(onClick = onDismissRequest) {
-                Text(stringResource(R.string.cancelar))
-            }
-        }
-    )
-}
+
 
 @Preview(showBackground = true)
 @Composable
@@ -261,6 +372,6 @@ fun ConfigPerfilPreview() {
         configPerfilViewModel = viewModel(),
         onChangePassword = {},
         onGuardarCambiosClick = {},
-        onBorrarCuentaClick = {}
+        onNavigateToLogin = {}
     )
 }

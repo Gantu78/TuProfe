@@ -1,5 +1,6 @@
 package com.example.tuprofe.data.repository
 
+import android.net.Uri
 import com.example.tuprofe.data.datasource.AuthRemoteDataSource
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException
 import com.google.firebase.auth.FirebaseAuthInvalidUserException
@@ -10,6 +11,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseAuthRecentLoginRequiredException
 import com.google.firebase.auth.FirebaseAuthUserCollisionException
 import com.google.firebase.auth.FirebaseAuthWeakPasswordException
+import com.google.firebase.auth.UserProfileChangeRequest
 import kotlinx.coroutines.tasks.await
 
 import javax.inject.Inject
@@ -71,17 +73,39 @@ class AuthRepository @Inject constructor(
         authRemoteDataSource.signOut()
     }
 
-    suspend fun deleteAccount(): Result<Unit> {
+    suspend fun deleteAccount(email: String, password: String): Result<Unit> {
         return try {
-            val user = FirebaseAuth.getInstance().currentUser
-            user?.delete()?.await()
+         authRemoteDataSource.reauthenticateAndDelete(email, password);
             Result.success(Unit)
-        } catch (e: FirebaseAuthRecentLoginRequiredException) {
+        } catch (e: FirebaseAuthInvalidCredentialsException) {
+        Result.failure(Exception("Contraseña incorrecta"))
+        } catch (e: FirebaseAuthInvalidUserException) {
+        Result.failure(Exception("El usuario ya no existe"))
+        }catch (e: FirebaseAuthRecentLoginRequiredException) {
             Result.failure(Exception("Debes iniciar sesión nuevamente"))
         } catch (e: FirebaseNetworkException) {
-            Result.failure(Exception("Error de conexión"))
+            Result.failure(Exception("Error de conexión, intenta nuevamente"))
         } catch (e: Exception) {
             Result.failure(Exception("Error al eliminar la cuenta"))
+        }
+    }
+
+    suspend fun updateProfileImage(photoUrl: String): Result<Unit> {
+        return try {
+            val user = currentUser ?: return Result.failure(Exception("Usuario no autenticado"))
+
+            val uri = Uri.parse(photoUrl)
+
+            user.updateProfile(
+                UserProfileChangeRequest.Builder()
+                    .setPhotoUri(uri)
+                    .build()
+            ).await()
+
+            Result.success(Unit)
+
+        } catch (e: Exception) {
+            Result.failure(e)
         }
     }
 

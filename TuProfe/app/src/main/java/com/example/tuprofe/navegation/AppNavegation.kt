@@ -114,9 +114,6 @@ fun AppNavegation(
             })
 
         }
-        composable(route = Screen.ConfigPerfil.route){
-
-        }
 
         composable(route = Screen.Login.route){
             val loginViewModel: LoginViewModel = hiltViewModel()
@@ -243,13 +240,13 @@ fun AppNavegation(
                 },
                 onGuardarCambiosClick = {
                     navController.navigate(Screen.Configuracion.route) {
-                        popUpTo(0){
-                            inclusive = true
-                        }
+                        popUpTo(0) { inclusive = true }
                     }
                 },
-                onBorrarCuentaClick = {
-                    navController.navigate(Screen.Login.route)
+                onNavigateToLogin = {
+                    navController.navigate(Screen.Login.route) {
+                        popUpTo(0) { inclusive = true }
+                    }
                 }
             )
         }

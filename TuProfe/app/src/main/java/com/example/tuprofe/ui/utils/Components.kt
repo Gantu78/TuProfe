@@ -133,6 +133,7 @@ fun TextFieldApp(
     OutlinedTextField(
         value = value,
         onValueChange = onValueChange,
+        singleLine = true,
         label = { Text(text = texto)},
         colors = TextFieldDefaults.colors(
             unfocusedContainerColor = colorResource(R.color.pastel),
@@ -161,6 +162,7 @@ fun TextFieldContraApp(
     OutlinedTextField(
         value = value,
         onValueChange = onValueChange,
+        singleLine = true,
         label = { Text(text = texto)},
         colors = TextFieldDefaults.colors(
             unfocusedContainerColor = colorResource(R.color.pastel),
@@ -181,7 +183,7 @@ fun TextFieldContraApp(
                 )
             }
         },
-        modifier = Modifier.padding(vertical = 2.dp)
+        modifier = modifier.padding(vertical = 2.dp)
     )
 }
 @Composable

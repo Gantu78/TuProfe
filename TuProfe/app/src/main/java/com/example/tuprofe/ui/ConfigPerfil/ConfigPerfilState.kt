@@ -8,9 +8,13 @@ import androidx.compose.runtime.setValue
 data class ConfigPerfilState(
     val email: String = "",
     val username: String = "Gantu20",
-    val carrera: String = "Ingenieria Mecatrónica",
-    val showDeleteDialog: Boolean = false,
+    val carrera: String = "Ingenieria Industrial",
+    val password: String = "",
+    val profileImage: String? = null,
+    val mostrarPassword: Boolean = false,
+    val isLoading: Boolean = false,
     val navigate: Boolean = false,
-    val showChangePasswordDialog: Boolean = false,
-    val showSaveDialog: Boolean = false
+    val showDeleteDialog: Boolean = false,
+    val showSaveDialog: Boolean = false,
+    val errorMessage: String? = null
 )
