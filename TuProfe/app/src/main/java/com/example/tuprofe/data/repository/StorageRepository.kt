@@ -17,7 +17,7 @@ class StorageRepository @Inject constructor(
              authRepository.updateProfileImage(url)
              Result.success(url)
          }catch(e: Exception){
-             Result.failure(e)
+             Result.failure(Exception("Error al subir la imagen de perfil"))
          }
     }
 }

@@ -58,6 +58,7 @@ fun ConfigPerfilScreen(
 
             item {
                 ProfilePicture(
+                    errorMessage = state.errorMessage,
                     imageUrl = state.profileImage,
                     onImageSelected = { uri ->
                         configPerfilViewModel.uploadImageToFirebase(uri)
@@ -207,7 +208,8 @@ private fun SaveConfirmationDialog(
 @Composable
 private fun ProfilePicture(
     imageUrl: String?,
-    onImageSelected: (Uri) -> Unit
+    onImageSelected: (Uri) -> Unit,
+    errorMessage: String? = null
 ) {
     Spacer(modifier = Modifier.height(30.dp))
 
@@ -217,6 +219,15 @@ private fun ProfilePicture(
             .clip(CircleShape)
             .background(Color.LightGray)
     ) {
+
+        if (!errorMessage.isNullOrEmpty()) {
+            Text(
+                text = errorMessage,
+                color = Color.Red,
+                fontSize = 12.sp
+            )
+        }
+
         AsyncImage(
             model = imageUrl,
             contentDescription = stringResource(R.string.foto_de_perfil),

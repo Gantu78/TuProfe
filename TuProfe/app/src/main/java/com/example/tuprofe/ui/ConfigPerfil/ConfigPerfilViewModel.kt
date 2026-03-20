@@ -111,6 +111,13 @@ class ConfigPerfilViewModel @Inject constructor(
                     )
                 }
             }
+            result.onFailure {
+                _uiState.update {
+                    it.copy(
+                        errorMessage = it.errorMessage
+                    )
+                }
+            }
 
         }
     }
