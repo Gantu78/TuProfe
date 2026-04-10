@@ -70,6 +70,8 @@ import com.example.tuprofe.ui.Register.RegisterScreen
 import com.example.tuprofe.ui.Register.RegisterViewModel
 import com.example.tuprofe.ui.ResetPassword.ResetPasswordScreen
 import com.example.tuprofe.ui.ResetPassword.ResetPasswordViewModel
+import com.example.tuprofe.ui.Review.CreateReviewScreen
+import com.example.tuprofe.ui.Review.CreateReviewViewModel
 import com.example.tuprofe.ui.Search.SearchScreen
 import com.example.tuprofe.ui.Splash.SplashScreen
 import com.example.tuprofe.ui.Splash.SplashViewModel
@@ -87,6 +89,7 @@ sealed class Screen(val route: String){
     }
     object Historial : Screen("Historial")
     object Loading : Screen("Loading")
+    object CreateReview : Screen("CreateReview")
     object ConfigPerfil : Screen("ConfigPerfil")
     object Configuracion : Screen("Configuracion")
     object Detalle : Screen("Detalle/{reviewId}"){
@@ -231,6 +234,16 @@ fun AppNavegation(
             )
         }
 
+        composable(route = Screen.CreateReview.route){
+            val createReviewViewModel: CreateReviewViewModel = hiltViewModel()
+            CreateReviewScreen(
+                viewModel = createReviewViewModel,
+                onBackClick = {
+                    navController.popBackStack()
+                }
+            )
+        }
+
         composable(route = Screen.ConfigPerfil.route){
             val configPerfilViewModel: ConfigPerfilViewModel = hiltViewModel()
             ConfigPerfilScreen(
@@ -313,7 +326,7 @@ data class BottomNavItem(
 val bottomNavItems = listOf(
     BottomNavItem(filledIcon = Icons.Filled.Home, outLinedIcon = Icons.Outlined.Home, route = Screen.Main.route),
     BottomNavItem(filledIcon = Icons.Filled.Search, outLinedIcon = Icons.Outlined.Search, route = Screen.Search.route),
-    BottomNavItem(filledIcon = Icons.Filled.Add, outLinedIcon = Icons.Outlined.Add, route = Screen.Loading.route),
+    BottomNavItem(filledIcon = Icons.Filled.Add, outLinedIcon = Icons.Outlined.Add, route = Screen.CreateReview.route),
     BottomNavItem(filledIcon = Icons.Filled.Message, outLinedIcon = Icons.Outlined.Message, route = Screen.Loading.route),
     BottomNavItem(filledIcon = Icons.Filled.Person, outLinedIcon = Icons.Outlined.Person, route = Screen.Configuracion.route)
 )

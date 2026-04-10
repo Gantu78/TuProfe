@@ -3,6 +3,7 @@ package com.example.tuprofe.data.datasource
 import com.example.tuprofe.data.ReviewInfo
 import com.example.tuprofe.data.dtos.CreateReviewDto
 import com.example.tuprofe.data.dtos.ResenaDto
+import javax.inject.Inject
 
 interface ResenaRemoteDataSource  {
 

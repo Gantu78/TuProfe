@@ -30,26 +30,42 @@ fun MainScreen(
     mainViewModel: MainViewModel
 ) {
     val uiState by mainViewModel.uiState.collectAsState()
-    Box(modifier = modifier.fillMaxSize()) {
-        BackgroundImage()
+    when {
+        uiState.isLoading -> {
+            Box(modifier = modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                CircularProgressIndicator()
+            }
+        }
 
-        if (uiState.isLoading) {
-            CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
-        } else {
-            LazyColumn(
-                modifier = Modifier.fillMaxSize(),
-                contentPadding = PaddingValues(top = 10.dp, bottom = 0.dp)
-            ) {
-                items(uiState.reviews) { review ->
-                    ResenaCard(
-                        reviewInfo = review,
-                        onCommentsClick = { onResenaClick(review.reviewId) },
-                        onProfileClick = { onProfileClick(review.profesor) }
-                    )
+        uiState.errorMessage != null -> {
+            Box(modifier = modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                Text(text = uiState.errorMessage ?: "Error desconocido")
+            }
+        }
+        else -> {
+            Box(modifier = modifier.fillMaxSize()) {
+                BackgroundImage()
+
+                if (uiState.isLoading) {
+                    CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
+                } else {
+                    LazyColumn(
+                        modifier = Modifier.fillMaxSize(),
+                        contentPadding = PaddingValues(top = 10.dp, bottom = 0.dp)
+                    ) {
+                        items(uiState.reviews) { review ->
+                            ResenaCard(
+                                reviewInfo = review,
+                                onCommentsClick = { onResenaClick(review.reviewId) },
+                                onProfileClick = { onProfileClick(review.profesor) }
+                            )
+                        }
+                    }
                 }
             }
         }
     }
+
 }
 
 @Composable

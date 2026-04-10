@@ -26,8 +26,8 @@ class ProfeViewModel @Inject constructor(savedStateHandle: SavedStateHandle) : V
     private fun cargarDatosProfesor(profeId: Int) {
         _uiState.update { it.copy(isLoading = true) }
 
-        val profesor = LocalProfesor.profesores.find { it.profeId == profeId }
-        val reviews = LocalReview.Reviews.filter { it.profesor.profeId == profeId }
+        val profesor = LocalProfesor.profesores.find { it.profeId == profeId.toString() }
+        val reviews = LocalReview.Reviews.filter { it.profesor.profeId == profeId.toString() }
         val average = if (reviews.isNotEmpty()) {
             reviews.map { it.rating }.average().roundToInt()
         } else 0

@@ -23,8 +23,8 @@ class DetalleViewModel @Inject constructor(savedStateHandle: SavedStateHandle) :
     private fun cargarDetalle(reviewId: Int) {
         _uiState.update { it.copy(isLoading = true) }
 
-        val review = LocalReview.Reviews.find { it.reviewId == reviewId }
-        val respuestas = LocalReview.Reviews.filter { it.reviewId != reviewId }
+        val review = LocalReview.Reviews.find { it.reviewId == reviewId.toString() }
+        val respuestas = LocalReview.Reviews.filter { it.reviewId != reviewId.toString() }
 
         _uiState.update {
             it.copy(
