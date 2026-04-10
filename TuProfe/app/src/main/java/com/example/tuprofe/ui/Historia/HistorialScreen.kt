@@ -1,12 +1,13 @@
 package com.example.tuprofe.ui
 
 import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -60,14 +61,15 @@ fun HistorialScreen(
 
             item {
                 HistorialHeader(
-                    onFilterClick = { historialViewModel.onFilterClick("")} //mientras establecemos que filtros
+                    onFilterClick = { historialViewModel.onFilterClick("")}
                 )
             }
 
             items(state.userReviews) { review ->
                 HistorialCard(
                     review = review,
-                    onVerCalificacionClick = onVerCalificacionClick
+                    onVerCalificacionClick = onVerCalificacionClick,
+                    onDeleteClick = { historialViewModel.deleteReview(review.reviewId) }
                 )
             }
         }
@@ -114,16 +116,10 @@ fun HistorialHeader(
 }
 
 @Composable
-@Preview
-fun HistorialHeaderPreview() {
-    HistorialHeader(onFilterClick = {})
-}
-
-
-@Composable
 fun HistorialCard(
     review: ReviewInfo,
     onVerCalificacionClick: (ReviewInfo) -> Unit,
+    onDeleteClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     Card(
@@ -142,7 +138,8 @@ fun HistorialCard(
 
             HistorialCardBody(
                 review = review,
-                onVerCalificacionClick = { onVerCalificacionClick(review) }
+                onVerCalificacionClick = { onVerCalificacionClick(review) },
+                onDeleteClick = onDeleteClick
             )
         }
     }
@@ -164,17 +161,11 @@ private fun ProfesorAvatar(
     )
 }
 
-@Preview(showBackground = true)
-@Composable
-private fun ProfesorAvatarPreview() {
-    ProfesorAvatar(imageUrl = " https://img.lalr.co/cms/2017/06/16184524/1280x1440_CARLOS-PARRA.jpg?r=6_5&ns=1&w=372&d=2.625")
-}
-
-
 @Composable
 private fun HistorialCardBody(
     review: ReviewInfo,
     onVerCalificacionClick: () -> Unit,
+    onDeleteClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     Column(modifier = modifier) {
@@ -190,7 +181,20 @@ private fun HistorialCardBody(
                 overflow = TextOverflow.Ellipsis,
                 modifier = Modifier.weight(1f)
             )
-            Spacer(modifier = Modifier.width(8.dp))
+            
+            IconButton(onClick = onDeleteClick) {
+                Icon(
+                    imageVector = Icons.Default.Delete,
+                    contentDescription = "Eliminar reseña",
+                    tint = Color.Red
+                )
+            }
+        }
+
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
             RatingStars(rating = review.rating, modifier = Modifier.height(16.dp))
         }
 
@@ -212,31 +216,4 @@ private fun HistorialCardBody(
             modifier = Modifier.height(34.dp)
         )
     }
-}
-
-@Preview(showBackground = true)
-@Composable
-private fun HistorialCardBodyPreview() {
-    HistorialCardBody(
-        review = LocalReview.Reviews[0],
-        onVerCalificacionClick = {}
-    )
-}
-
-@Composable
-@Preview (showBackground = true)
-fun HistorialCardPreview() {
-    HistorialCard(
-        review = LocalReview.Reviews[0],
-        onVerCalificacionClick = {}
-    )
-}
-
-@Preview(showBackground = true)
-@Composable
-fun HistorialScreenPreview() {
-    HistorialScreen(
-        historialViewModel = viewModel(),
-        onVerCalificacionClick = {}
-    )
 }

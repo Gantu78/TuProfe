@@ -14,7 +14,6 @@ import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Message
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Search
-import androidx.compose.material.icons.filled.Send
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.outlined.Add
 import androidx.compose.material.icons.outlined.Home
@@ -238,11 +237,17 @@ fun AppNavegation(
             val createReviewViewModel: CreateReviewViewModel = hiltViewModel()
             CreateReviewScreen(
                 viewModel = createReviewViewModel,
+                onSuccess = {
+                    navController.navigate(Screen.Main.route) {
+                        popUpTo(Screen.Main.route) { inclusive = true }
+                    }
+                },
                 onBackClick = {
                     navController.popBackStack()
                 }
             )
         }
+
 
         composable(route = Screen.ConfigPerfil.route){
             val configPerfilViewModel: ConfigPerfilViewModel = hiltViewModel()

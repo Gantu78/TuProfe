@@ -1,12 +1,9 @@
 package com.example.tuprofe.data.datasource.impl
 
-import com.example.tuprofe.data.ReviewInfo
 import com.example.tuprofe.data.datasource.ResenaRemoteDataSource
 import com.example.tuprofe.data.datasource.Services.ReviewRetrofitService
 import com.example.tuprofe.data.dtos.CreateReviewDto
 import com.example.tuprofe.data.dtos.ResenaDto
-
-import retrofit2.http.Path
 import javax.inject.Inject
 
 class ReviewRetrofitDataSourceImpl @Inject constructor(
@@ -34,5 +31,7 @@ class ReviewRetrofitDataSourceImpl @Inject constructor(
         service.updateTweet(id.toInt(),review)
     }
 
-
+    override suspend fun getUserReviews(userId: Int): List<ResenaDto> {
+        return service.getUserReviews(userId)
+    }
 }

@@ -1,6 +1,7 @@
 package com.example.tuprofe.data.datasource.Services
 
 import com.example.tuprofe.data.dtos.CreateReviewDto
+import com.example.tuprofe.data.dtos.ProfessorDto
 import com.example.tuprofe.data.dtos.ResenaDto
 import retrofit2.http.Body
 import retrofit2.http.DELETE
@@ -27,5 +28,12 @@ interface ReviewRetrofitService {
     @GET("reviews/{id}")
     suspend fun getReviewById(@Path("id") id: String): ResenaDto
 
+    @GET("professors/{id}")
+    suspend fun getProfessorById(@Path("id") id: Int): ProfessorDto
 
+    @GET("professors")
+    suspend fun getAllProfessors(): List<ProfessorDto>
+
+    @GET("users/{id}/reviews")
+    suspend fun getUserReviews(@Path("id") id: Int): List<ResenaDto>
 }

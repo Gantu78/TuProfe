@@ -23,13 +23,55 @@ class CreateReviewViewModel @Inject constructor(
         _uiState.update { it.copy(reviewText = newText) }
     }
 
+    fun onProfessorIdChange(id: String) {
+        _uiState.update { it.copy(professorId = id) }
+    }
+
+    fun onRatingChange(newRating: Int) {
+        _uiState.update { it.copy(rating = newRating) }
+    }
+
     fun createReview() {
-        viewModelScope.launch{ }
-        val result = reviewRepository.createReview(_uiState.value.reviewText, profesor, username, materiaId, content) //toca corregir esto
-        if (result.isSuccess) {
-            _uiState.update { it.copy(isLoading = true) }
-        } else {
-            _uiState.update { it.copy(error = result.exceptionOrNull()?.message) }
+        val currentState = _uiState.value
+        
+        // Hardcoded userId to 1 (Int) as requested
+        val userId = 1
+        val professorId = currentState.professorId.toIntOrNull() ?: 0
+
+        if (professorId == 0) {
+            _uiState.update { it.copy(error = "ID de profesor inválido") }
+            return
         }
+
+        if (currentState.rating < 1 || currentState.rating > 5) {
+            _uiState.update { it.copy(error = "La calificación debe estar entre 1 y 5") }
+            return
+        }
+
+        _uiState.update { it.copy(isLoading = true, error = null) }
+
+        viewModelScope.launch {
+            val result = reviewRepository.createReview(
+                userId = userId,
+                professorId = professorId,
+                content = currentState.reviewText,
+                rating = currentState.rating
+            )
+
+            if (result.isSuccess) {
+                _uiState.update { it.copy(isLoading = false, success = true) }
+            } else {
+                _uiState.update {
+                    it.copy(
+                        isLoading = false,
+                        error = result.exceptionOrNull()?.message ?: "Error desconocido"
+                    )
+                }
+            }
+        }
+    }
+
+    fun resetSuccess() {
+        _uiState.update { it.copy(success = false) }
     }
 }
