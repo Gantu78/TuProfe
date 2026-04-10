@@ -3,7 +3,7 @@ package com.example.tuprofe.data
 import androidx.annotation.DrawableRes
 
 data class ReviewInfo(
-    val reviewId: Int,
+    val reviewId: String,
     val profesor: Profesor,
     val username: String,
     val materia: Materia,

@@ -41,7 +41,7 @@ import com.example.tuprofe.ui.utils.RatingStars
 fun ProfeScreen(
     profeViewModel: ProfeViewModel,
     profesor: Profesor,
-    onResenaClick: (Int) -> Unit,
+    onResenaClick: (String) -> Unit,
     onProfileClick: (Profesor) -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -60,7 +60,7 @@ fun ProfeScreen(
 @Composable
 fun ProfeContent(
     uiState: ProfeState,
-    onResenaClick: (Int) -> Unit,
+    onResenaClick: (String) -> Unit,
     onProfileClick: (Profesor) -> Unit,
     onAddCommentClick: () -> Unit,
     onRateClick: () -> Unit,

@@ -83,14 +83,14 @@ sealed class Screen(val route: String){
     object Main : Screen("Main")
     object Search: Screen("Search")
     object Profe : Screen("profe/{profeId}") {
-        fun createRoute(profeId: Int) = "profe/$profeId"
+        fun createRoute(profeId: String) = "profe/$profeId"
     }
     object Historial : Screen("Historial")
     object Loading : Screen("Loading")
     object ConfigPerfil : Screen("ConfigPerfil")
     object Configuracion : Screen("Configuracion")
     object Detalle : Screen("Detalle/{reviewId}"){
-        fun createRoute(reviewId: Int) = "Detalle/$reviewId"
+        fun createRoute(reviewId: String) = "Detalle/$reviewId"
     }
 }
 
@@ -197,9 +197,9 @@ fun AppNavegation(
         }
         composable(
             route = Screen.Profe.route,
-            arguments = listOf(navArgument("profeId"){ type = NavType.IntType })
+            arguments = listOf(navArgument("profeId"){ type = NavType.StringType })
         ){
-            val profeId = it.arguments?.getInt("profeId") ?: 0
+            val profeId = it.arguments?.getString("profeId") ?: ""
             val profesor = LocalProfesor.profesores.find { it.profeId == profeId }
 
             if(profesor != null){
@@ -280,9 +280,9 @@ fun AppNavegation(
         }
         composable(
             route = Screen.Detalle.route,
-            arguments = listOf(navArgument("reviewId"){type = NavType.IntType})
+            arguments = listOf(navArgument("reviewId"){type = NavType.StringType})
         ){
-            val reviewId = it.arguments?.getInt("reviewId")?: 0
+            val reviewId = it.arguments?.getString("reviewId") ?: ""
             val review = LocalReview.Reviews.find { it.reviewId == reviewId }
             val detalleViewModel: DetalleViewModel = hiltViewModel()
 

@@ -25,7 +25,7 @@ import com.example.tuprofe.ui.utils.Resena
 @Composable
 fun MainScreen(
     modifier: Modifier = Modifier,
-    onResenaClick: (Int) -> Unit,
+    onResenaClick: (String) -> Unit,
     onProfileClick: (Profesor) -> Unit,
     mainViewModel: MainViewModel
 ) {
@@ -56,7 +56,7 @@ fun MainScreen(
 fun ResenaCard(
     reviewInfo: ReviewInfo,
     modifier: Modifier = Modifier,
-    onCommentsClick: (Int) -> Unit,
+    onCommentsClick: (String) -> Unit,
     onProfileClick: () -> Unit
 ) {
     Card(

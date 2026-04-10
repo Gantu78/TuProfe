@@ -12,7 +12,7 @@ object LocalReview {
     val Reviews = listOf(
 
         ReviewInfo(
-            reviewId = 1,
+            reviewId = "1",
             profesor = profesores[1],
             username = "Golosina33",
             materia = materias[1],
@@ -24,7 +24,7 @@ object LocalReview {
         ),
 
         ReviewInfo(
-            reviewId = 2,
+            reviewId = "2",
             profesor = profesores[0],
             username = "Pablosexto",
             materia = materias[0],
@@ -36,7 +36,7 @@ object LocalReview {
         ),
 
         ReviewInfo(
-            reviewId = 3,
+            reviewId = "3",
             profesor = profesores[6],
             username = "JuanGuti",
             materia = materias[3],
@@ -48,7 +48,7 @@ object LocalReview {
         ),
 
         ReviewInfo(
-            reviewId = 4,
+            reviewId = "4",
             profesor = profesores[0],
             username = "HQL",
             materia = materias[0],
@@ -60,7 +60,7 @@ object LocalReview {
         ),
 
         ReviewInfo(
-            reviewId = 5,
+            reviewId = "5",
             profesor = profesores[2],
             username = "Jp23",
             materia = materias[2],
@@ -72,7 +72,7 @@ object LocalReview {
         ),
 
         ReviewInfo(
-            reviewId = 6,
+            reviewId = "6",
             profesor = profesores[3],
             username = "MariaGarcia",
             materia = materias[7],
@@ -84,7 +84,7 @@ object LocalReview {
         ),
 
         ReviewInfo(
-            reviewId = 7,
+            reviewId = "7",
             profesor = profesores[4],
             username = "PedroPerez",
             materia = materias[2],
@@ -96,7 +96,7 @@ object LocalReview {
         ),
 
         ReviewInfo(
-            reviewId = 8,
+            reviewId = "8",
             profesor = profesores[5],
             username = "LuciaMendez",
             materia = materias[4],
@@ -108,7 +108,7 @@ object LocalReview {
         ),
 
         ReviewInfo(
-            reviewId = 9,
+            reviewId = "9",
             profesor = profesores[1],
             username = "RobertoGomez",
             materia = materias[1],
@@ -120,7 +120,7 @@ object LocalReview {
         ),
 
         ReviewInfo(
-            reviewId = 10,
+            reviewId = "10",
             profesor = profesores[7],
             username = "ElenaRivas",
             materia = materias[5],

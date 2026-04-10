@@ -76,7 +76,7 @@ class RegisterViewModel @Inject constructor(
             return
         }
 
-        viewModelScope.launch {
+        viewModelScope.launch { 
 
             val result = authRepository.signUp(
                 _uiState.value.email,

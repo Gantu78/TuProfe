@@ -25,7 +25,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 fun SearchScreen(
     modifier: Modifier = Modifier,
     searchViewModel: SearchViewModel = viewModel(),
-    onProfessorClick: (Int) -> Unit
+    onProfessorClick: (String) -> Unit
 
 ) {
     val uiState by searchViewModel.uiState.collectAsState()
