@@ -223,9 +223,6 @@ fun AppNavegation(
                 viewModel = createReviewViewModel,
                 onSuccess = {
                     navController.popBackStack()
-                },
-                onBackClick = {
-                    navController.popBackStack()
                 }
             )
         }
