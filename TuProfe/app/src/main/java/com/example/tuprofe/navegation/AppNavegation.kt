@@ -3,66 +3,45 @@ package com.example.tuprofe.navegation
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.offset
-import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.Home
-import androidx.compose.material.icons.filled.Message
-import androidx.compose.material.icons.filled.Person
-import androidx.compose.material.icons.filled.Search
-import androidx.compose.material.icons.filled.Settings
-import androidx.compose.material.icons.outlined.Add
-import androidx.compose.material.icons.outlined.Home
-import androidx.compose.material.icons.outlined.Message
-import androidx.compose.material.icons.outlined.Person
-import androidx.compose.material.icons.outlined.Search
-import androidx.compose.material.icons.outlined.Send
-import androidx.compose.material.icons.outlined.Settings
-import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.NavigationBar
-import androidx.compose.material3.NavigationBarItem
-import androidx.compose.material3.NavigationBarItemDefaults
-import androidx.compose.material3.Text
+import androidx.compose.material.icons.filled.*
+import androidx.compose.material.icons.outlined.*
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.colorResource
-import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
-import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
-import androidx.navigation.compose.currentBackStackEntryAsState
-import androidx.navigation.compose.rememberNavController
+import androidx.navigation.compose.*
 import androidx.navigation.navArgument
 import com.example.tuprofe.R
+import com.example.tuprofe.data.ReviewInfo
 import com.example.tuprofe.data.local.LocalProfesor
-import com.example.tuprofe.data.local.LocalReview
-import com.example.tuprofe.ui.ConfigPerfil.ConfigPerfilScreen
 import com.example.tuprofe.ui.Config.ConfigScreen
 import com.example.tuprofe.ui.Config.ConfigViewModel
+import com.example.tuprofe.ui.ConfigPerfil.ConfigPerfilScreen
 import com.example.tuprofe.ui.ConfigPerfil.ConfigPerfilViewModel
 import com.example.tuprofe.ui.Detalle.DetalleScreen
 import com.example.tuprofe.ui.Detalle.DetalleViewModel
+import com.example.tuprofe.ui.Historia.HistorialScreen
 import com.example.tuprofe.ui.Historia.HistorialViewModel
-import com.example.tuprofe.ui.HistorialScreen
-import com.example.tuprofe.ui.Login.HomeScreen
 import com.example.tuprofe.ui.LoadingScreen
+import com.example.tuprofe.ui.Login.HomeScreen
 import com.example.tuprofe.ui.Login.LoginViewModel
 import com.example.tuprofe.ui.Main.MainScreen
 import com.example.tuprofe.ui.Main.MainViewModel
+import com.example.tuprofe.ui.PerfilAjeno.UserProfileScreen
+import com.example.tuprofe.ui.PerfilAjeno.UserProfileViewModel
 import com.example.tuprofe.ui.Profe.ProfeScreen
 import com.example.tuprofe.ui.Profe.ProfeViewModel
 import com.example.tuprofe.ui.Register.RegisterScreen
@@ -71,6 +50,8 @@ import com.example.tuprofe.ui.ResetPassword.ResetPasswordScreen
 import com.example.tuprofe.ui.ResetPassword.ResetPasswordViewModel
 import com.example.tuprofe.ui.Review.CreateReviewScreen
 import com.example.tuprofe.ui.Review.CreateReviewViewModel
+import com.example.tuprofe.ui.Review.EditReviewScreen
+import com.example.tuprofe.ui.Review.EditReviewViewModel
 import com.example.tuprofe.ui.Search.SearchScreen
 import com.example.tuprofe.ui.Splash.SplashScreen
 import com.example.tuprofe.ui.Splash.SplashViewModel
@@ -89,11 +70,19 @@ sealed class Screen(val route: String){
     object Historial : Screen("Historial")
     object Loading : Screen("Loading")
     object CreateReview : Screen("CreateReview")
+    object EditReview : Screen("EditReview/{reviewId}") {
+        fun createRoute(reviewId: String) = "EditReview/$reviewId"
+    }
     object ConfigPerfil : Screen("ConfigPerfil")
     object Configuracion : Screen("Configuracion")
     object Detalle : Screen("Detalle/{reviewId}"){
         fun createRoute(reviewId: String) = "Detalle/$reviewId"
     }
+    
+    object Profile : Screen("Profile/{userId}") {
+        fun createRoute(userId: String) = "Profile/$userId"
+    }
+
 }
 
 
@@ -108,7 +97,6 @@ fun AppNavegation(
         modifier = modifier
     ){
         composable(route = Screen.Splash.route){
-            val viewModel: SplashViewModel = hiltViewModel()
             SplashScreen(navigateToLogin = {
                 navController.navigate(Screen.Login.route)
                 }, navigateToMain = {
@@ -124,25 +112,17 @@ fun AppNavegation(
                 onLoginClick = {
                     if(loginViewModel.loginClick()){
                     navController.navigate(Screen.Main.route){
-                        popUpTo(0){
+                        popUpTo(Screen.Login.route){
                             inclusive = true
                         }
                     }
                     }
                 },
                 onRegisterClick = {
-                    navController.navigate(Screen.Register.route){
-                        popUpTo(0){
-                            inclusive = true
-                        }
-                    }
+                    navController.navigate(Screen.Register.route)
                 },
                 onForgotPasswordClick = {
-                    navController.navigate(Screen.PasswordReset.route){
-                        popUpTo(0){
-                            inclusive = true
-                        }
-                    }
+                    navController.navigate(Screen.PasswordReset.route)
                 }
             )
         }
@@ -163,14 +143,10 @@ fun AppNavegation(
                     registerViewModel.onRegisterClickSecure()
                 },
                 onAlreadyAccountClick = {
-                    navController.navigate(Screen.Login.route){
-                        popUpTo(0){ inclusive = true }
-                    }
+                    navController.popBackStack()
                 },
                 onBackClick = {
-                    navController.navigate(Screen.Login.route){
-                        popUpTo(0){ inclusive = true }
-                    }
+                    navController.popBackStack()
                 }
             )
         }
@@ -178,11 +154,7 @@ fun AppNavegation(
             val resetPasswordViewModel: ResetPasswordViewModel = hiltViewModel()
             ResetPasswordScreen(
                 resetPasswordViewModel = resetPasswordViewModel,
-                onVolverClick = {navController.navigate(Screen.Login.route){
-                    popUpTo(0){
-                        inclusive = true
-                    }
-                }}
+                onVolverClick = {navController.popBackStack()}
             )
         }
         composable(route = Screen.Main.route){
@@ -194,6 +166,9 @@ fun AppNavegation(
                 },
                 onProfileClick = { profesor ->
                     navController.navigate(Screen.Profe.createRoute(profesor.profeId))
+                },
+                onUserClick = { userId ->
+                    navController.navigate(Screen.Profile.createRoute(userId))
                 }
             )
         }
@@ -213,8 +188,11 @@ fun AppNavegation(
                     onResenaClick = { reviewId ->
                         navController.navigate(Screen.Detalle.createRoute(reviewId))
                     },
-                    onProfileClick = { profesor ->
-                        navController.navigate(Screen.Profe.createRoute(profesor.profeId))
+                    onProfileClick = { p ->
+                        navController.navigate(Screen.Profe.createRoute(p.profeId))
+                    },
+                    onUserClick = { userId ->
+                        navController.navigate(Screen.Profile.createRoute(userId))
                     }
                 )
 
@@ -229,6 +207,12 @@ fun AppNavegation(
                 historialViewModel = historialViewModel,
                 onVerCalificacionClick = { review ->
                     navController.navigate(Screen.Detalle.createRoute(review.reviewId))
+                },
+                onProfessorClick = { profeId ->
+                    navController.navigate(Screen.Profe.createRoute(profeId))
+                },
+                onEditClick = { reviewId ->
+                    navController.navigate(Screen.EditReview.createRoute(reviewId))
                 }
             )
         }
@@ -238,9 +222,23 @@ fun AppNavegation(
             CreateReviewScreen(
                 viewModel = createReviewViewModel,
                 onSuccess = {
-                    navController.navigate(Screen.Main.route) {
-                        popUpTo(Screen.Main.route) { inclusive = true }
-                    }
+                    navController.popBackStack()
+                },
+                onBackClick = {
+                    navController.popBackStack()
+                }
+            )
+        }
+
+        composable(
+            route = Screen.EditReview.route,
+            arguments = listOf(navArgument("reviewId") { type = NavType.StringType })
+        ) {
+            val editReviewViewModel: EditReviewViewModel = hiltViewModel()
+            EditReviewScreen(
+                viewModel = editReviewViewModel,
+                onSuccess = {
+                    navController.popBackStack()
                 },
                 onBackClick = {
                     navController.popBackStack()
@@ -257,9 +255,7 @@ fun AppNavegation(
                     navController.navigate(Screen.PasswordReset.route)
                 },
                 onGuardarCambiosClick = {
-                    navController.navigate(Screen.Configuracion.route) {
-                        popUpTo(0) { inclusive = true }
-                    }
+                    navController.popBackStack()
                 },
                 onNavigateToLogin = {
                     navController.navigate(Screen.Login.route) {
@@ -281,17 +277,13 @@ fun AppNavegation(
                     navController.navigate(Screen.ConfigPerfil.route)
                 },
                 onLogoutClick = {
-                    configViewModel.onLogoutClick() // Cerrar sesion en la firebase
+                    configViewModel.onLogoutClick()
                     navController.navigate(Screen.Login.route) {
                         popUpTo(0) { inclusive = true }
                     }
                 },
                 onCalifClick = {
-                    navController.navigate(Screen.Historial.route){
-                        popUpTo(0){
-                            inclusive = true
-                        }
-                    }
+                    navController.navigate(Screen.Historial.route)
                 }
 
             )
@@ -300,23 +292,27 @@ fun AppNavegation(
             route = Screen.Detalle.route,
             arguments = listOf(navArgument("reviewId"){type = NavType.StringType})
         ){
-            val reviewId = it.arguments?.getString("reviewId") ?: ""
-            val review = LocalReview.Reviews.find { it.reviewId == reviewId }
             val detalleViewModel: DetalleViewModel = hiltViewModel()
 
-            if(review != null){
+            DetalleScreen(
+                detalleViewModel = detalleViewModel,
+                onProfileClick = { profesor ->
+                    navController.navigate(Screen.Profe.createRoute(profesor.profeId))
+                }
+            )
+        }
 
-                DetalleScreen(
-                    detalleViewModel = detalleViewModel,
-                    onProfileClick = { profesor ->
-                        navController.navigate(Screen.Profe.createRoute(profesor.profeId))
-                    }
-                )
-
-            } else{
-                (Text(stringResource(R.string.rese_a_no_encontrada)))
-            }
-
+        composable(
+            route = Screen.Profile.route,
+            arguments = listOf(navArgument("userId") { type = NavType.StringType })
+        ) {
+            val userProfileViewModel: UserProfileViewModel = hiltViewModel()
+            UserProfileScreen(
+                viewModel = userProfileViewModel,
+                onProfessorClick = { profeId ->
+                    navController.navigate(Screen.Profe.createRoute(profeId))
+                }
+            )
         }
     }
 
@@ -342,8 +338,8 @@ fun TuProfeBottomBar(
     items: List<BottomNavItem> = bottomNavItems
 ) {
 
-    val currentRoute =
-        navController.currentBackStackEntryAsState().value?.destination?.route
+    val currentBackStackEntry by navController.currentBackStackEntryAsState()
+    val currentRoute = currentBackStackEntry?.destination?.route
 
     Box {
 
@@ -366,7 +362,7 @@ fun TuProfeBottomBar(
                         onClick = {
                             if (currentRoute != item.route) {
                                 navController.navigate(item.route) {
-                                    popUpTo(navController.graph.startDestinationId) {
+                                    popUpTo(navController.graph.findStartDestination().id) {
                                         saveState = true
                                     }
                                     launchSingleTop = true
@@ -416,14 +412,8 @@ fun TuProfeBottomBar(
                     shape = CircleShape
                 )
                 .clickable {
-                    if (currentRoute != middleItem.route) {
-                        navController.navigate(middleItem.route) {
-                            popUpTo(navController.graph.startDestinationId) {
-                                saveState = true
-                            }
-                            launchSingleTop = true
-                            restoreState = true
-                        }
+                    navController.navigate(middleItem.route) {
+                        launchSingleTop = true
                     }
                 },
             contentAlignment = Alignment.Center
@@ -436,10 +426,4 @@ fun TuProfeBottomBar(
             )
         }
     }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun BottomNavPreview(){
-    TuProfeBottomBar(navController = rememberNavController())
 }

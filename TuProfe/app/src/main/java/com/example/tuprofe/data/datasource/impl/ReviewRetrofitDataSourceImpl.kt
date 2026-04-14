@@ -28,10 +28,10 @@ class ReviewRetrofitDataSourceImpl @Inject constructor(
     }
 
     override suspend fun updateReview(id: String, review: CreateReviewDto){
-        service.updateTweet(id.toInt(),review)
+        service.updateReview(id.toInt(),review)
     }
 
-    override suspend fun getUserReviews(userId: Int): List<ResenaDto> {
-        return service.getUserReviews(userId)
+    override suspend fun getUserReviews(userId: String): List<ResenaDto> {
+        return service.getUserReviews(userId.toInt())
     }
 }

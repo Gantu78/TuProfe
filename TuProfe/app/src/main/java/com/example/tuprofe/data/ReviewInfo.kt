@@ -1,15 +1,13 @@
 package com.example.tuprofe.data
 
-import androidx.annotation.DrawableRes
-
 data class ReviewInfo(
     val reviewId: String,
+    val usuario: Usuario,
     val profesor: Profesor,
-    val username: String,
     val materia: Materia,
-    val likes: Int,
     val content: String,
-    val time: String,
     val rating: Int,
-    val comments: Int
+    val time: String,
+    val likes: Int = 0,
+    val commentsCount: Int = 0
 )

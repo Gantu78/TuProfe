@@ -3,10 +3,8 @@ package com.example.tuprofe.ui.Profe
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.tuprofe.data.datasource.ResenaRemoteDataSource
-import com.example.tuprofe.data.datasource.Services.ReviewRetrofitService
-import com.example.tuprofe.data.dtos.toProfesor
-import com.example.tuprofe.data.dtos.toReviewInfo
+import com.example.tuprofe.data.repository.ProfessorRepository
+import com.example.tuprofe.data.repository.ReviewRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -18,8 +16,8 @@ import kotlin.math.roundToInt
 
 @HiltViewModel
 class ProfeViewModel @Inject constructor(
-    private val service: ReviewRetrofitService,
-    private val resenaRemoteDataSource: ResenaRemoteDataSource,
+    private val professorRepository: ProfessorRepository,
+    private val reviewRepository: ReviewRepository,
     savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
@@ -28,42 +26,41 @@ class ProfeViewModel @Inject constructor(
 
     init {
         val idString = savedStateHandle.get<String>("profeId") ?: "0"
-        val id = idString.toIntOrNull() ?: 0
-        cargarDatosProfesor(id)
+        cargarDatos(idString)
     }
 
-    private fun cargarDatosProfesor(profeId: Int) {
+    private fun cargarDatos(profeId: String) {
         _uiState.update { it.copy(isLoading = true) }
 
         viewModelScope.launch {
-            try {
-                // 1. Obtener datos del profesor reales
-                val professorDto = service.getProfessorById(profeId)
-                val profesorReal = professorDto.toProfesor()
+            val professorResult = professorRepository.getProfessorById(profeId)
+            val reviewsResult = reviewRepository.getReviews()
 
-                // 2. Obtener reseñas y filtrar
-                val allReviewsDto = resenaRemoteDataSource.getAllReviews()
-                val reviews = allReviewsDto
-                    .filter { it.professorId == profeId.toString() || it.professorId == profeId.toDouble().toString() }
-                    .map { 
-                        // Seteamos el profesor real a cada reseña para que tenga su nombre y foto
-                        it.toReviewInfo().copy(profesor = profesorReal) 
-                    }
+            if (professorResult.isSuccess && reviewsResult.isSuccess) {
+                val professor = professorResult.getOrNull()
+                val allReviews = reviewsResult.getOrNull() ?: emptyList()
+                
+                // Filtrar reseñas para este profesor
+                val filteredReviews = allReviews.filter { it.profesor.profeId == profeId.toString() }
 
-                val average = if (reviews.isNotEmpty()) {
-                    reviews.map { it.rating }.average().roundToInt()
+                val average = if (filteredReviews.isNotEmpty()) {
+                    filteredReviews.map { it.rating }.average().roundToInt()
                 } else 0
 
                 _uiState.update {
                     it.copy(
-                        profesor = profesorReal,
-                        professorReviews = reviews,
+                        profesor = professor,
+                        professorReviews = filteredReviews,
                         averageRating = average,
                         isLoading = false
                     )
                 }
-            } catch (e: Exception) {
-                _uiState.update { it.copy(isLoading = false) }
+            } else {
+                _uiState.update { 
+                    it.copy(
+                        isLoading = false
+                    ) 
+                }
             }
         }
     }

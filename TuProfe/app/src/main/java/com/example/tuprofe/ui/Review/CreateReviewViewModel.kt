@@ -2,6 +2,7 @@ package com.example.tuprofe.ui.Review
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.tuprofe.data.repository.ProfessorRepository
 import com.example.tuprofe.data.repository.ReviewRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -13,18 +14,62 @@ import javax.inject.Inject
 
 @HiltViewModel
 class CreateReviewViewModel @Inject constructor(
-    private val reviewRepository: ReviewRepository
+    private val reviewRepository: ReviewRepository,
+    private val professorRepository: ProfessorRepository
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(CreateReviewState())
     val uiState: StateFlow<CreateReviewState> = _uiState.asStateFlow()
 
+    init {
+        cargarProfesores()
+    }
+
+    fun cargarProfesores() {
+        _uiState.update { it.copy(isSearchingProfessors = true) }
+        viewModelScope.launch {
+            professorRepository.getProfessors().onSuccess { list ->
+                _uiState.update { it.copy(
+                    professors = list,
+                    filteredProfessors = list,
+                    isSearchingProfessors = false
+                ) }
+            }.onFailure { e ->
+                _uiState.update { it.copy(
+                    error = e.message,
+                    isSearchingProfessors = false
+                ) }
+            }
+        }
+    }
+
     fun onReviewTextChange(newText: String) {
         _uiState.update { it.copy(reviewText = newText) }
     }
 
-    fun onProfessorIdChange(id: String) {
-        _uiState.update { it.copy(professorId = id) }
+    fun onProfessorQueryChange(query: String) {
+        _uiState.update { state ->
+            val filtered = if (query.isBlank()) {
+                state.professors
+            } else {
+                state.professors.filter { 
+                    it.nombreProfe.contains(query, ignoreCase = true) 
+                }
+            }
+            state.copy(
+                professorQuery = query,
+                filteredProfessors = filtered,
+                isDropdownExpanded = query.isNotBlank() && filtered.isNotEmpty() && state.selectedProfessor?.nombreProfe != query
+            )
+        }
+    }
+
+    fun onProfessorSelected(professor: com.example.tuprofe.data.Profesor) {
+        _uiState.update { it.copy(
+            selectedProfessor = professor,
+            professorQuery = professor.nombreProfe,
+            isDropdownExpanded = false
+        ) }
     }
 
     fun onRatingChange(newRating: Int) {
@@ -33,13 +78,10 @@ class CreateReviewViewModel @Inject constructor(
 
     fun createReview() {
         val currentState = _uiState.value
-        
-        // Hardcoded userId to 1 (Int) as requested
-        val userId = 1
-        val professorId = currentState.professorId.toIntOrNull() ?: 0
+        val professorId = currentState.selectedProfessor?.profeId ?: ""
 
-        if (professorId == 0) {
-            _uiState.update { it.copy(error = "ID de profesor inválido") }
+        if (professorId.isBlank()) {
+            _uiState.update { it.copy(error = "Debes seleccionar un profesor") }
             return
         }
 
@@ -51,8 +93,9 @@ class CreateReviewViewModel @Inject constructor(
         _uiState.update { it.copy(isLoading = true, error = null) }
 
         viewModelScope.launch {
+            // Hardcoded userId "1"
             val result = reviewRepository.createReview(
-                userId = userId,
+                userId = "1",
                 professorId = professorId,
                 content = currentState.reviewText,
                 rating = currentState.rating
@@ -72,6 +115,12 @@ class CreateReviewViewModel @Inject constructor(
     }
 
     fun resetSuccess() {
-        _uiState.update { it.copy(success = false) }
+        // En lugar de solo resetear success, reseteamos el estado entero para la próxima vez
+        _uiState.update { CreateReviewState() }
+        cargarProfesores()
+    }
+
+    fun onDismissDropdown() {
+        _uiState.update { it.copy(isDropdownExpanded = false) }
     }
 }

@@ -2,29 +2,15 @@ package com.example.tuprofe.ui.utils
 
 import androidx.annotation.StringRes
 import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Star
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -37,16 +23,11 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import com.example.tuprofe.R
-import com.example.tuprofe.data.Profesor
 import com.example.tuprofe.data.ReviewInfo
-import com.example.tuprofe.data.local.LocalReview
-
-
 
 @Composable
 fun ProfileHeaderCard(
@@ -73,7 +54,6 @@ fun ProfileHeaderCard(
         ),
         elevation = CardDefaults.cardElevation(defaultElevation = 10.dp)
     ) {
-
         Row(
             modifier = Modifier
                 .fillMaxWidth()
@@ -104,9 +84,7 @@ fun ProfileHeaderCard(
                 modifier = Modifier.weight(1f),
                 verticalArrangement = Arrangement.spacedBy(4.dp)
             ) {
-
                 Row(verticalAlignment = Alignment.CenterVertically) {
-
                     Text(
                         text = username,
                         fontSize = 20.sp,
@@ -116,7 +94,6 @@ fun ProfileHeaderCard(
 
                     if (showStar) {
                         Spacer(modifier = Modifier.width(6.dp))
-
                         Icon(
                             imageVector = Icons.Default.Star,
                             contentDescription = null,
@@ -151,22 +128,21 @@ fun Resena(
     reviewInfo: ReviewInfo,
     modifier: Modifier = Modifier,
     onCommentsClick: () -> Unit = {},
-    onProfileClick: () -> Unit
-
+    onProfileClick: () -> Unit, // Navigate to Professor Profile
+    onUserClick: () -> Unit // Navigate to User Profile
 ) {
-
     Column(
-        modifier = Modifier
+        modifier = modifier
             .padding(horizontal = 16.dp, vertical = 10.dp),
         verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
-
         TuProfeCardHeader(
             profeName = reviewInfo.profesor.nombreProfe,
-            userName = reviewInfo.username,
+            userName = reviewInfo.usuario.nombreUsu,
             carrera = reviewInfo.materia.nombreMateria,
             imageUrl = reviewInfo.profesor.imageprofeUrl,
-            onProfileClick = onProfileClick
+            onProfessorClick = onProfileClick,
+            onUserClick = onUserClick
         )
 
         RatingStars(
@@ -181,22 +157,88 @@ fun Resena(
 
         ResenaCardActions(
             likes = reviewInfo.likes,
-            comments = reviewInfo.comments,
+            comments = reviewInfo.commentsCount,
             onCommentsClick = onCommentsClick
         )
     }
 }
 
-
-@Preview(showBackground = true)
 @Composable
-fun ResenaPreview() {
-    val example = LocalReview.Reviews[0]
-    Resena(
-        reviewInfo = example,
-        onCommentsClick = {},
-        onProfileClick = {}
-    )
+fun TuProfeCardHeader(
+    profeName: String,
+    userName: String,
+    carrera: String,
+    imageUrl: String?,
+    onProfessorClick: () -> Unit,
+    onUserClick: () -> Unit,
+    modifier: Modifier = Modifier.fillMaxWidth()
+) {
+    Row(
+        modifier = modifier,
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        AsyncImage(
+            model = imageUrl,
+            contentDescription = stringResource(R.string.foto_de_perfil),
+            placeholder = painterResource(R.drawable.loading_img),
+            error = painterResource(R.drawable.avatar),
+            contentScale = ContentScale.Crop,
+            modifier = Modifier
+                .size(48.dp)
+                .shadow(elevation = 4.dp, shape = CircleShape, clip = false)
+                .clip(CircleShape)
+                .background(MaterialTheme.colorScheme.surfaceVariant)
+                .border(
+                    width = 1.5.dp,
+                    color = MaterialTheme.colorScheme.outline.copy(alpha = 0.3f),
+                    shape = CircleShape
+                )
+                .clickable(onClick = onProfessorClick)
+        )
+
+        Spacer(modifier = Modifier.width(12.dp))
+
+        Column(
+            modifier = Modifier.weight(1f),
+            verticalArrangement = Arrangement.spacedBy(3.dp)
+        ) {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Text(
+                    text = profeName,
+                    fontSize = 17.sp,
+                    fontWeight = FontWeight.SemiBold,
+                    color = MaterialTheme.colorScheme.onSurface,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
+                    modifier = Modifier
+                        .weight(1f)
+                        .clickable(onClick = onProfessorClick)
+                )
+
+                Spacer(modifier = Modifier.width(8.dp))
+
+                Text(
+                    text = "Por: @$userName",
+                    fontSize = 12.sp,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
+                    modifier = Modifier.clickable(onClick = onUserClick)
+                )
+            }
+
+            Text(
+                text = carrera,
+                fontSize = 13.sp,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis
+            )
+        }
+    }
 }
 
 @Composable
@@ -205,8 +247,7 @@ fun RatingStars(
     starColor: Color = Color(0xFF1DB954),
     modifier: Modifier = Modifier
 ) {
-    Row (modifier =  modifier){
-
+    Row(modifier = modifier) {
         repeat(5) { index ->
             Icon(
                 imageVector = Icons.Default.Star,
@@ -223,11 +264,11 @@ fun ResenaCardActions(
     comments: Int,
     onCommentsClick: () -> Unit,
     modifier: Modifier = Modifier
-
 ) {
     Row(
-        modifier = modifier.fillMaxWidth()
-        .padding(start = 2.dp),
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(start = 2.dp),
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically
     ) {
@@ -235,7 +276,6 @@ fun ResenaCardActions(
             likes = likes,
             comments = comments
         )
-
     }
 }
 
@@ -244,143 +284,24 @@ fun TuProfeCardFooter(
     likes: Int,
     comments: Int,
     modifier: Modifier = Modifier
-){
-    Row(
-        modifier = modifier
-    ) {
-        TuProfeCardFooterItem(
-            likes,
-            R.string.likes
-        )
-        TuProfeCardFooterItem(
-            comments,
-            label = R.string.comentarios
-        )
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun TuProfeCardFooterPreview(){
-    val review = LocalReview.Reviews[0]
-    TuProfeCardFooter(
-        likes = review.likes,
-        comments = review.comments
-    )
-}
-
-@Composable
-fun TuProfeCardHeader(
-    profeName: String,
-    userName: String,
-    carrera: String,
-    imageUrl: String?,
-    onProfileClick: () -> Unit,
-    modifier: Modifier = Modifier.fillMaxWidth()
 ) {
-
-    Row(
-        modifier = modifier,
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-
-
-        AsyncImage(
-            model = imageUrl,
-            contentDescription = stringResource(R.string.foto_de_perfil),
-            placeholder = painterResource(R.drawable.loading_img),
-            error = painterResource(R.drawable.avatar),
-            contentScale = ContentScale.Crop,
-            modifier = Modifier
-                .size(48.dp)
-                .shadow(
-                    elevation = 4.dp,
-                    shape = CircleShape,
-                    clip = false
-                )
-                .clip(CircleShape)
-                .background(MaterialTheme.colorScheme.surfaceVariant)
-                .border(
-                    width = 1.5.dp,
-                    color = MaterialTheme.colorScheme.outline.copy(alpha = 0.3f),
-                    shape = CircleShape
-                )
-                .clickable(onClick = onProfileClick)
-
-        )
-
-        Spacer(modifier = Modifier.width(12.dp))
-
-        Column(
-            modifier = Modifier.weight(1f),
-            verticalArrangement = Arrangement.spacedBy(3.dp)
-        ) {
-
-            // 🔹 Fila superior
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-
-                Text(
-                    text = profeName,
-                    fontSize = 17.sp,
-                    fontWeight = FontWeight.SemiBold,
-                    color = MaterialTheme.colorScheme.onSurface,
-                    maxLines = 1,
-                    overflow = TextOverflow.Ellipsis,
-                    modifier = Modifier.weight(1f)
-                )
-
-                Spacer(modifier = Modifier.width(8.dp))
-
-                Text(
-                    text = "Por: @$userName",
-                    fontSize = 12.sp,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
-                    maxLines = 1,
-                    overflow = TextOverflow.Ellipsis
-                )
-            }
-
-            // 🔹 Materia
-            Text(
-                text = carrera,
-                fontSize = 13.sp,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
-                maxLines = 1,
-                overflow = TextOverflow.Ellipsis
-            )
-        }
+    Row(modifier = modifier) {
+        TuProfeCardFooterItem(likes, R.string.likes)
+        TuProfeCardFooterItem(comments, label = R.string.comentarios)
     }
 }
-
-@Preview(showBackground = true)
-@Composable
-fun TuProfeCardHeaderPreview(){
-    val review = LocalReview.Reviews[0]
-    TuProfeCardHeader(
-        profeName = review.profesor.nombreProfe,
-        userName = review.username,
-        carrera = review.materia.nombreMateria,
-        imageUrl = "https://co.linkedin.com/in/gerardo-tole-galvis-ms-c-94239452",
-        onProfileClick = {}
-    )
-}
-
 
 @Composable
 fun TuProfeCardBody(
     content: String,
     date: String,
     modifier: Modifier = Modifier
-){
+) {
     Column(
         modifier = modifier.padding(start = 2.dp),
         verticalArrangement = Arrangement.spacedBy(10.dp)
     ) {
         Text(content)
-
         Text(
             text = date,
             fontSize = 12.sp,
@@ -390,22 +311,13 @@ fun TuProfeCardBody(
     }
 }
 
-@Preview(showBackground = true)
-@Composable
-fun TuProfeCardBodyPreview() {
-    val review = LocalReview.Reviews[0]
-    TuProfeCardBody(review.content, review.time)
-}
-
 @Composable
 fun TuProfeCardFooterItem(
     cantidad: Int,
     @StringRes label: Int,
     modifier: Modifier = Modifier
-){
-    Row(
-        modifier = modifier.padding(end = 8.dp)
-    ) {
+) {
+    Row(modifier = modifier.padding(end = 8.dp)) {
         Text(
             cantidad.toString(),
             fontWeight = FontWeight.Bold,
@@ -413,13 +325,4 @@ fun TuProfeCardFooterItem(
         )
         Text(stringResource(label))
     }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun TuProfeCardFooterItemPreview(){
-    TuProfeCardFooterItem(
-        cantidad = 1000,
-        label = R.string.likes
-    )
 }

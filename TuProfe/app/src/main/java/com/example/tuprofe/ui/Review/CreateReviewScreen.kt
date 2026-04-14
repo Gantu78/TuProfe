@@ -1,14 +1,12 @@
 package com.example.tuprofe.ui.Review
 
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.Text
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowDropDown
+import androidx.compose.material.icons.filled.ArrowDropUp
+import androidx.compose.material.icons.filled.Star
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -16,17 +14,22 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
+import com.example.tuprofe.R
 import com.example.tuprofe.ui.utils.AppButton
 import com.example.tuprofe.ui.utils.BackgroundImage
 import com.example.tuprofe.ui.utils.TextFieldApp
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CreateReviewScreen(
-    viewModel: CreateReviewViewModel = viewModel(),
+    viewModel: CreateReviewViewModel = hiltViewModel(),
     onSuccess: () -> Unit = {},
-    onBackClick: () -> Unit = {},
     modifier: Modifier = Modifier
 ) {
     val state by viewModel.uiState.collectAsState()
@@ -38,62 +41,101 @@ fun CreateReviewScreen(
         }
     }
 
-    Box(
-        modifier = modifier.fillMaxSize()
-    ) {
+    Box(modifier = modifier.fillMaxSize()) {
         BackgroundImage()
 
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(30.dp),
+                .padding(24.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Spacer(modifier = Modifier.height(60.dp))
-
-            TextFieldApp(
-                texto = "ID del Profesor",
-                value = state.professorId,
-                onValueChange = { viewModel.onProfessorIdChange(it) },
-                modifier = Modifier.fillMaxWidth()
+            Text(
+                text = stringResource(R.string.crear_rese_a),
+                fontSize = 24.sp,
+                fontWeight = FontWeight.Bold,
+                modifier = Modifier.padding(vertical = 24.dp)
             )
 
-            Spacer(modifier = Modifier.height(16.dp))
+            // Selector de Profesor con Autocompletado
+            ExposedDropdownMenuBox(
+                expanded = state.isDropdownExpanded,
+                onExpandedChange = { /* Manejado por clicks y foco */ }
+            ) {
+                TextFieldApp(
+                    texto = stringResource(R.string.buscar_profesor),
+                    value = state.professorQuery,
+                    onValueChange = { viewModel.onProfessorQueryChange(it) },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .menuAnchor(MenuAnchorType.PrimaryNotEditable),
+                    trailingIcon = {
+                        Icon(
+                            imageVector = if (state.isDropdownExpanded) Icons.Default.ArrowDropUp else Icons.Default.ArrowDropDown,
+                            contentDescription = null
+                        )
+                    }
+                )
+
+                ExposedDropdownMenu(
+                    expanded = state.isDropdownExpanded,
+                    onDismissRequest = { viewModel.onDismissDropdown() }
+                ) {
+                    state.filteredProfessors.forEach { professor ->
+                        DropdownMenuItem(
+                            text = { Text(professor.nombreProfe) },
+                            onClick = { viewModel.onProfessorSelected(professor) }
+                        )
+                    }
+                }
+            }
+
+            Spacer(modifier = Modifier.height(20.dp))
+
+            // Selector de Calificación (Estrellas)
+            Text(text = stringResource(R.string.calificaci_n), fontWeight = FontWeight.Medium)
+            Row(
+                modifier = Modifier.padding(vertical = 8.dp)
+            ) {
+                repeat(5) { index ->
+                    val ratingValue = index + 1
+                    Icon(
+                        imageVector = Icons.Default.Star,
+                        contentDescription = null,
+                        tint = if (state.rating >= ratingValue) colorResource(R.color.verdetp) else Color.LightGray,
+                        modifier = Modifier
+                            .size(40.dp)
+                            .clickable { viewModel.onRatingChange(ratingValue) }
+                    )
+                }
+            }
+
+            Spacer(modifier = Modifier.height(20.dp))
 
             TextFieldApp(
-                texto = "Calificación (1-5)",
-                value = if (state.rating == 0) "" else state.rating.toString(),
-                onValueChange = { 
-                    val rating = it.toIntOrNull() ?: 0
-                    viewModel.onRatingChange(rating)
-                },
-                modifier = Modifier.fillMaxWidth()
-            )
-
-            Spacer(modifier = Modifier.height(16.dp))
-
-            TextFieldApp(
-                texto = "Escribe tu review aquí",
+                texto = stringResource(R.string.tu_opini_n_sobre_el_profesor),
                 value = state.reviewText,
                 onValueChange = { viewModel.onReviewTextChange(it) },
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(150.dp)
             )
 
-            Spacer(modifier = Modifier.height(24.dp))
+            Spacer(modifier = Modifier.height(32.dp))
 
             if (state.isLoading) {
-                CircularProgressIndicator()
+                CircularProgressIndicator(color = colorResource(R.color.verdetp))
             } else {
                 AppButton(
-                    textoBoton = "Publicar Review",
+                    textoBoton = stringResource(R.string.publicar_rese_a),
                     onClick = { viewModel.createReview() },
                     modifier = Modifier.fillMaxWidth()
                 )
             }
 
             state.error?.let {
-                Spacer(modifier = Modifier.height(8.dp))
-                Text(text = it, color = Color.Red)
+                Spacer(modifier = Modifier.height(12.dp))
+                Text(text = it, color = Color.Red, fontSize = 14.sp)
             }
         }
     }

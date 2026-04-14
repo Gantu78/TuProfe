@@ -33,6 +33,7 @@ import com.example.tuprofe.data.Profesor
 import com.example.tuprofe.data.local.LocalProfesor
 import com.example.tuprofe.data.local.LocalReview
 import com.example.tuprofe.ui.Main.ResenaCard
+import com.example.tuprofe.ui.PerfilAjeno.UserProfileState
 import com.example.tuprofe.ui.utils.BackgroundImage
 import com.example.tuprofe.ui.utils.RatingStars
 
@@ -43,6 +44,7 @@ fun ProfeScreen(
     profesor: Profesor,
     onResenaClick: (String) -> Unit,
     onProfileClick: (Profesor) -> Unit,
+    onUserClick: (String) -> Unit,
     modifier: Modifier = Modifier
 ) {
     val uiState by profeViewModel.uiState.collectAsState()
@@ -50,6 +52,7 @@ fun ProfeScreen(
         uiState = uiState,
         onResenaClick = onResenaClick,
         onProfileClick = onProfileClick,
+        onUserClick = onUserClick,
         onAddCommentClick = { Log.d("Boton", "Añadir Comentario") },
         onRateClick = { Log.d("Boton", "Calificar") },
         modifier = modifier
@@ -62,6 +65,7 @@ fun ProfeContent(
     uiState: ProfeState,
     onResenaClick: (String) -> Unit,
     onProfileClick: (Profesor) -> Unit,
+    onUserClick: (String) -> Unit,
     onAddCommentClick: () -> Unit,
     onRateClick: () -> Unit,
     modifier: Modifier = Modifier
@@ -90,7 +94,8 @@ fun ProfeContent(
                     ResenaCard(
                         reviewInfo = review,
                         onCommentsClick = onResenaClick,
-                        onProfileClick = { onProfileClick(review.profesor) }
+                        onProfileClick = { onProfileClick(review.profesor) },
+                        onUserClick = { onUserClick(review.usuario.usuarioId) }
                     )
                     Spacer(modifier = Modifier.height(16.dp))
                 }
@@ -216,6 +221,7 @@ private fun ProfeContentPreview() {
         ),
         onResenaClick = {},
         onProfileClick = {},
+        onUserClick = {},
         onAddCommentClick = {},
         onRateClick = {}
     )

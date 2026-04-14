@@ -118,7 +118,8 @@ private fun ReviewCard(
         Column {
             Resena(
                 reviewInfo = review,
-                onProfileClick = onProfileClick
+                onProfileClick = onProfileClick,
+                onUserClick ={}
             )
             HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant)
             ReviewActionBar(
@@ -188,7 +189,8 @@ private fun CommentCard(
         Resena(
             reviewInfo = respuesta,
             modifier = Modifier.padding(vertical = 8.dp),
-            onProfileClick = onProfileClick
+            onProfileClick = { },
+            onUserClick = {}
         )
     }
 }

@@ -13,5 +13,5 @@ interface ResenaRemoteDataSource  {
 
     suspend fun updateReview(id: String, review: CreateReviewDto): Unit
 
-    suspend fun getUserReviews(userId: Int): List<ResenaDto>
+    suspend fun getUserReviews(userId: String): List<ResenaDto>
 }

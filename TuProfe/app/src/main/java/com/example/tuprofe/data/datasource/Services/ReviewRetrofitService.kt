@@ -3,6 +3,7 @@ package com.example.tuprofe.data.datasource.Services
 import com.example.tuprofe.data.dtos.CreateReviewDto
 import com.example.tuprofe.data.dtos.ProfessorDto
 import com.example.tuprofe.data.dtos.ResenaDto
+import com.example.tuprofe.data.dtos.UsuarioDto
 import retrofit2.http.Body
 import retrofit2.http.DELETE
 import retrofit2.http.GET
@@ -16,14 +17,13 @@ interface ReviewRetrofitService {
     suspend fun getAllReviews(): List<ResenaDto>
 
     @POST("reviews")
-    suspend fun createReview(@Body   Review: CreateReviewDto ) : Unit
+    suspend fun createReview(@Body review: CreateReviewDto): Unit
 
-
-    @DELETE ("reviews/{id}")
-    suspend fun deleteReview(@Path("id") id:Int):Unit
+    @DELETE("reviews/{id}")
+    suspend fun deleteReview(@Path("id") id: Int): Unit
 
     @PUT("reviews/{id}")
-    suspend fun updateTweet(@Path("id") id:Int, @Body review: CreateReviewDto): Unit
+    suspend fun updateReview(@Path("id") id: Int, @Body review: CreateReviewDto): Unit
 
     @GET("reviews/{id}")
     suspend fun getReviewById(@Path("id") id: String): ResenaDto
@@ -36,4 +36,7 @@ interface ReviewRetrofitService {
 
     @GET("users/{id}/reviews")
     suspend fun getUserReviews(@Path("id") id: Int): List<ResenaDto>
+
+    @GET("users/{id}")
+    suspend fun getUserById(@Path("id") id: Int): UsuarioDto
 }

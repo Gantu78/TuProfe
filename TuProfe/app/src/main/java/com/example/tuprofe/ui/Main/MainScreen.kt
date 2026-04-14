@@ -27,6 +27,7 @@ fun MainScreen(
     modifier: Modifier = Modifier,
     onResenaClick: (String) -> Unit,
     onProfileClick: (Profesor) -> Unit,
+    onUserClick: (String) -> Unit,
     mainViewModel: MainViewModel
 ) {
     val uiState by mainViewModel.uiState.collectAsState()
@@ -46,20 +47,17 @@ fun MainScreen(
             Box(modifier = modifier.fillMaxSize()) {
                 BackgroundImage()
 
-                if (uiState.isLoading) {
-                    CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
-                } else {
-                    LazyColumn(
-                        modifier = Modifier.fillMaxSize(),
-                        contentPadding = PaddingValues(top = 10.dp, bottom = 0.dp)
-                    ) {
-                        items(uiState.reviews) { review ->
-                            ResenaCard(
-                                reviewInfo = review,
-                                onCommentsClick = { onResenaClick(review.reviewId) },
-                                onProfileClick = { onProfileClick(review.profesor) }
-                            )
-                        }
+                LazyColumn(
+                    modifier = Modifier.fillMaxSize(),
+                    contentPadding = PaddingValues(top = 10.dp, bottom = 0.dp)
+                ) {
+                    items(uiState.reviews) { review ->
+                        ResenaCard(
+                            reviewInfo = review,
+                            onCommentsClick = { onResenaClick(review.reviewId) },
+                            onProfileClick = { onProfileClick(review.profesor) },
+                            onUserClick = { onUserClick(review.usuario.usuarioId) }
+                        )
                     }
                 }
             }
@@ -73,7 +71,8 @@ fun ResenaCard(
     reviewInfo: ReviewInfo,
     modifier: Modifier = Modifier,
     onCommentsClick: (String) -> Unit,
-    onProfileClick: () -> Unit
+    onProfileClick: () -> Unit,
+    onUserClick: () -> Unit
 ) {
     Card(
         modifier = modifier
@@ -92,7 +91,8 @@ fun ResenaCard(
     ) {
         Resena(
             reviewInfo = reviewInfo,
-            onProfileClick = onProfileClick
+            onProfileClick = onProfileClick,
+            onUserClick = onUserClick
         )
     }
 }
@@ -103,7 +103,8 @@ fun ResenaCardPreview() {
     ResenaCard(
         reviewInfo = LocalReview.Reviews[0],
         onCommentsClick = {},
-        onProfileClick = {}
+        onProfileClick = {},
+        onUserClick = {}
     )
 }
 
@@ -113,6 +114,7 @@ fun MainScreenPreview() {
     MainScreen(
         onResenaClick = {},
         onProfileClick = {},
+        onUserClick = {},
         mainViewModel = viewModel()
     )
 }

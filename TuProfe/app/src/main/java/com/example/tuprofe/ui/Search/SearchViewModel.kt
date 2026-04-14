@@ -3,8 +3,7 @@ package com.example.tuprofe.ui.Search
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.tuprofe.data.Profesor
-import com.example.tuprofe.data.datasource.Services.ReviewRetrofitService
-import com.example.tuprofe.data.dtos.toProfesor
+import com.example.tuprofe.data.repository.ProfessorRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -15,7 +14,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class SearchViewModel @Inject constructor(
-    private val service: ReviewRetrofitService
+    private val professorRepository: ProfessorRepository
 ): ViewModel() {
 
     private val _uiState = MutableStateFlow(SearchState())
@@ -30,16 +29,14 @@ class SearchViewModel @Inject constructor(
     private fun cargarTodosLosProfesores() {
         _uiState.update { it.copy(isLoading = true) }
         viewModelScope.launch {
-            try {
-                // Usando el endpoint /professors del backend
-                val professorsDto = service.getAllProfessors()
-                allProfessors = professorsDto.map { it.toProfesor() }
-
+            val result = professorRepository.getProfessors()
+            result.onSuccess { list ->
+                allProfessors = list
                 _uiState.update { it.copy(
                     searchResults = allProfessors,
                     isLoading = false
                 ) }
-            } catch (e: Exception) {
+            }.onFailure {
                 _uiState.update { it.copy(isLoading = false) }
             }
         }
@@ -58,10 +55,6 @@ class SearchViewModel @Inject constructor(
             searchQuery = newQuery,
             searchResults = results
         ) }
-    }
-
-    fun onProfileClick(profeId: Int) {
-        _uiState.update { it.copy(navigateToProfileId = profeId) }
     }
 
     fun onNavigationHandled() {

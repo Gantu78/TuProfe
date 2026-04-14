@@ -1,10 +1,17 @@
 package com.example.tuprofe.ui.Review
 
+import com.example.tuprofe.data.Profesor
+
 data class CreateReviewState(
     val reviewText: String = "",
-    val professorId: String = "",
+    val professorQuery: String = "",
+    val professors: List<Profesor> = emptyList(),
+    val filteredProfessors: List<Profesor> = emptyList(),
+    val selectedProfessor: Profesor? = null,
     val rating: Int = 0,
     val isLoading: Boolean = false,
+    val isSearchingProfessors: Boolean = false,
     val success: Boolean = false,
-    val error: String? = null
+    val error: String? = null,
+    val isDropdownExpanded: Boolean = false
 )

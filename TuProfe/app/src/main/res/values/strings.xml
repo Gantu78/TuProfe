@@ -58,4 +58,10 @@
     <string name="eliminar">Eliminar</string>
     <string name="guardar">Guardar</string>
     <string name="deseas_guardar_los_cambios">¿Deseas guardar los cambios?</string>
+    <string name="editar_rese_a">Editar Reseña</string>
+    <string name="calificaci_n">Calificación</string>
+    <string name="tu_opini_n_sobre_el_profesor">Tu opinión sobre el profesor</string>
+    <string name="crear_rese_a">Crear Reseña</string>
+    <string name="buscar_profesor">Buscar Profesor</string>
+    <string name="publicar_rese_a">Publicar Reseña</string>
 </resources>
