@@ -17,6 +17,7 @@ data class ResenaDto(
     val updatedAt: String? = null,
     val professor: ProfessorNameDto? = null,
     val user: UserDto? = null
+
 )
 
 data class ProfessorNameDto(
