@@ -20,11 +20,9 @@ class MainViewModel @Inject constructor(
     private val _uiState = MutableStateFlow(MainState())
     val uiState: StateFlow<MainState> = _uiState.asStateFlow()
 
-    init {
-        obtenerResenas()
-    }
 
-    private fun obtenerResenas() {
+
+     fun fetchReviews() {
         _uiState.update { it.copy(isLoading = true) }
         viewModelScope.launch {
             Log.d("MainViewModel", "Iniciando obtención de reseñas...")

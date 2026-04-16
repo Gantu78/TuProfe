@@ -1,9 +1,23 @@
 package com.example.tuprofe.data.dtos
 
+data class CreateReviewUserDto(
+    val username: String? = null
+)
+
+data class CreateReviewProfessorDto(
+    val name: String? = null,
+    val department: String? = null,
+    val fotoProf: String? = null
+)
 data class CreateReviewDto(
-    val userId: Int? = null,
-    val professorId: Int? = null,
+    var userId: String? = null,
+    val professorId: String? = null,
     val content: String? = null,
     val rating: Int? = null,
-    val time: String? = null
+    val time: String? = null,
+
+    var user: CreateReviewUserDto? = null,
+    val professor: CreateReviewProfessorDto? = null
 )
+
+

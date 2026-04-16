@@ -1,7 +1,9 @@
 package com.example.tuprofe.ui.Review
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.tuprofe.data.repository.AuthRepository
 import com.example.tuprofe.data.repository.ProfessorRepository
 import com.example.tuprofe.data.repository.ReviewRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -15,7 +17,8 @@ import javax.inject.Inject
 @HiltViewModel
 class CreateReviewViewModel @Inject constructor(
     private val reviewRepository: ReviewRepository,
-    private val professorRepository: ProfessorRepository
+    private val professorRepository: ProfessorRepository,
+    private val authRepository: AuthRepository
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(CreateReviewState())
@@ -92,14 +95,19 @@ class CreateReviewViewModel @Inject constructor(
 
         _uiState.update { it.copy(isLoading = true, error = null) }
 
+        val userId = authRepository.currentUser?.uid ?:return
+
+
         viewModelScope.launch {
             // Hardcoded userId "1"
             val result = reviewRepository.createReview(
-                userId = "1",
+                userId = userId,
                 professorId = professorId,
                 content = currentState.reviewText,
                 rating = currentState.rating
             )
+
+            Log.i("DATOS","$userId")
 
             if (result.isSuccess) {
                 _uiState.update { it.copy(isLoading = false, success = true) }

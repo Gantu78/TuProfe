@@ -87,7 +87,7 @@ dependencies {
     implementation("com.squareup.okhttp3:logging-interceptor:4.12.0")
 
     //firestore
-    implementation("com.google.firebase:firebase-firestore")
+    implementation("com.google.firebase:firebase-firestore:26.2.0")
 
     implementation(libs.androidx.compose.runtime)
     testImplementation(libs.junit)

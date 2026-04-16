@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.tuprofe.data.repository.AuthRepository
 import com.example.tuprofe.data.repository.StorageRepository
+import com.example.tuprofe.data.repository.UserRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -16,7 +17,8 @@ import javax.inject.Inject
 @HiltViewModel
 class ConfigPerfilViewModel @Inject constructor(
     private val authRepository: AuthRepository,
-    private val storageRepository: StorageRepository
+    private val storageRepository: StorageRepository,
+    private val userRepository: UserRepository
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(
@@ -26,6 +28,36 @@ class ConfigPerfilViewModel @Inject constructor(
         )
     )
     val uiState: StateFlow<ConfigPerfilState> = _uiState.asStateFlow()
+
+    init {
+        loadUserProfile()
+    }
+
+    private fun loadUserProfile() {
+        val userId = authRepository.currentUser?.uid
+        if (userId != null) {
+            viewModelScope.launch {
+                _uiState.update { it.copy(isLoading = true) }
+                val result = userRepository.getUserById(userId)
+                result.onSuccess { usuario ->
+                    _uiState.update {
+                        it.copy(
+                            username = usuario.nombreUsu,
+                            carrera = usuario.carrera,
+                            isLoading = false
+                        )
+                    }
+                }.onFailure { error ->
+                    _uiState.update {
+                        it.copy(
+                            isLoading = false,
+                            errorMessage = error.message
+                        )
+                    }
+                }
+            }
+        }
+    }
 
     fun setEmail(newEmail: String) {
         _uiState.update { it.copy(email = newEmail) }
@@ -101,27 +133,24 @@ class ConfigPerfilViewModel @Inject constructor(
         _uiState.update { it.copy(errorMessage = null) }
     }
 
-    fun uploadImageToFirebase(Imagen: Uri){
+    fun uploadImageToFirebase(imagen: Uri){
         viewModelScope.launch {
-           val result = storageRepository.uploadProfileImage(Imagen)
-            result.onSuccess {
+           val result = storageRepository.uploadProfileImage(imagen)
+            result.onSuccess { imageUrl ->
                 _uiState.update {
                     it.copy(
-                        profileImage = result.getOrNull()
+                        profileImage = imageUrl
                     )
                 }
             }
-            result.onFailure {
+            result.onFailure { error ->
                 _uiState.update {
                     it.copy(
-                        errorMessage = it.errorMessage
+                        errorMessage = error.message
                     )
                 }
             }
 
         }
     }
-
-
-
 }

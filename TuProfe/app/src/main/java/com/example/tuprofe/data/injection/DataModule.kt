@@ -1,12 +1,11 @@
 package com.example.tuprofe.data.injection
 
 import com.example.tuprofe.data.datasource.ProfessorRemoteDataSource
-import com.example.tuprofe.data.datasource.ResenaRemoteDataSource
+import com.example.tuprofe.data.datasource.ReviewRemoteDataSource
 import com.example.tuprofe.data.datasource.UsuarioRemoteDataSource
 import com.example.tuprofe.data.datasource.impl.firestore.UserFirestoreDataSourceImpl
 import com.example.tuprofe.data.datasource.impl.retrofit.ProfessorRemoteDataSourceImpl
 import com.example.tuprofe.data.datasource.impl.retrofit.ReviewRetrofitDataSourceImpl
-import com.example.tuprofe.data.datasource.impl.retrofit.UsuarioRemoteDataSourceImpl
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -21,7 +20,7 @@ abstract class DataModule {
     @Singleton
     abstract fun bindResenaRemoteDataSource(
         resenaRemoteDataSourceImpl: ReviewRetrofitDataSourceImpl
-    ): ResenaRemoteDataSource
+    ): ReviewRemoteDataSource
 
     @Binds
     @Singleton

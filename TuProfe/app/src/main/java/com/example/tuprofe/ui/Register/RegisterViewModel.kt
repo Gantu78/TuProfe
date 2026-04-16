@@ -87,13 +87,12 @@ class RegisterViewModel @Inject constructor(
 
             if (result.isSuccess) {
                 val userId = authRepository.currentUser?.uid ?: throw Exception("No se pudo obtener el usuario actual")
-                Log.e("Email","${currentState.email}")
-                Log.e("Email","${currentState.usuario}")
-                Log.e("Email","${currentState.carrera}")
-                Log.e("Email","${userId}")
+
+                Log.i("Email","${currentState.usuario}")
+                Log.i("Email","${currentState.carrera}")
+                Log.i("Email","${userId}")
 
                 val firestoreResult = userRepository.registerUser(
-                    email = currentState.email,
                     username = currentState.usuario,
                     carrera = currentState.carrera,
                     userId = userId

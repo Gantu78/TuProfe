@@ -5,13 +5,14 @@ import com.example.tuprofe.data.datasource.ProfessorRemoteDataSource
 import com.example.tuprofe.data.datasource.Services.ReviewRetrofitService
 import com.example.tuprofe.data.datasource.UsuarioRemoteDataSource
 import com.example.tuprofe.data.datasource.impl.firestore.UserFirestoreDataSourceImpl
+import com.example.tuprofe.data.datasource.impl.retrofit.UsuarioRemoteDataSourceImpl
 import com.example.tuprofe.data.dtos.RegisterUserDto
 import com.example.tuprofe.data.dtos.toUsuario
 import javax.inject.Inject
 import kotlin.math.log
 
 class UserRepository @Inject constructor(
-    private val userRemoteDataSource: UsuarioRemoteDataSource
+    private val userRemoteDataSource: UserFirestoreDataSourceImpl
 ) {
     suspend fun getUserById(userId: String): Result<Usuario> {
         return try {
@@ -22,10 +23,10 @@ class UserRepository @Inject constructor(
         }
     }
 
-    suspend fun registerUser(email: String, username: String, carrera: String, userId: String): Result<Unit> {
+    suspend fun registerUser(username: String, carrera: String, userId: String): Result<Unit> {
         return try {
             val registerUserDto = RegisterUserDto(
-                email = email,
+                id= userId,
                 username = username,
                 carrera = carrera
             )

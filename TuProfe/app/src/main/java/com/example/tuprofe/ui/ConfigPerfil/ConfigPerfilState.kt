@@ -7,8 +7,8 @@ import androidx.compose.runtime.setValue
 
 data class ConfigPerfilState(
     val email: String = "",
-    val username: String = "Gantu20",
-    val carrera: String = "Ingenieria Industrial",
+    val username: String = "",
+    val carrera: String = "",
     val password: String = "",
     val profileImage: String? = null,
     val mostrarPassword: Boolean = false,

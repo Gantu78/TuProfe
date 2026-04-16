@@ -40,6 +40,8 @@ import com.example.tuprofe.navegation.NavigationLogic
 import com.example.tuprofe.navegation.TuProfeBottomBar
 import com.example.tuprofe.ui.utils.BackgroundImage
 import com.example.tuprofe.ui.theme.Montserrat
+import com.google.firebase.Firebase
+import com.google.firebase.auth.FirebaseAuth
 
 
 @Composable
@@ -51,6 +53,10 @@ fun TuProfeApp(
 
     val currentBackStackEntry = navController.currentBackStackEntryAsState()
     val currentRoute = currentBackStackEntry.value?.destination?.route
+    val currentUser = FirebaseAuth.getInstance().currentUser
+
+
+
 
     Box(modifier = Modifier.fillMaxSize()) {
         BackgroundImage()
