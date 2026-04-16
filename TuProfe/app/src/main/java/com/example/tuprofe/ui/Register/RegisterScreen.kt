@@ -7,8 +7,11 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -32,6 +35,7 @@ import com.example.tuprofe.ui.utils.BackgroundImage
 import com.example.tuprofe.ui.utils.LogoApp
 import com.example.tuprofe.ui.utils.TextFieldApp
 import com.example.tuprofe.ui.utils.TextFieldContraApp
+import kotlinx.coroutines.delay
 
 @Composable
 fun RegisterScreen(
@@ -76,9 +80,13 @@ fun RegisterScreen(
 
             )
             if (state.mostrarMensajeError) {
-                Text(state.errorMessage, color = Color.Red)
+                Text(state.errorMessage, color = Color.Red, modifier = Modifier.padding(8.dp))
             } else if(state.mostrarMensaje){
-                Text(stringResource(R.string.su_cuenta_ha_sido_creada_con_exito), color = Color.Green)
+                Text(
+                    stringResource(R.string.su_cuenta_ha_sido_creada_con_exito), 
+                    color = Color.Green,
+                    modifier = Modifier.padding(8.dp)
+                )
             }
 
             Spacer(modifier = Modifier.padding(15.dp))

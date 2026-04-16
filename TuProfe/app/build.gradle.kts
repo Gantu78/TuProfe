@@ -86,6 +86,8 @@ dependencies {
     implementation("com.squareup.retrofit2:converter-gson:2.9.0")
     implementation("com.squareup.okhttp3:logging-interceptor:4.12.0")
 
+    //firestore
+    implementation("com.google.firebase:firebase-firestore")
 
     implementation(libs.androidx.compose.runtime)
     testImplementation(libs.junit)

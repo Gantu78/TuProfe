@@ -7,17 +7,20 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.tuprofe.data.repository.AuthRepository
+import com.example.tuprofe.data.repository.UserRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
+import android.util.Log
 
 
 @HiltViewModel
 class RegisterViewModel @Inject constructor(
-    private val authRepository: AuthRepository
+    private val authRepository: AuthRepository,
+    private val userRepository: UserRepository
 ): ViewModel() {
 
     private val _uiState = MutableStateFlow(RegisterState())
@@ -47,15 +50,14 @@ class RegisterViewModel @Inject constructor(
         _uiState.update { it.copy(passwordVisible = !_uiState.value.passwordVisible) }
     }
 
-
     fun onRegisterClickSecure() {
-
+         val currentState = _uiState.value
         if (
-            _uiState.value.password1.isBlank() ||
-            _uiState.value.password2.isBlank() ||
-            _uiState.value.email.isBlank() ||
-            _uiState.value.usuario.isBlank() ||
-            _uiState.value.carrera.isBlank()
+            currentState.password1.isBlank() ||
+            currentState.password2.isBlank() ||
+            currentState.email.isBlank() ||
+            currentState.usuario.isBlank() ||
+            currentState.carrera.isBlank()
         ) {
             _uiState.update {
                 it.copy(
@@ -66,7 +68,7 @@ class RegisterViewModel @Inject constructor(
             return
         }
 
-        if (_uiState.value.password1 != _uiState.value.password2) {
+        if (currentState.password1 != currentState.password2) {
             _uiState.update {
                 it.copy(
                     mostrarMensajeError = true,
@@ -76,20 +78,45 @@ class RegisterViewModel @Inject constructor(
             return
         }
 
-        viewModelScope.launch { 
+        viewModelScope.launch {
 
             val result = authRepository.signUp(
-                _uiState.value.email,
-                _uiState.value.password1
+                currentState.email,
+                currentState.password1
             )
 
             if (result.isSuccess) {
-                _uiState.update {
-                    it.copy(
-                        mostrarMensajeError = false,
-                        mostrarMensaje = true,
-                        navigateHome = true
-                    )
+                val userId = authRepository.currentUser?.uid ?: throw Exception("No se pudo obtener el usuario actual")
+                Log.e("Email","${currentState.email}")
+                Log.e("Email","${currentState.usuario}")
+                Log.e("Email","${currentState.carrera}")
+                Log.e("Email","${userId}")
+
+                val firestoreResult = userRepository.registerUser(
+                    email = currentState.email,
+                    username = currentState.usuario,
+                    carrera = currentState.carrera,
+                    userId = userId
+                )
+
+                if (firestoreResult.isSuccess) {
+                    _uiState.update {
+                        it.copy(
+                            mostrarMensajeError = false,
+                            mostrarMensaje = true,
+                            navigateHome = true
+                        )
+                    }
+                } else {
+                    val errorMessage =
+                        firestoreResult.exceptionOrNull()?.message ?: "Error al guardar el perfil"
+                    Log.e("RegisterViewModel", "Firestore Error: $errorMessage") // Add this line
+                    _uiState.update {
+                        it.copy(
+                            mostrarMensajeError = true,
+                            errorMessage = errorMessage
+                        )
+                    }
                 }
             } else {
                 val errorMessage =
@@ -104,5 +131,8 @@ class RegisterViewModel @Inject constructor(
             }
         }
     }
-}
 
+    fun onNavigationHandled() {
+        _uiState.update { it.copy(navigateHome = false) }
+    }
+}

@@ -17,16 +17,16 @@ import javax.inject.Singleton
 @InstallIn(SingletonComponent::class)
 object FireBaseHiltModule {
 
-    @Provides
     @Singleton
-    fun provideFirebaseAuth(): FirebaseAuth = Firebase.auth
+    @Provides
+    fun Auth(): FirebaseAuth = Firebase.auth
 
-    @Provides
     @Singleton
-    fun provideFirebaseFirestore(): FirebaseFirestore = Firebase.firestore
+    @Provides
+    fun Firestore(): FirebaseFirestore = Firebase.firestore
 
-    @Provides
     @Singleton
-    fun provideFirebaseStorage(): FirebaseStorage = Firebase.storage
+    @Provides
+    fun Storage(): FirebaseStorage = Firebase.storage
 
 }

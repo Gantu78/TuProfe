@@ -1,4 +1,4 @@
-package com.example.tuprofe.data.datasource.impl
+package com.example.tuprofe.data.datasource.impl.retrofit
 
 import com.example.tuprofe.data.datasource.ProfessorRemoteDataSource
 import com.example.tuprofe.data.datasource.Services.ReviewRetrofitService
