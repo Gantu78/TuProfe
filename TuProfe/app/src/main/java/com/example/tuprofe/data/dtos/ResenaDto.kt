@@ -17,7 +17,6 @@ data class ResenaDto(
     val updatedAt: String? = null,
     val professor: ProfessorNameDto? = null,
     val user: UserDto? = null
-
 )
 
 data class ProfessorNameDto(
@@ -25,17 +24,15 @@ data class ProfessorNameDto(
     val foto: String? = null
 )
 
-
-
 fun ResenaDto.toReviewInfo(): ReviewInfo {
     return ReviewInfo(
         reviewId = id?.toString() ?: "",
-        usuario = Usuario(
+        usuario = user?.toUsuario() ?: Usuario(
             usuarioId = userId?.toString() ?: "0",
-            nombreUsu = user?.username ?: user?.name ?: "Usuario $userId",
-            email = user?.email ?: "",
-            carrera = user?.carrera ?: "",
-            imageprofeUrl = user?.foto
+            nombreUsu = "Usuario $userId",
+            email = "",
+            carrera = "",
+            imageprofeUrl = null
         ),
         profesor = Profesor(
             profeId = professorId?.toString() ?: "0",

@@ -3,7 +3,7 @@ package com.example.tuprofe.data.datasource.Services
 import com.example.tuprofe.data.dtos.CreateReviewDto
 import com.example.tuprofe.data.dtos.ProfessorDto
 import com.example.tuprofe.data.dtos.ResenaDto
-import com.example.tuprofe.data.dtos.UsuarioDto
+import com.example.tuprofe.data.dtos.UserDto
 import retrofit2.http.Body
 import retrofit2.http.DELETE
 import retrofit2.http.GET
@@ -38,5 +38,5 @@ interface ReviewRetrofitService {
     suspend fun getUserReviews(@Path("id") id: Int): List<ResenaDto>
 
     @GET("users/{id}")
-    suspend fun getUserById(@Path("id") id: Int): UsuarioDto
+    suspend fun getUserById(@Path("id") id: Int): UserDto
 }
