@@ -7,6 +7,9 @@ import com.example.tuprofe.data.datasource.ReviewRemoteDataSource
 import com.example.tuprofe.data.datasource.impl.firestore.ProfessorFirestoreDataSourceImpl
 import com.example.tuprofe.data.datasource.impl.firestore.ReviewFirestoreDataSourceImpl
 import com.example.tuprofe.data.datasource.impl.firestore.UserFirestoreDataSourceImpl
+import com.example.tuprofe.data.datasource.impl.retrofit.ProfessorRemoteDataSourceImpl
+import com.example.tuprofe.data.datasource.impl.retrofit.ReviewRetrofitDataSourceImpl
+import com.example.tuprofe.data.datasource.impl.retrofit.UsuarioRemoteDataSourceImpl
 import com.example.tuprofe.data.dtos.CreateReviewDto
 import com.example.tuprofe.data.dtos.CreateReviewProfessorDto
 import com.example.tuprofe.data.dtos.CreateReviewUserDto
@@ -23,9 +26,7 @@ import kotlin.String
 class ReviewRepository @Inject constructor(
     private val reviewRemoteDataSource: ReviewFirestoreDataSourceImpl,
     private val userRemoteDataSource: UserFirestoreDataSourceImpl,
-    private val  authRemoteDataSource: AuthRemoteDataSource,
-    private val professorRemoteDataSource: ProfessorFirestoreDataSourceImpl,
-    private val User: UserRepository
+    private val professorRemoteDataSource: ProfessorFirestoreDataSourceImpl
 ){
 
     suspend fun getReviews(): Result<List<ReviewInfo>> {

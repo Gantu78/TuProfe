@@ -41,12 +41,13 @@ import com.example.tuprofe.ui.utils.RatingStars
 @Composable
 fun ProfeScreen(
     profeViewModel: ProfeViewModel,
-    profesor: Profesor,
+    profeId: String = "",
     onResenaClick: (String) -> Unit,
     onProfileClick: (Profesor) -> Unit,
     onUserClick: (String) -> Unit,
     modifier: Modifier = Modifier
 ) {
+
     val uiState by profeViewModel.uiState.collectAsState()
     ProfeContent(
         uiState = uiState,
@@ -74,9 +75,12 @@ fun ProfeContent(
         BackgroundImage()
 
         when {
-            uiState.isLoading -> CircularProgressIndicator(
-                modifier = Modifier.align(Alignment.Center)
-            )
+            uiState.isLoading -> Box(
+                modifier = Modifier.fillMaxSize(),
+                contentAlignment = Alignment.Center
+            ) {
+                CircularProgressIndicator(color = colorResource(R.color.verdetp))
+            }
 
             uiState.profesor != null -> LazyColumn(
                 modifier = Modifier.fillMaxSize(),

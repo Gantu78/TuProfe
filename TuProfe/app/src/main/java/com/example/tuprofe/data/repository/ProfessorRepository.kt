@@ -4,6 +4,7 @@ import android.util.Log
 import com.example.tuprofe.data.Profesor
 import com.example.tuprofe.data.datasource.ProfessorRemoteDataSource
 import com.example.tuprofe.data.datasource.impl.firestore.ProfessorFirestoreDataSourceImpl
+import com.example.tuprofe.data.datasource.impl.retrofit.ProfessorRemoteDataSourceImpl
 import com.example.tuprofe.data.dtos.toProfesor
 import javax.inject.Inject
 
