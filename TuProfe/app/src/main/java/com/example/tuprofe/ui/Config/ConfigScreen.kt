@@ -23,6 +23,7 @@ import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.material.icons.filled.ThumbsUpDown
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -56,65 +57,74 @@ fun ConfigScreen(
 
        val state by configViewModel.uiState.collectAsState()
 
+
+
     LaunchedEffect(Unit) {
         configViewModel.loadUserProfile()
     }
 
-        Box(
-            modifier = modifier
-                .fillMaxSize()
-        ) {
-
-            BackgroundImage()
-
-            LazyColumn(
-                modifier = Modifier
+    when {
+        state.isLoading -> {
+            Box(modifier = modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                CircularProgressIndicator()
+            }
+        }
+        else -> {
+            Box(
+                modifier = modifier
                     .fillMaxSize()
-                    .padding(horizontal = 30.dp),
-                contentPadding = PaddingValues(
-                    bottom = 120.dp
-                )
             ) {
 
-                item {
-                    ProfileHeaderCard(
-                        username = state.username,
-                        email = state.email,
-                        carrera = state.carrera,
-                        imageUrl = state.profileImageUrl,
-                        onProfileClick = onProfileClick,
-                        showStar = false
+                BackgroundImage()
+
+                LazyColumn(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(horizontal = 30.dp),
+                    contentPadding = PaddingValues(
+                        bottom = 120.dp
                     )
+                ) {
+
+                    item {
+                        ProfileHeaderCard(
+                            username = state.username,
+                            email = state.email,
+                            carrera = state.carrera,
+                            imageUrl = state.profileImageUrl,
+                            onProfileClick = onProfileClick,
+                            showStar = false
+                        )
+                    }
+
+                    item { Spacer(modifier = Modifier.height(20.dp)) }
+
+                    item {
+                        ConfigBody(
+                            onCalifClick = onCalifClick,
+                            onAyudaClick = {configViewModel.onAyudaClick()},
+                            onPrivacidadClick = {configViewModel.onPrivacidadClick()},
+                            onNotisClick = {configViewModel.onNotificacionesClick()},
+                            modifier = Modifier
+                        )
+                    }
+
+                    item { Spacer(modifier = Modifier.height(20.dp)) }
+
+                    item {
+                        AppButton(
+                            textoBoton = stringResource(R.string.cerrar_sesi_n),
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(horizontal = 30.dp),
+                            onClick = onLogoutClick
+                        )
+                    }
                 }
-
-                item { Spacer(modifier = Modifier.height(20.dp)) }
-
-                item {
-                    ConfigBody(
-                        onCalifClick = onCalifClick,
-                        onAyudaClick = {configViewModel.onAyudaClick()},
-                        onPrivacidadClick = {configViewModel.onPrivacidadClick()},
-                        onNotisClick = {configViewModel.onNotificacionesClick()},
-                        modifier = Modifier
-                    )
-                }
-
-                item { Spacer(modifier = Modifier.height(20.dp)) }
-
-                item {
-                    AppButton(
-                        textoBoton = stringResource(R.string.cerrar_sesi_n),
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(horizontal = 30.dp),
-                        onClick = onLogoutClick
-                    )
-                }
-
-
             }
         }
     }
+}
 
 @Composable
 fun ConfigBody(
