@@ -105,12 +105,26 @@ class ConfigPerfilViewModel @Inject constructor(
     }
 
     fun onGuardarCambiosClick() {
-        _uiState.update {
-            it.copy(
-                navigate = true,
-                showSaveDialog = false
+        val userId = authRepository.currentUser?.uid ?: return
+        viewModelScope.launch {
+            val current = _uiState.value
+            _uiState.update { it.copy(isLoading = true, errorMessage = null, showSaveDialog = false) }
+            val result = userRepository.updateUser(
+                userId = userId,
+                username = current.username,
+                email = current.email,
+                carrera = current.carrera
             )
+            result.onSuccess {
+                _uiState.update { it.copy(isLoading = false, saveSuccess = true) }
+            }.onFailure { error ->
+                _uiState.update { it.copy(isLoading = false, errorMessage = error.message) }
+            }
         }
+    }
+
+    fun onSaveSuccessDone() {
+        _uiState.update { it.copy(saveSuccess = false) }
     }
 
     fun toggleShowDelete() {
@@ -134,23 +148,16 @@ class ConfigPerfilViewModel @Inject constructor(
     }
 
     fun uploadImageToFirebase(imagen: Uri){
+        val userId = authRepository.currentUser?.uid ?: return
         viewModelScope.launch {
-           val result = storageRepository.uploadProfileImage(imagen)
+            val result = storageRepository.uploadProfileImage(imagen)
             result.onSuccess { imageUrl ->
-                _uiState.update {
-                    it.copy(
-                        profileImage = imageUrl
-                    )
-                }
+                _uiState.update { it.copy(profileImage = imageUrl) }
+                userRepository.updateUserPhoto(userId, imageUrl)
             }
             result.onFailure { error ->
-                _uiState.update {
-                    it.copy(
-                        errorMessage = error.message
-                    )
-                }
+                _uiState.update { it.copy(errorMessage = error.message) }
             }
-
         }
     }
 }

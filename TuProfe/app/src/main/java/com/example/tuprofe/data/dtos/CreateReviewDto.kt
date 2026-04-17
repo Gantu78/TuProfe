@@ -7,7 +7,7 @@ data class CreateReviewUserDto(
 data class CreateReviewProfessorDto(
     val name: String? = null,
     val department: String? = null,
-    val fotoProf: String? = null
+    val foto: String? = null
 )
 data class CreateReviewDto(
     var userId: String? = null,

@@ -14,6 +14,7 @@ data class ConfigPerfilState(
     val mostrarPassword: Boolean = false,
     val isLoading: Boolean = false,
     val navigate: Boolean = false,
+    val saveSuccess: Boolean = false,
     val showDeleteDialog: Boolean = false,
     val showSaveDialog: Boolean = false,
     val errorMessage: String? = null

@@ -47,7 +47,7 @@ class ConfigViewModel @Inject constructor(
         loadUserProfile()
     }
 
-    private fun loadUserProfile() {
+    fun loadUserProfile() {
         val userId = authRepository.currentUser?.uid
         if (userId != null) {
             viewModelScope.launch {

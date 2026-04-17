@@ -22,4 +22,17 @@ class UserFirestoreDataSourceImpl @Inject constructor(
     override suspend fun registerUser(registerUserDto: RegisterUserDto, userID: String) {
         db.collection("users").document(userID).set(registerUserDto).await()
     }
+
+    override suspend fun updateUser(userId: String, username: String, email: String, carrera: String) {
+        val updates = mapOf(
+            "username" to username,
+            "email" to email,
+            "carrera" to carrera
+        )
+        db.collection("users").document(userId).update(updates).await()
+    }
+
+    override suspend fun updateUserPhoto(userId: String, photoUrl: String) {
+        db.collection("users").document(userId).update("foto", photoUrl).await()
+    }
 }

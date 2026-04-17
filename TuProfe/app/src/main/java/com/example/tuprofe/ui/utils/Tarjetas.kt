@@ -306,7 +306,7 @@ fun TuProfeCardBody(
             text = date,
             fontSize = 12.sp,
             lineHeight = 12.sp,
-            color = Color.Gray
+            color = colorResource(R.color.gris)
         )
     }
 }

@@ -79,7 +79,7 @@ class ReviewRepository @Inject constructor(
             val createReviewProfessorDto = CreateReviewProfessorDto(
                 name = prof.name,
                 department = prof.department,
-                fotoProf = prof.foto_prof
+                foto = prof.foto_prof
             )
 
             val sdf = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.US)

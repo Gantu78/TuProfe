@@ -4,6 +4,19 @@ import com.example.tuprofe.data.Profesor
 import com.example.tuprofe.data.ReviewInfo
 import com.example.tuprofe.data.Usuario
 import com.example.tuprofe.data.local.LocalMateria
+import java.text.SimpleDateFormat
+import java.util.Locale
+
+private fun formatReviewDate(raw: String?): String {
+    if (raw.isNullOrEmpty()) return ""
+    return try {
+        val input = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.US)
+        val output = SimpleDateFormat("d 'de' MMMM 'de' yyyy", Locale("es"))
+        output.format(input.parse(raw)!!)
+    } catch (e: Exception) {
+        raw
+    }
+}
 
 data class ReviewDto(
     val id: String? = null,
@@ -54,7 +67,7 @@ fun ReviewDto.toReviewInfo(): ReviewInfo {
         materia = LocalMateria.materias.first(),
         content = content ?: "",
         rating = rating ?: 0,
-        time = time ?: "",
+        time = formatReviewDate(time),
         likes = 0,
         commentsCount = comment ?: 0
     )

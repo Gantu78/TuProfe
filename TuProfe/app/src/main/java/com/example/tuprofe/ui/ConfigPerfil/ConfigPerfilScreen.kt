@@ -29,7 +29,7 @@ import android.net.Uri
 fun ConfigPerfilScreen(
     configPerfilViewModel: ConfigPerfilViewModel,
     onChangePassword: () -> Unit,
-    onGuardarCambiosClick: () -> Unit,
+    onSaveSuccess: () -> Unit,
     onNavigateToLogin: () -> Unit,
     modifier: Modifier = Modifier,
 
@@ -40,6 +40,13 @@ fun ConfigPerfilScreen(
         if (state.navigate) {
             onNavigateToLogin()
             configPerfilViewModel.onNavigationDone()
+        }
+    }
+
+    LaunchedEffect(state.saveSuccess) {
+        if (state.saveSuccess) {
+            configPerfilViewModel.onSaveSuccessDone()
+            onSaveSuccess()
         }
     }
 
@@ -80,10 +87,8 @@ fun ConfigPerfilScreen(
             item {
                 ActionButtons(
                     onCambiarContrasenaClick = onChangePassword,
-                    onGuardarCambiosClick = onGuardarCambiosClick,
-                    onBorrarCuentaClick = {
-                        configPerfilViewModel.toggleShowDelete()
-                    }
+                    onGuardarCambiosClick = { configPerfilViewModel.toggleShowSave() },
+                    onBorrarCuentaClick = { configPerfilViewModel.toggleShowDelete() }
                 )
             }
         }
@@ -382,7 +387,7 @@ fun ConfigPerfilPreview() {
     ConfigPerfilScreen(
         configPerfilViewModel = viewModel(),
         onChangePassword = {},
-        onGuardarCambiosClick = {},
+        onSaveSuccess = {},
         onNavigateToLogin = {}
     )
 }

@@ -14,4 +14,12 @@ class StorageRemoteDataSource @Inject constructor(
         imageRef.putFile(image).await()
         return imageRef.downloadUrl.await().toString()
     }
+
+    suspend fun getProfileImageUrl(userId: String): String? {
+        return try {
+            storage.reference.child("profileImages/$userId.jpg").downloadUrl.await().toString()
+        } catch (e: Exception) {
+            null
+        }
+    }
 }

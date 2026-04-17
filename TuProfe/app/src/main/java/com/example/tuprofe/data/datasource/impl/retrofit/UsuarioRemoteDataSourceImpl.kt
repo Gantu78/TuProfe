@@ -17,4 +17,17 @@ class UsuarioRemoteDataSourceImpl @Inject constructor(
     override suspend fun registerUser(registerUserDto: RegisterUserDto, userID: String) {
         TODO("Not yet implemented")
     }
+
+    override suspend fun updateUser(
+        userId: String,
+        username: String,
+        email: String,
+        carrera: String
+    ) {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun updateUserPhoto(userId: String, photoUrl: String) {
+        TODO("Not yet implemented")
+    }
 }

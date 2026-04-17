@@ -245,7 +245,7 @@ fun AppNavegation(
                 onChangePassword = {
                     navController.navigate(Screen.PasswordReset.route)
                 },
-                onGuardarCambiosClick = {
+                onSaveSuccess = {
                     navController.popBackStack()
                 },
                 onNavigateToLogin = {
