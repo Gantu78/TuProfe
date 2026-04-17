@@ -2,6 +2,7 @@ package com.example.tuprofe.ui.Historia
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.tuprofe.data.repository.AuthRepository
 import com.example.tuprofe.data.repository.ReviewRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -13,7 +14,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class HistorialViewModel @Inject constructor(
-    private val reviewRepository: ReviewRepository
+    private val reviewRepository: ReviewRepository,
+    private val authRepository: AuthRepository
 ): ViewModel() {
     private val _uiState = MutableStateFlow(HistorialState())
     val uiState: StateFlow<HistorialState> = _uiState.asStateFlow()
@@ -24,22 +26,28 @@ class HistorialViewModel @Inject constructor(
 
     fun cargarHistorial() {
         _uiState.update { it.copy(isLoading = true) }
-        
-        viewModelScope.launch {
-            // Hardcoded user ID "1" as String
-            val result = reviewRepository.getUserReviews("1")
-            
-            if (result.isSuccess) {
-                _uiState.update { it.copy(
-                    userReviews = result.getOrNull() ?: emptyList(),
-                    isLoading = false,
-                    errorMessage = null
-                ) }
-            } else {
-                _uiState.update { it.copy(
-                    isLoading = false,
-                    errorMessage = result.exceptionOrNull()?.message
-                ) }
+        val userId = authRepository.currentUser?.uid
+        if (userId != null) {
+            viewModelScope.launch {
+                // Hardcoded user ID "1" as String
+                val result = reviewRepository.getUserReviews(userId)
+
+                if (result.isSuccess) {
+                    _uiState.update {
+                        it.copy(
+                            userReviews = result.getOrNull() ?: emptyList(),
+                            isLoading = false,
+                            errorMessage = null
+                        )
+                    }
+                } else {
+                    _uiState.update {
+                        it.copy(
+                            isLoading = false,
+                            errorMessage = result.exceptionOrNull()?.message
+                        )
+                    }
+                }
             }
         }
     }
