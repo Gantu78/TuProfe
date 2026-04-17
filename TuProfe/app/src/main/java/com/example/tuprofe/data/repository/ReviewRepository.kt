@@ -3,9 +3,7 @@ package com.example.tuprofe.data.repository
 import android.util.Log
 import com.example.tuprofe.data.ReviewInfo
 import com.example.tuprofe.data.datasource.AuthRemoteDataSource
-import com.example.tuprofe.data.datasource.ProfessorRemoteDataSource
 import com.example.tuprofe.data.datasource.ReviewRemoteDataSource
-import com.example.tuprofe.data.datasource.UserRemoteDataSource
 import com.example.tuprofe.data.datasource.impl.firestore.ProfessorFirestoreDataSourceImpl
 import com.example.tuprofe.data.datasource.impl.firestore.ReviewFirestoreDataSourceImpl
 import com.example.tuprofe.data.datasource.impl.firestore.UserFirestoreDataSourceImpl
@@ -26,9 +24,9 @@ import javax.inject.Inject
 import kotlin.String
 
 class ReviewRepository @Inject constructor(
-    private val reviewRemoteDataSource: ReviewRemoteDataSource,
-    private val userRemoteDataSource: UserRemoteDataSource,
-    private val professorRemoteDataSource: ProfessorRemoteDataSource
+    private val reviewRemoteDataSource: ReviewFirestoreDataSourceImpl,
+    private val userRemoteDataSource: UserFirestoreDataSourceImpl,
+    private val professorRemoteDataSource: ProfessorFirestoreDataSourceImpl
 ){
 
     suspend fun getReviews(): Result<List<ReviewInfo>> {

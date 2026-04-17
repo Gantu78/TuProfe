@@ -3,44 +3,34 @@ package com.example.tuprofe.data.injection
 import com.example.tuprofe.data.datasource.ProfessorRemoteDataSource
 import com.example.tuprofe.data.datasource.ReviewRemoteDataSource
 import com.example.tuprofe.data.datasource.UserRemoteDataSource
-import com.example.tuprofe.data.datasource.impl.firestore.ProfessorFirestoreDataSourceImpl
-import com.example.tuprofe.data.datasource.impl.firestore.ReviewFirestoreDataSourceImpl
 import com.example.tuprofe.data.datasource.impl.firestore.UserFirestoreDataSourceImpl
 import com.example.tuprofe.data.datasource.impl.retrofit.ProfessorRemoteDataSourceImpl
 import com.example.tuprofe.data.datasource.impl.retrofit.ReviewRetrofitDataSourceImpl
-import com.example.tuprofe.data.datasource.impl.retrofit.UsuarioRemoteDataSourceImpl
 import dagger.Binds
 import dagger.Module
-import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
-object DataModule {
+abstract class DataModule {
 
+    @Binds
     @Singleton
-    @Provides
-    fun provideReviewDataSource(
-        firestoreImpl: ReviewFirestoreDataSourceImpl,
-        retrofitImpl: ReviewRetrofitDataSourceImpl
-    ): ReviewRemoteDataSource =
-        if (DataSourceConfig.USE_FIRESTORE) firestoreImpl else retrofitImpl
+    abstract fun bindResenaRemoteDataSource(
+        resenaRemoteDataSourceImpl: ReviewRetrofitDataSourceImpl
+    ): ReviewRemoteDataSource
 
+    @Binds
     @Singleton
-    @Provides
-    fun provideProfessorDataSource(
-        firestoreImpl: ProfessorFirestoreDataSourceImpl,
-        retrofitImpl: ProfessorRemoteDataSourceImpl
-    ): ProfessorRemoteDataSource =
-        if (DataSourceConfig.USE_FIRESTORE) firestoreImpl else retrofitImpl
+    abstract fun bindProfessorRemoteDataSource(
+        professorRemoteDataSourceImpl: ProfessorRemoteDataSourceImpl
+    ): ProfessorRemoteDataSource
 
+    @Binds
     @Singleton
-    @Provides
-    fun provideUsuarioDataSource(
-        firestoreImpl: UserFirestoreDataSourceImpl,
-        retrofitImpl: UsuarioRemoteDataSourceImpl
-    ): UserRemoteDataSource =
-        if (DataSourceConfig.USE_FIRESTORE) firestoreImpl else retrofitImpl
+    abstract fun bindUsuarioRemoteDataSource(
+        userFirestoreDataSourceImpl: UserFirestoreDataSourceImpl
+    ): UserRemoteDataSource
 }
