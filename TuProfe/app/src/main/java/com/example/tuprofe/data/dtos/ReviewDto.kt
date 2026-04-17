@@ -27,15 +27,25 @@ data class ProfessorNameDto(
 )
  
 fun ReviewDto.toReviewInfo(): ReviewInfo {
-    return ReviewInfo(
-        reviewId = id ?: "",
-        usuario = user?.toUsuario() ?: Usuario(
-            usuarioId = userId ?: "0",
-            nombreUsu = "Usuario $userId",
+    // El ID real de navegación es el userId (UID de Firebase) del autor.
+    // Si el objeto 'user' anidado no trae ID, usamos el 'userId' del nivel superior del DTO.
+    val authorId = userId ?: user?.id ?: "0"
+    
+    val usuarioModel = if (user != null) {
+        user.toUsuario().copy(usuarioId = authorId)
+    } else {
+        Usuario(
+            usuarioId = authorId,
+            nombreUsu = "Usuario $authorId",
             email = "",
             carrera = "",
             imageprofeUrl = null
-        ),
+        )
+    }
+
+    return ReviewInfo(
+        reviewId = id ?: "",
+        usuario = usuarioModel,
         profesor = Profesor(
             profeId = professorId ?: "0",
             nombreProfe = professor?.name ?: "Profesor #$professorId",
