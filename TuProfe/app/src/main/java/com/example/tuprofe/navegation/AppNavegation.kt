@@ -26,6 +26,7 @@ import androidx.navigation.compose.*
 import androidx.navigation.navArgument
 import com.example.tuprofe.R
 import com.example.tuprofe.data.ReviewInfo
+import com.example.tuprofe.data.datasource.impl.firestore.ProfessorFirestoreDataSourceImpl
 import com.example.tuprofe.data.local.LocalProfesor
 import com.example.tuprofe.ui.Config.ConfigScreen
 import com.example.tuprofe.ui.Config.ConfigViewModel
@@ -175,16 +176,13 @@ fun AppNavegation(
         composable(
             route = Screen.Profe.route,
             arguments = listOf(navArgument("profeId"){ type = NavType.StringType })
+            
         ){
             val profeId = it.arguments?.getString("profeId") ?: ""
-            val profesor = LocalProfesor.profesores.find { it.profeId == profeId }
-
-            if(profesor != null){
-
-                val profeViewModel: ProfeViewModel = hiltViewModel()
+            val profeViewModel: ProfeViewModel = hiltViewModel()
                 ProfeScreen(
                     profeViewModel = profeViewModel,
-                    profesor = profesor,
+                    profeId = profeId,
                     onResenaClick = { reviewId ->
                         navController.navigate(Screen.Detalle.createRoute(reviewId))
                     },
@@ -195,11 +193,7 @@ fun AppNavegation(
                         navController.navigate(Screen.Profile.createRoute(userId))
                     }
                 )
-
-            } else {
-                Text("Profesor no encontrado")
             }
-        }
         composable(route = Screen.Historial.route){
             val historialViewModel: HistorialViewModel = hiltViewModel()
 

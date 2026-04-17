@@ -1,7 +1,7 @@
 package com.example.tuprofe.data.datasource.impl.firestore
 
 import android.util.Log
-import com.example.tuprofe.data.datasource.UsuarioRemoteDataSource
+import com.example.tuprofe.data.datasource.UserRemoteDataSource
 import com.example.tuprofe.data.dtos.RegisterUserDto
 import com.example.tuprofe.data.dtos.UserDto
 import com.google.firebase.firestore.FirebaseFirestore
@@ -10,7 +10,7 @@ import javax.inject.Inject
 
 class UserFirestoreDataSourceImpl @Inject constructor(
     private val db: FirebaseFirestore
-) : UsuarioRemoteDataSource {
+) : UserRemoteDataSource {
 
     override suspend fun getUserById(id: String): UserDto {
         val respuesta = db.collection("users").document(id).get().await()

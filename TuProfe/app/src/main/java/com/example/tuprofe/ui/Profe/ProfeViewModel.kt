@@ -21,12 +21,12 @@ class ProfeViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
+    private val profeId: String = checkNotNull(savedStateHandle["profeId"])
     private val _uiState = MutableStateFlow(ProfeState())
     val uiState: StateFlow<ProfeState> = _uiState.asStateFlow()
 
     init {
-        val idString = savedStateHandle.get<String>("profeId") ?: "0"
-        cargarDatos(idString)
+        cargarDatos(profeId)
     }
 
     private fun cargarDatos(profeId: String) {

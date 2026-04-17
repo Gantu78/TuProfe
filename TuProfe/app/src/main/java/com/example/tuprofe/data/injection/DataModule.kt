@@ -2,7 +2,7 @@ package com.example.tuprofe.data.injection
 
 import com.example.tuprofe.data.datasource.ProfessorRemoteDataSource
 import com.example.tuprofe.data.datasource.ReviewRemoteDataSource
-import com.example.tuprofe.data.datasource.UsuarioRemoteDataSource
+import com.example.tuprofe.data.datasource.UserRemoteDataSource
 import com.example.tuprofe.data.datasource.impl.firestore.UserFirestoreDataSourceImpl
 import com.example.tuprofe.data.datasource.impl.retrofit.ProfessorRemoteDataSourceImpl
 import com.example.tuprofe.data.datasource.impl.retrofit.ReviewRetrofitDataSourceImpl
@@ -32,5 +32,5 @@ abstract class DataModule {
     @Singleton
     abstract fun bindUsuarioRemoteDataSource(
         userFirestoreDataSourceImpl: UserFirestoreDataSourceImpl
-    ): UsuarioRemoteDataSource
+    ): UserRemoteDataSource
 }
