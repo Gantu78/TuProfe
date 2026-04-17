@@ -9,7 +9,7 @@ import com.example.tuprofe.data.dtos.toProfesor
 import javax.inject.Inject
 
 class ProfessorRepository @Inject constructor(
-    private val professorRemoteDataSource: ProfessorFirestoreDataSourceImpl
+    private val professorRemoteDataSource: ProfessorRemoteDataSource
 ) {
     suspend fun getProfessors(): Result<List<Profesor>> {
         return try {

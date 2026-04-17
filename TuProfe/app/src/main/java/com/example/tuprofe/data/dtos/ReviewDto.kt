@@ -25,7 +25,7 @@ data class ProfessorNameDto(
     val name: String? = null,
     val foto: String? = null
 )
- 
+
 fun ReviewDto.toReviewInfo(): ReviewInfo {
     // El ID real de navegación es el userId (UID de Firebase) del autor.
     // Si el objeto 'user' anidado no trae ID, usamos el 'userId' del nivel superior del DTO.

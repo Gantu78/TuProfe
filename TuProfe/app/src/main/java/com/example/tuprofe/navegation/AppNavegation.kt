@@ -178,6 +178,7 @@ fun AppNavegation(
             arguments = listOf(navArgument("profeId"){ type = NavType.StringType })
             
         ){
+            val userId = it.arguments?.getString("userId") ?:""
             val profeId = it.arguments?.getString("profeId") ?: ""
             val profeViewModel: ProfeViewModel = hiltViewModel()
                 ProfeScreen(
@@ -189,8 +190,8 @@ fun AppNavegation(
                     onProfileClick = { p ->
                         navController.navigate(Screen.Profe.createRoute(p.profeId))
                     },
-                    onUserClick = { userId ->
-                        navController.navigate(Screen.Profile.createRoute(userId))
+                    onUserClick = { u ->
+                        navController.navigate(Screen.Profile.createRoute(u))
                     }
                 )
             }
