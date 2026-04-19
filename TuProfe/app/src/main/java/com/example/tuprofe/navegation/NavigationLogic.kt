@@ -6,12 +6,13 @@ object NavigationLogic {
         Screen.Login.route,
         Screen.PasswordReset.route,
         Screen.Register.route,
+        Screen.Splash.route
     )
 
     private val NoBottomBar = listOf(
         Screen.Login.route,
         Screen.PasswordReset.route,
-        Screen.Register.route,
+        Screen.Splash.route,
     )
 
     fun ShouldShowTopBar(route: String?) = !NoTopBar.contains(route)

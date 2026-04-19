@@ -319,7 +319,7 @@ val bottomNavItems = listOf(
     BottomNavItem(filledIcon = Icons.Filled.Home, outLinedIcon = Icons.Outlined.Home, route = Screen.Main.route),
     BottomNavItem(filledIcon = Icons.Filled.Search, outLinedIcon = Icons.Outlined.Search, route = Screen.Search.route),
     BottomNavItem(filledIcon = Icons.Filled.Add, outLinedIcon = Icons.Outlined.Add, route = Screen.CreateReview.route),
-    BottomNavItem(filledIcon = Icons.Filled.Message, outLinedIcon = Icons.Outlined.Message, route = Screen.Loading.route),
+    BottomNavItem(filledIcon = Icons.Filled.Notifications, outLinedIcon = Icons.Outlined.Notifications, route = Screen.Loading.route),
     BottomNavItem(filledIcon = Icons.Filled.Person, outLinedIcon = Icons.Outlined.Person, route = Screen.Configuracion.route)
 )
 

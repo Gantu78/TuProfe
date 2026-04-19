@@ -20,6 +20,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material.icons.filled.MailOutline
 import androidx.compose.material.icons.filled.Notifications
+import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.filled.ThumbsUpDown
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -104,7 +105,7 @@ fun ConfigScreen(
                             onCalifClick = onCalifClick,
                             onAyudaClick = {configViewModel.onAyudaClick()},
                             onPrivacidadClick = {configViewModel.onPrivacidadClick()},
-                            onNotisClick = {configViewModel.onNotificacionesClick()},
+                            onAjustesClick = {configViewModel.onAjustesClick()},
                             modifier = Modifier
                         )
                     }
@@ -131,7 +132,7 @@ fun ConfigBody(
     onCalifClick: () -> Unit,
     onAyudaClick: () -> Unit,
     onPrivacidadClick: () -> Unit,
-    onNotisClick: () -> Unit,
+    onAjustesClick: () -> Unit,
     modifier: Modifier
 ){
     Column(
@@ -167,10 +168,10 @@ fun ConfigBody(
 
 
             ConfigItem(
-                icon = Icons.Default.Notifications,
-                title = stringResource(R.string.notificaciones),
-                subtitle = stringResource(R.string.alertas_y_novedades),
-                onClick = onNotisClick
+                icon = Icons.Default.Settings,
+                title = stringResource(R.string.ajustes),
+                subtitle = stringResource(R.string.congiguraci_n_de_la_aplicaci_n),
+                onClick = onAjustesClick
             )
 
 

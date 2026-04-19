@@ -64,4 +64,6 @@
     <string name="crear_rese_a">Crear Reseña</string>
     <string name="buscar_profesor">Buscar Profesor</string>
     <string name="publicar_rese_a">Publicar Reseña</string>
+    <string name="ajustes">Ajustes</string>
+    <string name="congiguraci_n_de_la_aplicaci_n">Congiguración de la aplicación</string>
 </resources>

@@ -39,7 +39,7 @@ class ConfigViewModel @Inject constructor(
 
     }
 
-    fun onNotificacionesClick() {
+    fun onAjustesClick() {
 
     }
 
@@ -58,6 +58,7 @@ class ConfigViewModel @Inject constructor(
                         it.copy(
                             username = usuario.nombreUsu,
                             carrera = usuario.carrera,
+                            profileImageUrl = usuario.imageprofeUrl,
                             isLoading = false
                         )
                     }
