@@ -156,7 +156,7 @@ fun ConfigBody(
             ConfigItem(
                 icon = Icons.Default.Settings,
                 title = stringResource(R.string.ajustes),
-                subtitle = stringResource(R.string.congiguraci_n_de_la_aplicaci_n),
+                subtitle = stringResource(R.string.configuraci_n_de_la_aplicaci_n),
                 onClick = onAjustesClick
             )
 
