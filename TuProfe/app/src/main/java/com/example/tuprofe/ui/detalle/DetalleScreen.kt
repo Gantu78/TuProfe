@@ -32,7 +32,8 @@ import com.example.tuprofe.ui.utils.BackgroundImage
 fun DetalleScreen(
     modifier: Modifier = Modifier,
     detalleViewModel: DetalleViewModel = viewModel(),
-    onProfileClick: (Profesor) -> Unit
+    onProfileClick: (Profesor) -> Unit,
+    onUserClick: (String) -> Unit
 ) {
     val uiState by detalleViewModel.uiState.collectAsState()
 
@@ -42,7 +43,8 @@ fun DetalleScreen(
         onShare = { },
         onComment = { },
         onProfileClick = onProfileClick,
-        modifier = modifier
+        modifier = modifier,
+        onUserClick = onUserClick
     )
 }
 
@@ -53,7 +55,8 @@ fun DetalleContent(
     onShare: () -> Unit,
     onComment: () -> Unit,
     onProfileClick: (Profesor) -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    onUserClick: (String) -> Unit
 ) {
     Box(modifier = modifier.fillMaxSize()) {
         BackgroundImage()
@@ -74,7 +77,8 @@ fun DetalleContent(
                             onLike = onLike,
                             onComment = onComment,
                             onShare = onShare,
-                            onProfileClick = {onProfileClick(review.profesor)}
+                            onProfileClick = {onProfileClick(review.profesor)},
+                            onUserClick = {onUserClick(review.usuario.usuarioId)}
                         )
 
                         Spacer(modifier = Modifier.height(28.dp))
@@ -89,7 +93,6 @@ fun DetalleContent(
                     items(uiState.respuestas) { respuesta ->
                         CommentCard(
                             respuesta = respuesta,
-                            onProfileClick = {onProfileClick(respuesta.profesor)}
                         )
                     }
                 }
@@ -107,6 +110,7 @@ private fun ReviewCard(
     onComment: () -> Unit,
     onShare: () -> Unit,
     onProfileClick: () -> Unit,
+    onUserClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     Card(
@@ -119,7 +123,7 @@ private fun ReviewCard(
             Resena(
                 reviewInfo = review,
                 onProfileClick = onProfileClick,
-                onUserClick ={}
+                onUserClick = onUserClick
             )
             HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant)
             ReviewActionBar(
@@ -139,6 +143,7 @@ private fun ReviewCardPreview() {
         onLike = {},
         onComment = {},
         onShare = {},
+        onUserClick = {},
         onProfileClick = {}
     )
 }
@@ -175,7 +180,6 @@ private fun CommentsHeaderPreview() {
 @Composable
 private fun CommentCard(
     respuesta: ReviewInfo,
-    onProfileClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     Card(
@@ -199,8 +203,7 @@ private fun CommentCard(
 @Composable
 private fun CommentCardPreview() {
     CommentCard(
-        respuesta = LocalReview.Reviews[1],
-        onProfileClick = {}
+        respuesta = LocalReview.Reviews[1]
     )
 }
 
@@ -247,6 +250,7 @@ fun DetalleScreenPreview() {
         onLike = {},
         onShare = {},
         onComment = {},
+        onUserClick = {},
         onProfileClick = {}
     )
 }

@@ -280,8 +280,12 @@ fun AppNavegation(
                 detalleViewModel = detalleViewModel,
                 onProfileClick = { profesor ->
                     navController.navigate(Screen.Profe.createRoute(profesor.profeId))
+                } ,
+                onUserClick = { userId ->
+                    navController.navigate(Screen.Profile.createRoute(userId))
                 }
             )
+
         }
 
         composable(
