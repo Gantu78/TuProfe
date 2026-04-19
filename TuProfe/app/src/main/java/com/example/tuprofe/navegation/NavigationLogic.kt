@@ -12,6 +12,7 @@ object NavigationLogic {
     private val NoBottomBar = listOf(
         Screen.Login.route,
         Screen.PasswordReset.route,
+        Screen.Register.route,
         Screen.Splash.route,
     )
 

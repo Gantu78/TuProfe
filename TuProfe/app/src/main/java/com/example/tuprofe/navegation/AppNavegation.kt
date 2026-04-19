@@ -95,9 +95,17 @@ fun AppNavegation(
     ){
         composable(route = Screen.Splash.route){
             SplashScreen(navigateToLogin = {
-                navController.navigate(Screen.Login.route)
+                navController.navigate(Screen.Login.route) {
+                    popUpTo(Screen.Splash.route) {
+                        inclusive = true
+                    }
+                }
                 }, navigateToMain = {
-                navController.navigate(Screen.Main.route)
+                navController.navigate(Screen.Main.route) {
+                    popUpTo(Screen.Splash.route) {
+                        inclusive = true
+                    }
+                }
             })
 
         }

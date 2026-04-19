@@ -126,16 +126,19 @@ fun FormularioRegistro(
         modifier = modifier
     ) {
         TextFieldApp(
+            modifier = Modifier,
             stringResource(R.string.email),
             value = email,
             onValueChange = onEmailChange
         )
         TextFieldApp(
+            modifier = Modifier,
             stringResource(R.string.usuario),
             value = usuario,
             onValueChange = onUsuarioChange
         )
         TextFieldApp(
+            modifier = Modifier,
             stringResource(R.string.carrera),
             value = carrera,
             onValueChange = onCarreraChange
