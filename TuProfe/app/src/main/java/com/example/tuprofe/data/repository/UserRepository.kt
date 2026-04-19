@@ -11,9 +11,9 @@ class UserRepository @Inject constructor(
     private val userRemoteDataSource: UserRemoteDataSource,
     private val storageRemoteDataSource: StorageRemoteDataSource
 ) {
-    suspend fun getUserById(userId: String): Result<Usuario> {
+    suspend fun getUserById(userId: String, CurrentUserId:String =""): Result<Usuario> {
         return try {
-            val userDto = userRemoteDataSource.getUserById(userId)
+            val userDto = userRemoteDataSource.getUserById(userId, CurrentUserId)
             val usuario = userDto.toUsuario()
             val withPhoto = if (usuario.imageprofeUrl.isNullOrEmpty()) {
                 val photoUrl = storageRemoteDataSource.getProfileImageUrl(userId)
@@ -57,5 +57,15 @@ class UserRepository @Inject constructor(
         } catch (e: Exception) {
             Result.failure(e)
         }
+    }
+
+    suspend fun followOrUnfollow(currentUserId: String, targetUserId: String): Result<Unit>{
+        return try{
+            userRemoteDataSource.followOrUnfollowUser(currentUserId, targetUserId)
+            return Result.success(Unit)
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+
     }
 }

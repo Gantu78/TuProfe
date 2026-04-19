@@ -8,7 +8,10 @@ data class UserDto(
     val username: String? = null,
     val email: String? = null,
     val carrera: String? = null,
-    val foto: String? = null
+    val foto: String? = null,
+    val followingCount: Int = 0,
+    val followersCount: Int = 0,
+    var followed: Boolean = false
 ){
     constructor(): this("","","","","","")
 }
@@ -21,6 +24,9 @@ fun UserDto.toUsuario(): Usuario {
         nombreUsu = username ?: name ?: "Usuario $id",
         email = email ?: "",
         carrera = carrera ?: "",
-        imageprofeUrl = foto
+        imageprofeUrl = foto,
+        followingCount = followingCount,
+        followersCount = followersCount,
+        followed = followed
     )
 }

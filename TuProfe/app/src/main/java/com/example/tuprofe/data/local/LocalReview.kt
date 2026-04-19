@@ -14,7 +14,10 @@ object LocalReview {
         nombreUsu = "Usuario Mock",
         email = "mock@example.com",
         carrera = "Ingeniería",
-        imageprofeUrl = null
+        imageprofeUrl = null,
+        followingCount = 0,
+        followersCount = 0,
+        followed = false
     )
 
     val Reviews = listOf(

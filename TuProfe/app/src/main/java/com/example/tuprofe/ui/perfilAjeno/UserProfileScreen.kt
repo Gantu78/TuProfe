@@ -2,9 +2,11 @@ package com.example.tuprofe.ui.perfilAjeno
 
 import android.content.res.Configuration
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Star
@@ -14,13 +16,19 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import coil.compose.AsyncImage
 import com.example.tuprofe.R
 import com.example.tuprofe.data.ReviewInfo
 import com.example.tuprofe.data.Usuario
@@ -28,10 +36,7 @@ import com.example.tuprofe.data.local.LocalReview
 import com.example.tuprofe.ui.theme.BebasNeue
 import com.example.tuprofe.ui.theme.TuProfeTheme
 import com.example.tuprofe.ui.utils.BackgroundImage
-import com.example.tuprofe.ui.utils.ProfileHeaderCard
 import com.example.tuprofe.ui.utils.Resena
-
-// ── Entry point (stateful) ────────────────────────────────────────────────────
 
 @Composable
 fun UserProfileScreen(
@@ -43,16 +48,16 @@ fun UserProfileScreen(
     UserProfileContent(
         state = uiState,
         onProfessorClick = onProfessorClick,
+        onFollowClick = { viewModel.followOrUnfollowUser(uiState.user.usuarioId) },
         modifier = modifier
     )
 }
-
-// ── Stateless root (state hoisted) ───────────────────────────────────────────
 
 @Composable
 fun UserProfileContent(
     state: UserProfileState,
     onProfessorClick: (String) -> Unit,
+    onFollowClick: () -> Unit = {},
     modifier: Modifier = Modifier
 ) {
     Box(modifier = modifier.fillMaxSize()) {
@@ -60,44 +65,44 @@ fun UserProfileContent(
         when {
             state.isLoading -> UserProfileLoadingState()
             state.errorMessage != null -> UserProfileErrorState(state.errorMessage)
-            state.user != null -> UserProfileLoaded(
+            else -> UserProfileLoaded(
                 user = state.user,
                 reviews = state.userReviews,
-                onProfessorClick = onProfessorClick
+                isOwnProfile = state.currentUserId == state.user.usuarioId,
+                onProfessorClick = onProfessorClick,
+                onFollowClick = onFollowClick
             )
         }
     }
 }
 
-// ── Loaded layout ─────────────────────────────────────────────────────────────
-
 @Composable
 private fun UserProfileLoaded(
     user: Usuario,
     reviews: List<ReviewInfo>,
-    onProfessorClick: (String) -> Unit
+    isOwnProfile: Boolean,
+    onProfessorClick: (String) -> Unit,
+    onFollowClick: () -> Unit
 ) {
     LazyColumn(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(horizontal = 30.dp),
+        modifier = Modifier.fillMaxSize(),
         contentPadding = PaddingValues(bottom = 100.dp)
     ) {
         item {
-            ProfileHeaderCard(
-                username = user.nombreUsu,
-                email = user.email,
-                carrera = user.carrera,
-                imageUrl = user.imageprofeUrl,
-                onProfileClick = {},
-                showStar = true
+            UserProfileHeader(
+                user = user,
+                isOwnProfile = isOwnProfile,
+                onFollowClick = onFollowClick
             )
         }
 
         item { Spacer(Modifier.height(16.dp)) }
 
         item {
-            ReviewsSectionHeader(reviewCount = reviews.size)
+            ReviewsSectionHeader(
+                reviewCount = reviews.size,
+                modifier = Modifier.padding(horizontal = 20.dp)
+            )
         }
 
         item { Spacer(Modifier.height(8.dp)) }
@@ -108,14 +113,111 @@ private fun UserProfileLoaded(
             items(reviews, key = { it.reviewId }) { review ->
                 ReviewCard(
                     review = review,
-                    onProfessorClick = onProfessorClick
+                    onProfessorClick = onProfessorClick,
+                    modifier = Modifier.padding(horizontal = 20.dp)
                 )
                 Spacer(Modifier.height(12.dp))
             }
         }
     }
 }
-// ── Section header ────────────────────────────────────────────────────────────
+
+@Composable
+private fun UserProfileHeader(
+    user: Usuario,
+    isOwnProfile: Boolean,
+    onFollowClick: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+    Column(
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(horizontal = 24.dp)
+            .padding(top = 28.dp, bottom = 8.dp),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        AsyncImage(
+            model = user.imageprofeUrl,
+            contentDescription = null,
+            placeholder = painterResource(R.drawable.loading_img),
+            error = painterResource(R.drawable.avatar),
+            contentScale = ContentScale.Crop,
+            modifier = Modifier
+                .size(96.dp)
+                .shadow(6.dp, CircleShape, clip = false)
+                .clip(CircleShape)
+                .background(MaterialTheme.colorScheme.surfaceVariant)
+        )
+
+        Spacer(Modifier.height(12.dp))
+
+        Text(
+            text = user.nombreUsu,
+            fontSize = 22.sp,
+            fontWeight = FontWeight.Bold,
+            color = MaterialTheme.colorScheme.onSurface
+        )
+
+        Text(
+            text = user.carrera,
+            fontSize = 13.sp,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
+            modifier = Modifier.padding(top = 2.dp)
+        )
+
+        Spacer(Modifier.height(16.dp))
+
+        Row(
+            horizontalArrangement = Arrangement.spacedBy(40.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            StatItem(label = "Seguidores", count = user.followersCount)
+            StatItem(label = "Siguiendo", count = user.followingCount)
+        }
+
+        if (!isOwnProfile) {
+            Spacer(Modifier.height(16.dp))
+            Button(
+                onClick = onFollowClick,
+                shape = RoundedCornerShape(50),
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = if (user.followed) Color.Transparent else colorResource(R.color.verdetp),
+                    contentColor = if (user.followed) colorResource(R.color.verdetp) else Color.White
+                ),
+                border = if (user.followed) BorderStroke(1.5.dp, colorResource(R.color.verdetp)) else null,
+                modifier = Modifier
+                    .width(140.dp)
+                    .height(40.dp)
+            ) {
+                Text(
+                    text = if (user.followed) "Siguiendo" else "Seguir",
+                    fontWeight = FontWeight.SemiBold,
+                    fontSize = 15.sp
+                )
+            }
+        }
+
+        Spacer(Modifier.height(20.dp))
+        HorizontalDivider(color = colorResource(R.color.BordeTuProfe))
+    }
+}
+
+@Composable
+private fun StatItem(label: String, count: Int) {
+    Column(horizontalAlignment = Alignment.CenterHorizontally) {
+        Text(
+            text = "$count",
+            fontSize = 20.sp,
+            fontWeight = FontWeight.Bold,
+            color = MaterialTheme.colorScheme.onSurface
+        )
+        Text(
+            text = label,
+            fontSize = 12.sp,
+            color = MaterialTheme.colorScheme.onSurfaceVariant
+        )
+    }
+}
 
 @Composable
 private fun ReviewsSectionHeader(reviewCount: Int, modifier: Modifier = Modifier) {
@@ -153,8 +255,6 @@ private fun ReviewsSectionHeader(reviewCount: Int, modifier: Modifier = Modifier
     }
 }
 
-// ── Review card (wraps Resena to provide surface background) ─────────────────
-
 @Composable
 private fun ReviewCard(
     review: ReviewInfo,
@@ -175,8 +275,6 @@ private fun ReviewCard(
         )
     }
 }
-
-// ── Empty & status states ─────────────────────────────────────────────────────
 
 @Composable
 private fun EmptyReviewsMessage(modifier: Modifier = Modifier) {
@@ -230,7 +328,10 @@ private val previewUser = Usuario(
     nombreUsu = "Gantu970",
     email = "g.samjg@javeriana.edu.co",
     carrera = "Ingeniería de Sistemas",
-    imageprofeUrl = null
+    imageprofeUrl = null,
+    followersCount = 128,
+    followingCount = 47,
+    followed = false
 )
 
 @Preview(showBackground = true, showSystemUi = true, name = "Con reseñas – Claro")
@@ -238,29 +339,40 @@ private val previewUser = Usuario(
 private fun UserProfileWithReviewsLightPreview() {
     TuProfeTheme(darkTheme = false) {
         UserProfileContent(
-            state = UserProfileState(
-                user = previewUser,
-                userReviews = LocalReview.Reviews.take(3)
-            ),
+            state = UserProfileState(user = previewUser, userReviews = LocalReview.Reviews.take(3)),
             onProfessorClick = {}
         )
     }
 }
 
-@Preview(
-    showBackground = true,
-    showSystemUi = true,
-    name = "Con reseñas – Oscuro",
-    uiMode = Configuration.UI_MODE_NIGHT_YES
-)
+@Preview(showBackground = true, showSystemUi = true, name = "Con reseñas – Oscuro", uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
 private fun UserProfileWithReviewsDarkPreview() {
     TuProfeTheme(darkTheme = true) {
         UserProfileContent(
-            state = UserProfileState(
-                user = previewUser,
-                userReviews = LocalReview.Reviews.take(3)
-            ),
+            state = UserProfileState(user = previewUser, userReviews = LocalReview.Reviews.take(3)),
+            onProfessorClick = {}
+        )
+    }
+}
+
+@Preview(showBackground = true, name = "Siguiendo")
+@Composable
+private fun UserProfileFollowedPreview() {
+    TuProfeTheme {
+        UserProfileContent(
+            state = UserProfileState(user = previewUser.copy(followed = true, followersCount = 129)),
+            onProfessorClick = {}
+        )
+    }
+}
+
+@Preview(showBackground = true, name = "Perfil propio")
+@Composable
+private fun UserProfileOwnPreview() {
+    TuProfeTheme {
+        UserProfileContent(
+            state = UserProfileState(user = previewUser, currentUserId = previewUser.usuarioId),
             onProfessorClick = {}
         )
     }
@@ -293,15 +405,5 @@ private fun UserProfileErrorPreview() {
             state = UserProfileState(errorMessage = "No se pudo cargar el perfil"),
             onProfessorClick = {}
         )
-    }
-}
-
-@Preview(showBackground = true, name = "Encabezado de sección")
-@Composable
-private fun ReviewsSectionHeaderPreview() {
-    TuProfeTheme {
-        Column(modifier = Modifier.padding(30.dp)) {
-            ReviewsSectionHeader(reviewCount = 5)
-        }
     }
 }

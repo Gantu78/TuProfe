@@ -54,7 +54,10 @@ fun ReviewDto.toReviewInfo(): ReviewInfo {
             nombreUsu = "Usuario $authorId",
             email = "",
             carrera = "",
-            imageprofeUrl = null
+            imageprofeUrl = null,
+            followingCount = 0,
+            followersCount = 0,
+            followed = false
         )
     }
 

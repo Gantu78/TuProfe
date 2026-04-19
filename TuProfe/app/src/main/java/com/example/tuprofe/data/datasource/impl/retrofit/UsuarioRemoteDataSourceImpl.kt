@@ -10,7 +10,7 @@ class UsuarioRemoteDataSourceImpl @Inject constructor(
     private val service: UserRetrofitService
 ) : UserRemoteDataSource {
 
-    override suspend fun getUserById(id: String): UserDto {
+    override suspend fun getUserById(id: String, currentUserId: String): UserDto {
         return service.getUserById(id.toInt())
     }
 
@@ -29,6 +29,10 @@ class UsuarioRemoteDataSourceImpl @Inject constructor(
     }
 
     override suspend fun updateUserPhoto(userId: String, photoUrl: String) {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun followOrUnfollowUser(currentUserId: String, targetUserId: String) {
         TODO("Not yet implemented")
     }
 

@@ -3,6 +3,8 @@ package com.example.tuprofe.ui.perfilAjeno
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.tuprofe.data.Usuario
+import com.example.tuprofe.data.repository.AuthRepository
 import com.example.tuprofe.data.repository.ReviewRepository
 import com.example.tuprofe.data.repository.UserRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -17,6 +19,7 @@ import javax.inject.Inject
 class UserProfileViewModel @Inject constructor(
     private val reviewRepository: ReviewRepository,
     private val userRepository: UserRepository,
+    private val authRepository: AuthRepository,
     savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
@@ -24,7 +27,7 @@ class UserProfileViewModel @Inject constructor(
     val uiState: StateFlow<UserProfileState> = _uiState.asStateFlow()
 
     init {
-        // Obtenemos el ID como String de la navegación
+        _uiState.update { it.copy(currentUserId = authRepository.currentUser?.uid ?: "") }
         val userId = savedStateHandle.get<String>("userId") ?: ""
         if (userId.isNotEmpty()) {
             cargarDatosUsuario(userId)
@@ -34,14 +37,13 @@ class UserProfileViewModel @Inject constructor(
     private fun cargarDatosUsuario(userId: String) {
         _uiState.update { it.copy(isLoading = true) }
         viewModelScope.launch {
-            // El Repositorio recibe String y se encarga de la conversión a Int para Retrofit
             val userResult = userRepository.getUserById(userId)
             val reviewsResult = reviewRepository.getUserReviews(userId)
 
             if (userResult.isSuccess && reviewsResult.isSuccess) {
                 _uiState.update {
                     it.copy(
-                        user = userResult.getOrNull(),
+                        user = userResult.getOrNull()?: Usuario("", "", "", "", "", 0, 0, false),
                         userReviews = reviewsResult.getOrNull() ?: emptyList(),
                         isLoading = false,
                         errorMessage = null
@@ -53,6 +55,24 @@ class UserProfileViewModel @Inject constructor(
                     it.copy(
                         isLoading = false,
                         errorMessage = error?.message ?: "Error al cargar el perfil"
+                    )
+                }
+            }
+        }
+    }
+
+    fun followOrUnfollowUser(targetUserId: String) {
+        val currentUserId = _uiState.value.currentUserId
+        viewModelScope.launch {
+            val result = userRepository.followOrUnfollow(currentUserId, targetUserId)
+            if (result.isSuccess) {
+                val user = _uiState.value.user
+                _uiState.update {
+                    it.copy(
+                        user = user.copy(
+                            followersCount = if (user.followed) user.followersCount - 1 else user.followersCount + 1,
+                            followed = !user.followed
+                        )
                     )
                 }
             }
