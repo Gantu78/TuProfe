@@ -51,7 +51,7 @@ class ConfigPerfilViewModel @Inject constructor(
                     _uiState.update {
                         it.copy(
                             isLoading = false,
-                            errorMessage = error.message
+                            errorMessagePerfil = error.message
                         )
                     }
                 }
@@ -77,7 +77,7 @@ class ConfigPerfilViewModel @Inject constructor(
             _uiState.update {
                 it.copy(
                     isLoading = true,
-                    errorMessage = null
+                    errorMessageEliminar = null
                 )
             }
 
@@ -97,7 +97,7 @@ class ConfigPerfilViewModel @Inject constructor(
                 _uiState.update {
                     it.copy(
                         isLoading = false,
-                        errorMessage = error.message
+                        errorMessageEliminar = error.message
                     )
                 }
             }
@@ -108,7 +108,7 @@ class ConfigPerfilViewModel @Inject constructor(
         val userId = authRepository.currentUser?.uid ?: return
         viewModelScope.launch {
             val current = _uiState.value
-            _uiState.update { it.copy(isLoading = true, errorMessage = null, showSaveDialog = false) }
+            _uiState.update { it.copy(isLoading = true, errorMessagePerfil = null, showSaveDialog = false) }
             val result = userRepository.updateUser(
                 userId = userId,
                 username = current.username,
@@ -118,7 +118,7 @@ class ConfigPerfilViewModel @Inject constructor(
             result.onSuccess {
                 _uiState.update { it.copy(isLoading = false, saveSuccess = true) }
             }.onFailure { error ->
-                _uiState.update { it.copy(isLoading = false, errorMessage = error.message) }
+                _uiState.update { it.copy(isLoading = false, errorMessagePerfil = error.message) }
             }
         }
     }
@@ -143,8 +143,11 @@ class ConfigPerfilViewModel @Inject constructor(
         _uiState.update { it.copy(navigate = false) }
     }
 
-    fun clearError() {
-        _uiState.update { it.copy(errorMessage = null) }
+    fun clearErrorPerfil() {
+        _uiState.update { it.copy(errorMessagePerfil = null) }
+    }
+    fun clearErrorEliminar() {
+        _uiState.update { it.copy(errorMessageEliminar = null) }
     }
 
     fun uploadImageToFirebase(imagen: Uri){
@@ -156,7 +159,7 @@ class ConfigPerfilViewModel @Inject constructor(
                 userRepository.updateUserPhoto(userId, imageUrl)
             }
             result.onFailure { error ->
-                _uiState.update { it.copy(errorMessage = error.message) }
+                _uiState.update { it.copy(errorMessagePerfil = error.message) }
             }
         }
     }

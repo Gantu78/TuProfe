@@ -24,6 +24,7 @@ import com.example.tuprofe.R
 import com.example.tuprofe.ui.theme.BebasNeue
 import com.example.tuprofe.ui.utils.*
 import android.net.Uri
+import androidx.compose.ui.text.style.TextAlign
 
 @Composable
 fun ConfigPerfilScreen(
@@ -64,13 +65,24 @@ fun ConfigPerfilScreen(
         ) {
 
             item {
-                ProfilePicture(
-                    errorMessage = state.errorMessage,
-                    imageUrl = state.profileImage,
-                    onImageSelected = { uri ->
-                        configPerfilViewModel.uploadImageToFirebase(uri)
-                    }
-                )
+                Column(
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ){
+                    Text(
+                        text = state.errorMessagePerfil ?: "",
+                        color = Color.Red,
+                        fontSize = 12.sp,
+                        textAlign = TextAlign.Center,
+                        modifier = Modifier.fillMaxWidth()
+                    )
+                    ProfilePicture(
+                        imageUrl = state.profileImage,
+                        onImageSelected = { uri ->
+                            configPerfilViewModel.uploadImageToFirebase(uri)
+                        }
+                    )
+                }
+
             }
 
             item {
@@ -95,13 +107,13 @@ fun ConfigPerfilScreen(
 
         if (state.showDeleteDialog) {
             DeleteConfirmationDialog(
-                errorMessage = state.errorMessage,
+                errorMessage = state.errorMessageEliminar,
                 onDismissRequest = {
                     configPerfilViewModel.toggleShowDelete()
-                    configPerfilViewModel.clearError()
+                    configPerfilViewModel.clearErrorEliminar()
                 },
                 onConfirm = { password ->
-                    configPerfilViewModel.clearError()
+                    configPerfilViewModel.clearErrorEliminar()
                     configPerfilViewModel.onBorrarCuentaClick(
                         state.email,
                         password
@@ -214,7 +226,6 @@ private fun SaveConfirmationDialog(
 private fun ProfilePicture(
     imageUrl: String?,
     onImageSelected: (Uri) -> Unit,
-    errorMessage: String? = null
 ) {
     Spacer(modifier = Modifier.height(30.dp))
 
@@ -224,14 +235,6 @@ private fun ProfilePicture(
             .clip(CircleShape)
             .background(Color.LightGray)
     ) {
-
-        if (!errorMessage.isNullOrEmpty()) {
-            Text(
-                text = errorMessage,
-                color = Color.Red,
-                fontSize = 12.sp
-            )
-        }
 
         AsyncImage(
             model = imageUrl,

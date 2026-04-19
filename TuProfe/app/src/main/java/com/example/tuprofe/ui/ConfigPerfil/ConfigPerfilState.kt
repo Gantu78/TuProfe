@@ -17,5 +17,6 @@ data class ConfigPerfilState(
     val saveSuccess: Boolean = false,
     val showDeleteDialog: Boolean = false,
     val showSaveDialog: Boolean = false,
-    val errorMessage: String? = null
+    val errorMessagePerfil: String? = null,
+    val errorMessageEliminar: String? = null
 )
