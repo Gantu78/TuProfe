@@ -109,5 +109,18 @@ class AuthRepository @Inject constructor(
         }
     }
 
+    suspend fun resetPassword(email: String): Result<Unit> {
+        return try {
+            authRemoteDataSource.resetPassword(email)
+            Result.success(Unit)
+        } catch (e: FirebaseAuthInvalidCredentialsException) {
+            Result.failure(Exception("El correo no es válido"))
+        } catch (e: FirebaseNetworkException) {
+            Result.failure(Exception("Error de conexión"))
+        } catch (e: Exception) {
+            Result.failure(Exception("Error al enviar el enlace"))
+        }
+    }
+
 
 }

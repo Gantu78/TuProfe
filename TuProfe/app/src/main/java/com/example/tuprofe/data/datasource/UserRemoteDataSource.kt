@@ -12,4 +12,5 @@ interface UserRemoteDataSource {
 
     suspend fun updateUserPhoto(userId: String, photoUrl: String)
 
+
 }

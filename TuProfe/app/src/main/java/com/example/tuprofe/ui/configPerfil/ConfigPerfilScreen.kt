@@ -29,11 +29,9 @@ import androidx.compose.ui.text.style.TextAlign
 @Composable
 fun ConfigPerfilScreen(
     configPerfilViewModel: ConfigPerfilViewModel,
-    onChangePassword: () -> Unit,
     onSaveSuccess: () -> Unit,
     onNavigateToLogin: () -> Unit,
     modifier: Modifier = Modifier,
-
 ) {
     val state by configPerfilViewModel.uiState.collectAsState()
 
@@ -97,8 +95,17 @@ fun ConfigPerfilScreen(
             }
 
             item {
+                state.passwordResetMessage?.let { mensaje ->
+                    Text(
+                        text = mensaje,
+                        color = Color(0xFF1AC06A),
+                        fontSize = 14.sp,
+                        textAlign = TextAlign.Center,
+                        modifier = Modifier.padding(horizontal = 40.dp)
+                    )
+                }
                 ActionButtons(
-                    onCambiarContrasenaClick = onChangePassword,
+                    onCambiarContrasenaClick = { configPerfilViewModel.onCambiarContrasenaClick() },
                     onGuardarCambiosClick = { configPerfilViewModel.toggleShowSave() },
                     onBorrarCuentaClick = { configPerfilViewModel.toggleShowDelete() }
                 )
@@ -389,7 +396,6 @@ fun UserInfoFormPreview() {
 fun ConfigPerfilPreview() {
     ConfigPerfilScreen(
         configPerfilViewModel = viewModel(),
-        onChangePassword = {},
         onSaveSuccess = {},
         onNavigateToLogin = {}
     )

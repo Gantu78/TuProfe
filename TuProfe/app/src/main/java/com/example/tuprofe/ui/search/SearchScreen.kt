@@ -17,8 +17,11 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.tuprofe.data.Profesor
 import com.example.tuprofe.ui.utils.BackgroundImage
+import com.example.tuprofe.ui.utils.RatingStars
 import com.example.tuprofe.ui.utils.SearchBar
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.ui.res.colorResource
+import com.example.tuprofe.R
 
 @Composable
 fun SearchScreen(
@@ -71,6 +74,7 @@ fun SearchContent(
                     items(uiState.searchResults) { profesor ->
                         ProfessorSearchResultItem(
                             profesor = profesor,
+                            rating = uiState.ratings[profesor.profeId] ?: 0,
                             onClick = { onProfessorClick(profesor) }
                         )
                     }
@@ -81,15 +85,22 @@ fun SearchContent(
 }
 
 @Composable
-fun ProfessorSearchResultItem(profesor: Profesor, onClick: () -> Unit) {
+fun ProfessorSearchResultItem(profesor: Profesor, rating: Int, onClick: () -> Unit) {
     Card(
         onClick = onClick,
         modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(16.dp)
     ) {
-        Row(modifier = Modifier.padding(16.dp)) {
-            Text(text = profesor.nombreProfe, fontWeight = FontWeight.Bold)
-            Spacer(modifier = Modifier.width(8.dp))
+        Row(
+            modifier = Modifier.padding(16.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Text(
+                text = profesor.nombreProfe,
+                fontWeight = FontWeight.Bold,
+                modifier = Modifier.weight(1f)
+            )
+            RatingStars(rating = rating, starColor = colorResource(R.color.verdetp))
         }
     }
 }

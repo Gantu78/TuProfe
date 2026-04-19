@@ -8,6 +8,8 @@ data class ReviewInfo(
     val content: String,
     val rating: Int,
     val time: String,
-    val likes: Int = 0,
-    val commentsCount: Int = 0
+    val likes: Int,
+    val commentsCount: Int = 0 ,
+    val liked: Boolean = false
+
 )

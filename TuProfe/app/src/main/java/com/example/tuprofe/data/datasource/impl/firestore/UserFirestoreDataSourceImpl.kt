@@ -35,4 +35,6 @@ class UserFirestoreDataSourceImpl @Inject constructor(
     override suspend fun updateUserPhoto(userId: String, photoUrl: String) {
         db.collection("users").document(userId).update("foto", photoUrl).await()
     }
+
+
 }

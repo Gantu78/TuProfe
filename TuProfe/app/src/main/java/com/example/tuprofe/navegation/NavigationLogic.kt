@@ -16,10 +16,9 @@ object NavigationLogic {
         Screen.Splash.route,
     )
 
-    fun ShouldShowTopBar(route: String?) = !NoTopBar.contains(route)
+    fun ShouldShowTopBar(route: String?) = route != null && !NoTopBar.contains(route)
 
-
-    fun ShouldShowBottomBar(route: String?) = !NoBottomBar.contains(route)
+    fun ShouldShowBottomBar(route: String?) = route != null && !NoBottomBar.contains(route)
 
 
 }

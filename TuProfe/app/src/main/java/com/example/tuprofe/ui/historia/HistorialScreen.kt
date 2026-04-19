@@ -85,14 +85,28 @@ fun HistorialScreen(
                     )
                 }
 
-                items(state.userReviews) { review ->
-                    HistorialCard(
-                        review = review,
-                        onVerCalificacionClick = onVerCalificacionClick,
-                        onProfessorClick = onProfessorClick,
-                        onEditClick = { onEditClick(review.reviewId) },
-                        onDeleteClick = { historialViewModel.deleteReview(review.reviewId) }
-                    )
+                if (state.userReviews.isEmpty()) {
+                    item {
+                        Text(
+                            text = "Todavía no has hecho ninguna calificación",
+                            fontSize = 16.sp,
+                            textAlign = TextAlign.Center,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(top = 40.dp)
+                        )
+                    }
+                } else {
+                    items(state.userReviews) { review ->
+                        HistorialCard(
+                            review = review,
+                            onVerCalificacionClick = onVerCalificacionClick,
+                            onProfessorClick = onProfessorClick,
+                            onEditClick = { onEditClick(review.reviewId) },
+                            onDeleteClick = { historialViewModel.deleteReview(review.reviewId) }
+                        )
+                    }
                 }
             }
         }

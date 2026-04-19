@@ -2,6 +2,7 @@ package com.example.tuprofe.data.repository
 
 import android.util.Log
 import com.example.tuprofe.data.ReviewInfo
+import com.example.tuprofe.data.datasource.AuthRemoteDataSource
 import com.example.tuprofe.data.datasource.ProfessorRemoteDataSource
 import com.example.tuprofe.data.datasource.ReviewRemoteDataSource
 import com.example.tuprofe.data.datasource.UserRemoteDataSource
@@ -18,6 +19,7 @@ import javax.inject.Inject
 import kotlin.String
 
 class ReviewRepository @Inject constructor(
+    private val authRemoteDataSource: AuthRemoteDataSource,
     private val reviewRemoteDataSource: ReviewRemoteDataSource,
     private val userRemoteDataSource: UserRemoteDataSource,
     private val professorRemoteDataSource: ProfessorRemoteDataSource
@@ -34,9 +36,9 @@ class ReviewRepository @Inject constructor(
         }
     }
 
-    suspend fun getReviewById(reviewId: String): Result<ReviewInfo> {
+    suspend fun getReviewById(reviewId: String, currentUserId: String = ""): Result<ReviewInfo> {
         return try {
-            val review = reviewRemoteDataSource.getReviewById(reviewId).toReviewInfo()
+            val review = reviewRemoteDataSource.getReviewById(reviewId, currentUserId).toReviewInfo()
             Result.success(review)
         } catch (e: HttpException) {
             Result.failure(e)
@@ -121,6 +123,17 @@ class ReviewRepository @Inject constructor(
     suspend fun deleteReview(reviewId: String): Result<Unit> {
         return try {
             reviewRemoteDataSource.deleteReview(reviewId)
+            Result.success(Unit)
+        } catch (e: HttpException) {
+            Result.failure(e)
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
+
+    suspend fun sendOrDeleteReviewLike(reviewId: String, userId: String): Result<Unit>{
+        return try{
+            reviewRemoteDataSource.SendOrDeleteReviewLike(reviewId, userId)
             Result.success(Unit)
         } catch (e: HttpException) {
             Result.failure(e)

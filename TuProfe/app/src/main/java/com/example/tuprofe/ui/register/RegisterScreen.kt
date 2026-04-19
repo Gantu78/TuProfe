@@ -34,7 +34,6 @@ fun RegisterScreen(
     registerViewModel: RegisterViewModel,
     modifier: Modifier = Modifier,
     onRegisterClick: () -> Unit,
-    onAlreadyAccountClick: () -> Unit,
     onBackClick: () -> Unit,
 ) {
 
@@ -83,8 +82,7 @@ fun RegisterScreen(
 
             Spacer(modifier = Modifier.padding(15.dp))
             BotonesRegistro(
-                onRegisterClick =  onRegisterClick,
-                onAlreadyAccountClick = onAlreadyAccountClick,
+                onRegisterClick = onRegisterClick,
                 onBackClick = onBackClick
             )
         }
@@ -98,7 +96,6 @@ fun RegisterScreenPreview() {
     RegisterScreen(
         registerViewModel = viewModel(),
         onRegisterClick = {},
-        onAlreadyAccountClick = {},
         onBackClick = {}
     )
 }
@@ -219,7 +216,6 @@ fun HeaderPreview() {
 fun BotonesRegistro(
     modifier: Modifier = Modifier,
     onRegisterClick: () -> Unit,
-    onAlreadyAccountClick: () -> Unit,
     onBackClick: () -> Unit
 ) {
     Column(
@@ -232,10 +228,6 @@ fun BotonesRegistro(
         )
         AppTextButton(
             modifier = Modifier,
-            stringResource(R.string.ya_tengo_una_cuenta),
-            onClick = onAlreadyAccountClick)
-        AppTextButton(
-            modifier = Modifier,
             stringResource(R.string.volver),
             onClick = onBackClick)
     }
@@ -245,5 +237,5 @@ fun BotonesRegistro(
 @Composable
 @Preview(showBackground = true)
 fun BotonesRegistroPreview() {
-    BotonesRegistro(onRegisterClick = {}, onAlreadyAccountClick = {}, onBackClick = {})
+    BotonesRegistro(onRegisterClick = {}, onBackClick = {})
 }

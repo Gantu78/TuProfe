@@ -1,6 +1,5 @@
 package com.example.tuprofe.ui.resetPassword
 
-import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -13,6 +12,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
@@ -52,23 +52,24 @@ fun ResetPasswordScreen(
                 TextFieldApp(
                     stringResource(R.string.email),
                     value = state.email,
-                    onValueChange = { resetPasswordViewModel.setEmail(it) }
+                    onValueChange = { resetPasswordViewModel.setEmail(it) },
+                    singleLine = true
                 )
-                Spacer(modifier = Modifier.padding(20.dp))
+                Spacer(modifier = Modifier.padding(10.dp))
+                if (state.mostrarMensaje) {
+                    Text("Si el correo está registrado, recibirás un enlace", color = Color(0xFF1AC06A), fontSize = 16.sp)
+                } else if (state.mostrarError) {
+                    Text(state.errorMessage, color = Color.Red, fontSize = 16.sp)
+                }
+                Spacer(modifier = Modifier.padding(10.dp))
                 AppButton(stringResource(R.string.enviar_enlace),
-                    onClick = {
-                        Log.d("Boton", "Enviando Enlace")
-                        resetPasswordViewModel.toggleMostrarMensaje()
-                    }
+                    onClick = { resetPasswordViewModel.resetPassword() }
                 )
                 Spacer(modifier = Modifier.padding(10.dp))
                 AppTextButton(
                     modifier = Modifier,
                     stringResource(R.string.volver),
-                    onClick = onVolverClick )
-                if (state.mostrarMensaje) {
-                    Text("Tu enlace se envio correctamente", color = colorResource(R.color.verdetp2), fontSize = 16.sp)
-                }
+                    onClick = onVolverClick)
 
             }
         }

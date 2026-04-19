@@ -148,6 +148,18 @@ class ConfigPerfilViewModel @Inject constructor(
         _uiState.update { it.copy(errorMessageEliminar = null) }
     }
 
+    fun onCambiarContrasenaClick() {
+        val email = authRepository.currentUser?.email ?: return
+        viewModelScope.launch {
+            val result = authRepository.resetPassword(email)
+            if (result.isSuccess) {
+                _uiState.update { it.copy(passwordResetMessage = "Se ha enviado un correo para cambiar tu contraseña") }
+            } else {
+                _uiState.update { it.copy(passwordResetMessage = result.exceptionOrNull()?.message ?: "Error al enviar el correo") }
+            }
+        }
+    }
+
     fun uploadImageToFirebase(imagen: Uri){
         val userId = authRepository.currentUser?.uid ?: return
         viewModelScope.launch {

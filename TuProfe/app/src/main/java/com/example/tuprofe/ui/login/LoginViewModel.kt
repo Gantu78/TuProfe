@@ -30,7 +30,7 @@ class LoginViewModel @Inject constructor(
         _uiState.update { it.copy(passwordVisible = !_uiState.value.passwordVisible) }
     }
 
-    fun loginClick(): Boolean{
+    fun loginClick() {
         if (_uiState.value.email.isNullOrEmpty() || _uiState.value.password.isNullOrEmpty()) {
             _uiState.update {
                 it.copy(
@@ -38,24 +38,21 @@ class LoginViewModel @Inject constructor(
                     errorMessage = "Por favor complete todos los campos"
                 )
             }
-        } else {
-            viewModelScope.launch {
-
-                val result = authRepository.signIn(_uiState.value.email, _uiState.value.password)
-
-                if(result.isSuccess){
-                    _uiState.update { it.copy(mostrarMensajeError = false, navigate = true) }
-                } else{
-                    val mensaje = result.exceptionOrNull()?.message?: "Error al iniciar sesión"
-                    _uiState.update {
-                        it.copy(
-                            mostrarMensajeError = true,
-                            errorMessage = mensaje
-                        )
-                    }
+            return
+        }
+        viewModelScope.launch {
+            val result = authRepository.signIn(_uiState.value.email, _uiState.value.password)
+            if (result.isSuccess) {
+                _uiState.update { it.copy(mostrarMensajeError = false, navigate = true) }
+            } else {
+                val mensaje = result.exceptionOrNull()?.message ?: "Error al iniciar sesión"
+                _uiState.update {
+                    it.copy(
+                        mostrarMensajeError = true,
+                        errorMessage = mensaje
+                    )
                 }
             }
         }
-        return _uiState.value.navigate
     }
 }

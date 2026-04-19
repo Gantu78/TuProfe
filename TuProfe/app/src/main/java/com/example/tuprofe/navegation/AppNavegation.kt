@@ -19,6 +19,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.compose.runtime.collectAsState
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
@@ -112,17 +113,19 @@ fun AppNavegation(
 
         composable(route = Screen.Login.route){
             val loginViewModel: LoginViewModel = hiltViewModel()
+            val loginState by loginViewModel.uiState.collectAsState()
+
+            androidx.compose.runtime.LaunchedEffect(loginState.navigate) {
+                if (loginState.navigate) {
+                    navController.navigate(Screen.Main.route) {
+                        popUpTo(Screen.Login.route) { inclusive = true }
+                    }
+                }
+            }
+
             HomeScreen(
                 loginViewModel = loginViewModel,
-                onLoginClick = {
-                    if(loginViewModel.loginClick()){
-                    navController.navigate(Screen.Main.route){
-                        popUpTo(Screen.Login.route){
-                            inclusive = true
-                        }
-                    }
-                    }
-                },
+                onLoginClick = { loginViewModel.loginClick() },
                 onRegisterClick = {
                     navController.navigate(Screen.Register.route)
                 },
@@ -141,14 +144,20 @@ fun AppNavegation(
         }
         composable(route = Screen.Register.route){
             val registerViewModel: RegisterViewModel = hiltViewModel()
+            val registerState by registerViewModel.uiState.collectAsState()
+
+            androidx.compose.runtime.LaunchedEffect(registerState.navigateHome) {
+                if (registerState.navigateHome) {
+                    navController.navigate(Screen.Main.route) {
+                        popUpTo(Screen.Login.route) { inclusive = true }
+                    }
+                }
+            }
 
             RegisterScreen(
                 registerViewModel = registerViewModel,
                 onRegisterClick = {
                     registerViewModel.onRegisterClickSecure()
-                },
-                onAlreadyAccountClick = {
-                    navController.popBackStack()
                 },
                 onBackClick = {
                     navController.popBackStack()
@@ -241,9 +250,6 @@ fun AppNavegation(
             val configPerfilViewModel: ConfigPerfilViewModel = hiltViewModel()
             ConfigPerfilScreen(
                 configPerfilViewModel = configPerfilViewModel,
-                onChangePassword = {
-                    navController.navigate(Screen.PasswordReset.route)
-                },
                 onSaveSuccess = {
                     navController.popBackStack()
                 },
@@ -285,6 +291,7 @@ fun AppNavegation(
             val detalleViewModel: DetalleViewModel = hiltViewModel()
 
             DetalleScreen(
+                reviewId = navController.currentBackStackEntry?.arguments?.getString("reviewId") ?: "",
                 detalleViewModel = detalleViewModel,
                 onProfileClick = { profesor ->
                     navController.navigate(Screen.Profe.createRoute(profesor.profeId))

@@ -86,7 +86,8 @@ fun ProfeContent(
                     ProfessorInfoCard(
                         professorName = uiState.profesor.nombreProfe,
                         generalRating = uiState.averageRating,
-                        professorImageUrl = uiState.profesor.imageprofeUrl
+                        professorImageUrl = uiState.profesor.imageprofeUrl,
+                        departamento = uiState.profesor.departamento
                     )
                 }
                 items(uiState.professorReviews) { review ->
@@ -122,6 +123,7 @@ fun ProfessorInfoCard(
     professorName: String,
     generalRating: Int,
     professorImageUrl: String?,
+    departamento: String = "",
     modifier: Modifier = Modifier
 ) {
     Card(
@@ -153,6 +155,14 @@ fun ProfessorInfoCard(
             )
             Spacer(modifier = Modifier.height(16.dp))
             Text(text = professorName, fontSize = 22.sp, fontWeight = FontWeight.SemiBold)
+            if (departamento.isNotBlank()) {
+                Spacer(modifier = Modifier.height(4.dp))
+                Text(
+                    text = departamento,
+                    fontSize = 14.sp,
+                    color = colorResource(R.color.verdetp2)
+                )
+            }
             Spacer(modifier = Modifier.height(18.dp))
             RatingStars(rating = generalRating, starColor = colorResource(R.color.verdetp))
         }

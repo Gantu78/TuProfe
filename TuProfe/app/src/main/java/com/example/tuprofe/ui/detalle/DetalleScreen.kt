@@ -8,12 +8,14 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.Comment
+import androidx.compose.material.icons.filled.ThumbUp
 import androidx.compose.material.icons.outlined.Share
 import androidx.compose.material.icons.outlined.ThumbUp
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -30,6 +32,7 @@ import com.example.tuprofe.ui.utils.BackgroundImage
 
 @Composable
 fun DetalleScreen(
+    reviewId: String,
     modifier: Modifier = Modifier,
     detalleViewModel: DetalleViewModel = viewModel(),
     onProfileClick: (Profesor) -> Unit,
@@ -37,9 +40,14 @@ fun DetalleScreen(
 ) {
     val uiState by detalleViewModel.uiState.collectAsState()
 
+    LaunchedEffect(Unit) {
+        detalleViewModel.cargarDetalle(reviewId)
+    }
+
     DetalleContent(
+        detalleViewModel = detalleViewModel,
+        reviewId = reviewId,
         uiState = uiState,
-        onLike = { },
         onShare = { },
         onComment = { },
         onProfileClick = onProfileClick,
@@ -50,8 +58,9 @@ fun DetalleScreen(
 
 @Composable
 fun DetalleContent(
+    detalleViewModel: DetalleViewModel,
+    reviewId: String,
     uiState: DetalleState,
-    onLike: () -> Unit,
     onShare: () -> Unit,
     onComment: () -> Unit,
     onProfileClick: (Profesor) -> Unit,
@@ -73,8 +82,10 @@ fun DetalleContent(
                 ) {
                     item {
                         ReviewCard(
+                            detalleViewModel = detalleViewModel,
+                            uiState = uiState,
+                            reviewId = reviewId,
                             review = review,
-                            onLike = onLike,
                             onComment = onComment,
                             onShare = onShare,
                             onProfileClick = {onProfileClick(review.profesor)},
@@ -97,7 +108,10 @@ fun DetalleContent(
                     }
                 }
             } ?: Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                Text(text = stringResource(R.string.rese_a_no_encontrada))
+                Text(
+                    text = uiState.errorMessage ?: stringResource(R.string.rese_a_no_encontrada),
+                    color = if (uiState.errorMessage != null) Color.Red else MaterialTheme.colorScheme.onSurface
+                )
             }
         }
     }
@@ -105,8 +119,10 @@ fun DetalleContent(
 
 @Composable
 private fun ReviewCard(
+    detalleViewModel: DetalleViewModel,
+    uiState: DetalleState,
+    reviewId: String,
     review: ReviewInfo,
-    onLike: () -> Unit,
     onComment: () -> Unit,
     onShare: () -> Unit,
     onProfileClick: () -> Unit,
@@ -127,9 +143,12 @@ private fun ReviewCard(
             )
             HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant)
             ReviewActionBar(
-                onLike = onLike,
+                onLike = {
+                    detalleViewModel.sendOrDeleteReviewLike(reviewId, uiState.currentUserId)
+                },
                 onComment = onComment,
-                onShare = onShare
+                onShare = onShare,
+                isLiked = uiState.selectedReview?.liked?: false
             )
         }
     }
@@ -139,8 +158,10 @@ private fun ReviewCard(
 @Composable
 private fun ReviewCardPreview() {
     ReviewCard(
+        detalleViewModel = viewModel(),
+        uiState = DetalleState(),
+        reviewId = "",
         review = LocalReview.Reviews[0],
-        onLike = {},
         onComment = {},
         onShare = {},
         onUserClick = {},
@@ -212,14 +233,16 @@ private fun CommentCardPreview() {
 fun ReviewActionBar(
     onLike: () -> Unit,
     onComment: () -> Unit,
-    onShare: () -> Unit
+    onShare: () -> Unit,
+    isLiked: Boolean
 ) {
     Row(
         modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 6.dp),
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
         IconButton(onClick = onLike) {
-            Icon(imageVector = Icons.Outlined.ThumbUp, contentDescription = "Like", tint = colorResource(R.color.verdetp))
+            if(isLiked) Icon(imageVector = Icons.Filled.ThumbUp, contentDescription = "Like", tint = colorResource(R.color.verdetp))
+            else Icon(imageVector = Icons.Outlined.ThumbUp, contentDescription = "Like", tint = colorResource(R.color.verdetp))
         }
         IconButton(onClick = onComment) {
             Icon(imageVector = Icons.AutoMirrored.Outlined.Comment, contentDescription = "Comment", tint = colorResource(R.color.verdetp))
@@ -233,7 +256,7 @@ fun ReviewActionBar(
 @Preview
 @Composable
 fun ReviewActionBarPreview() {
-    ReviewActionBar(onLike = {}, onComment = {}, onShare = {})
+    ReviewActionBar(onLike = {}, onComment = {}, onShare = {}, isLiked = false)
 }
 
 
@@ -246,11 +269,13 @@ fun DetalleScreenPreview() {
         isLoading = false
     )
     DetalleContent(
+        detalleViewModel = viewModel(),
         uiState = mockState,
-        onLike = {},
+        reviewId = "",
         onShare = {},
         onComment = {},
         onUserClick = {},
         onProfileClick = {}
     )
 }
+

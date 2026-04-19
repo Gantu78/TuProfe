@@ -17,7 +17,8 @@ fun TextFieldApp(
     value: String,
     onValueChange: (String) -> Unit,
     modifier: Modifier = Modifier,
-    trailingIcon: @Composable (() -> Unit)? = null
+    trailingIcon: @Composable (() -> Unit)? = null,
+    singleLine: Boolean = false
 ) {
     OutlinedTextField(
         value = value,
@@ -26,6 +27,7 @@ fun TextFieldApp(
         modifier = modifier.fillMaxWidth(),
         trailingIcon = trailingIcon,
         shape = RoundedCornerShape(25.dp),
+        singleLine = singleLine,
         colors = OutlinedTextFieldDefaults.colors(
             focusedBorderColor = colorResource(R.color.verdetp),
             unfocusedBorderColor = colorResource(R.color.BordeTuProfe),

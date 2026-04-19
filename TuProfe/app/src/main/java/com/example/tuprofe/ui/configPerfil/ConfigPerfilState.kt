@@ -13,5 +13,6 @@ data class ConfigPerfilState(
     val showDeleteDialog: Boolean = false,
     val showSaveDialog: Boolean = false,
     val errorMessagePerfil: String? = null,
-    val errorMessageEliminar: String? = null
+    val errorMessageEliminar: String? = null,
+    val passwordResetMessage: String? = null
 )

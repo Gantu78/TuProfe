@@ -15,7 +15,10 @@ class ReviewRetrofitDataSourceImpl @Inject constructor(
          return service.getAllReviews()
     }
 
-    override suspend fun getReviewById(id:String): ReviewDto{
+    override suspend fun getReviewById(
+        id: String,
+        currentUserId: String
+    ): ReviewDto {
         return service.getReviewById(id)
     }
 
@@ -34,6 +37,10 @@ class ReviewRetrofitDataSourceImpl @Inject constructor(
 
     override suspend fun getUserReviews(userId: String): List<ReviewDto> {
         return service.getUserReviews(userId.toInt())
+    }
+
+    override suspend fun SendOrDeleteReviewLike(reviewId: String, userId: String) {
+        TODO("Not yet implemented")
     }
 
 }

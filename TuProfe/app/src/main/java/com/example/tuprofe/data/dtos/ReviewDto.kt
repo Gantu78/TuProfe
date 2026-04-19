@@ -29,9 +29,11 @@ data class ReviewDto(
     val createdAt: String? = null,
     val updatedAt: String? = null,
     val professor: ProfessorNameDto? = null,
-    val user: UserDto? = null
+    val user: UserDto? = null,
+    val likesCount: Int,
+    var liked: Boolean = false
 ){
-    constructor(): this("", "", "", "", "", 0, 0, "", "", null, null)
+    constructor(): this("", "", "", "", "", 0, 0, "", "", null, null, 0)
 }
 
 data class ProfessorNameDto(
@@ -68,7 +70,9 @@ fun ReviewDto.toReviewInfo(): ReviewInfo {
         content = content ?: "",
         rating = rating ?: 0,
         time = formatReviewDate(time),
-        likes = 0,
-        commentsCount = comment ?: 0
+        likes = likesCount,
+        commentsCount = comment ?: 0,
+        liked = liked
+
     )
 }
