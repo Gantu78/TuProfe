@@ -48,20 +48,12 @@ fun LogoApp(
     modifier: Modifier = Modifier
 ){
     Image(
+        modifier = modifier,
         painter = painterResource(R.drawable.img),
         contentDescription = stringResource(R.string.logo_tuprofe)
     )
 }
 
-@Composable
-fun LogoLoading(
-    modifier: Modifier = Modifier
-){
-    Image(
-        painter = painterResource(R.drawable.loading),
-        contentDescription = (stringResource(R.string.loading))
-    )
-}
 
 
 @Composable
@@ -104,9 +96,9 @@ fun AppButtonRow(
 
 @Composable
 fun AppTextButton(
+    modifier: Modifier = Modifier,
     textoBoton: String,
-    onClick: () -> Unit = {},
-    modifier: Modifier = Modifier
+    onClick: () -> Unit = {}
 ){
     TextButton(
         onClick = onClick,
@@ -125,10 +117,10 @@ fun AppTextButton(
 
 @Composable
 fun TextFieldApp(
+    modifier: Modifier = Modifier,
     texto: String,
     value: String = "",
-    onValueChange: (String) -> Unit = {},
-    modifier: Modifier = Modifier
+    onValueChange: (String) -> Unit = {}
 ){
     OutlinedTextField(
         value = value,
@@ -151,12 +143,12 @@ fun TextFieldApp(
 
 @Composable
 fun TextFieldContraApp(
+    modifier: Modifier = Modifier,
     texto: String,
     mostrarPassword: Boolean,
     click: () -> Unit,
     value: String = "",
     onValueChange: (String) -> Unit = {},
-    modifier: Modifier = Modifier,
     icono: Int
 ){
     OutlinedTextField(
@@ -297,7 +289,7 @@ fun BackButtonHeader(onBackClick: () -> Unit, modifier: Modifier = Modifier) {
 
 
 @Composable
-@Preview()
+@Preview
 fun HeaderSectionPreview(){
     HeaderSection(
         title = stringResource(R.string.tuprofe)

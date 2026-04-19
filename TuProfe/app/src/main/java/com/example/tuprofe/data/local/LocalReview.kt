@@ -1,7 +1,6 @@
 package com.example.tuprofe.data.local
 
 
-import com.example.tuprofe.R
 import com.example.tuprofe.data.ReviewInfo
 import com.example.tuprofe.data.Usuario
 import com.example.tuprofe.data.local.LocalProfesor.profesores

@@ -4,20 +4,14 @@ import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
-import androidx.compose.material3.VerticalDivider
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -40,8 +34,6 @@ import com.example.tuprofe.navegation.NavigationLogic
 import com.example.tuprofe.navegation.TuProfeBottomBar
 import com.example.tuprofe.ui.utils.BackgroundImage
 import com.example.tuprofe.ui.theme.Montserrat
-import com.google.firebase.Firebase
-import com.google.firebase.auth.FirebaseAuth
 
 
 @Composable
@@ -53,7 +45,6 @@ fun TuProfeApp(
 
     val currentBackStackEntry = navController.currentBackStackEntryAsState()
     val currentRoute = currentBackStackEntry.value?.destination?.route
-    val currentUser = FirebaseAuth.getInstance().currentUser
 
 
 
@@ -92,7 +83,7 @@ fun TuProfeApp(
     }
 }
 
-@Preview()
+@Preview
 @Composable
 fun TuProfeAppPreview(){
     TuProfeApp(
@@ -102,8 +93,9 @@ fun TuProfeAppPreview(){
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TuProfeTopBar(
+    modifier: Modifier = Modifier,
     texto: String = "TuProfe",
-    modifier: Modifier = Modifier
+
 ) {
     Column(
         modifier = modifier
@@ -162,52 +154,4 @@ fun HeaderSection(
     }
 }
 
-@Composable
-fun BottomBar(
-    on1Click: () -> Unit,
-    on2Click: () -> Unit,
-    on3Click: () -> Unit,
-    modifier: Modifier = Modifier
-) {
-    Card(
-        modifier = modifier
-            .fillMaxWidth()
-            .padding(horizontal = 16.dp, vertical = 8.dp),
-        shape = RoundedCornerShape(50),
-        colors = CardDefaults.cardColors(containerColor = colorResource(id = R.color.verdetp))
-    ) {
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            TextButton(
-                onClick = on1Click,
-                modifier = Modifier.weight(1f)
-            ) {
-                Text("Incio", color = Color.White, fontSize = 16.sp)
-            }
-            VerticalDivider(
-                modifier = Modifier.height(30.dp),
-                thickness = 1.dp,
-                color = Color.White
-            )
-            TextButton(
-                onClick = on2Click,
-                modifier = Modifier.weight(1f)
-            ) {
-                Text("Profesores", color = Color.White, fontSize = 16.sp)
-            }
-            VerticalDivider(
-                modifier = Modifier.height(30.dp),
-                thickness = 1.dp,
-                color = Color.White
-            )
-            TextButton(
-                onClick = on3Click,
-                modifier = Modifier.weight(1f)
-            ) {
-                Text("Perfil", color = Color.White, fontSize = 16.sp)
-            }
-        }
-    }
-}
+

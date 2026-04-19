@@ -1,10 +1,8 @@
 package com.example.tuprofe.data.datasource
 
-import android.net.Uri
 import com.google.firebase.auth.EmailAuthProvider
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
-import com.google.firebase.auth.UserProfileChangeRequest
 import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
 
@@ -16,11 +14,11 @@ class AuthRemoteDataSource @Inject constructor (
         get() = auth.currentUser
 
 
-    suspend fun signIn(email: String, password: String): Unit{
+    suspend fun signIn(email: String, password: String){
         auth.signInWithEmailAndPassword(email, password).await()
     }
 
-    suspend fun signUp(email: String, password: String): Unit {
+    suspend fun signUp(email: String, password: String){
         auth.createUserWithEmailAndPassword(email, password).await()
     }
 

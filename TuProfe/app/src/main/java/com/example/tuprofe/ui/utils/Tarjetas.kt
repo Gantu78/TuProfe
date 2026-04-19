@@ -165,16 +165,16 @@ fun Resena(
 
 @Composable
 fun TuProfeCardHeader(
+    modifier: Modifier = Modifier,
     profeName: String,
     userName: String,
     carrera: String,
     imageUrl: String?,
     onProfessorClick: () -> Unit,
-    onUserClick: () -> Unit,
-    modifier: Modifier = Modifier.fillMaxWidth()
+    onUserClick: () -> Unit
 ) {
     Row(
-        modifier = modifier,
+        modifier = modifier.fillMaxWidth(),
         verticalAlignment = Alignment.CenterVertically
     ) {
         AsyncImage(
@@ -243,9 +243,9 @@ fun TuProfeCardHeader(
 
 @Composable
 fun RatingStars(
+    modifier: Modifier = Modifier,
     rating: Int,
-    starColor: Color = Color(0xFF1DB954),
-    modifier: Modifier = Modifier
+    starColor: Color = Color(0xFF1DB954)
 ) {
     Row(modifier = modifier) {
         repeat(5) { index ->

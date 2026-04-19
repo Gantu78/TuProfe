@@ -1,7 +1,7 @@
 package com.example.tuprofe.data.datasource.impl.retrofit
 
 import com.example.tuprofe.data.datasource.ReviewRemoteDataSource
-import com.example.tuprofe.data.datasource.Services.ReviewRetrofitService
+import com.example.tuprofe.data.datasource.services.ReviewRetrofitService
 import com.example.tuprofe.data.dtos.CreateReviewDto
 import com.example.tuprofe.data.dtos.ReviewDto
 import javax.inject.Inject
@@ -35,4 +35,5 @@ class ReviewRetrofitDataSourceImpl @Inject constructor(
     override suspend fun getUserReviews(userId: String): List<ReviewDto> {
         return service.getUserReviews(userId.toInt())
     }
+
 }

@@ -2,21 +2,13 @@ package com.example.tuprofe.data.repository
 
 import android.util.Log
 import com.example.tuprofe.data.ReviewInfo
-import com.example.tuprofe.data.datasource.AuthRemoteDataSource
 import com.example.tuprofe.data.datasource.ProfessorRemoteDataSource
 import com.example.tuprofe.data.datasource.ReviewRemoteDataSource
 import com.example.tuprofe.data.datasource.UserRemoteDataSource
-import com.example.tuprofe.data.datasource.impl.firestore.ProfessorFirestoreDataSourceImpl
-import com.example.tuprofe.data.datasource.impl.firestore.ReviewFirestoreDataSourceImpl
-import com.example.tuprofe.data.datasource.impl.firestore.UserFirestoreDataSourceImpl
-import com.example.tuprofe.data.datasource.impl.retrofit.ProfessorRemoteDataSourceImpl
-import com.example.tuprofe.data.datasource.impl.retrofit.ReviewRetrofitDataSourceImpl
-import com.example.tuprofe.data.datasource.impl.retrofit.UsuarioRemoteDataSourceImpl
 import com.example.tuprofe.data.dtos.CreateReviewDto
 import com.example.tuprofe.data.dtos.CreateReviewProfessorDto
 import com.example.tuprofe.data.dtos.CreateReviewUserDto
 import com.example.tuprofe.data.dtos.toReviewInfo
-import com.example.tuprofe.data.dtos.toUsuario
 import retrofit2.HttpException
 import java.text.SimpleDateFormat
 import java.util.Date

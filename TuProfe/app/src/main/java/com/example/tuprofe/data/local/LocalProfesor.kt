@@ -1,7 +1,6 @@
 package com.example.tuprofe.data.local
 
 import com.example.tuprofe.data.Profesor
-import com.example.tuprofe.R
 
 object LocalProfesor {
 

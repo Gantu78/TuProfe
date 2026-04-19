@@ -19,14 +19,14 @@ object FireBaseHiltModule {
 
 
     @Provides
-    fun Auth(): FirebaseAuth = Firebase.auth
+    fun provideAuth(): FirebaseAuth = Firebase.auth
 
     @Singleton
     @Provides
-    fun Firestore(): FirebaseFirestore = Firebase.firestore
+    fun provideFirestore(): FirebaseFirestore = Firebase.firestore
 
 
     @Provides
-    fun Storage(): FirebaseStorage = Firebase.storage
+    fun provideStorage(): FirebaseStorage = Firebase.storage
 
 }

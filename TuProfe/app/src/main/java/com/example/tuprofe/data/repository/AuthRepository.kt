@@ -7,7 +7,6 @@ import com.google.firebase.auth.FirebaseAuthInvalidUserException
 import com.google.firebase.FirebaseTooManyRequestsException
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.FirebaseNetworkException
-import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseAuthRecentLoginRequiredException
 import com.google.firebase.auth.FirebaseAuthUserCollisionException
 import com.google.firebase.auth.FirebaseAuthWeakPasswordException

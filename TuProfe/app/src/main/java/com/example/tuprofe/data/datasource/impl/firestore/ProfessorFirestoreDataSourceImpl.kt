@@ -2,8 +2,6 @@ package com.example.tuprofe.data.datasource.impl.firestore
 
 import com.example.tuprofe.data.datasource.ProfessorRemoteDataSource
 import com.example.tuprofe.data.dtos.ProfessorDto
-import com.example.tuprofe.data.dtos.ReviewDto
-import com.example.tuprofe.data.dtos.UserDto
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.tasks.await
 import javax.inject.Inject

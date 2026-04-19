@@ -1,9 +1,7 @@
 package com.example.tuprofe.data.repository
 
 import android.net.Uri
-import android.util.Log
 import com.example.tuprofe.data.datasource.StorageRemoteDataSource
-import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
 
 class StorageRepository @Inject constructor(

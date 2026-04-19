@@ -1,6 +1,5 @@
 package com.example.tuprofe.data
 
-import androidx.annotation.DrawableRes
 
 data class Profesor(
     val profeId: String,

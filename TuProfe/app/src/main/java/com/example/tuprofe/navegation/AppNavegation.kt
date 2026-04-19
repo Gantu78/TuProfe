@@ -25,37 +25,33 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.*
 import androidx.navigation.navArgument
 import com.example.tuprofe.R
-import com.example.tuprofe.data.ReviewInfo
-import com.example.tuprofe.data.datasource.impl.firestore.ProfessorFirestoreDataSourceImpl
-import com.example.tuprofe.data.local.LocalProfesor
-import com.example.tuprofe.ui.Config.ConfigScreen
-import com.example.tuprofe.ui.Config.ConfigViewModel
-import com.example.tuprofe.ui.ConfigPerfil.ConfigPerfilScreen
-import com.example.tuprofe.ui.ConfigPerfil.ConfigPerfilViewModel
-import com.example.tuprofe.ui.Detalle.DetalleScreen
-import com.example.tuprofe.ui.Detalle.DetalleViewModel
-import com.example.tuprofe.ui.Historia.HistorialScreen
-import com.example.tuprofe.ui.Historia.HistorialViewModel
+import com.example.tuprofe.ui.config.ConfigScreen
+import com.example.tuprofe.ui.config.ConfigViewModel
+import com.example.tuprofe.ui.configPerfil.ConfigPerfilScreen
+import com.example.tuprofe.ui.configPerfil.ConfigPerfilViewModel
+import com.example.tuprofe.ui.detalle.DetalleScreen
+import com.example.tuprofe.ui.detalle.DetalleViewModel
+import com.example.tuprofe.ui.historia.HistorialScreen
+import com.example.tuprofe.ui.historia.HistorialViewModel
 import com.example.tuprofe.ui.LoadingScreen
-import com.example.tuprofe.ui.Login.HomeScreen
-import com.example.tuprofe.ui.Login.LoginViewModel
-import com.example.tuprofe.ui.Main.MainScreen
-import com.example.tuprofe.ui.Main.MainViewModel
-import com.example.tuprofe.ui.PerfilAjeno.UserProfileScreen
-import com.example.tuprofe.ui.PerfilAjeno.UserProfileViewModel
-import com.example.tuprofe.ui.Profe.ProfeScreen
-import com.example.tuprofe.ui.Profe.ProfeViewModel
-import com.example.tuprofe.ui.Register.RegisterScreen
-import com.example.tuprofe.ui.Register.RegisterViewModel
-import com.example.tuprofe.ui.ResetPassword.ResetPasswordScreen
-import com.example.tuprofe.ui.ResetPassword.ResetPasswordViewModel
-import com.example.tuprofe.ui.Review.CreateReviewScreen
-import com.example.tuprofe.ui.Review.CreateReviewViewModel
-import com.example.tuprofe.ui.Review.EditReviewScreen
-import com.example.tuprofe.ui.Review.EditReviewViewModel
-import com.example.tuprofe.ui.Search.SearchScreen
-import com.example.tuprofe.ui.Splash.SplashScreen
-import com.example.tuprofe.ui.Splash.SplashViewModel
+import com.example.tuprofe.ui.login.HomeScreen
+import com.example.tuprofe.ui.login.LoginViewModel
+import com.example.tuprofe.ui.main.MainScreen
+import com.example.tuprofe.ui.main.MainViewModel
+import com.example.tuprofe.ui.perfilAjeno.UserProfileScreen
+import com.example.tuprofe.ui.perfilAjeno.UserProfileViewModel
+import com.example.tuprofe.ui.profe.ProfeScreen
+import com.example.tuprofe.ui.profe.ProfeViewModel
+import com.example.tuprofe.ui.register.RegisterScreen
+import com.example.tuprofe.ui.register.RegisterViewModel
+import com.example.tuprofe.ui.resetPassword.ResetPasswordScreen
+import com.example.tuprofe.ui.resetPassword.ResetPasswordViewModel
+import com.example.tuprofe.ui.review.create.CreateReviewScreen
+import com.example.tuprofe.ui.review.create.CreateReviewViewModel
+import com.example.tuprofe.ui.review.edit.EditReviewScreen
+import com.example.tuprofe.ui.review.edit.EditReviewViewModel
+import com.example.tuprofe.ui.search.SearchScreen
+import com.example.tuprofe.ui.splash.SplashScreen
 
 
 sealed class Screen(val route: String){
@@ -178,11 +174,9 @@ fun AppNavegation(
             arguments = listOf(navArgument("profeId"){ type = NavType.StringType })
             
         ){
-            val profeId = it.arguments?.getString("profeId") ?: ""
             val profeViewModel: ProfeViewModel = hiltViewModel()
                 ProfeScreen(
                     profeViewModel = profeViewModel,
-                    profeId = profeId,
                     onResenaClick = { reviewId ->
                         navController.navigate(Screen.Detalle.createRoute(reviewId))
                     },
@@ -231,9 +225,6 @@ fun AppNavegation(
                 onSuccess = {
                     navController.popBackStack()
                 },
-                onBackClick = {
-                    navController.popBackStack()
-                }
             )
         }
 

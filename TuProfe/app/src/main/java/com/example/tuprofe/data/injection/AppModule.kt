@@ -1,6 +1,8 @@
 package com.example.tuprofe.data.injection
 
-import com.example.tuprofe.data.datasource.Services.ReviewRetrofitService
+import com.example.tuprofe.data.datasource.services.ProfesorRetrofitService
+import com.example.tuprofe.data.datasource.services.ReviewRetrofitService
+import com.example.tuprofe.data.datasource.services.UserRetrofitService
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -47,5 +49,17 @@ object AppModule {
     @Provides
     fun providesReviewRetrofitService(retrofit: Retrofit): ReviewRetrofitService {
         return retrofit.create(ReviewRetrofitService::class.java)
+    }
+
+    @Singleton
+    @Provides
+    fun providesProfesorRetrofitService(retrofit: Retrofit): ProfesorRetrofitService {
+        return retrofit.create(ProfesorRetrofitService::class.java)
+    }
+
+    @Singleton
+    @Provides
+    fun providesUserRetrofitService(retrofit: Retrofit): UserRetrofitService {
+        return retrofit.create(UserRetrofitService::class.java)
     }
 }
