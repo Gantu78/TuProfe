@@ -121,7 +121,7 @@ fun ProfeContent(
 @Composable
 fun ProfessorInfoCard(
     professorName: String,
-    generalRating: Int,
+    generalRating: Float,
     professorImageUrl: String?,
     departamento: String = "",
     modifier: Modifier = Modifier
@@ -165,6 +165,14 @@ fun ProfessorInfoCard(
             }
             Spacer(modifier = Modifier.height(18.dp))
             RatingStars(rating = generalRating, starColor = colorResource(R.color.verdetp))
+            if (generalRating > 0f) {
+                Spacer(modifier = Modifier.height(4.dp))
+                Text(
+                    text = String.format("%.1f", generalRating),
+                    fontSize = 14.sp,
+                    color = colorResource(R.color.verdetp2)
+                )
+            }
         }
     }
 }
@@ -174,7 +182,7 @@ fun ProfessorInfoCard(
 private fun ProfessorInfoCardPreview() {
     ProfessorInfoCard(
         professorName = "Carlos Parra",
-        generalRating = 4,
+        generalRating = 4F,
         professorImageUrl = "https://img.lalr.co/cms/2017/06/16184524/1280x1440_CARLOS-PARRA.jpg?r=6_5&ns=1&w=372&d=2.625"
     )
 }
@@ -225,7 +233,7 @@ private fun ProfeContentPreview() {
         uiState = ProfeState(
             profesor = LocalProfesor.profesores[0],
             professorReviews = LocalReview.Reviews.take(3),
-            averageRating = 4,
+            averageRating = 4F,
             isLoading = false
         ),
         onResenaClick = {},

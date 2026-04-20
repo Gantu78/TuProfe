@@ -74,7 +74,7 @@ fun SearchContent(
                     items(uiState.searchResults) { profesor ->
                         ProfessorSearchResultItem(
                             profesor = profesor,
-                            rating = uiState.ratings[profesor.profeId] ?: 0,
+                            rating = uiState.ratings[profesor.profeId] ?: 0F,
                             onClick = { onProfessorClick(profesor) }
                         )
                     }
@@ -85,7 +85,7 @@ fun SearchContent(
 }
 
 @Composable
-fun ProfessorSearchResultItem(profesor: Profesor, rating: Int, onClick: () -> Unit) {
+fun ProfessorSearchResultItem(profesor: Profesor, rating: Float, onClick: () -> Unit) {
     Card(
         onClick = onClick,
         modifier = Modifier.fillMaxWidth(),

@@ -130,4 +130,8 @@ class CreateReviewViewModel @Inject constructor(
     fun onDismissDropdown() {
         _uiState.update { it.copy(isDropdownExpanded = false) }
     }
+
+    fun toggleDropdown() {
+        _uiState.update { it.copy(isDropdownExpanded = !it.isDropdownExpanded) }
+    }
 }

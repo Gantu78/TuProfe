@@ -12,7 +12,6 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
-import kotlin.math.roundToInt
 
 @HiltViewModel
 class ProfeViewModel @Inject constructor(
@@ -44,8 +43,9 @@ class ProfeViewModel @Inject constructor(
                 val filteredReviews = allReviews.filter { it.profesor.profeId == profeId}
 
                 val average = if (filteredReviews.isNotEmpty()) {
-                    filteredReviews.map { it.rating }.average().roundToInt()
-                } else 0
+                    val raw = filteredReviews.map { it.rating }.average()
+                    (Math.round(raw * 10) / 10.0).toFloat()
+                } else 0f
 
                 _uiState.update {
                     it.copy(

@@ -16,13 +16,19 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.geometry.Rect
+import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Outline
+import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.unit.Density
+import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
@@ -146,7 +152,7 @@ fun Resena(
         )
 
         RatingStars(
-            rating = reviewInfo.rating,
+            rating = reviewInfo.rating.toFloat(),
             starColor = colorResource(R.color.verdetp)
         )
 
@@ -241,19 +247,51 @@ fun TuProfeCardHeader(
     }
 }
 
+private val LeftHalfShape = object : Shape {
+    override fun createOutline(size: Size, layoutDirection: LayoutDirection, density: Density) =
+        Outline.Rectangle(Rect(0f, 0f, size.width / 2f, size.height))
+}
+
 @Composable
 fun RatingStars(
     modifier: Modifier = Modifier,
-    rating: Int,
+    rating: Float,
+    starSize: androidx.compose.ui.unit.Dp = 24.dp,
     starColor: Color = Color(0xFF1DB954)
 ) {
     Row(modifier = modifier) {
         repeat(5) { index ->
-            Icon(
-                imageVector = Icons.Default.Star,
-                contentDescription = null,
-                tint = if (index < rating) starColor else Color.LightGray
-            )
+            val threshold = index + 1f
+            when {
+                rating >= threshold -> Icon(
+                    imageVector = Icons.Default.Star,
+                    contentDescription = null,
+                    tint = starColor,
+                    modifier = Modifier.size(starSize)
+                )
+                rating >= threshold - 0.5f -> Box(modifier = Modifier.size(starSize)) {
+                    Icon(
+                        imageVector = Icons.Default.Star,
+                        contentDescription = null,
+                        tint = Color.LightGray,
+                        modifier = Modifier.size(starSize)
+                    )
+                    Box(modifier = Modifier.size(starSize).clip(LeftHalfShape)) {
+                        Icon(
+                            imageVector = Icons.Default.Star,
+                            contentDescription = null,
+                            tint = starColor,
+                            modifier = Modifier.size(starSize)
+                        )
+                    }
+                }
+                else -> Icon(
+                    imageVector = Icons.Default.Star,
+                    contentDescription = null,
+                    tint = Color.LightGray,
+                    modifier = Modifier.size(starSize)
+                )
+            }
         }
     }
 }

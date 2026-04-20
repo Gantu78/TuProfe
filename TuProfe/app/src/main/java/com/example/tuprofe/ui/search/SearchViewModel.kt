@@ -12,7 +12,6 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
-import kotlin.math.roundToInt
 
 @HiltViewModel
 class SearchViewModel @Inject constructor(
@@ -37,7 +36,10 @@ class SearchViewModel @Inject constructor(
 
             val ratings = reviewsResult.getOrNull()
                 ?.groupBy { it.profesor.profeId }
-                ?.mapValues { (_, reviews) -> reviews.map { it.rating }.average().roundToInt() }
+                ?.mapValues { (_, reviews) ->
+                    val raw = reviews.map { it.rating }.average()
+                    (Math.round(raw * 10) / 10.0).toFloat()
+                }
                 ?: emptyMap()
 
             professorsResult.onSuccess { list ->

@@ -248,7 +248,7 @@ private fun HistorialCardBody(
             modifier = Modifier.fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            RatingStars(rating = review.rating, modifier = Modifier.height(16.dp))
+            RatingStars(rating = review.rating.toFloat(), modifier = Modifier.height(16.dp))
         }
 
         Spacer(modifier = Modifier.height(4.dp))

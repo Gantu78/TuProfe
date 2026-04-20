@@ -60,7 +60,7 @@ fun CreateReviewScreen(
             // Selector de Profesor con Autocompletado
             ExposedDropdownMenuBox(
                 expanded = state.isDropdownExpanded,
-                onExpandedChange = { /* Manejado por clicks y foco */ }
+                onExpandedChange = { viewModel.toggleDropdown() }
             ) {
                 TextFieldApp(
                     texto = stringResource(R.string.buscar_profesor),
