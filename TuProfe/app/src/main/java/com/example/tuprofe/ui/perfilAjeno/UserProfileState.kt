@@ -8,6 +8,10 @@ data class UserProfileState(
     val userReviews: List<ReviewInfo> = emptyList(),
     val isLoading: Boolean = false,
     val errorMessage: String? = null,
-    val currentUserId: String = ""
-
+    val currentUserId: String = "",
+    val showFollowersSheet: Boolean = false,
+    val showFollowingSheet: Boolean = false,
+    val followersList: List<Usuario> = emptyList(),
+    val followingList: List<Usuario> = emptyList(),
+    val isLoadingList: Boolean = false
 )

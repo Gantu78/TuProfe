@@ -66,6 +66,23 @@ class UserRepository @Inject constructor(
         } catch (e: Exception) {
             Result.failure(e)
         }
+    }
 
+    suspend fun getFollowers(userId: String, currentUserId: String): Result<List<Usuario>> {
+        return try {
+            val dtos = userRemoteDataSource.getFollowers(userId, currentUserId)
+            Result.success(dtos.map { it.toUsuario() })
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
+
+    suspend fun getFollowing(userId: String, currentUserId: String): Result<List<Usuario>> {
+        return try {
+            val dtos = userRemoteDataSource.getFollowing(userId, currentUserId)
+            Result.success(dtos.map { it.toUsuario() })
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
     }
 }

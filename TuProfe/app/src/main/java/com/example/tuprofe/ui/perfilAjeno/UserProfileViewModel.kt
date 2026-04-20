@@ -78,4 +78,55 @@ class UserProfileViewModel @Inject constructor(
             }
         }
     }
+
+    fun openFollowersSheet() {
+        val state = _uiState.value
+        _uiState.update { it.copy(showFollowersSheet = true, isLoadingList = true) }
+        viewModelScope.launch {
+            val result = userRepository.getFollowers(state.user.usuarioId, state.currentUserId)
+            result.onSuccess { list ->
+                _uiState.update { it.copy(followersList = list, isLoadingList = false) }
+            }.onFailure {
+                _uiState.update { it.copy(isLoadingList = false) }
+            }
+        }
+    }
+
+    fun openFollowingSheet() {
+        val state = _uiState.value
+        _uiState.update { it.copy(showFollowingSheet = true, isLoadingList = true) }
+        viewModelScope.launch {
+            val result = userRepository.getFollowing(state.user.usuarioId, state.currentUserId)
+            result.onSuccess { list ->
+                _uiState.update { it.copy(followingList = list, isLoadingList = false) }
+            }.onFailure {
+                _uiState.update { it.copy(isLoadingList = false) }
+            }
+        }
+    }
+
+    fun closeSheet() {
+        _uiState.update { it.copy(showFollowersSheet = false, showFollowingSheet = false) }
+    }
+
+    fun followOrUnfollowInList(targetUserId: String) {
+        val currentUserId = _uiState.value.currentUserId
+        viewModelScope.launch {
+            val result = userRepository.followOrUnfollow(currentUserId, targetUserId)
+            if (result.isSuccess) {
+                fun toggle(list: List<Usuario>) = list.map { u ->
+                    if (u.usuarioId == targetUserId) u.copy(
+                        followed = !u.followed,
+                        followersCount = if (u.followed) u.followersCount - 1 else u.followersCount + 1
+                    ) else u
+                }
+                _uiState.update { state ->
+                    state.copy(
+                        followersList = toggle(state.followersList),
+                        followingList = toggle(state.followingList)
+                    )
+                }
+            }
+        }
+    }
 }

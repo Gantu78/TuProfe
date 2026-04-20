@@ -269,7 +269,7 @@ fun AppNavegation(
 
             ConfigScreen(
                 configViewModel = configViewModel,
-                onProfileClick = {
+                onEditProfileClick = {
                     navController.navigate(Screen.ConfigPerfil.route)
                 },
                 onLogoutClick = {

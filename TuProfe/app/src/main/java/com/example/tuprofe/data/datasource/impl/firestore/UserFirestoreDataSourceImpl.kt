@@ -45,6 +45,36 @@ class UserFirestoreDataSourceImpl @Inject constructor(
     }
 
 
+    override suspend fun getFollowers(userId: String, currentUserId: String): List<UserDto> {
+        val docs = db.collection("users").document(userId).collection("followers").get().await()
+        return docs.documents.mapNotNull { doc ->
+            try {
+                fetchUserWithFollowStatus(doc.id, currentUserId)
+            } catch (e: Exception) { null }
+        }
+    }
+
+    override suspend fun getFollowing(userId: String, currentUserId: String): List<UserDto> {
+        val docs = db.collection("users").document(userId).collection("following").get().await()
+        return docs.documents.mapNotNull { doc ->
+            try {
+                fetchUserWithFollowStatus(doc.id, currentUserId)
+            } catch (e: Exception) { null }
+        }
+    }
+
+    private suspend fun fetchUserWithFollowStatus(targetId: String, currentUserId: String): UserDto? {
+        val userDoc = db.collection("users").document(targetId).get().await()
+        val user = userDoc.toObject(UserDto::class.java) ?: return null
+        user.copy(id = targetId)
+        if (currentUserId.isNotEmpty()) {
+            val isFollowed = db.collection("users").document(targetId)
+                .collection("followers").document(currentUserId).get().await().exists()
+            user.followed = isFollowed
+        }
+        return user.copy(id = targetId)
+    }
+
     override suspend fun followOrUnfollowUser(currentUserId: String, targetUserId: String) {
         Log.d("TEST", "currentUserId: $currentUserId")
         val currentUserRef = db.collection("users").document(currentUserId)

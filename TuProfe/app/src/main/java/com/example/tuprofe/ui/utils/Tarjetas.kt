@@ -43,89 +43,137 @@ fun ProfileHeaderCard(
     imageUrl: String?,
     onProfileClick: () -> Unit,
     modifier: Modifier = Modifier,
-    showStar: Boolean = true
+    showStar: Boolean = true,
+    followersCount: Int? = null,
+    followingCount: Int? = null,
+    onEditClick: (() -> Unit)? = null,
+    onFollowersClick: () -> Unit = {},
+    onFollowingClick: () -> Unit = {}
 ) {
+    val hasStats = followersCount != null && followingCount != null && onEditClick != null
     Card(
         modifier = modifier
             .fillMaxWidth()
-            .padding(vertical = 12.dp),
-        onClick = onProfileClick,
+            .padding(vertical = 12.dp)
+            .then(if (!hasStats) Modifier.clickable(onClick = onProfileClick) else Modifier),
         shape = RoundedCornerShape(32.dp),
-        border = BorderStroke(
-            2.dp,
-            colorResource(R.color.BordeTuProfe)
-        ),
-        colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.surface
-        ),
+        border = BorderStroke(2.dp, colorResource(R.color.BordeTuProfe)),
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
         elevation = CardDefaults.cardElevation(defaultElevation = 10.dp)
     ) {
-        Row(
+        Column(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 22.dp, vertical = 20.dp),
-            verticalAlignment = Alignment.CenterVertically
+            verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
-            AsyncImage(
-                model = imageUrl,
-                contentDescription = stringResource(R.string.foto_de_perfil),
-                placeholder = painterResource(R.drawable.loading_img),
-                error = painterResource(R.drawable.avatar),
-                modifier = Modifier
-                    .size(88.dp)
-                    .shadow(6.dp, CircleShape, clip = false)
-                    .clip(CircleShape)
-                    .background(MaterialTheme.colorScheme.surfaceVariant)
-                    .border(
-                        2.dp,
-                        MaterialTheme.colorScheme.outline.copy(alpha = 0.25f),
-                        CircleShape
-                    ),
-                contentScale = ContentScale.Crop
-            )
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                AsyncImage(
+                    model = imageUrl,
+                    contentDescription = stringResource(R.string.foto_de_perfil),
+                    placeholder = painterResource(R.drawable.loading_img),
+                    error = painterResource(R.drawable.avatar),
+                    modifier = Modifier
+                        .size(88.dp)
+                        .shadow(6.dp, CircleShape, clip = false)
+                        .clip(CircleShape)
+                        .background(MaterialTheme.colorScheme.surfaceVariant)
+                        .border(
+                            2.dp,
+                            MaterialTheme.colorScheme.outline.copy(alpha = 0.25f),
+                            CircleShape
+                        ),
+                    contentScale = ContentScale.Crop
+                )
 
-            Spacer(modifier = Modifier.width(18.dp))
+                Spacer(modifier = Modifier.width(18.dp))
 
-            Column(
-                modifier = Modifier.weight(1f),
-                verticalArrangement = Arrangement.spacedBy(4.dp)
-            ) {
-                Row(verticalAlignment = Alignment.CenterVertically) {
+                Column(
+                    modifier = Modifier.weight(1f),
+                    verticalArrangement = Arrangement.spacedBy(4.dp)
+                ) {
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        Text(
+                            text = username,
+                            fontSize = 20.sp,
+                            fontWeight = FontWeight.SemiBold,
+                            color = MaterialTheme.colorScheme.onSurface
+                        )
+
+                        if (showStar) {
+                            Spacer(modifier = Modifier.width(6.dp))
+                            Icon(
+                                imageVector = Icons.Default.Star,
+                                contentDescription = null,
+                                tint = colorResource(R.color.verdetp),
+                                modifier = Modifier.size(18.dp)
+                            )
+                        }
+                    }
+
                     Text(
-                        text = username,
-                        fontSize = 20.sp,
-                        fontWeight = FontWeight.SemiBold,
-                        color = MaterialTheme.colorScheme.onSurface
+                        text = email,
+                        fontSize = 14.sp,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis
                     )
 
-                    if (showStar) {
-                        Spacer(modifier = Modifier.width(6.dp))
-                        Icon(
-                            imageVector = Icons.Default.Star,
-                            contentDescription = null,
-                            tint = colorResource(R.color.verdetp),
-                            modifier = Modifier.size(18.dp)
+                    Text(
+                        text = carrera,
+                        fontSize = 14.sp,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis
+                    )
+                }
+            }
+
+            if (hasStats) {
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Row(horizontalArrangement = Arrangement.spacedBy(24.dp)) {
+                        ProfileStat(label = "Seguidores", count = followersCount!!, onClick = onFollowersClick)
+                        ProfileStat(label = "Siguiendo", count = followingCount!!, onClick = onFollowingClick)
+                    }
+                    OutlinedButton(
+                        onClick = onEditClick!!,
+                        border = BorderStroke(1.5.dp, colorResource(R.color.verdetp)),
+                        contentPadding = PaddingValues(horizontal = 16.dp, vertical = 6.dp)
+                    ) {
+                        Text(
+                            text = "Editar perfil",
+                            color = colorResource(R.color.verdetp),
+                            fontSize = 13.sp,
+                            fontWeight = FontWeight.Medium
                         )
                     }
                 }
-
-                Text(
-                    text = email,
-                    fontSize = 14.sp,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
-                    maxLines = 1,
-                    overflow = TextOverflow.Ellipsis
-                )
-
-                Text(
-                    text = carrera,
-                    fontSize = 14.sp,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
-                    maxLines = 1,
-                    overflow = TextOverflow.Ellipsis
-                )
             }
         }
+    }
+}
+
+@Composable
+private fun ProfileStat(label: String, count: Int, onClick: () -> Unit = {}) {
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally,
+        modifier = Modifier.clickable(onClick = onClick)
+    ) {
+        Text(
+            text = count.toString(),
+            fontSize = 18.sp,
+            fontWeight = FontWeight.Bold,
+            color = MaterialTheme.colorScheme.onSurface
+        )
+        Text(
+            text = label,
+            fontSize = 12.sp,
+            color = MaterialTheme.colorScheme.onSurfaceVariant
+        )
     }
 }
 

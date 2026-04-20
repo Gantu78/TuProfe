@@ -3,6 +3,7 @@ package com.example.tuprofe.ui.perfilAjeno
 import android.content.res.Configuration
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -49,15 +50,24 @@ fun UserProfileScreen(
         state = uiState,
         onProfessorClick = onProfessorClick,
         onFollowClick = { viewModel.followOrUnfollowUser(uiState.user.usuarioId) },
+        onFollowersClick = { viewModel.openFollowersSheet() },
+        onFollowingClick = { viewModel.openFollowingSheet() },
+        onDismissSheet = { viewModel.closeSheet() },
+        onFollowInList = { viewModel.followOrUnfollowInList(it) },
         modifier = modifier
     )
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun UserProfileContent(
     state: UserProfileState,
     onProfessorClick: (String) -> Unit,
     onFollowClick: () -> Unit = {},
+    onFollowersClick: () -> Unit = {},
+    onFollowingClick: () -> Unit = {},
+    onDismissSheet: () -> Unit = {},
+    onFollowInList: (String) -> Unit = {},
     modifier: Modifier = Modifier
 ) {
     Box(modifier = modifier.fillMaxSize()) {
@@ -70,8 +80,63 @@ fun UserProfileContent(
                 reviews = state.userReviews,
                 isOwnProfile = state.currentUserId == state.user.usuarioId,
                 onProfessorClick = onProfessorClick,
-                onFollowClick = onFollowClick
+                onFollowClick = onFollowClick,
+                onFollowersClick = onFollowersClick,
+                onFollowingClick = onFollowingClick
             )
+        }
+    }
+
+    val showSheet = state.showFollowersSheet || state.showFollowingSheet
+    if (showSheet) {
+        val title = if (state.showFollowersSheet) "Seguidores" else "Siguiendo"
+        val list = if (state.showFollowersSheet) state.followersList else state.followingList
+
+        ModalBottomSheet(onDismissRequest = onDismissSheet) {
+            Text(
+                text = title,
+                fontWeight = FontWeight.Bold,
+                fontSize = 18.sp,
+                modifier = Modifier.padding(horizontal = 24.dp, vertical = 4.dp)
+            )
+            HorizontalDivider(modifier = Modifier.padding(vertical = 8.dp))
+            if (state.isLoadingList) {
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(120.dp),
+                    contentAlignment = Alignment.Center
+                ) {
+                    CircularProgressIndicator(color = colorResource(R.color.verdetp))
+                }
+            } else if (list.isEmpty()) {
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(120.dp),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Text(
+                        text = "No hay usuarios aún",
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        fontSize = 14.sp
+                    )
+                }
+            } else {
+                LazyColumn(
+                    contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp),
+                    verticalArrangement = Arrangement.spacedBy(4.dp),
+                    modifier = Modifier.navigationBarsPadding()
+                ) {
+                    items(list, key = { it.usuarioId }) { usuario ->
+                        UserListItem(
+                            usuario = usuario,
+                            isCurrentUser = usuario.usuarioId == state.currentUserId,
+                            onFollowClick = { onFollowInList(usuario.usuarioId) }
+                        )
+                    }
+                }
+            }
         }
     }
 }
@@ -82,7 +147,9 @@ private fun UserProfileLoaded(
     reviews: List<ReviewInfo>,
     isOwnProfile: Boolean,
     onProfessorClick: (String) -> Unit,
-    onFollowClick: () -> Unit
+    onFollowClick: () -> Unit,
+    onFollowersClick: () -> Unit = {},
+    onFollowingClick: () -> Unit = {}
 ) {
     LazyColumn(
         modifier = Modifier.fillMaxSize(),
@@ -92,7 +159,9 @@ private fun UserProfileLoaded(
             UserProfileHeader(
                 user = user,
                 isOwnProfile = isOwnProfile,
-                onFollowClick = onFollowClick
+                onFollowClick = onFollowClick,
+                onFollowersClick = onFollowersClick,
+                onFollowingClick = onFollowingClick
             )
         }
 
@@ -127,6 +196,8 @@ private fun UserProfileHeader(
     user: Usuario,
     isOwnProfile: Boolean,
     onFollowClick: () -> Unit,
+    onFollowersClick: () -> Unit = {},
+    onFollowingClick: () -> Unit = {},
     modifier: Modifier = Modifier
 ) {
     Column(
@@ -171,8 +242,8 @@ private fun UserProfileHeader(
             horizontalArrangement = Arrangement.spacedBy(40.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            StatItem(label = "Seguidores", count = user.followersCount)
-            StatItem(label = "Siguiendo", count = user.followingCount)
+            StatItem(label = "Seguidores", count = user.followersCount, onClick = onFollowersClick)
+            StatItem(label = "Siguiendo", count = user.followingCount, onClick = onFollowingClick)
         }
 
         if (!isOwnProfile) {
@@ -203,8 +274,11 @@ private fun UserProfileHeader(
 }
 
 @Composable
-private fun StatItem(label: String, count: Int) {
-    Column(horizontalAlignment = Alignment.CenterHorizontally) {
+private fun StatItem(label: String, count: Int, onClick: () -> Unit = {}) {
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally,
+        modifier = Modifier.clickable(onClick = onClick)
+    ) {
         Text(
             text = "$count",
             fontSize = 20.sp,
@@ -216,6 +290,57 @@ private fun StatItem(label: String, count: Int) {
             fontSize = 12.sp,
             color = MaterialTheme.colorScheme.onSurfaceVariant
         )
+    }
+}
+
+@Composable
+private fun UserListItem(
+    usuario: Usuario,
+    isCurrentUser: Boolean,
+    onFollowClick: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+    Row(
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(horizontal = 8.dp, vertical = 10.dp),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        AsyncImage(
+            model = usuario.imageprofeUrl,
+            contentDescription = null,
+            placeholder = painterResource(R.drawable.loading_img),
+            error = painterResource(R.drawable.avatar),
+            contentScale = ContentScale.Crop,
+            modifier = Modifier
+                .size(46.dp)
+                .clip(CircleShape)
+                .background(MaterialTheme.colorScheme.surfaceVariant)
+        )
+        Spacer(Modifier.width(12.dp))
+        Text(
+            text = usuario.nombreUsu,
+            fontSize = 15.sp,
+            fontWeight = FontWeight.Medium,
+            color = MaterialTheme.colorScheme.onSurface,
+            modifier = Modifier.weight(1f)
+        )
+        if (!isCurrentUser) OutlinedButton(
+            onClick = onFollowClick,
+            border = BorderStroke(1.5.dp, colorResource(R.color.verdetp)),
+            contentPadding = PaddingValues(horizontal = 14.dp, vertical = 4.dp),
+            modifier = Modifier.height(34.dp),
+            colors = ButtonDefaults.outlinedButtonColors(
+                containerColor = if (usuario.followed) colorResource(R.color.verdetp) else Color.Transparent,
+                contentColor = if (usuario.followed) Color.White else colorResource(R.color.verdetp)
+            )
+        ) {
+            Text(
+                text = if (usuario.followed) "Siguiendo" else "Seguir",
+                fontSize = 13.sp,
+                fontWeight = FontWeight.Medium
+            )
+        }
     }
 }
 
