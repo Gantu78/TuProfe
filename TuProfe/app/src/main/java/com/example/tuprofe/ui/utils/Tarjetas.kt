@@ -158,7 +158,8 @@ fun Resena(
 
         TuProfeCardBody(
             content = reviewInfo.content,
-            date = reviewInfo.time
+            date = reviewInfo.time,
+            editado = reviewInfo.editado
         )
 
         ResenaCardActions(
@@ -333,6 +334,7 @@ fun TuProfeCardFooter(
 fun TuProfeCardBody(
     content: String,
     date: String,
+    editado: Boolean = false,
     modifier: Modifier = Modifier
 ) {
     Column(
@@ -340,12 +342,30 @@ fun TuProfeCardBody(
         verticalArrangement = Arrangement.spacedBy(10.dp)
     ) {
         Text(content)
-        Text(
-            text = date,
-            fontSize = 12.sp,
-            lineHeight = 12.sp,
-            color = colorResource(R.color.gris)
-        )
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(8.dp)
+        ) {
+            Text(
+                text = date,
+                fontSize = 12.sp,
+                lineHeight = 12.sp,
+                color = colorResource(R.color.gris)
+            )
+            if (editado) {
+                Surface(
+                    shape = RoundedCornerShape(4.dp),
+                    color = colorResource(R.color.verdetp).copy(alpha = 0.12f)
+                ) {
+                    Text(
+                        text = "Editado",
+                        fontSize = 11.sp,
+                        color = colorResource(R.color.verdetp),
+                        modifier = Modifier.padding(horizontal = 6.dp, vertical = 2.dp)
+                    )
+                }
+            }
+        }
     }
 }
 

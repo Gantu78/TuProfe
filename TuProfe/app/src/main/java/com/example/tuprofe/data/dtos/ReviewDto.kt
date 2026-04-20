@@ -75,7 +75,7 @@ fun ReviewDto.toReviewInfo(): ReviewInfo {
         time = formatReviewDate(time),
         likes = likesCount,
         commentsCount = comment ?: 0,
-        liked = liked
-
+        liked = liked,
+        editado = !updatedAt.isNullOrEmpty()
     )
 }

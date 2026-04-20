@@ -51,10 +51,9 @@ class ReviewFirestoreDataSourceImpl @Inject constructor(
         review.content?.let { updates["content"] = it }
         review.rating?.let { updates["rating"] = it }
         review.time?.let { updates["time"] = it }
-        
-        if (updates.isNotEmpty()) {
-            db.collection("reviews").document(id).update(updates).await()
-        }
+        updates["updatedAt"] = java.time.Instant.now().toString()
+
+        db.collection("reviews").document(id).update(updates).await()
     }
 
     override suspend fun getUserReviews(userId: String): List<ReviewDto> {
