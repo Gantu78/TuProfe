@@ -36,8 +36,9 @@ class UserProfileViewModel @Inject constructor(
 
     private fun cargarDatosUsuario(userId: String) {
         _uiState.update { it.copy(isLoading = true) }
+        val currentUserId = authRepository.currentUser?.uid ?: ""
         viewModelScope.launch {
-            val userResult = userRepository.getUserById(userId)
+            val userResult = userRepository.getUserById(userId, currentUserId)
             val reviewsResult = reviewRepository.getUserReviews(userId)
 
             if (userResult.isSuccess && reviewsResult.isSuccess) {
@@ -62,7 +63,7 @@ class UserProfileViewModel @Inject constructor(
     }
 
     fun followOrUnfollowUser(targetUserId: String) {
-        val currentUserId = _uiState.value.currentUserId
+        val currentUserId = authRepository.currentUser?.uid ?: return
         viewModelScope.launch {
             val result = userRepository.followOrUnfollow(currentUserId, targetUserId)
             if (result.isSuccess) {
@@ -81,9 +82,10 @@ class UserProfileViewModel @Inject constructor(
 
     fun openFollowersSheet() {
         val state = _uiState.value
+        val currentUserId = authRepository.currentUser?.uid ?: ""
         _uiState.update { it.copy(showFollowersSheet = true, isLoadingList = true) }
         viewModelScope.launch {
-            val result = userRepository.getFollowers(state.user.usuarioId, state.currentUserId)
+            val result = userRepository.getFollowers(state.user.usuarioId, currentUserId)
             result.onSuccess { list ->
                 _uiState.update { it.copy(followersList = list, isLoadingList = false) }
             }.onFailure {
@@ -94,9 +96,10 @@ class UserProfileViewModel @Inject constructor(
 
     fun openFollowingSheet() {
         val state = _uiState.value
+        val currentUserId = authRepository.currentUser?.uid ?: ""
         _uiState.update { it.copy(showFollowingSheet = true, isLoadingList = true) }
         viewModelScope.launch {
-            val result = userRepository.getFollowing(state.user.usuarioId, state.currentUserId)
+            val result = userRepository.getFollowing(state.user.usuarioId, currentUserId)
             result.onSuccess { list ->
                 _uiState.update { it.copy(followingList = list, isLoadingList = false) }
             }.onFailure {
@@ -110,7 +113,7 @@ class UserProfileViewModel @Inject constructor(
     }
 
     fun followOrUnfollowInList(targetUserId: String) {
-        val currentUserId = _uiState.value.currentUserId
+        val currentUserId = authRepository.currentUser?.uid ?: return
         viewModelScope.launch {
             val result = userRepository.followOrUnfollow(currentUserId, targetUserId)
             if (result.isSuccess) {

@@ -1,6 +1,5 @@
 package com.example.tuprofe.ui.profe
 
-import android.util.Log
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -49,8 +48,6 @@ fun ProfeScreen(
         onResenaClick = onResenaClick,
         onProfileClick = onProfileClick,
         onUserClick = onUserClick,
-        onAddCommentClick = { Log.d("Boton", "Añadir Comentario") },
-        onRateClick = { Log.d("Boton", "Calificar") },
         modifier = modifier
     )
 }
@@ -62,8 +59,6 @@ fun ProfeContent(
     onResenaClick: (String) -> Unit,
     onProfileClick: (Profesor) -> Unit,
     onUserClick: (String) -> Unit,
-    onAddCommentClick: () -> Unit,
-    onRateClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     Box(modifier = modifier.fillMaxSize()) {
@@ -109,11 +104,6 @@ fun ProfeContent(
             }
         }
 
-        ProfeScreenBottomBar(
-            onAddCommentClick = onAddCommentClick,
-            onRateClick = onRateClick,
-            modifier = Modifier.align(Alignment.BottomCenter)
-        )
     }
 }
 
@@ -187,45 +177,6 @@ private fun ProfessorInfoCardPreview() {
     )
 }
 
-
-@Composable
-private fun ProfeScreenBottomBar(
-    onAddCommentClick: () -> Unit,
-    onRateClick: () -> Unit,
-    modifier: Modifier = Modifier
-) {
-    Card(
-        modifier = modifier
-            .fillMaxWidth()
-            .padding(horizontal = 20.dp, vertical = 12.dp),
-        shape = RoundedCornerShape(50.dp),
-        colors = CardDefaults.cardColors(containerColor = colorResource(R.color.verdetp))
-    ) {
-        Row(
-            modifier = Modifier.fillMaxWidth().height(54.dp),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            TextButton(onClick = onAddCommentClick, modifier = Modifier.weight(1f)) {
-                Text(stringResource(R.string.a_adir_comentario), color = Color.White)
-            }
-            VerticalDivider(
-                modifier = Modifier.height(28.dp),
-                color = Color.White.copy(alpha = 0.4f)
-            )
-            TextButton(onClick = onRateClick, modifier = Modifier.weight(1f)) {
-                Text(stringResource(R.string.calificar), color = Color.White)
-            }
-        }
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-private fun ProfeScreenBottomBarPreview() {
-    ProfeScreenBottomBar(onAddCommentClick = {}, onRateClick = {})
-}
-
-
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
 private fun ProfeContentPreview() {
@@ -238,8 +189,6 @@ private fun ProfeContentPreview() {
         ),
         onResenaClick = {},
         onProfileClick = {},
-        onUserClick = {},
-        onAddCommentClick = {},
-        onRateClick = {}
+        onUserClick = {}
     )
 }

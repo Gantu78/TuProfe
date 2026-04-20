@@ -16,12 +16,11 @@ class UserFirestoreDataSourceImpl @Inject constructor(
     override suspend fun getUserById(id: String, currentUserId: String): UserDto {
         val docRef = db.collection("users").document(id)
         val respuesta = docRef.get().await()
-        val user =  respuesta.toObject(UserDto::class.java)?: throw Exception("No se pudo obtener el usuario con id: $id")
-        user.copy(id = id)
+        var user = respuesta.toObject(UserDto::class.java)?: throw Exception("No se pudo obtener el usuario con id: $id")
+        user = user.copy(id = id)
         if(currentUserId.isNotEmpty()){
             val followerDoc = db.collection("users").document(id).collection("followers").document(currentUserId).get().await()
-            val exist = followerDoc.exists()
-            user.followed = exist
+            user = user.copy(followed = followerDoc.exists())
         }
         return user
 
@@ -70,14 +69,15 @@ class UserFirestoreDataSourceImpl @Inject constructor(
 
     private suspend fun fetchUserWithFollowStatus(targetId: String, currentUserId: String): UserDto? {
         val userDoc = db.collection("users").document(targetId).get().await()
-        val user = userDoc.toObject(UserDto::class.java) ?: return null
-        user.copy(id = targetId)
+        var user = userDoc.toObject(UserDto::class.java) ?: return null
         if (currentUserId.isNotEmpty()) {
             val isFollowed = db.collection("users").document(targetId)
                 .collection("followers").document(currentUserId).get().await().exists()
-            user.followed = isFollowed
+            user = user.copy(id = targetId, followed = isFollowed)
+        } else {
+            user = user.copy(id = targetId)
         }
-        return user.copy(id = targetId)
+        return user
     }
 
     override suspend fun followOrUnfollowUser(currentUserId: String, targetUserId: String) {
