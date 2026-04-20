@@ -85,4 +85,12 @@ class UserRepository @Inject constructor(
             Result.failure(e)
         }
     }
+
+    suspend fun getFollowingIds(userId: String): Result<List<String>> {
+        return try {
+            Result.success(userRemoteDataSource.getFollowingIds(userId))
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
 }

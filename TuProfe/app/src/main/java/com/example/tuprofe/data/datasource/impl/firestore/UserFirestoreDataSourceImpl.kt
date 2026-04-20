@@ -63,6 +63,11 @@ class UserFirestoreDataSourceImpl @Inject constructor(
         }
     }
 
+    override suspend fun getFollowingIds(userId: String): List<String> {
+        return db.collection("users").document(userId).collection("following").get().await()
+            .documents.map { it.id }
+    }
+
     private suspend fun fetchUserWithFollowStatus(targetId: String, currentUserId: String): UserDto? {
         val userDoc = db.collection("users").document(targetId).get().await()
         val user = userDoc.toObject(UserDto::class.java) ?: return null

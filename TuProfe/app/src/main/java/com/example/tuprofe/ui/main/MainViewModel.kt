@@ -3,7 +3,9 @@ package com.example.tuprofe.ui.main
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.tuprofe.data.repository.AuthRepository
 import com.example.tuprofe.data.repository.ReviewRepository
+import com.example.tuprofe.data.repository.UserRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -14,15 +16,19 @@ import javax.inject.Inject
 
 @HiltViewModel
 class MainViewModel @Inject constructor(
-    private val reviewRepository: ReviewRepository
+    private val reviewRepository: ReviewRepository,
+    private val userRepository: UserRepository,
+    private val authRepository: AuthRepository
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(MainState())
     val uiState: StateFlow<MainState> = _uiState.asStateFlow()
 
+    fun selectTab(index: Int) {
+        _uiState.update { it.copy(selectedTab = index) }
+    }
 
-
-     fun fetchReviews() {
+    fun fetchReviews() {
         _uiState.update { it.copy(isLoading = true) }
         viewModelScope.launch {
             Log.d("MainViewModel", "Iniciando obtención de reseñas...")
@@ -30,9 +36,16 @@ class MainViewModel @Inject constructor(
             if (result.isSuccess) {
                 val reviews = result.getOrNull() ?: emptyList()
                 Log.d("MainViewModel", "Reseñas obtenidas con éxito: ${reviews.size}")
+
+                val currentUserId = authRepository.currentUser?.uid ?: ""
+                val followingIds = if (currentUserId.isNotEmpty()) {
+                    userRepository.getFollowingIds(currentUserId).getOrDefault(emptyList())
+                } else emptyList()
+
                 _uiState.update {
                     it.copy(
                         reviews = reviews,
+                        followingReviews = reviews.filter { r -> r.usuario.usuarioId in followingIds },
                         isLoading = false,
                         errorMessage = null
                     )

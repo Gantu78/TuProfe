@@ -43,4 +43,8 @@ class UsuarioRemoteDataSourceImpl @Inject constructor(
     override suspend fun getFollowing(userId: String, currentUserId: String): List<UserDto> {
         TODO("Not yet implemented")
     }
+
+    override suspend fun getFollowingIds(userId: String): List<String> {
+        TODO("Not yet implemented")
+    }
 }

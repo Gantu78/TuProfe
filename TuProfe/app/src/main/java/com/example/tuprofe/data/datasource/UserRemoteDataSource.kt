@@ -17,4 +17,6 @@ interface UserRemoteDataSource {
     suspend fun getFollowers(userId: String, currentUserId: String): List<UserDto>
 
     suspend fun getFollowing(userId: String, currentUserId: String): List<UserDto>
+
+    suspend fun getFollowingIds(userId: String): List<String>
 }
