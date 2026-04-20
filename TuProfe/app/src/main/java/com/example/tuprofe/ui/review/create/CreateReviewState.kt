@@ -8,6 +8,8 @@ data class CreateReviewState(
     val professors: List<Profesor> = emptyList(),
     val filteredProfessors: List<Profesor> = emptyList(),
     val selectedProfessor: Profesor? = null,
+    val selectedMateria: String = "",
+    val isMateriaDropdownExpanded: Boolean = false,
     val rating: Int = 0,
     val isLoading: Boolean = false,
     val isSearchingProfessors: Boolean = false,

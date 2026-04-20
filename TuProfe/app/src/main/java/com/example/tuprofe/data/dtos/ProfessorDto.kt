@@ -19,6 +19,7 @@ fun ProfessorDto.toProfesor(): Profesor {
         profeId = this.id,
         nombreProfe = this.name,
         imageprofeUrl = this.foto_prof,
-        departamento = this.department
+        departamento = this.department,
+        materias = this.subjects
     )
 }

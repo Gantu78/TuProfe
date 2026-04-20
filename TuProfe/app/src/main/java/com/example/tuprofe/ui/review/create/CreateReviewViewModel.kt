@@ -71,8 +71,25 @@ class CreateReviewViewModel @Inject constructor(
         _uiState.update { it.copy(
             selectedProfessor = professor,
             professorQuery = professor.nombreProfe,
-            isDropdownExpanded = false
+            isDropdownExpanded = false,
+            selectedMateria = "",
+            isMateriaDropdownExpanded = false
         ) }
+    }
+
+    fun onMateriaSelected(materia: String) {
+        _uiState.update { it.copy(
+            selectedMateria = materia,
+            isMateriaDropdownExpanded = false
+        ) }
+    }
+
+    fun toggleMateriaDropdown() {
+        _uiState.update { it.copy(isMateriaDropdownExpanded = !it.isMateriaDropdownExpanded) }
+    }
+
+    fun onDismissMateriaDropdown() {
+        _uiState.update { it.copy(isMateriaDropdownExpanded = false) }
     }
 
     fun onRatingChange(newRating: Int) {
@@ -85,6 +102,11 @@ class CreateReviewViewModel @Inject constructor(
 
         if (professorId.isBlank()) {
             _uiState.update { it.copy(error = "Debes seleccionar un profesor") }
+            return
+        }
+
+        if (currentState.selectedMateria.isBlank()) {
+            _uiState.update { it.copy(error = "Debes seleccionar una materia") }
             return
         }
 
@@ -104,7 +126,8 @@ class CreateReviewViewModel @Inject constructor(
                 userId = userId,
                 professorId = professorId,
                 content = currentState.reviewText,
-                rating = currentState.rating
+                rating = currentState.rating,
+                materia = currentState.selectedMateria
             )
 
 

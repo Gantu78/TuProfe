@@ -90,6 +90,46 @@ fun CreateReviewScreen(
                 }
             }
 
+            // Selector de Materia (solo visible si hay profesor seleccionado)
+            if (state.selectedProfessor != null) {
+                Spacer(modifier = Modifier.height(16.dp))
+
+                ExposedDropdownMenuBox(
+                    expanded = state.isMateriaDropdownExpanded,
+                    onExpandedChange = { viewModel.toggleMateriaDropdown() }
+                ) {
+                    TextFieldApp(
+                        texto = stringResource(R.string.seleccionar_materia),
+                        value = state.selectedMateria,
+                        onValueChange = {},
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .menuAnchor(MenuAnchorType.PrimaryNotEditable),
+                        trailingIcon = {
+                            Icon(
+                                imageVector = if (state.isMateriaDropdownExpanded) Icons.Default.ArrowDropUp else Icons.Default.ArrowDropDown,
+                                contentDescription = null
+                            )
+                        }
+                    )
+
+                    ExposedDropdownMenu(
+                        expanded = state.isMateriaDropdownExpanded,
+                        onDismissRequest = { viewModel.onDismissMateriaDropdown() }
+                    ) {
+                        if(state.selectedProfessor != null){
+                            state.selectedProfessor!!.materias.forEach { materia ->
+                                DropdownMenuItem(
+                                    text = { Text(materia) },
+                                    onClick = { viewModel.onMateriaSelected(materia) }
+                                )
+                            }
+                        }
+
+                    }
+                }
+            }
+
             Spacer(modifier = Modifier.height(20.dp))
 
             // Selector de Calificación (Estrellas)

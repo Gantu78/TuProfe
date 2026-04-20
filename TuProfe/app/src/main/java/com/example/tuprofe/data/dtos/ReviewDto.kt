@@ -1,9 +1,9 @@
 package com.example.tuprofe.data.dtos
 
 import com.example.tuprofe.data.Profesor
+import com.example.tuprofe.data.Materia
 import com.example.tuprofe.data.ReviewInfo
 import com.example.tuprofe.data.Usuario
-import com.example.tuprofe.data.local.LocalMateria
 import java.text.SimpleDateFormat
 import java.util.Locale
 
@@ -28,12 +28,13 @@ data class ReviewDto(
     val comment: Int? = null,
     val createdAt: String? = null,
     val updatedAt: String? = null,
+    val materia: String? = null,
     val professor: ProfessorNameDto? = null,
     val user: UserDto? = null,
     val likesCount: Int,
     var liked: Boolean = false
 ){
-    constructor(): this("", "", "", "", "", 0, 0, "", "", null, null, 0)
+    constructor(): this("", "", "", "", "", 0, 0, "", "", null, null, null, 0)
 }
 
 data class ProfessorNameDto(
@@ -69,7 +70,7 @@ fun ReviewDto.toReviewInfo(): ReviewInfo {
             nombreProfe = professor?.name ?: "Profesor #$professorId",
             imageprofeUrl = professor?.foto
         ),
-        materia = LocalMateria.materias.first(),
+        materia = Materia(materiaId = "", nombreMateria = materia ?: ""),
         content = content ?: "",
         rating = rating ?: 0,
         time = formatReviewDate(time),
