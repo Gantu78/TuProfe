@@ -3,6 +3,7 @@ package com.example.tuprofe.ui.config
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -46,6 +47,7 @@ fun ConfigScreen(
     onEditProfileClick: () -> Unit,
     onLogoutClick: () -> Unit,
     onCalifClick: () -> Unit,
+    onUserClick: (String) -> Unit = {},
     modifier: Modifier = Modifier
 ) {
 
@@ -164,7 +166,8 @@ fun ConfigScreen(
                     items(list, key = { it.usuarioId }) { usuario ->
                         ConfigUserListItem(
                             usuario = usuario,
-                            onFollowClick = { configViewModel.followOrUnfollowInList(usuario.usuarioId) }
+                            onFollowClick = { configViewModel.followOrUnfollowInList(usuario.usuarioId) },
+                            onUserClick = { onUserClick(usuario.usuarioId) }
                         )
                     }
                 }
@@ -177,11 +180,13 @@ fun ConfigScreen(
 private fun ConfigUserListItem(
     usuario: Usuario,
     onFollowClick: () -> Unit,
+    onUserClick: () -> Unit = {},
     modifier: Modifier = Modifier
 ) {
     Row(
         modifier = modifier
             .fillMaxWidth()
+            .clickable(onClick = onUserClick)
             .padding(horizontal = 8.dp, vertical = 10.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {

@@ -363,8 +363,10 @@ fun AppNavegation(
                 },
                 onCalifClick = {
                     navController.navigate(Screen.Historial.route)
+                },
+                onUserClick = { userId ->
+                    navController.navigate(Screen.Profile.createRoute(userId))
                 }
-
             )
         }
         composable(
@@ -395,6 +397,12 @@ fun AppNavegation(
                 viewModel = userProfileViewModel,
                 onProfessorClick = { profeId ->
                     navController.navigate(Screen.Profe.createRoute(profeId))
+                },
+                onUserClick = { userId ->
+                    navController.navigate(Screen.Profile.createRoute(userId))
+                },
+                onReviewClick = { reviewId ->
+                    navController.navigate(Screen.Detalle.createRoute(reviewId))
                 }
             )
         }

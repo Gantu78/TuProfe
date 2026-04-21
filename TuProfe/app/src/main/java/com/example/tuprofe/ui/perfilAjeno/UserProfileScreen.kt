@@ -43,12 +43,16 @@ import com.example.tuprofe.ui.utils.Resena
 fun UserProfileScreen(
     modifier: Modifier = Modifier,
     viewModel: UserProfileViewModel = hiltViewModel(),
-    onProfessorClick: (String) -> Unit
+    onProfessorClick: (String) -> Unit,
+    onUserClick: (String) -> Unit = {},
+    onReviewClick: (String) -> Unit = {}
 ) {
     val uiState by viewModel.uiState.collectAsState()
     UserProfileContent(
         state = uiState,
         onProfessorClick = onProfessorClick,
+        onUserClick = onUserClick,
+        onReviewClick = onReviewClick,
         onFollowClick = { viewModel.followOrUnfollowUser(uiState.user.usuarioId) },
         onFollowersClick = { viewModel.openFollowersSheet() },
         onFollowingClick = { viewModel.openFollowingSheet() },
@@ -63,6 +67,8 @@ fun UserProfileScreen(
 fun UserProfileContent(
     state: UserProfileState,
     onProfessorClick: (String) -> Unit,
+    onUserClick: (String) -> Unit = {},
+    onReviewClick: (String) -> Unit = {},
     onFollowClick: () -> Unit = {},
     onFollowersClick: () -> Unit = {},
     onFollowingClick: () -> Unit = {},
@@ -80,6 +86,7 @@ fun UserProfileContent(
                 reviews = state.userReviews,
                 isOwnProfile = state.currentUserId == state.user.usuarioId,
                 onProfessorClick = onProfessorClick,
+                onReviewClick = onReviewClick,
                 onFollowClick = onFollowClick,
                 onFollowersClick = onFollowersClick,
                 onFollowingClick = onFollowingClick
@@ -132,7 +139,8 @@ fun UserProfileContent(
                         UserListItem(
                             usuario = usuario,
                             isCurrentUser = usuario.usuarioId == state.currentUserId,
-                            onFollowClick = { onFollowInList(usuario.usuarioId) }
+                            onFollowClick = { onFollowInList(usuario.usuarioId) },
+                            onUserClick = { onUserClick(usuario.usuarioId) }
                         )
                     }
                 }
@@ -147,6 +155,7 @@ private fun UserProfileLoaded(
     reviews: List<ReviewInfo>,
     isOwnProfile: Boolean,
     onProfessorClick: (String) -> Unit,
+    onReviewClick: (String) -> Unit = {},
     onFollowClick: () -> Unit,
     onFollowersClick: () -> Unit = {},
     onFollowingClick: () -> Unit = {}
@@ -183,6 +192,7 @@ private fun UserProfileLoaded(
                 ReviewCard(
                     review = review,
                     onProfessorClick = onProfessorClick,
+                    onReviewClick = onReviewClick,
                     modifier = Modifier.padding(horizontal = 20.dp)
                 )
                 Spacer(Modifier.height(12.dp))
@@ -298,11 +308,13 @@ private fun UserListItem(
     usuario: Usuario,
     isCurrentUser: Boolean,
     onFollowClick: () -> Unit,
+    onUserClick: () -> Unit = {},
     modifier: Modifier = Modifier
 ) {
     Row(
         modifier = modifier
             .fillMaxWidth()
+            .clickable(onClick = onUserClick)
             .padding(horizontal = 8.dp, vertical = 10.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
@@ -384,9 +396,11 @@ private fun ReviewsSectionHeader(reviewCount: Int, modifier: Modifier = Modifier
 private fun ReviewCard(
     review: ReviewInfo,
     onProfessorClick: (String) -> Unit,
+    onReviewClick: (String) -> Unit = {},
     modifier: Modifier = Modifier
 ) {
     Card(
+        onClick = { onReviewClick(review.reviewId) },
         modifier = modifier.fillMaxWidth(),
         shape = RoundedCornerShape(28.dp),
         border = BorderStroke(2.dp, colorResource(R.color.BordeTuProfe)),
