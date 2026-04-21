@@ -1,5 +1,9 @@
 package com.example.tuprofe.ui.detalle
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.*
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.slideInVertically
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -16,6 +20,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -30,8 +35,8 @@ import com.example.tuprofe.R
 import com.example.tuprofe.data.Profesor
 import com.example.tuprofe.data.ReviewInfo
 import com.example.tuprofe.data.local.LocalReview
-import com.example.tuprofe.ui.utils.Resena
 import com.example.tuprofe.ui.utils.BackgroundImage
+import com.example.tuprofe.ui.utils.Resena
 
 @Composable
 fun DetalleScreen(
@@ -58,11 +63,11 @@ fun DetalleScreen(
         detalleViewModel = detalleViewModel,
         reviewId = reviewId,
         uiState = uiState,
-        onShare = { },
-        onComment = { },
+        onShare = {},
+        onComment = {},
         onProfileClick = onProfileClick,
-        modifier = modifier,
-        onUserClick = onUserClick
+        onUserClick = onUserClick,
+        modifier = modifier
     )
 }
 
@@ -74,8 +79,8 @@ fun DetalleContent(
     onShare: () -> Unit,
     onComment: () -> Unit,
     onProfileClick: (Profesor) -> Unit,
-    modifier: Modifier = Modifier,
-    onUserClick: (String) -> Unit
+    onUserClick: (String) -> Unit,
+    modifier: Modifier = Modifier
 ) {
     Box(modifier = modifier.fillMaxSize()) {
         BackgroundImage()
@@ -83,45 +88,55 @@ fun DetalleContent(
         if (uiState.isLoading) {
             CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
         } else {
-            uiState.selectedReview?.let { review ->
-                LazyColumn(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .padding(horizontal = 20.dp),
-                    contentPadding = PaddingValues(top = 16.dp, bottom = 120.dp)
-                ) {
-                    item {
-                        ReviewCard(
-                            detalleViewModel = detalleViewModel,
-                            uiState = uiState,
-                            reviewId = reviewId,
-                            review = review,
-                            onComment = onComment,
-                            onShare = onShare,
-                            onProfileClick = {onProfileClick(review.profesor)},
-                            onUserClick = {onUserClick(review.usuario.usuarioId)}
+            // Animate the full content in after load
+            AnimatedVisibility(
+                visible = uiState.selectedReview != null,
+                enter = fadeIn(tween(320)) +
+                        slideInVertically(
+                            animationSpec = tween(380, easing = FastOutSlowInEasing),
+                            initialOffsetY = { it / 6 }
                         )
+            ) {
+                uiState.selectedReview?.let { review ->
+                    LazyColumn(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .padding(horizontal = 20.dp),
+                        contentPadding = PaddingValues(top = 16.dp, bottom = 120.dp)
+                    ) {
+                        item {
+                            ReviewCard(
+                                detalleViewModel = detalleViewModel,
+                                uiState = uiState,
+                                reviewId = reviewId,
+                                review = review,
+                                onComment = onComment,
+                                onShare = onShare,
+                                onProfileClick = { onProfileClick(review.profesor) },
+                                onUserClick = { onUserClick(review.usuario.usuarioId) }
+                            )
+                            Spacer(modifier = Modifier.height(28.dp))
+                        }
 
-                        Spacer(modifier = Modifier.height(28.dp))
-                    }
+                        item {
+                            CommentsHeader(modifier = Modifier.padding(bottom = 16.dp))
+                        }
 
-                    item {
-                        CommentsHeader(
-                            modifier = Modifier.padding(bottom = 16.dp)
-                        )
-                    }
-
-                    items(uiState.respuestas) { respuesta ->
-                        CommentCard(
-                            respuesta = respuesta,
-                        )
+                        items(uiState.respuestas) { respuesta ->
+                            CommentCard(respuesta = respuesta)
+                        }
                     }
                 }
-            } ?: Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                Text(
-                    text = uiState.errorMessage ?: stringResource(R.string.rese_a_no_encontrada),
-                    color = if (uiState.errorMessage != null) Color.Red else MaterialTheme.colorScheme.onSurface
-                )
+            }
+
+            // Error state
+            if (uiState.selectedReview == null && uiState.errorMessage != null) {
+                Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                    Text(
+                        text = uiState.errorMessage,
+                        color = Color.Red
+                    )
+                }
             }
         }
     }
@@ -158,7 +173,7 @@ private fun ReviewCard(
                 },
                 onComment = onComment,
                 onShare = onShare,
-                isLiked = uiState.selectedReview?.liked?: false
+                isLiked = uiState.selectedReview?.liked ?: false
             )
         }
     }
@@ -201,13 +216,6 @@ private fun CommentsHeader(modifier: Modifier = Modifier) {
     }
 }
 
-@Preview(showBackground = true)
-@Composable
-private fun CommentsHeaderPreview() {
-    CommentsHeader()
-}
-
-
 @Composable
 private fun CommentCard(
     respuesta: ReviewInfo,
@@ -224,20 +232,11 @@ private fun CommentCard(
         Resena(
             reviewInfo = respuesta,
             modifier = Modifier.padding(vertical = 8.dp),
-            onProfileClick = { },
+            onProfileClick = {},
             onUserClick = {}
         )
     }
 }
-
-@Preview(showBackground = true)
-@Composable
-private fun CommentCardPreview() {
-    CommentCard(
-        respuesta = LocalReview.Reviews[1]
-    )
-}
-
 
 @Composable
 fun ReviewActionBar(
@@ -247,18 +246,54 @@ fun ReviewActionBar(
     isLiked: Boolean
 ) {
     Row(
-        modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 6.dp),
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 16.dp, vertical = 6.dp),
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
-        IconButton(onClick = onLike) {
-            if(isLiked) Icon(imageVector = Icons.Filled.ThumbUp, contentDescription = "Like", tint = colorResource(R.color.verdetp))
-            else Icon(imageVector = Icons.Outlined.ThumbUp, contentDescription = "Like", tint = colorResource(R.color.verdetp))
+        // Like button with bounce animation on click
+        var likeTriggered by remember { mutableStateOf(false) }
+        val likeScale by animateFloatAsState(
+            targetValue = if (likeTriggered) 1.35f else 1f,
+            animationSpec = spring(
+                dampingRatio = Spring.DampingRatioHighBouncy,
+                stiffness = Spring.StiffnessMedium
+            ),
+            finishedListener = { likeTriggered = false },
+            label = "likeScale"
+        )
+
+        IconButton(
+            onClick = {
+                likeTriggered = true
+                onLike()
+            }
+        ) {
+            Icon(
+                imageVector = if (isLiked) Icons.Filled.ThumbUp else Icons.Outlined.ThumbUp,
+                contentDescription = "Like",
+                tint = colorResource(R.color.verdetp),
+                modifier = Modifier.graphicsLayer {
+                    scaleX = likeScale
+                    scaleY = likeScale
+                }
+            )
         }
+
         IconButton(onClick = onComment) {
-            Icon(imageVector = Icons.AutoMirrored.Outlined.Comment, contentDescription = "Comment", tint = colorResource(R.color.verdetp))
+            Icon(
+                imageVector = Icons.AutoMirrored.Outlined.Comment,
+                contentDescription = "Comment",
+                tint = colorResource(R.color.verdetp)
+            )
         }
+
         IconButton(onClick = onShare) {
-            Icon(imageVector = Icons.Outlined.Share, contentDescription = "Share", tint = colorResource(R.color.verdetp))
+            Icon(
+                imageVector = Icons.Outlined.Share,
+                contentDescription = "Share",
+                tint = colorResource(R.color.verdetp)
+            )
         }
     }
 }
@@ -268,7 +303,6 @@ fun ReviewActionBar(
 fun ReviewActionBarPreview() {
     ReviewActionBar(onLike = {}, onComment = {}, onShare = {}, isLiked = false)
 }
-
 
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
@@ -288,4 +322,3 @@ fun DetalleScreenPreview() {
         onProfileClick = {}
     )
 }
-

@@ -1,5 +1,6 @@
 package com.example.tuprofe.navegation
 
+import androidx.compose.animation.fadeIn
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -53,6 +54,44 @@ import com.example.tuprofe.ui.review.edit.EditReviewScreen
 import com.example.tuprofe.ui.review.edit.EditReviewViewModel
 import com.example.tuprofe.ui.search.SearchScreen
 import com.example.tuprofe.ui.splash.SplashScreen
+import androidx.compose.animation.*
+import androidx.compose.animation.core.FastOutSlowInEasing
+import androidx.compose.animation.core.tween
+
+
+// ── Reusable transition specs ─────────────────────────────────────────────────
+
+private fun slideEnter() = slideInHorizontally(
+    tween(300, easing = FastOutSlowInEasing)
+) { it / 3 } + fadeIn(tween(260))
+
+
+private fun slideExit() =
+    slideOutHorizontally(tween(240)) { -it / 8 } + fadeOut(tween(200))
+
+private fun slidePopEnter() = slideInHorizontally(
+    tween(300, easing = FastOutSlowInEasing)
+) { -it / 3 } + fadeIn(tween(260))
+
+
+private fun slidePopExit() =
+    slideOutHorizontally(tween(240)) { it / 4 } + fadeOut(tween(200))
+
+
+private fun tabEnter() = fadeIn(tween(280))
+private fun tabExit() = fadeOut(tween(200))
+
+
+private fun modalEnter() =
+    slideInVertically(tween(360, easing = FastOutSlowInEasing)) { it } +
+            fadeIn(tween(300))
+
+
+private fun modalExit() =
+    slideOutVertically(tween(280)) { it } + fadeOut(tween(240))
+
+// ── Screens ───────────────────────────────────────────────────────────────────
+
 
 
 sealed class Screen(val route: String){
@@ -76,7 +115,7 @@ sealed class Screen(val route: String){
     object Detalle : Screen("Detalle/{reviewId}"){
         fun createRoute(reviewId: String) = "Detalle/$reviewId"
     }
-    
+
     object Profile : Screen("Profile/{userId}") {
         fun createRoute(userId: String) = "Profile/$userId"
     }
@@ -89,29 +128,33 @@ fun AppNavegation(
     navController: NavHostController,
     modifier: Modifier = Modifier
 ){
-    NavHost(
-        navController = navController,
+    NavHost(navController = navController,
         startDestination = Screen.Splash.route,
-        modifier = modifier
+        modifier = modifier,
+        enterTransition = { slideEnter() },
+        exitTransition = { slideExit() },
+        popEnterTransition = { slidePopEnter() },
+        popExitTransition = { slidePopExit() }
     ){
-        composable(route = Screen.Splash.route){
-            SplashScreen(navigateToLogin = {
-                navController.navigate(Screen.Login.route) {
-                    popUpTo(Screen.Splash.route) {
-                        inclusive = true
-                    }
-                }
-                }, navigateToMain = {
-                navController.navigate(Screen.Main.route) {
-                    popUpTo(Screen.Splash.route) {
-                        inclusive = true
-                    }
-                }
-            })
-
+        // ── Splash ────────────────────────────────────────────────────────────
+        composable(
+            route = Screen.Splash.route,
+            enterTransition = { fadeIn(tween(500)) },
+            exitTransition = { fadeOut(tween(400)) }
+        ) {
+            SplashScreen(
+                navigateToLogin = { navController.navigate(Screen.Login.route) },
+                navigateToMain = { navController.navigate(Screen.Main.route) }
+            )
         }
 
-        composable(route = Screen.Login.route){
+        composable(
+            route = Screen.Login.route,
+            enterTransition = { tabEnter() },
+            exitTransition = { tabExit() },
+            popEnterTransition = { tabEnter() },
+            popExitTransition = { tabExit() }
+        ){
             val loginViewModel: LoginViewModel = hiltViewModel()
             val loginState by loginViewModel.uiState.collectAsState()
 
@@ -135,6 +178,7 @@ fun AppNavegation(
             )
         }
 
+
         composable(route = Screen.Search.route){
             SearchScreen(
                 onProfessorClick = { profeId ->
@@ -142,7 +186,13 @@ fun AppNavegation(
                 }
             )
         }
-        composable(route = Screen.Register.route){
+        composable(
+            route = Screen.Register.route,
+            enterTransition = { tabEnter() },
+            exitTransition = { tabExit() },
+            popEnterTransition = { tabEnter() },
+            popExitTransition = { tabExit() }
+        ){
             val registerViewModel: RegisterViewModel = hiltViewModel()
             val registerState by registerViewModel.uiState.collectAsState()
 
@@ -164,14 +214,26 @@ fun AppNavegation(
                 }
             )
         }
-        composable(route = Screen.PasswordReset.route){
+        composable(
+            route = Screen.PasswordReset.route,
+            enterTransition = { tabEnter() },
+            exitTransition = { tabExit() },
+            popEnterTransition = { tabEnter() },
+            popExitTransition = { tabExit() }
+        ){
             val resetPasswordViewModel: ResetPasswordViewModel = hiltViewModel()
             ResetPasswordScreen(
                 resetPasswordViewModel = resetPasswordViewModel,
                 onVolverClick = {navController.popBackStack()}
             )
         }
-        composable(route = Screen.Main.route){
+        composable(
+            route = Screen.Main.route,
+            enterTransition = { tabEnter() },
+            exitTransition = { tabExit() },
+            popEnterTransition = { tabEnter() },
+            popExitTransition = { tabExit() }
+        ){
             val mainViewModel: MainViewModel = hiltViewModel()
             MainScreen(
                 mainViewModel = mainViewModel,
@@ -189,7 +251,7 @@ fun AppNavegation(
         composable(
             route = Screen.Profe.route,
             arguments = listOf(navArgument("profeId"){ type = NavType.StringType })
-            
+
         ){
             val profeViewModel: ProfeViewModel = hiltViewModel()
                 ProfeScreen(
@@ -205,7 +267,12 @@ fun AppNavegation(
                     }
                 )
             }
-        composable(route = Screen.Historial.route){
+        composable(
+            route = Screen.Historial.route,
+            enterTransition = { tabEnter() },
+            exitTransition = { tabExit() },
+            popEnterTransition = { tabEnter() },
+            popExitTransition = { tabExit() }){
             val historialViewModel: HistorialViewModel = hiltViewModel()
 
             HistorialScreen(
@@ -246,7 +313,13 @@ fun AppNavegation(
         }
 
 
-        composable(route = Screen.ConfigPerfil.route){
+        composable(
+            route = Screen.ConfigPerfil.route,
+            enterTransition = { tabEnter() },
+            exitTransition = { tabExit() },
+            popEnterTransition = { tabEnter() },
+            popExitTransition = { tabExit() }
+        ){
             val configPerfilViewModel: ConfigPerfilViewModel = hiltViewModel()
             ConfigPerfilScreen(
                 configPerfilViewModel = configPerfilViewModel,

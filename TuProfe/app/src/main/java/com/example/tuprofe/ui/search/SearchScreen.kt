@@ -5,7 +5,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
@@ -31,12 +31,12 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
 import com.example.tuprofe.R
 import com.example.tuprofe.data.Profesor
+import com.example.tuprofe.ui.utils.AnimatedListItem
 import com.example.tuprofe.ui.utils.BackgroundImage
+import com.example.tuprofe.ui.utils.ProfessorListSkeleton
 import com.example.tuprofe.ui.utils.RatingStars
 import com.example.tuprofe.ui.utils.SearchBar
-import com.example.tuprofe.ui.utils.TitleHeader
-
-
+import com.example.tuprofe.ui.utils.pressScaleEffect
 
 @Composable
 fun SearchScreen(
@@ -71,7 +71,10 @@ fun SearchContent(
             )
 
             when {
-                uiState.isLoading -> SearchLoadingState()
+                uiState.isLoading -> {
+                    // Shimmer placeholders while data loads
+                    ProfessorListSkeleton(count = 5)
+                }
                 uiState.searchResults.isEmpty() -> SearchEmptyState(query = uiState.searchQuery)
                 else -> ProfessorList(
                     professors = uiState.searchResults,
@@ -82,8 +85,6 @@ fun SearchContent(
         }
     }
 }
-
-
 
 @Composable
 private fun SearchHeader(
@@ -117,12 +118,17 @@ private fun ProfessorList(
         item {
             SearchResultsCount(count = professors.size)
         }
-        items(professors, key = { it.profeId }) { profesor ->
-            ProfessorCard(
-                profesor = profesor,
-                rating = ratings[profesor.profeId] ?: 0f,
-                onClick = { onProfessorClick(profesor) }
-            )
+        itemsIndexed(
+            professors,
+            key = { _, p -> p.profeId }
+        ) { index, profesor ->
+            AnimatedListItem(index = index) {
+                ProfessorCard(
+                    profesor = profesor,
+                    rating = ratings[profesor.profeId] ?: 0f,
+                    onClick = { onProfessorClick(profesor) }
+                )
+            }
         }
     }
 }
@@ -147,7 +153,9 @@ fun ProfessorCard(
 ) {
     Card(
         onClick = onClick,
-        modifier = modifier.fillMaxWidth(),
+        modifier = modifier
+            .fillMaxWidth()
+            .pressScaleEffect(),                    // ← scale on press
         shape = RoundedCornerShape(28.dp),
         border = BorderStroke(2.dp, colorResource(R.color.BordeTuProfe)),
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
@@ -226,10 +234,7 @@ private fun ProfessorInfo(
 
 @Composable
 private fun SearchLoadingState(modifier: Modifier = Modifier) {
-    Box(
-        modifier = modifier.fillMaxSize(),
-        contentAlignment = Alignment.Center
-    ) {
+    Box(modifier = modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
         CircularProgressIndicator(color = colorResource(R.color.verdetp))
     }
 }
@@ -241,10 +246,7 @@ private fun SearchEmptyState(query: String, modifier: Modifier = Modifier) {
     } else {
         "No se encontraron resultados\npara \"$query\""
     }
-    Box(
-        modifier = modifier.fillMaxSize(),
-        contentAlignment = Alignment.Center
-    ) {
+    Box(modifier = modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.spacedBy(12.dp)
@@ -265,8 +267,6 @@ private fun SearchEmptyState(query: String, modifier: Modifier = Modifier) {
         }
     }
 }
-
-// ── Preview ───────────────────────────────────────────────────────────────────
 
 @Preview(showBackground = true, showSystemUi = true)
 @Composable

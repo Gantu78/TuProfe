@@ -1,16 +1,16 @@
 package com.example.tuprofe.ui.main
 
+import androidx.compose.animation.*
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
 import androidx.compose.material3.TabRowDefaults.tabIndicatorOffset
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.colorResource
@@ -24,8 +24,11 @@ import com.example.tuprofe.R
 import com.example.tuprofe.data.Profesor
 import com.example.tuprofe.data.ReviewInfo
 import com.example.tuprofe.data.local.LocalReview
+import com.example.tuprofe.ui.utils.AnimatedListItem
 import com.example.tuprofe.ui.utils.BackgroundImage
 import com.example.tuprofe.ui.utils.Resena
+import com.example.tuprofe.ui.utils.ReviewListSkeleton
+import com.example.tuprofe.ui.utils.pressScaleEffect
 
 private val tabs = listOf("Para ti", "Siguiendo")
 
@@ -45,8 +48,10 @@ fun MainScreen(
 
     when {
         uiState.isLoading -> {
-            Box(modifier = modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                CircularProgressIndicator()
+            // Shimmer skeletons instead of a spinner
+            Box(modifier = modifier.fillMaxSize()) {
+                BackgroundImage()
+                ReviewListSkeleton(count = 5)
             }
         }
 
@@ -66,33 +71,52 @@ fun MainScreen(
                         onTabSelected = { mainViewModel.selectTab(it) }
                     )
 
-                    val currentList = if (uiState.selectedTab == 0) uiState.reviews else uiState.followingReviews
+                    // AnimatedContent for smooth tab switching
+                    AnimatedContent(
+                        targetState = uiState.selectedTab,
+                        transitionSpec = {
+                            val dir = if (targetState > initialState) 1 else -1
+                            (slideInHorizontally(tween(280)) { dir * it / 4 } +
+                                    fadeIn(tween(260))) togetherWith
+                                    (slideOutHorizontally(tween(220)) { -dir * it / 5 } +
+                                            fadeOut(tween(200)))
+                        },
+                        label = "tabContent"
+                    ) { selectedTab ->
+                        val currentList =
+                            if (selectedTab == 0) uiState.reviews else uiState.followingReviews
 
-                    if (uiState.selectedTab == 1 && currentList.isEmpty()) {
-                        Box(
-                            modifier = Modifier.fillMaxSize(),
-                            contentAlignment = Alignment.Center
-                        ) {
-                            Text(
-                                text = "Aún no sigues a nadie\no las personas que sigues no han publicado reseñas",
-                                color = MaterialTheme.colorScheme.onSurfaceVariant,
-                                fontSize = 14.sp,
-                                textAlign = TextAlign.Center,
-                                modifier = Modifier.padding(32.dp)
-                            )
-                        }
-                    } else {
-                        LazyColumn(
-                            modifier = Modifier.fillMaxSize(),
-                            contentPadding = PaddingValues(top = 6.dp, bottom = 100.dp)
-                        ) {
-                            items(currentList, key = { it.reviewId }) { review ->
-                                ResenaCard(
-                                    reviewInfo = review,
-                                    onCommentsClick = { onResenaClick(review.reviewId) },
-                                    onProfileClick = { onProfileClick(review.profesor) },
-                                    onUserClick = { onUserClick(review.usuario.usuarioId) }
+                        if (selectedTab == 1 && currentList.isEmpty()) {
+                            Box(
+                                modifier = Modifier.fillMaxSize(),
+                                contentAlignment = Alignment.Center
+                            ) {
+                                Text(
+                                    text = "Aún no sigues a nadie\no las personas que sigues no han publicado reseñas",
+                                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                                    fontSize = 14.sp,
+                                    textAlign = TextAlign.Center,
+                                    modifier = Modifier.padding(32.dp)
                                 )
+                            }
+                        } else {
+                            LazyColumn(
+                                modifier = Modifier.fillMaxSize(),
+                                contentPadding = PaddingValues(top = 6.dp, bottom = 100.dp)
+                            ) {
+                                itemsIndexed(
+                                    currentList,
+                                    key = { _, review -> review.reviewId }
+                                ) { index, review ->
+                                    AnimatedListItem(index = index) {
+                                        ResenaCard(
+                                            reviewInfo = review,
+                                            onCommentsClick = { onResenaClick(review.reviewId) },
+                                            onProfileClick = { onProfileClick(review.profesor) },
+                                            onUserClick = { onUserClick(review.usuario.usuarioId) }
+                                        )
+                                    }
+                                }
                             }
                         }
                     }
@@ -128,6 +152,12 @@ fun FeedTabBar(
                 onClick = { onTabSelected(index) },
                 modifier = Modifier.height(48.dp)
             ) {
+                // Animate font weight change on selection
+                val weight by animateFloatAsState(
+                    targetValue = if (selectedTab == index) 700f else 400f,
+                    animationSpec = tween(200),
+                    label = "tabWeight"
+                )
                 Text(
                     text = label,
                     fontWeight = if (selectedTab == index) FontWeight.Bold else FontWeight.Normal,
@@ -153,15 +183,14 @@ fun ResenaCard(
     Card(
         modifier = modifier
             .fillMaxWidth()
-            .padding(vertical = 5.dp, horizontal = 18.dp),
+            .padding(vertical = 5.dp, horizontal = 18.dp)
+            .pressScaleEffect(),                   // ← scale on press
         shape = RoundedCornerShape(30.dp),
         border = BorderStroke(
             width = 2.5.dp,
             color = colorResource(R.color.BordeTuProfe)
         ),
-        colors = CardDefaults.cardColors(
-            MaterialTheme.colorScheme.surface
-        ),
+        colors = CardDefaults.cardColors(MaterialTheme.colorScheme.surface),
         elevation = CardDefaults.cardElevation(defaultElevation = 10.dp),
         onClick = { onCommentsClick(reviewInfo.reviewId) }
     ) {
