@@ -1,20 +1,20 @@
 package com.example.tuprofe.ui.perfilAjeno
 
 import android.content.res.Configuration
-import androidx.compose.animation.animateColorAsState
-import androidx.compose.animation.core.tween
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Star
 import androidx.compose.material3.*
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -36,18 +36,23 @@ import com.example.tuprofe.data.Usuario
 import com.example.tuprofe.data.local.LocalReview
 import com.example.tuprofe.ui.theme.BebasNeue
 import com.example.tuprofe.ui.theme.TuProfeTheme
-import com.example.tuprofe.ui.utils.*
+import com.example.tuprofe.ui.utils.BackgroundImage
+import com.example.tuprofe.ui.utils.Resena
 
 @Composable
 fun UserProfileScreen(
     modifier: Modifier = Modifier,
     viewModel: UserProfileViewModel = hiltViewModel(),
-    onProfessorClick: (String) -> Unit
+    onProfessorClick: (String) -> Unit,
+    onUserClick: (String) -> Unit = {},
+    onReviewClick: (String) -> Unit = {}
 ) {
     val uiState by viewModel.uiState.collectAsState()
     UserProfileContent(
         state = uiState,
         onProfessorClick = onProfessorClick,
+        onUserClick = onUserClick,
+        onReviewClick = onReviewClick,
         onFollowClick = { viewModel.followOrUnfollowUser(uiState.user.usuarioId) },
         onFollowersClick = { viewModel.openFollowersSheet() },
         onFollowingClick = { viewModel.openFollowingSheet() },
@@ -62,6 +67,8 @@ fun UserProfileScreen(
 fun UserProfileContent(
     state: UserProfileState,
     onProfessorClick: (String) -> Unit,
+    onUserClick: (String) -> Unit = {},
+    onReviewClick: (String) -> Unit = {},
     onFollowClick: () -> Unit = {},
     onFollowersClick: () -> Unit = {},
     onFollowingClick: () -> Unit = {},
@@ -79,6 +86,7 @@ fun UserProfileContent(
                 reviews = state.userReviews,
                 isOwnProfile = state.currentUserId == state.user.usuarioId,
                 onProfessorClick = onProfessorClick,
+                onReviewClick = onReviewClick,
                 onFollowClick = onFollowClick,
                 onFollowersClick = onFollowersClick,
                 onFollowingClick = onFollowingClick
@@ -101,14 +109,18 @@ fun UserProfileContent(
             HorizontalDivider(modifier = Modifier.padding(vertical = 8.dp))
             if (state.isLoadingList) {
                 Box(
-                    modifier = Modifier.fillMaxWidth().height(120.dp),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(120.dp),
                     contentAlignment = Alignment.Center
                 ) {
                     CircularProgressIndicator(color = colorResource(R.color.verdetp))
                 }
             } else if (list.isEmpty()) {
                 Box(
-                    modifier = Modifier.fillMaxWidth().height(120.dp),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(120.dp),
                     contentAlignment = Alignment.Center
                 ) {
                     Text(
@@ -123,14 +135,13 @@ fun UserProfileContent(
                     verticalArrangement = Arrangement.spacedBy(4.dp),
                     modifier = Modifier.navigationBarsPadding()
                 ) {
-                    itemsIndexed(list, key = { _, u -> u.usuarioId }) { index, usuario ->
-                        AnimatedListItem(index = index) {
-                            UserListItem(
-                                usuario = usuario,
-                                isCurrentUser = usuario.usuarioId == state.currentUserId,
-                                onFollowClick = { onFollowInList(usuario.usuarioId) }
-                            )
-                        }
+                    items(list, key = { it.usuarioId }) { usuario ->
+                        UserListItem(
+                            usuario = usuario,
+                            isCurrentUser = usuario.usuarioId == state.currentUserId,
+                            onFollowClick = { onFollowInList(usuario.usuarioId) },
+                            onUserClick = { onUserClick(usuario.usuarioId) }
+                        )
                     }
                 }
             }
@@ -144,6 +155,7 @@ private fun UserProfileLoaded(
     reviews: List<ReviewInfo>,
     isOwnProfile: Boolean,
     onProfessorClick: (String) -> Unit,
+    onReviewClick: (String) -> Unit = {},
     onFollowClick: () -> Unit,
     onFollowersClick: () -> Unit = {},
     onFollowingClick: () -> Unit = {}
@@ -153,44 +165,37 @@ private fun UserProfileLoaded(
         contentPadding = PaddingValues(bottom = 100.dp)
     ) {
         item {
-            AnimatedScreen(delayMs = 0) {
-                UserProfileHeader(
-                    user = user,
-                    isOwnProfile = isOwnProfile,
-                    onFollowClick = onFollowClick,
-                    onFollowersClick = onFollowersClick,
-                    onFollowingClick = onFollowingClick
-                )
-            }
+            UserProfileHeader(
+                user = user,
+                isOwnProfile = isOwnProfile,
+                onFollowClick = onFollowClick,
+                onFollowersClick = onFollowersClick,
+                onFollowingClick = onFollowingClick
+            )
         }
 
         item { Spacer(Modifier.height(16.dp)) }
 
         item {
-            AnimatedScreen(delayMs = 80) {
-                ReviewsSectionHeader(
-                    reviewCount = reviews.size,
-                    modifier = Modifier.padding(horizontal = 20.dp)
-                )
-            }
+            ReviewsSectionHeader(
+                reviewCount = reviews.size,
+                modifier = Modifier.padding(horizontal = 20.dp)
+            )
         }
 
         item { Spacer(Modifier.height(8.dp)) }
 
         if (reviews.isEmpty()) {
-            item {
-                AnimatedScreen(delayMs = 120) { EmptyReviewsMessage() }
-            }
+            item { EmptyReviewsMessage() }
         } else {
-            itemsIndexed(reviews, key = { _, r -> r.reviewId }) { index, review ->
-                AnimatedListItem(index = index) {
-                    ReviewCard(
-                        review = review,
-                        onProfessorClick = onProfessorClick,
-                        modifier = Modifier.padding(horizontal = 20.dp)
-                    )
-                    Spacer(Modifier.height(12.dp))
-                }
+            items(reviews, key = { it.reviewId }) { review ->
+                ReviewCard(
+                    review = review,
+                    onProfessorClick = onProfessorClick,
+                    onReviewClick = onReviewClick,
+                    modifier = Modifier.padding(horizontal = 20.dp)
+                )
+                Spacer(Modifier.height(12.dp))
             }
         }
     }
@@ -253,31 +258,17 @@ private fun UserProfileHeader(
 
         if (!isOwnProfile) {
             Spacer(Modifier.height(16.dp))
-
-            // Animate follow button container color
-            val containerColor by animateColorAsState(
-                targetValue = if (user.followed) Color.Transparent else colorResource(R.color.verdetp),
-                animationSpec = tween(300),
-                label = "followBg"
-            )
-            val contentColor by animateColorAsState(
-                targetValue = if (user.followed) colorResource(R.color.verdetp) else Color.White,
-                animationSpec = tween(300),
-                label = "followContent"
-            )
-
             Button(
                 onClick = onFollowClick,
                 shape = RoundedCornerShape(50),
                 colors = ButtonDefaults.buttonColors(
-                    containerColor = containerColor,
-                    contentColor = contentColor
+                    containerColor = if (user.followed) Color.Transparent else colorResource(R.color.verdetp),
+                    contentColor = if (user.followed) colorResource(R.color.verdetp) else Color.White
                 ),
                 border = if (user.followed) BorderStroke(1.5.dp, colorResource(R.color.verdetp)) else null,
                 modifier = Modifier
                     .width(140.dp)
                     .height(40.dp)
-                    .pressScaleEffect()
             ) {
                 Text(
                     text = if (user.followed) "Siguiendo" else "Seguir",
@@ -296,9 +287,7 @@ private fun UserProfileHeader(
 private fun StatItem(label: String, count: Int, onClick: () -> Unit = {}) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
-        modifier = Modifier
-            .clickable(onClick = onClick)
-            .pressScaleEffect()
+        modifier = Modifier.clickable(onClick = onClick)
     ) {
         Text(
             text = "$count",
@@ -319,11 +308,13 @@ private fun UserListItem(
     usuario: Usuario,
     isCurrentUser: Boolean,
     onFollowClick: () -> Unit,
+    onUserClick: () -> Unit = {},
     modifier: Modifier = Modifier
 ) {
     Row(
         modifier = modifier
             .fillMaxWidth()
+            .clickable(onClick = onUserClick)
             .padding(horizontal = 8.dp, vertical = 10.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
@@ -346,35 +337,21 @@ private fun UserListItem(
             color = MaterialTheme.colorScheme.onSurface,
             modifier = Modifier.weight(1f)
         )
-        if (!isCurrentUser) {
-            val containerColor by animateColorAsState(
-                targetValue = if (usuario.followed) colorResource(R.color.verdetp) else Color.Transparent,
-                animationSpec = tween(250),
-                label = "listFollowBg"
+        if (!isCurrentUser) OutlinedButton(
+            onClick = onFollowClick,
+            border = BorderStroke(1.5.dp, colorResource(R.color.verdetp)),
+            contentPadding = PaddingValues(horizontal = 14.dp, vertical = 4.dp),
+            modifier = Modifier.height(34.dp),
+            colors = ButtonDefaults.outlinedButtonColors(
+                containerColor = if (usuario.followed) colorResource(R.color.verdetp) else Color.Transparent,
+                contentColor = if (usuario.followed) Color.White else colorResource(R.color.verdetp)
             )
-            val contentColor by animateColorAsState(
-                targetValue = if (usuario.followed) Color.White else colorResource(R.color.verdetp),
-                animationSpec = tween(250),
-                label = "listFollowContent"
+        ) {
+            Text(
+                text = if (usuario.followed) "Siguiendo" else "Seguir",
+                fontSize = 13.sp,
+                fontWeight = FontWeight.Medium
             )
-            OutlinedButton(
-                onClick = onFollowClick,
-                border = BorderStroke(1.5.dp, colorResource(R.color.verdetp)),
-                contentPadding = PaddingValues(horizontal = 14.dp, vertical = 4.dp),
-                modifier = Modifier
-                    .height(34.dp)
-                    .pressScaleEffect(),
-                colors = ButtonDefaults.outlinedButtonColors(
-                    containerColor = containerColor,
-                    contentColor = contentColor
-                )
-            ) {
-                Text(
-                    text = if (usuario.followed) "Siguiendo" else "Seguir",
-                    fontSize = 13.sp,
-                    fontWeight = FontWeight.Medium
-                )
-            }
         }
     }
 }
@@ -419,12 +396,12 @@ private fun ReviewsSectionHeader(reviewCount: Int, modifier: Modifier = Modifier
 private fun ReviewCard(
     review: ReviewInfo,
     onProfessorClick: (String) -> Unit,
+    onReviewClick: (String) -> Unit = {},
     modifier: Modifier = Modifier
 ) {
     Card(
-        modifier = modifier
-            .fillMaxWidth()
-            .pressScaleEffect(),
+        onClick = { onReviewClick(review.reviewId) },
+        modifier = modifier.fillMaxWidth(),
         shape = RoundedCornerShape(28.dp),
         border = BorderStroke(2.dp, colorResource(R.color.BordeTuProfe)),
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
@@ -524,6 +501,47 @@ private fun UserProfileFollowedPreview() {
     TuProfeTheme {
         UserProfileContent(
             state = UserProfileState(user = previewUser.copy(followed = true, followersCount = 129)),
+            onProfessorClick = {}
+        )
+    }
+}
+
+@Preview(showBackground = true, name = "Perfil propio")
+@Composable
+private fun UserProfileOwnPreview() {
+    TuProfeTheme {
+        UserProfileContent(
+            state = UserProfileState(user = previewUser, currentUserId = previewUser.usuarioId),
+            onProfessorClick = {}
+        )
+    }
+}
+
+@Preview(showBackground = true, name = "Sin reseñas")
+@Composable
+private fun UserProfileEmptyPreview() {
+    TuProfeTheme {
+        UserProfileContent(
+            state = UserProfileState(user = previewUser, userReviews = emptyList()),
+            onProfessorClick = {}
+        )
+    }
+}
+
+@Preview(showBackground = true, name = "Cargando")
+@Composable
+private fun UserProfileLoadingPreview() {
+    TuProfeTheme {
+        UserProfileContent(state = UserProfileState(isLoading = true), onProfessorClick = {})
+    }
+}
+
+@Preview(showBackground = true, name = "Error")
+@Composable
+private fun UserProfileErrorPreview() {
+    TuProfeTheme {
+        UserProfileContent(
+            state = UserProfileState(errorMessage = "No se pudo cargar el perfil"),
             onProfessorClick = {}
         )
     }
