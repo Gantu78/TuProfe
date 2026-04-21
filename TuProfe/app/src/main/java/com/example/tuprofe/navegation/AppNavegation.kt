@@ -142,9 +142,19 @@ fun AppNavegation(
             enterTransition = { fadeIn(tween(500)) },
             exitTransition = { fadeOut(tween(400)) }
         ) {
-            SplashScreen(
-                navigateToLogin = { navController.navigate(Screen.Login.route) },
-                navigateToMain = { navController.navigate(Screen.Main.route) }
+            SplashScreen(navigateToLogin = {
+                navController.navigate(Screen.Login.route)
+                navController.navigate(Screen.Login.route) {
+                    popUpTo(Screen.Splash.route) {
+                        inclusive = true
+                    }
+                }
+            },
+                navigateToMain = { navController.navigate(Screen.Main.route) {
+                    popUpTo(Screen.Splash.route) {
+                        inclusive = true
+                    }
+                } }
             )
         }
 
