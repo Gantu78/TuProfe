@@ -1,11 +1,13 @@
 package com.example.tuprofe.ui.profe
 
+import androidx.compose.animation.core.FastOutSlowInEasing
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
@@ -14,7 +16,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
@@ -29,9 +30,7 @@ import com.example.tuprofe.data.Profesor
 import com.example.tuprofe.data.local.LocalProfesor
 import com.example.tuprofe.data.local.LocalReview
 import com.example.tuprofe.ui.main.ResenaCard
-import com.example.tuprofe.ui.utils.BackgroundImage
-import com.example.tuprofe.ui.utils.RatingStars
-
+import com.example.tuprofe.ui.utils.*
 
 @Composable
 fun ProfeScreen(
@@ -41,7 +40,6 @@ fun ProfeScreen(
     onProfileClick: (Profesor) -> Unit,
     onUserClick: (String) -> Unit
 ) {
-
     val uiState by profeViewModel.uiState.collectAsState()
     ProfeContent(
         uiState = uiState,
@@ -51,7 +49,6 @@ fun ProfeScreen(
         modifier = modifier
     )
 }
-
 
 @Composable
 fun ProfeContent(
@@ -65,34 +62,45 @@ fun ProfeContent(
         BackgroundImage()
 
         when {
-            uiState.isLoading -> Box(
-                modifier = Modifier.fillMaxSize(),
-                contentAlignment = Alignment.Center
-            ) {
-                CircularProgressIndicator(color = colorResource(R.color.verdetp))
+            uiState.isLoading -> {
+                // Shimmer placeholder while loading professor + reviews
+                Column(modifier = Modifier.fillMaxSize()) {
+                    ProfessorInfoCardSkeleton()
+                    ReviewListSkeleton(count = 3)
+                }
             }
 
-            uiState.profesor != null -> LazyColumn(
-                modifier = Modifier.fillMaxSize(),
-                horizontalAlignment = Alignment.CenterHorizontally,
-                contentPadding = PaddingValues(bottom = 100.dp)
-            ) {
-                item {
-                    ProfessorInfoCard(
-                        professorName = uiState.profesor.nombreProfe,
-                        generalRating = uiState.averageRating,
-                        professorImageUrl = uiState.profesor.imageprofeUrl,
-                        departamento = uiState.profesor.departamento
-                    )
-                }
-                items(uiState.professorReviews) { review ->
-                    ResenaCard(
-                        reviewInfo = review,
-                        onCommentsClick = onResenaClick,
-                        onProfileClick = { onProfileClick(review.profesor) },
-                        onUserClick = { onUserClick(review.usuario.usuarioId) }
-                    )
-                    Spacer(modifier = Modifier.height(16.dp))
+            uiState.profesor != null -> {
+                LazyColumn(
+                    modifier = Modifier.fillMaxSize(),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    contentPadding = PaddingValues(bottom = 100.dp)
+                ) {
+                    item {
+                        // Info card slides + fades in first
+                        AnimatedScreen(delayMs = 0) {
+                            ProfessorInfoCard(
+                                professorName = uiState.profesor.nombreProfe,
+                                generalRating = uiState.averageRating,
+                                professorImageUrl = uiState.profesor.imageprofeUrl,
+                                departamento = uiState.profesor.departamento
+                            )
+                        }
+                    }
+                    itemsIndexed(
+                        uiState.professorReviews,
+                        key = { _, r -> r.reviewId }
+                    ) { index, review ->
+                        AnimatedListItem(index = index) {
+                            ResenaCard(
+                                reviewInfo = review,
+                                onCommentsClick = onResenaClick,
+                                onProfileClick = { onProfileClick(review.profesor) },
+                                onUserClick = { onUserClick(review.usuario.usuarioId) }
+                            )
+                            Spacer(modifier = Modifier.height(16.dp))
+                        }
+                    }
                 }
             }
 
@@ -103,10 +111,10 @@ fun ProfeContent(
                 Text(text = stringResource(R.string.rese_a_no_encontrada))
             }
         }
-
     }
 }
 
+// ── Professor info card ───────────────────────────────────────────────────────
 
 @Composable
 fun ProfessorInfoCard(
@@ -126,10 +134,11 @@ fun ProfessorInfoCard(
         elevation = CardDefaults.cardElevation(12.dp)
     ) {
         Column(
-            modifier = Modifier.padding(20.dp).fillMaxWidth(),
+            modifier = Modifier
+                .padding(20.dp)
+                .fillMaxWidth(),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-
             AsyncImage(
                 model = professorImageUrl,
                 contentDescription = stringResource(R.string.foto_de_perfil),
@@ -167,13 +176,66 @@ fun ProfessorInfoCard(
     }
 }
 
+// ── Shimmer skeleton for the info card ───────────────────────────────────────
+
+@Composable
+fun ProfessorInfoCardSkeleton(modifier: Modifier = Modifier) {
+    Card(
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(horizontal = 16.dp, vertical = 12.dp),
+        shape = RoundedCornerShape(28.dp),
+        border = BorderStroke(2.dp, colorResource(R.color.BordeTuProfe).copy(alpha = 0.35f)),
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
+        elevation = CardDefaults.cardElevation(4.dp)
+    ) {
+        Column(
+            modifier = Modifier
+                .padding(20.dp)
+                .fillMaxWidth(),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.spacedBy(12.dp)
+        ) {
+            Box(
+                Modifier
+                    .size(110.dp)
+                    .clip(CircleShape)
+                    .shimmerEffect()
+            )
+            Box(
+                Modifier
+                    .width(160.dp)
+                    .height(18.dp)
+                    .clip(RoundedCornerShape(6.dp))
+                    .shimmerEffect()
+            )
+            Box(
+                Modifier
+                    .width(100.dp)
+                    .height(12.dp)
+                    .clip(RoundedCornerShape(4.dp))
+                    .shimmerEffect()
+            )
+            Box(
+                Modifier
+                    .width(120.dp)
+                    .height(20.dp)
+                    .clip(RoundedCornerShape(4.dp))
+                    .shimmerEffect()
+            )
+        }
+    }
+}
+
+// ── Previews ──────────────────────────────────────────────────────────────────
+
 @Preview(showBackground = true)
 @Composable
 private fun ProfessorInfoCardPreview() {
     ProfessorInfoCard(
         professorName = "Carlos Parra",
         generalRating = 4F,
-        professorImageUrl = "https://img.lalr.co/cms/2017/06/16184524/1280x1440_CARLOS-PARRA.jpg?r=6_5&ns=1&w=372&d=2.625"
+        professorImageUrl = null
     )
 }
 
