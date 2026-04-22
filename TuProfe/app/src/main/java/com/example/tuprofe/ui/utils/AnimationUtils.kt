@@ -17,11 +17,11 @@ import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.input.pointer.pointerInput
 import kotlinx.coroutines.delay
 
+// ── Shimmer ───────────────────────────────────────────────────────────────────
+
 /**
  * Shimmer loading animation.
- * Apply AFTER .clip(shape) so the shape masks correctly:
- *   Modifier.size(48.dp).clip(CircleShape).shimmerEffect()
- *   Modifier.height(12.dp).clip(RoundedCornerShape(4.dp)).shimmerEffect()
+ * Apply AFTER .clip(shape) so the shape masks correctly.
  */
 fun Modifier.shimmerEffect(): Modifier = composed {
     val shimmerColors = listOf(
@@ -47,6 +47,8 @@ fun Modifier.shimmerEffect(): Modifier = composed {
         )
     )
 }
+
+// ── Press scale ───────────────────────────────────────────────────────────────
 
 /**
  * Subtle scale-down on press. Does NOT consume pointer events so the
@@ -75,9 +77,11 @@ fun Modifier.pressScaleEffect(): Modifier = composed {
         }
 }
 
+// ── Staggered list entrance ───────────────────────────────────────────────────
+
 /**
  * Staggered fade + slide-up entrance for list items.
- * Place inside LazyColumn using itemsIndexed to pass the correct index.
+ * Use inside LazyColumn with itemsIndexed.
  */
 @Composable
 fun AnimatedListItem(
@@ -99,4 +103,54 @@ fun AnimatedListItem(
     ) {
         content()
     }
+}
+
+// ── Screen entrance ───────────────────────────────────────────────────────────
+
+/**
+ * One-shot fade + slide-up entrance for a section/screen.
+ * [delayMs] staggers multiple sections on the same screen.
+ */
+@Composable
+fun AnimatedScreen(
+    delayMs: Long = 0L,
+    content: @Composable () -> Unit
+) {
+    var visible by remember { mutableStateOf(false) }
+    LaunchedEffect(Unit) {
+        if (delayMs > 0L) delay(delayMs)
+        visible = true
+    }
+    AnimatedVisibility(
+        visible = visible,
+        enter = fadeIn(tween(350)) +
+                slideInVertically(
+                    animationSpec = tween(400, easing = FastOutSlowInEasing),
+                    initialOffsetY = { it / 5 }
+                )
+    ) {
+        content()
+    }
+}
+
+// ── Star bounce ───────────────────────────────────────────────────────────────
+
+/**
+ * Returns a scale value that bounces once when [selected] flips to true.
+ * Apply via graphicsLayer { scaleX = s; scaleY = s } on the star Icon.
+ */
+@Composable
+fun rememberStarBounceScale(selected: Boolean): Float {
+    var triggered by remember { mutableStateOf(false) }
+    LaunchedEffect(selected) { if (selected) triggered = !triggered }
+    val scale by animateFloatAsState(
+        targetValue = if (triggered) 1.4f else 1f,
+        animationSpec = spring(
+            dampingRatio = Spring.DampingRatioHighBouncy,
+            stiffness = Spring.StiffnessMediumLow
+        ),
+        finishedListener = { triggered = false },
+        label = "starBounce"
+    )
+    return scale
 }

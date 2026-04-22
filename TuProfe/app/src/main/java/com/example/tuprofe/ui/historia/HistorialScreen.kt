@@ -1,20 +1,19 @@
 package com.example.tuprofe.ui.historia
 
+import androidx.compose.animation.animateColorAsState
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material3.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -34,10 +33,7 @@ import androidx.lifecycle.LifecycleEventObserver
 import coil.compose.AsyncImage
 import com.example.tuprofe.R
 import com.example.tuprofe.data.ReviewInfo
-import com.example.tuprofe.ui.utils.AppButton
-import com.example.tuprofe.ui.utils.AppButtonRow
-import com.example.tuprofe.ui.utils.BackgroundImage
-import com.example.tuprofe.ui.utils.RatingStars
+import com.example.tuprofe.ui.utils.*
 
 @Composable
 fun HistorialScreen(
@@ -50,62 +46,64 @@ fun HistorialScreen(
     val state by historialViewModel.uiState.collectAsState()
     val lifecycleOwner = LocalLifecycleOwner.current
 
-    // Sincronizar datos al volver a la pantalla (por ejemplo, después de editar)
     DisposableEffect(lifecycleOwner) {
         val observer = LifecycleEventObserver { _, event ->
-            if (event == Lifecycle.Event.ON_RESUME) {
-                historialViewModel.cargarHistorial()
-            }
+            if (event == Lifecycle.Event.ON_RESUME) historialViewModel.cargarHistorial()
         }
         lifecycleOwner.lifecycle.addObserver(observer)
-        onDispose {
-            lifecycleOwner.lifecycle.removeObserver(observer)
-        }
+        onDispose { lifecycleOwner.lifecycle.removeObserver(observer) }
     }
 
     Box(modifier = modifier.fillMaxSize()) {
         BackgroundImage()
 
         if (state.isLoading && state.userReviews.isEmpty()) {
-            CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
+            // Shimmer skeleton while first load
+            ReviewListSkeleton(count = 4)
         } else {
             LazyColumn(
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(horizontal = 10.dp),
                 verticalArrangement = Arrangement.spacedBy(16.dp),
-                contentPadding = PaddingValues(
-                    top = 24.dp,
-                    bottom = 80.dp
-                )
+                contentPadding = PaddingValues(top = 24.dp, bottom = 80.dp)
             ) {
                 item {
-                    HistorialHeader(
-                        onFilterClick = { historialViewModel.onFilterClick("") }
-                    )
+                    AnimatedScreen(delayMs = 0) {
+                        HistorialHeader(
+                            onFilterClick = { historialViewModel.onFilterClick("") }
+                        )
+                    }
                 }
 
                 if (state.userReviews.isEmpty()) {
                     item {
-                        Text(
-                            text = "Todavía no has hecho ninguna calificación",
-                            fontSize = 16.sp,
-                            textAlign = TextAlign.Center,
-                            color = MaterialTheme.colorScheme.onSurfaceVariant,
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(top = 40.dp)
-                        )
+                        AnimatedScreen(delayMs = 120) {
+                            Text(
+                                text = "Todavía no has hecho ninguna calificación",
+                                fontSize = 16.sp,
+                                textAlign = TextAlign.Center,
+                                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(top = 40.dp)
+                            )
+                        }
                     }
                 } else {
-                    items(state.userReviews) { review ->
-                        HistorialCard(
-                            review = review,
-                            onVerCalificacionClick = onVerCalificacionClick,
-                            onProfessorClick = onProfessorClick,
-                            onEditClick = { onEditClick(review.reviewId) },
-                            onDeleteClick = { historialViewModel.deleteReview(review.reviewId) }
-                        )
+                    itemsIndexed(
+                        state.userReviews,
+                        key = { _, review -> review.reviewId }
+                    ) { index, review ->
+                        AnimatedListItem(index = index) {
+                            HistorialCard(
+                                review = review,
+                                onVerCalificacionClick = onVerCalificacionClick,
+                                onProfessorClick = onProfessorClick,
+                                onEditClick = { onEditClick(review.reviewId) },
+                                onDeleteClick = { historialViewModel.deleteReview(review.reviewId) }
+                            )
+                        }
                     }
                 }
             }
@@ -118,19 +116,16 @@ fun HistorialHeader(
     onFilterClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    Column(
-        modifier = modifier.padding(horizontal = 24.dp)
-    ) {
+    Column(modifier = modifier.padding(horizontal = 24.dp)) {
         AppButton(
             textoBoton = stringResource(R.string.filtrar),
             onClick = onFilterClick,
             modifier = Modifier
                 .fillMaxWidth()
                 .height(56.dp)
+                .pressScaleEffect()
         )
-
         Spacer(modifier = Modifier.height(16.dp))
-
         Text(
             text = stringResource(R.string.texto_calificaciones),
             fontSize = 18.sp,
@@ -139,9 +134,7 @@ fun HistorialHeader(
             lineHeight = 22.sp,
             color = MaterialTheme.colorScheme.onSurface,
         )
-
         Spacer(modifier = Modifier.height(12.dp))
-
         HorizontalDivider(
             thickness = 1.dp,
             color = colorResource(R.color.BordeTuProfe),
@@ -160,22 +153,24 @@ fun HistorialCard(
     modifier: Modifier = Modifier
 ) {
     Card(
-        modifier = modifier.fillMaxWidth(),
+        modifier = modifier
+            .fillMaxWidth()
+            .pressScaleEffect(),
         shape = RoundedCornerShape(28.dp),
         border = BorderStroke(1.dp, colorResource(R.color.BordeTuProfe)),
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)
     ) {
         Row(
-            modifier = Modifier.padding(16.dp).fillMaxWidth(),
+            modifier = Modifier
+                .padding(16.dp)
+                .fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically
         ) {
             ProfesorAvatar(
                 imageUrl = review.profesor.imageprofeUrl,
                 onClick = { onProfessorClick(review.profesor.profeId) }
             )
-
             Spacer(modifier = Modifier.width(14.dp))
-
             HistorialCardBody(
                 review = review,
                 onVerCalificacionClick = { onVerCalificacionClick(review) },
@@ -226,16 +221,20 @@ private fun HistorialCardBody(
                 overflow = TextOverflow.Ellipsis,
                 modifier = Modifier.weight(1f)
             )
-
-            IconButton(onClick = onEditClick) {
+            IconButton(
+                onClick = onEditClick,
+                modifier = Modifier.pressScaleEffect()
+            ) {
                 Icon(
                     imageVector = Icons.Default.Edit,
                     contentDescription = "Editar reseña",
                     tint = colorResource(R.color.verdetp)
                 )
             }
-
-            IconButton(onClick = onDeleteClick) {
+            IconButton(
+                onClick = onDeleteClick,
+                modifier = Modifier.pressScaleEffect()
+            ) {
                 Icon(
                     imageVector = Icons.Default.Delete,
                     contentDescription = "Eliminar reseña",
@@ -266,7 +265,9 @@ private fun HistorialCardBody(
         AppButtonRow(
             textoBoton = stringResource(R.string.ver_rese_a),
             onClick = onVerCalificacionClick,
-            modifier = Modifier.height(34.dp)
+            modifier = Modifier
+                .height(34.dp)
+                .pressScaleEffect()
         )
     }
 }
