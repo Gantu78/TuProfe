@@ -2,6 +2,13 @@
 .idea/
 .gradle
 /local.properties
+
+# Firebase - Nunca subir al repositorio
+app/google-services.json
+
+# Keystores de firma
+*.jks
+*.keystore
 /.idea/caches
 /.idea/libraries
 /.idea/modules.xml

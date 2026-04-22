@@ -1,13 +1,13 @@
 {
   "project_info": {
-    "project_number": "1043975331593",
-    "project_id": "tuprofe-89d43",
-    "storage_bucket": "tuprofe-89d43.firebasestorage.app"
+    "project_number": "TU_PROJECT_NUMBER",
+    "project_id": "tu-project-id",
+    "storage_bucket": "tu-project-id.firebasestorage.app"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:1043975331593:android:f33dca255626af2e653dd8",
+        "mobilesdk_app_id": "1:TU_PROJECT_NUMBER:android:TU_APP_ID",
         "android_client_info": {
           "package_name": "com.example.tuprofe"
         }
@@ -15,7 +15,7 @@
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyAv_C4h68XXVUMcMcLCc54h86rrQ3AygHQ"
+          "current_key": "REEMPLAZAR_CON_TU_API_KEY_DE_FIREBASE"
         }
       ],
       "services": {
