@@ -5,6 +5,9 @@ import com.example.tuprofe.data.dtos.CreateReviewDto
 import com.example.tuprofe.data.dtos.ReviewDto
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
+import kotlinx.coroutines.channels.awaitClose
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
 
@@ -82,5 +85,31 @@ class ReviewFirestoreDataSourceImpl @Inject constructor(
 
 
         }
+    }
+
+    override suspend fun listenAllReviews(): Flow<List<ReviewDto>> = callbackFlow {
+
+        val listener = db.collection("reviews").addSnapshotListener { snapshot, error ->
+            if(error!=null){
+                close(error)
+                return@addSnapshotListener
+            }
+
+            if(snapshot!=null){
+                val reviews = snapshot.documents.map { doc ->
+                    val review = doc.toObject(ReviewDto::class.java)
+                    review?.copy(id=doc.id)?:throw Exception ("review not found")
+                }
+
+                trySend(reviews).isSuccess
+            }
+        }
+
+        awaitClose{
+            listener.remove()
+        }
+
+
+
     }
 }

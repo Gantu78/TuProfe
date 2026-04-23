@@ -2,6 +2,7 @@ package com.example.tuprofe.data.datasource
 
 import com.example.tuprofe.data.dtos.CreateReviewDto
 import com.example.tuprofe.data.dtos.ReviewDto
+import kotlinx.coroutines.flow.Flow
 
 interface ReviewRemoteDataSource  {
 
@@ -16,4 +17,6 @@ interface ReviewRemoteDataSource  {
     suspend fun getUserReviews(userId: String): List<ReviewDto>
 
     suspend fun SendOrDeleteReviewLike(reviewId: String, userId: String)
+
+    suspend fun listenAllReviews(): Flow<List<ReviewDto>>
 }

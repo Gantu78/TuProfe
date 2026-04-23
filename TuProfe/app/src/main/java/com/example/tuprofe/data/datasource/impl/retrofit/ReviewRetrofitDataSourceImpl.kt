@@ -4,6 +4,7 @@ import com.example.tuprofe.data.datasource.ReviewRemoteDataSource
 import com.example.tuprofe.data.datasource.services.ReviewRetrofitService
 import com.example.tuprofe.data.dtos.CreateReviewDto
 import com.example.tuprofe.data.dtos.ReviewDto
+import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
 class ReviewRetrofitDataSourceImpl @Inject constructor(
@@ -40,6 +41,10 @@ class ReviewRetrofitDataSourceImpl @Inject constructor(
     }
 
     override suspend fun SendOrDeleteReviewLike(reviewId: String, userId: String) {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun listenAllReviews(): Flow<List<ReviewDto>> {
         TODO("Not yet implemented")
     }
 

@@ -10,6 +10,8 @@ import com.example.tuprofe.data.dtos.CreateReviewDto
 import com.example.tuprofe.data.dtos.CreateReviewProfessorDto
 import com.example.tuprofe.data.dtos.CreateReviewUserDto
 import com.example.tuprofe.data.dtos.toReviewInfo
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 import retrofit2.HttpException
 import java.text.SimpleDateFormat
 import java.util.Date
@@ -142,4 +144,13 @@ class ReviewRepository @Inject constructor(
             Result.failure(e)
         }
     }
+
+
+    suspend fun getReviewsLive(): Flow<List<ReviewInfo>> {
+        return reviewRemoteDataSource.listenAllReviews().map { reviews ->
+            reviews.map { it.toReviewInfo() }
+        }
+    }
+
+
 }
