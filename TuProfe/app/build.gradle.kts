@@ -89,6 +89,9 @@ dependencies {
     //firestore
     implementation("com.google.firebase:firebase-firestore:26.2.0")
 
+    implementation("com.google.firebase:firebase-analytics")
+    implementation("com.google.firebase:firebase-messaging")
+
     implementation(libs.androidx.compose.runtime)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)

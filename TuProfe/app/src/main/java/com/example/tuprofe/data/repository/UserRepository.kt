@@ -5,6 +5,8 @@ import com.example.tuprofe.data.datasource.StorageRemoteDataSource
 import com.example.tuprofe.data.datasource.UserRemoteDataSource
 import com.example.tuprofe.data.dtos.RegisterUserDto
 import com.example.tuprofe.data.dtos.toUsuario
+import com.google.firebase.messaging.FirebaseMessaging
+import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
 
 class UserRepository @Inject constructor(
@@ -29,10 +31,12 @@ class UserRepository @Inject constructor(
 
     suspend fun registerUser(username: String, carrera: String, userId: String): Result<Unit> {
         return try {
+            val fcmToken = FirebaseMessaging.getInstance().token.await()
             val registerUserDto = RegisterUserDto(
                 id= userId,
                 username = username,
-                carrera = carrera
+                carrera = carrera,
+                FCMToken = fcmToken
             )
             userRemoteDataSource.registerUser(registerUserDto, userId)
             Result.success(Unit)
