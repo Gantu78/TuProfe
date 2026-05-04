@@ -3,6 +3,7 @@ package com.example.tuprofe.ui.historia
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -10,6 +11,7 @@ import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.outlined.Comment
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material3.*
@@ -32,6 +34,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import coil.compose.AsyncImage
 import com.example.tuprofe.R
+import com.example.tuprofe.data.CommentInfo
 import com.example.tuprofe.data.ReviewInfo
 import com.example.tuprofe.ui.utils.*
 
@@ -41,6 +44,8 @@ fun HistorialScreen(
     onProfessorClick: (String) -> Unit,
     onVerCalificacionClick: (ReviewInfo) -> Unit,
     onEditClick: (String) -> Unit,
+    onVerComentarioClick: (String) -> Unit,
+    onEditCommentClick: (String) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val state by historialViewModel.uiState.collectAsState()
@@ -57,8 +62,7 @@ fun HistorialScreen(
     Box(modifier = modifier.fillMaxSize()) {
         BackgroundImage()
 
-        if (state.isLoading && state.userReviews.isEmpty()) {
-            // Shimmer skeleton while first load
+        if (state.isLoading && state.userReviews.isEmpty() && state.userComments.isEmpty()) {
             ReviewListSkeleton(count = 4)
         } else {
             LazyColumn(
@@ -71,16 +75,31 @@ fun HistorialScreen(
                 item {
                     AnimatedScreen(delayMs = 0) {
                         HistorialHeader(
-                            onFilterClick = { historialViewModel.onFilterClick("") }
+                            selectedFilter = state.selectedFilter,
+                            onFilterClick = { historialViewModel.onFilterClick("") },
+                            onFilterSelected = { historialViewModel.setFilter(it) }
                         )
                     }
                 }
 
-                if (state.userReviews.isEmpty()) {
+                val showReviews = state.selectedFilter != HistorialFilter.COMENTARIOS
+                val showComments = state.selectedFilter != HistorialFilter.RESENAS
+
+                val isEmpty = (showReviews && state.userReviews.isEmpty() || !showReviews) &&
+                        (showComments && state.userComments.isEmpty() || !showComments)
+
+                val noContent = (if (showReviews) state.userReviews else emptyList<ReviewInfo>()).isEmpty() &&
+                        (if (showComments) state.userComments else emptyList<CommentInfo>()).isEmpty()
+
+                if (noContent) {
                     item {
                         AnimatedScreen(delayMs = 120) {
                             Text(
-                                text = "Todavía no has hecho ninguna calificación",
+                                text = when (state.selectedFilter) {
+                                    HistorialFilter.TODO -> "Todavía no has hecho ninguna calificación"
+                                    HistorialFilter.RESENAS -> "No tienes reseñas aún"
+                                    HistorialFilter.COMENTARIOS -> "No tienes comentarios aún"
+                                },
                                 fontSize = 16.sp,
                                 textAlign = TextAlign.Center,
                                 color = MaterialTheme.colorScheme.onSurfaceVariant,
@@ -91,18 +110,36 @@ fun HistorialScreen(
                         }
                     }
                 } else {
-                    itemsIndexed(
-                        state.userReviews,
-                        key = { _, review -> review.reviewId }
-                    ) { index, review ->
-                        AnimatedListItem(index = index) {
-                            HistorialCard(
-                                review = review,
-                                onVerCalificacionClick = onVerCalificacionClick,
-                                onProfessorClick = onProfessorClick,
-                                onEditClick = { onEditClick(review.reviewId) },
-                                onDeleteClick = { historialViewModel.deleteReview(review.reviewId) }
-                            )
+                    if (showReviews) {
+                        itemsIndexed(
+                            state.userReviews,
+                            key = { _, review -> "review_${review.reviewId}" }
+                        ) { index, review ->
+                            AnimatedListItem(index = index) {
+                                HistorialCard(
+                                    review = review,
+                                    onVerCalificacionClick = onVerCalificacionClick,
+                                    onProfessorClick = onProfessorClick,
+                                    onEditClick = { onEditClick(review.reviewId) },
+                                    onDeleteClick = { historialViewModel.deleteReview(review.reviewId) }
+                                )
+                            }
+                        }
+                    }
+
+                    if (showComments) {
+                        itemsIndexed(
+                            state.userComments,
+                            key = { _, comment -> "comment_${comment.commentId}" }
+                        ) { index, comment ->
+                            AnimatedListItem(index = if (showReviews) state.userReviews.size + index else index) {
+                                CommentHistorialCard(
+                                    comment = comment,
+                                    onVerComentarioClick = { onVerComentarioClick(comment.commentId) },
+                                    onEditClick = { onEditCommentClick(comment.commentId) },
+                                    onDeleteClick = { historialViewModel.deleteComment(comment.commentId) }
+                                )
+                            }
                         }
                     }
                 }
@@ -113,18 +150,50 @@ fun HistorialScreen(
 
 @Composable
 fun HistorialHeader(
+    selectedFilter: HistorialFilter,
     onFilterClick: () -> Unit,
+    onFilterSelected: (HistorialFilter) -> Unit = {},
     modifier: Modifier = Modifier
 ) {
     Column(modifier = modifier.padding(horizontal = 24.dp)) {
-        AppButton(
-            textoBoton = stringResource(R.string.filtrar),
-            onClick = onFilterClick,
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(56.dp)
-                .pressScaleEffect()
-        )
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.spacedBy(8.dp)
+        ) {
+            HistorialFilter.entries.forEach { filter ->
+                val isSelected = selectedFilter == filter
+                val containerColor by animateColorAsState(
+                    targetValue = if (isSelected) colorResource(R.color.verdetp) else Color.Transparent,
+                    animationSpec = tween(200),
+                    label = "filterColor"
+                )
+                val textColor by animateColorAsState(
+                    targetValue = if (isSelected) Color.White else colorResource(R.color.verdetp),
+                    animationSpec = tween(200),
+                    label = "filterTextColor"
+                )
+                OutlinedButton(
+                    onClick = { onFilterSelected(filter) },
+                    modifier = Modifier.weight(1f).pressScaleEffect(),
+                    border = BorderStroke(1.5.dp, colorResource(R.color.verdetp)),
+                    colors = ButtonDefaults.outlinedButtonColors(containerColor = containerColor),
+                    shape = RoundedCornerShape(50),
+                    contentPadding = PaddingValues(horizontal = 8.dp, vertical = 6.dp)
+                ) {
+                    Text(
+                        text = when (filter) {
+                            HistorialFilter.TODO -> "TODO"
+                            HistorialFilter.RESENAS -> "RESEÑAS"
+                            HistorialFilter.COMENTARIOS -> "COMENTARIOS"
+                        },
+                        color = textColor,
+                        fontSize = 12.sp,
+                        fontWeight = FontWeight.Bold,
+                        maxLines = 1
+                    )
+                }
+            }
+        }
         Spacer(modifier = Modifier.height(16.dp))
         Text(
             text = stringResource(R.string.texto_calificaciones),
@@ -265,6 +334,125 @@ private fun HistorialCardBody(
         AppButtonRow(
             textoBoton = stringResource(R.string.ver_rese_a),
             onClick = onVerCalificacionClick,
+            modifier = Modifier
+                .height(34.dp)
+                .pressScaleEffect()
+        )
+    }
+}
+
+@Composable
+fun CommentHistorialCard(
+    comment: CommentInfo,
+    onVerComentarioClick: () -> Unit,
+    onEditClick: () -> Unit,
+    onDeleteClick: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+    Card(
+        modifier = modifier
+            .fillMaxWidth()
+            .pressScaleEffect(),
+        shape = RoundedCornerShape(28.dp),
+        border = BorderStroke(1.dp, colorResource(R.color.BordeTuProfe)),
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)
+    ) {
+        Row(
+            modifier = Modifier
+                .padding(16.dp)
+                .fillMaxWidth(),
+            verticalAlignment = Alignment.Top
+        ) {
+            Box(
+                modifier = Modifier
+                    .size(56.dp)
+                    .background(
+                        color = colorResource(R.color.verdetp).copy(alpha = 0.1f),
+                        shape = CircleShape
+                    ),
+                contentAlignment = Alignment.Center
+            ) {
+                Icon(
+                    imageVector = Icons.AutoMirrored.Outlined.Comment,
+                    contentDescription = null,
+                    tint = colorResource(R.color.verdetp),
+                    modifier = Modifier.size(26.dp)
+                )
+            }
+            Spacer(modifier = Modifier.width(14.dp))
+            CommentHistorialCardBody(
+                comment = comment,
+                onVerComentarioClick = onVerComentarioClick,
+                onEditClick = onEditClick,
+                onDeleteClick = onDeleteClick
+            )
+        }
+    }
+}
+
+@Composable
+private fun CommentHistorialCardBody(
+    comment: CommentInfo,
+    onVerComentarioClick: () -> Unit,
+    onEditClick: () -> Unit,
+    onDeleteClick: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+    Column(modifier = modifier.fillMaxWidth()) {
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Text(
+                text = "Comentario",
+                fontWeight = FontWeight.SemiBold,
+                fontSize = 15.sp,
+                color = colorResource(R.color.verdetp),
+                modifier = Modifier.weight(1f)
+            )
+            IconButton(
+                onClick = onEditClick,
+                modifier = Modifier.pressScaleEffect()
+            ) {
+                Icon(
+                    imageVector = Icons.Default.Edit,
+                    contentDescription = "Editar comentario",
+                    tint = colorResource(R.color.verdetp)
+                )
+            }
+            IconButton(
+                onClick = onDeleteClick,
+                modifier = Modifier.pressScaleEffect()
+            ) {
+                Icon(
+                    imageVector = Icons.Default.Delete,
+                    contentDescription = "Eliminar comentario",
+                    tint = Color.Red
+                )
+            }
+        }
+
+        Text(
+            text = comment.content,
+            fontSize = 14.sp,
+            maxLines = 2,
+            overflow = TextOverflow.Ellipsis,
+            color = MaterialTheme.colorScheme.onSurface
+        )
+
+        Spacer(modifier = Modifier.height(4.dp))
+
+        Text(
+            text = comment.time,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
+            fontSize = 12.sp
+        )
+
+        Spacer(modifier = Modifier.height(8.dp))
+
+        AppButtonRow(
+            textoBoton = "VER COMENTARIO",
+            onClick = onVerComentarioClick,
             modifier = Modifier
                 .height(34.dp)
                 .pressScaleEffect()

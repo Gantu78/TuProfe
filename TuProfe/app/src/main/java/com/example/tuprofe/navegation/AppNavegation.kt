@@ -31,6 +31,10 @@ import com.example.tuprofe.ui.config.ConfigScreen
 import com.example.tuprofe.ui.config.ConfigViewModel
 import com.example.tuprofe.ui.configPerfil.ConfigPerfilScreen
 import com.example.tuprofe.ui.configPerfil.ConfigPerfilViewModel
+import com.example.tuprofe.ui.comment.detalle.CommentDetalleScreen
+import com.example.tuprofe.ui.comment.detalle.CommentDetalleViewModel
+import com.example.tuprofe.ui.comment.edit.EditCommentScreen
+import com.example.tuprofe.ui.comment.edit.EditCommentViewModel
 import com.example.tuprofe.ui.detalle.DetalleScreen
 import com.example.tuprofe.ui.detalle.DetalleViewModel
 import com.example.tuprofe.ui.historia.HistorialScreen
@@ -118,6 +122,14 @@ sealed class Screen(val route: String){
 
     object Profile : Screen("Profile/{userId}") {
         fun createRoute(userId: String) = "Profile/$userId"
+    }
+
+    object CommentDetalle : Screen("CommentDetalle/{commentId}") {
+        fun createRoute(commentId: String) = "CommentDetalle/$commentId"
+    }
+
+    object EditComment : Screen("EditComment/{commentId}") {
+        fun createRoute(commentId: String) = "EditComment/$commentId"
     }
 
 }
@@ -295,6 +307,12 @@ fun AppNavegation(
                 },
                 onEditClick = { reviewId ->
                     navController.navigate(Screen.EditReview.createRoute(reviewId))
+                },
+                onVerComentarioClick = { commentId ->
+                    navController.navigate(Screen.CommentDetalle.createRoute(commentId))
+                },
+                onEditCommentClick = { commentId ->
+                    navController.navigate(Screen.EditComment.createRoute(commentId))
                 }
             )
         }
@@ -380,12 +398,42 @@ fun AppNavegation(
                 detalleViewModel = detalleViewModel,
                 onProfileClick = { profesor ->
                     navController.navigate(Screen.Profe.createRoute(profesor.profeId))
-                } ,
+                },
+                onUserClick = { userId ->
+                    navController.navigate(Screen.Profile.createRoute(userId))
+                },
+                onCommentClick = { commentId ->
+                    navController.navigate(Screen.CommentDetalle.createRoute(commentId))
+                }
+            )
+        }
+
+        composable(
+            route = Screen.CommentDetalle.route,
+            arguments = listOf(navArgument("commentId") { type = NavType.StringType })
+        ) {
+            val commentDetalleViewModel: CommentDetalleViewModel = hiltViewModel()
+            CommentDetalleScreen(
+                commentId = navController.currentBackStackEntry?.arguments?.getString("commentId") ?: "",
+                viewModel = commentDetalleViewModel,
+                onCommentClick = { commentId ->
+                    navController.navigate(Screen.CommentDetalle.createRoute(commentId))
+                },
                 onUserClick = { userId ->
                     navController.navigate(Screen.Profile.createRoute(userId))
                 }
             )
+        }
 
+        composable(
+            route = Screen.EditComment.route,
+            arguments = listOf(navArgument("commentId") { type = NavType.StringType })
+        ) {
+            val editCommentViewModel: EditCommentViewModel = hiltViewModel()
+            EditCommentScreen(
+                viewModel = editCommentViewModel,
+                onSuccess = { navController.popBackStack() }
+            )
         }
 
         composable(

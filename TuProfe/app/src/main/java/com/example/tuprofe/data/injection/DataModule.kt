@@ -1,8 +1,10 @@
 package com.example.tuprofe.data.injection
 
+import com.example.tuprofe.data.datasource.CommentRemoteDataSource
 import com.example.tuprofe.data.datasource.ProfessorRemoteDataSource
 import com.example.tuprofe.data.datasource.ReviewRemoteDataSource
 import com.example.tuprofe.data.datasource.UserRemoteDataSource
+import com.example.tuprofe.data.datasource.impl.firestore.CommentFirestoreDataSourceImpl
 import com.example.tuprofe.data.datasource.impl.firestore.ProfessorFirestoreDataSourceImpl
 import com.example.tuprofe.data.datasource.impl.firestore.ReviewFirestoreDataSourceImpl
 import com.example.tuprofe.data.datasource.impl.firestore.UserFirestoreDataSourceImpl
@@ -42,4 +44,10 @@ object DataModule {
         retrofitImpl: UsuarioRemoteDataSourceImpl
     ): UserRemoteDataSource =
         if (DataSourceConfig.USE_FIRESTORE) firestoreImpl else retrofitImpl
+
+    @Singleton
+    @Provides
+    fun provideCommentDataSource(
+        firestoreImpl: CommentFirestoreDataSourceImpl
+    ): CommentRemoteDataSource = firestoreImpl
 }
