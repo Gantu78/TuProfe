@@ -16,6 +16,7 @@ class UserRepository @Inject constructor(
     suspend fun getUserById(userId: String, CurrentUserId:String =""): Result<Usuario> {
         return try {
             val userDto = userRemoteDataSource.getUserById(userId, CurrentUserId)
+            if(userDto == null ) return Result.failure(Exception("User not found"))
             val usuario = userDto.toUsuario()
             val withPhoto = if (usuario.imageprofeUrl.isNullOrEmpty()) {
                 val photoUrl = storageRemoteDataSource.getProfileImageUrl(userId)

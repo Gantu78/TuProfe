@@ -3,7 +3,7 @@ package com.example.tuprofe.data.dtos
 import com.example.tuprofe.data.Usuario
 
 data class UserDto(
-    val id: String? = null,
+    val id: String,
     val name: String? = null,
     val username: String? = null,
     val email: String? = null,
@@ -13,7 +13,7 @@ data class UserDto(
     val followersCount: Int = 0,
     var followed: Boolean = false
 ){
-    constructor(): this("","","","","","")
+    constructor(): this("0","","","","","")
 }
 
 

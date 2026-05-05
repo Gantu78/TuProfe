@@ -65,7 +65,10 @@ class ReviewRepository @Inject constructor(
 
             Log.d("ReviewRepo", "Buscando usuario: $userId")
             val user = userRemoteDataSource.getUserById(userId)
+            if(user == null ) return Result.failure(Exception("User not found"))
             Log.d("ReviewRepo", "Usuario encontrado: ${user.username}")
+
+
 
             Log.d("ReviewRepo", "Buscando profesor: $professorId")
             val prof = professorRemoteDataSource.getProfessorById(professorId)

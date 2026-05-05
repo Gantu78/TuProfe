@@ -13,10 +13,10 @@ class UserFirestoreDataSourceImpl @Inject constructor(
     private val db: FirebaseFirestore
 ) : UserRemoteDataSource {
 
-    override suspend fun getUserById(id: String, currentUserId: String): UserDto {
+    override suspend fun getUserById(id: String, currentUserId: String): UserDto? {
         val docRef = db.collection("users").document(id)
         val respuesta = docRef.get().await()
-        var user = respuesta.toObject(UserDto::class.java)?: throw Exception("No se pudo obtener el usuario con id: $id")
+        var user = respuesta.toObject(UserDto::class.java)?: return null
         user = user.copy(id = id)
         if(currentUserId.isNotEmpty()){
             val followerDoc = db.collection("users").document(id).collection("followers").document(currentUserId).get().await()

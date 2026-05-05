@@ -55,6 +55,7 @@ class CommentRepository @Inject constructor(
     ): Result<String> {
         return try {
             val user = userRemoteDataSource.getUserById(userId)
+            if(user == null ) return Result.failure(Exception("User not found"))
             val sdf = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.US)
             sdf.timeZone = TimeZone.getTimeZone("UTC")
             val currentTime = sdf.format(Date())
