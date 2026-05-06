@@ -22,8 +22,8 @@ fun UserDto.toUsuario(): Usuario {
     return Usuario(
         usuarioId = id?: "0",
         nombreUsu = username ?: name ?: "Usuario $id",
-        email = email ?: "",
-        carrera = carrera ?: "",
+        email = email ?: "Email@papu.com",
+        carrera = carrera ?: "Ingenieria de la vida",
         imageprofeUrl = foto,
         followingCount = followingCount,
         followersCount = followersCount,

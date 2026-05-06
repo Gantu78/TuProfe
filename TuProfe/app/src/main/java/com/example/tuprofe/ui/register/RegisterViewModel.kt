@@ -11,12 +11,16 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 import android.util.Log
+import com.example.tuprofe.data.injection.IoDispatcher
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.Dispatchers
 
 
 @HiltViewModel
 class RegisterViewModel @Inject constructor(
     private val authRepository: AuthRepository,
-    private val userRepository: UserRepository
+    private val userRepository: UserRepository,
+    @IoDispatcher private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO
 ): ViewModel() {
 
     private val _uiState = MutableStateFlow(RegisterState())
@@ -47,7 +51,14 @@ class RegisterViewModel @Inject constructor(
     }
 
     fun onRegisterClickSecure() {
-         val currentState = _uiState.value
+
+        viewModelScope.launch(ioDispatcher) {
+            registerUserOnline()
+        }
+    }
+
+    suspend fun registerUserOnline(){
+        val currentState = _uiState.value
         if (
             currentState.password1.isBlank() ||
             currentState.password2.isBlank() ||
@@ -74,51 +85,48 @@ class RegisterViewModel @Inject constructor(
             return
         }
 
-        viewModelScope.launch {
+        val result = authRepository.signUp(
+            currentState.email,
+            currentState.password1
+        )
 
-            val result = authRepository.signUp(
-                currentState.email,
-                currentState.password1
+        if (result.isSuccess) {
+            val userId = authRepository.currentUser?.uid ?: throw Exception("No se pudo obtener el usuario actual")
+
+            val firestoreResult = userRepository.registerUser(
+                username = currentState.usuario,
+                carrera = currentState.carrera,
+                userId = userId
             )
 
-            if (result.isSuccess) {
-                val userId = authRepository.currentUser?.uid ?: throw Exception("No se pudo obtener el usuario actual")
-
-                val firestoreResult = userRepository.registerUser(
-                    username = currentState.usuario,
-                    carrera = currentState.carrera,
-                    userId = userId
-                )
-
-                if (firestoreResult.isSuccess) {
-                    _uiState.update {
-                        it.copy(
-                            mostrarMensajeError = false,
-                            mostrarMensaje = true,
-                            navigateHome = true
-                        )
-                    }
-                } else {
-                    val errorMessage =
-                        firestoreResult.exceptionOrNull()?.message ?: "Error al guardar el perfil"
-                    Log.e("RegisterViewModel", "Firestore Error: $errorMessage") // Add this line
-                    _uiState.update {
-                        it.copy(
-                            mostrarMensajeError = true,
-                            errorMessage = errorMessage
-                        )
-                    }
+            if (firestoreResult.isSuccess) {
+                _uiState.update {
+                    it.copy(
+                        mostrarMensajeError = false,
+                        mostrarMensaje = true,
+                        navigateHome = true
+                    )
                 }
             } else {
                 val errorMessage =
-                    result.exceptionOrNull()?.message ?: "Error al registrar el usuario"
-
+                    firestoreResult.exceptionOrNull()?.message ?: "Error al guardar el perfil"
+                Log.e("RegisterViewModel", "Firestore Error: $errorMessage") // Add this line
                 _uiState.update {
                     it.copy(
                         mostrarMensajeError = true,
                         errorMessage = errorMessage
                     )
                 }
+            }
+        } else {
+            val errorMessage =
+                result.exceptionOrNull()?.message ?: "Error al registrar el usuario"
+
+            _uiState.update {
+                it.copy(
+                    mostrarMensajeError = true,
+                    errorMessage = errorMessage
+                )
             }
         }
     }

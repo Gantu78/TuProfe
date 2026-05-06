@@ -1,5 +1,6 @@
 package com.example.tuprofe.data.repository
 
+import android.util.Log
 import com.example.tuprofe.data.Usuario
 import com.example.tuprofe.data.datasource.StorageRemoteDataSource
 import com.example.tuprofe.data.datasource.UserRemoteDataSource
@@ -32,7 +33,13 @@ class UserRepository @Inject constructor(
 
     suspend fun registerUser(username: String, carrera: String, userId: String): Result<Unit> {
         return try {
-            val fcmToken = FirebaseMessaging.getInstance().token.await()
+            val fcmToken = try {
+                FirebaseMessaging.getInstance().token.await()
+            } catch (e: Exception) {
+                Log.w("UserRepository", "No se pudo obtener el token de FCM: ${e.message}")
+                ""
+            }
+
             val registerUserDto = RegisterUserDto(
                 id= userId,
                 username = username,
