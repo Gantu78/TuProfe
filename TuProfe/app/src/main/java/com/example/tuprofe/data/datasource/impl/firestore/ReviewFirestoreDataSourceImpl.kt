@@ -84,7 +84,7 @@ class ReviewFirestoreDataSourceImpl @Inject constructor(
             }
 
 
-        }
+        }.await()
     }
 
     override suspend fun listenAllReviews(): Flow<List<ReviewDto>> = callbackFlow {
