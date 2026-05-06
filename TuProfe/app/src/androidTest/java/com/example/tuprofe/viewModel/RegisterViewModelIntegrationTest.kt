@@ -18,6 +18,7 @@ import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.setMain
 import kotlinx.coroutines.test.resetMain
+import kotlinx.coroutines.test.runTest
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
@@ -86,6 +87,37 @@ class RegisterViewModelIntegrationTest {
         assertThat(state.navigateHome).isTrue()
         assertThat(state.mostrarMensaje).isTrue()
     }
+
+    @Test
+    fun register_alreadyUsedEmail_showErrorMessage() = runBlocking {
+
+        val duplicatedEmail = "alreadyused_${System.currentTimeMillis()}@papu.com"
+
+        val authRepository = AuthRepository(AuthRemoteDataSource(Firebase.auth))
+        authRepository.signUp(duplicatedEmail, "password123")
+        Firebase.auth.signOut()
+
+        viewModel.setEmail(duplicatedEmail)
+        viewModel.setUsuario("TestUser")
+        viewModel.setCarrera("Ingeniería")
+        viewModel.setPassword1("password123")
+        viewModel.setPassword2("password123")
+
+        viewModel.onRegisterClickSecure()
+
+        val timeout = 10000L
+        val start = System.currentTimeMillis()
+        var state = viewModel.uiState.value
+        while (!state.mostrarMensajeError && (System.currentTimeMillis() - start) < timeout) {
+            delay(500)
+            state = viewModel.uiState.value
+        }
+
+        assertThat(state.mostrarMensajeError).isTrue()
+        assertThat(state.errorMessage).isEqualTo("El usuario ya está registrado")
+        assertThat(state.navigateHome).isFalse()
+    }
+
 
     @After
     fun tearDown() {
