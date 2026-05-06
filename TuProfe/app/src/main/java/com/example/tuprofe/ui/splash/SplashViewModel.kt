@@ -26,7 +26,7 @@ class SplashViewModel @Inject constructor(
 
     private fun checkUser() {
         viewModelScope.launch {
-            delay(2000) // Delay para mostrar el logo
+            delay(8000)
             if (authRepository.currentUser != null) {
                 _uiState.update { it.copy(navigateToMain = true) }
             } else {
