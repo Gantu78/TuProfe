@@ -42,8 +42,21 @@ class LoginViewModel @Inject constructor(
         }
         viewModelScope.launch {
             val result = authRepository.signIn(_uiState.value.email, _uiState.value.password)
+
             if (result.isSuccess) {
-                _uiState.update { it.copy(mostrarMensajeError = false, navigate = true) }
+
+                if (authRepository.isEmailVerified()) {
+                    _uiState.update { it.copy(mostrarMensajeError = false, navigate = true) }
+                } else {
+
+                    authRepository.signOut()
+                    _uiState.update {
+                        it.copy(
+                            mostrarMensajeError = true,
+                            errorMessage = "Debes verificar tu correo electrónico antes de poder ingresar."
+                        )
+                    }
+                }
             } else {
                 val mensaje = result.exceptionOrNull()?.message ?: "Error al iniciar sesión"
                 _uiState.update {
