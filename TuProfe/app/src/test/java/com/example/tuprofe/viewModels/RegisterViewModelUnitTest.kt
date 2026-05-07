@@ -6,10 +6,15 @@ import com.example.tuprofe.data.repository.UserRepository
 import com.example.tuprofe.ui.register.RegisterViewModel
 import com.google.common.truth.Truth.assertThat
 import com.google.firebase.auth.FirebaseUser
-import io.mockk.*
+import io.mockk.coEvery
+import io.mockk.every
+import io.mockk.mockk
+import io.mockk.mockkStatic
+import io.mockk.unmockkStatic
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.test.UnconfinedTestDispatcher
+import kotlinx.coroutines.test.StandardTestDispatcher
+import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.test.setMain
@@ -17,28 +22,25 @@ import org.junit.After
 import org.junit.Before
 import org.junit.Test
 
-@OptIn(ExperimentalCoroutinesApi::class)
 class RegisterViewModelUnitTest {
 
     private lateinit var viewModel: RegisterViewModel
     private lateinit var authRepository: AuthRepository
     private lateinit var userRepository: UserRepository
+    private val testDispatcher = StandardTestDispatcher()
 
-    private val testDispatcher = UnconfinedTestDispatcher()
 
     @Before
     fun setUp() {
         Dispatchers.setMain(testDispatcher)
-
         mockkStatic(Log::class)
         every { Log.d(any(), any()) } returns 0
         every { Log.e(any(), any()) } returns 0
-
         authRepository = mockk()
         userRepository = mockk()
-
         viewModel = RegisterViewModel(authRepository, userRepository, testDispatcher)
     }
+
 
     @After
     fun tearDown() {
@@ -46,9 +48,10 @@ class RegisterViewModelUnitTest {
         Dispatchers.resetMain()
     }
 
+
     @Test
-    fun `register_success_navigatesToHome`() = runTest {
-        // Arrange
+    fun register_success_navigatesToHome() = runTest {
+        // arrange
         val userId = "user123"
         val mockUser = mockk<FirebaseUser>()
         every { mockUser.uid } returns userId
@@ -63,52 +66,55 @@ class RegisterViewModelUnitTest {
         viewModel.setPassword1("123456")
         viewModel.setPassword2("123456")
 
-        // Act
-        viewModel.onRegisterClickSecure()
+        viewModel.registerUserOnline()
+        advanceUntilIdle()
 
-        // Assert
+        // assert
         val state = viewModel.uiState.value
         assertThat(state.navigateHome).isTrue()
         assertThat(state.mostrarMensaje).isTrue()
         assertThat(state.mostrarMensajeError).isFalse()
     }
 
+
     @Test
-    fun `register_passwordsMismatch_showsError`() = runTest {
-        // Arrange
+    fun register_passwordsMismatch_showsError() = runTest {
+        // arrange
         viewModel.setEmail("test@test.com")
         viewModel.setUsuario("user")
         viewModel.setCarrera("carrera")
         viewModel.setPassword1("123456")
         viewModel.setPassword2("654321")
 
-        // Act
-        viewModel.onRegisterClickSecure()
+        viewModel.registerUserOnline()
+        advanceUntilIdle()
 
-        // Assert
+        // assert
         val state = viewModel.uiState.value
         assertThat(state.mostrarMensajeError).isTrue()
         assertThat(state.errorMessage).isEqualTo("Las contraseñas no coinciden")
         assertThat(state.navigateHome).isFalse()
     }
 
+
     @Test
-    fun `register_blankFields_showsError`() = runTest {
-        // Arrange
+    fun register_blankFields_showsError() = runTest {
+        // arrange
         viewModel.setEmail("")
 
-        // Act
-        viewModel.onRegisterClickSecure()
+        viewModel.registerUserOnline()
+        advanceUntilIdle()
 
-        // Assert
+        // assert
         val state = viewModel.uiState.value
         assertThat(state.mostrarMensajeError).isTrue()
         assertThat(state.errorMessage).isEqualTo("Por favor complete todos los campos")
     }
 
+
     @Test
-    fun `register_authFailure_showsErrorMessage`() = runTest {
-        // Arrange
+    fun register_authFailure_showsErrorMessage() = runTest {
+        // arrange
         val errorMsg = "Email inválido"
         coEvery { authRepository.signUp(any(), any()) } returns Result.failure(Exception(errorMsg))
 
@@ -118,19 +124,20 @@ class RegisterViewModelUnitTest {
         viewModel.setPassword1("123456")
         viewModel.setPassword2("123456")
 
-        // Act
-        viewModel.onRegisterClickSecure()
+        viewModel.registerUserOnline()
+        advanceUntilIdle()
 
-        // Assert
+        // assert
         val state = viewModel.uiState.value
         assertThat(state.mostrarMensajeError).isTrue()
         assertThat(state.errorMessage).isEqualTo(errorMsg)
         assertThat(state.navigateHome).isFalse()
     }
 
+
     @Test
-    fun `register_firestoreFailure_showsErrorMessage`() = runTest {
-        // Arrange
+    fun register_firestoreFailure_showsErrorMessage() = runTest {
+        // arrange
         val userId = "user123"
         val mockUser = mockk<FirebaseUser>()
         every { mockUser.uid } returns userId
@@ -146,10 +153,10 @@ class RegisterViewModelUnitTest {
         viewModel.setPassword1("123456")
         viewModel.setPassword2("123456")
 
-        // Act
-        viewModel.onRegisterClickSecure()
+        viewModel.registerUserOnline()
+        advanceUntilIdle()
 
-        // Assert
+        // assert
         val state = viewModel.uiState.value
         assertThat(state.mostrarMensajeError).isTrue()
         assertThat(state.errorMessage).isEqualTo("Error en base de datos")
