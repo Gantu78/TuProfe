@@ -47,6 +47,10 @@ fun MainScreen(
         mainViewModel.fetchReviews()
     }
 
+    LaunchedEffect(uiState.selectedTab) {
+        if (uiState.selectedTab == 1) mainViewModel.refreshFollowingReviews()
+    }
+
     when {
         uiState.isLoading -> {
             // Shimmer skeletons instead of a spinner
@@ -151,7 +155,9 @@ fun FeedTabBar(
             Tab(
                 selected = selectedTab == index,
                 onClick = { onTabSelected(index) },
-                modifier = Modifier.height(48.dp)
+                modifier = Modifier
+                    .height(48.dp)
+                    .testTag(if (index == 1) "tab_siguiendo" else "tab_para_ti")
             ) {
                 // Animate font weight change on selection
                 val weight by animateFloatAsState(
@@ -185,7 +191,8 @@ fun ResenaCard(
         modifier = modifier
             .fillMaxWidth()
             .padding(vertical = 5.dp, horizontal = 18.dp)
-            .pressScaleEffect(),                   // ← scale on press
+            .pressScaleEffect()
+            .testTag("review_card"),
         shape = RoundedCornerShape(30.dp),
         border = BorderStroke(
             width = 2.5.dp,

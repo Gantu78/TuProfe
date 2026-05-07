@@ -19,6 +19,7 @@ import androidx.compose.material.icons.outlined.ThumbUp
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
@@ -101,7 +102,7 @@ fun DetalleContent(
     onCommentClick: (String) -> Unit,
     modifier: Modifier = Modifier
 ) {
-    Box(modifier = modifier.fillMaxSize()) {
+    Box(modifier = modifier.fillMaxSize().testTag("detalleScreen")) {
         BackgroundImage()
 
         if (uiState.isLoading) {
@@ -245,7 +246,8 @@ private fun CommentCard(
             .fillMaxWidth()
             .padding(vertical = 8.dp)
             .pressScaleEffect()
-            .clickable(onClick = onClick),
+            .clickable(onClick = onClick)
+            .testTag("comment_card"),
         shape = RoundedCornerShape(18.dp),
         border = BorderStroke(1.dp, colorResource(R.color.BordeTuProfe)),
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)

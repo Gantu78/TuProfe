@@ -18,6 +18,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
@@ -76,7 +77,7 @@ fun UserProfileContent(
     onFollowInList: (String) -> Unit = {},
     modifier: Modifier = Modifier
 ) {
-    Box(modifier = modifier.fillMaxSize()) {
+    Box(modifier = modifier.fillMaxSize().testTag("userProfileScreen")) {
         BackgroundImage()
         when {
             state.isLoading -> UserProfileLoadingState()
@@ -236,14 +237,15 @@ private fun UserProfileHeader(
             text = user.nombreUsu,
             fontSize = 22.sp,
             fontWeight = FontWeight.Bold,
-            color = MaterialTheme.colorScheme.onSurface
+            color = MaterialTheme.colorScheme.onSurface,
+            modifier = Modifier.testTag("user_profile_nombre")
         )
 
         Text(
             text = user.carrera,
             fontSize = 13.sp,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
-            modifier = Modifier.padding(top = 2.dp)
+            modifier = Modifier.padding(top = 2.dp).testTag("user_profile_carrera")
         )
 
         Spacer(Modifier.height(16.dp))
@@ -252,7 +254,7 @@ private fun UserProfileHeader(
             horizontalArrangement = Arrangement.spacedBy(40.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            StatItem(label = "Seguidores", count = user.followersCount, onClick = onFollowersClick)
+            StatItem(label = "Seguidores", count = user.followersCount, onClick = onFollowersClick, testTag = "user_profile_followers_count")
             StatItem(label = "Siguiendo", count = user.followingCount, onClick = onFollowingClick)
         }
 
@@ -269,6 +271,7 @@ private fun UserProfileHeader(
                 modifier = Modifier
                     .width(140.dp)
                     .height(40.dp)
+                    .testTag("follow_button")
             ) {
                 Text(
                     text = if (user.followed) "Siguiendo" else "Seguir",
@@ -284,7 +287,7 @@ private fun UserProfileHeader(
 }
 
 @Composable
-private fun StatItem(label: String, count: Int, onClick: () -> Unit = {}) {
+private fun StatItem(label: String, count: Int, onClick: () -> Unit = {}, testTag: String = "") {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier.clickable(onClick = onClick)
@@ -293,7 +296,8 @@ private fun StatItem(label: String, count: Int, onClick: () -> Unit = {}) {
             text = "$count",
             fontSize = 20.sp,
             fontWeight = FontWeight.Bold,
-            color = MaterialTheme.colorScheme.onSurface
+            color = MaterialTheme.colorScheme.onSurface,
+            modifier = if (testTag.isNotEmpty()) Modifier.testTag(testTag) else Modifier
         )
         Text(
             text = label,

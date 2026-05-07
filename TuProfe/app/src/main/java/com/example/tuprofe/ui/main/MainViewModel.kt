@@ -29,6 +29,18 @@ class MainViewModel @Inject constructor(
         _uiState.update { it.copy(selectedTab = index) }
     }
 
+    fun refreshFollowingReviews() {
+        val current = _uiState.value.reviews
+        if (current.isEmpty()) return
+        viewModelScope.launch {
+            val currentUserId = authRepository.currentUser?.uid ?: return@launch
+            val followingIds = userRepository.getFollowingIds(currentUserId).getOrDefault(emptyList())
+            _uiState.update {
+                it.copy(followingReviews = current.filter { r -> r.usuario.usuarioId in followingIds })
+            }
+        }
+    }
+
     fun fetchReviews() {
         _uiState.update { it.copy(isLoading = true) }
         /*

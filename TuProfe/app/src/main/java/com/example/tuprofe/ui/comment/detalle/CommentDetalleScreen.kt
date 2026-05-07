@@ -21,6 +21,7 @@ import androidx.compose.material.icons.outlined.ThumbUp
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
@@ -77,7 +78,7 @@ fun CommentDetalleScreen(
         )
     }
 
-    Box(modifier = modifier.fillMaxSize()) {
+    Box(modifier = modifier.fillMaxSize().testTag("commentDetalleScreen")) {
         BackgroundImage()
 
         if (uiState.isLoading) {
@@ -232,7 +233,8 @@ fun ComentarioContent(
                 text = "${comment.likes} Likes",
                 fontSize = 13.sp,
                 fontWeight = FontWeight.Bold,
-                color = MaterialTheme.colorScheme.onSurfaceVariant
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                modifier = Modifier.testTag("comment_likes_count")
             )
             Text(
                 text = "${comment.repliesCount} Respuestas",
