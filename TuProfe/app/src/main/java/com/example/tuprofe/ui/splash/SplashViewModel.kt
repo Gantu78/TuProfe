@@ -2,6 +2,7 @@ package com.example.tuprofe.ui.splash
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.tuprofe.data.injection.SplashDelay
 import com.example.tuprofe.data.repository.AuthRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
@@ -14,7 +15,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class SplashViewModel @Inject constructor(
-    private val authRepository: AuthRepository
+    private val authRepository: AuthRepository,
+    @SplashDelay private val splashDelay: Long
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(SplashState())
@@ -26,7 +28,7 @@ class SplashViewModel @Inject constructor(
 
     private fun checkUser() {
         viewModelScope.launch {
-            delay(8000)
+            delay(splashDelay)
             if (authRepository.currentUser != null) {
                 _uiState.update { it.copy(navigateToMain = true) }
             } else {

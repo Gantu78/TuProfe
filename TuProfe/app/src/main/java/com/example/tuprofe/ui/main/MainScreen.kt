@@ -13,6 +13,7 @@ import androidx.compose.material3.TabRowDefaults.tabIndicatorOffset
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -34,7 +35,7 @@ private val tabs = listOf("Para ti", "Siguiendo")
 
 @Composable
 fun MainScreen(
-    modifier: Modifier = Modifier,
+    modifier: Modifier = Modifier.testTag("mainScreen"),
     onResenaClick: (String) -> Unit,
     onProfileClick: (Profesor) -> Unit,
     onUserClick: (String) -> Unit,

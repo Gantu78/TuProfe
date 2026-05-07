@@ -24,6 +24,7 @@ import com.example.tuprofe.R
 import com.example.tuprofe.ui.theme.BebasNeue
 import com.example.tuprofe.ui.utils.*
 import android.net.Uri
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.style.TextAlign
 
 @Composable
@@ -31,7 +32,7 @@ fun ConfigPerfilScreen(
     configPerfilViewModel: ConfigPerfilViewModel,
     onSaveSuccess: () -> Unit,
     onNavigateToLogin: () -> Unit,
-    modifier: Modifier = Modifier,
+    modifier: Modifier = Modifier.testTag("configPerfilScreen"),
 ) {
     val state by configPerfilViewModel.uiState.collectAsState()
 
@@ -217,7 +218,8 @@ private fun SaveConfirmationDialog(
         title = { Text(stringResource(R.string.guardar_cambios)) },
         text = { Text(stringResource(R.string.deseas_guardar_los_cambios)) },
         confirmButton = {
-            TextButton(onClick = onConfirm) {
+            TextButton(onClick = onConfirm,
+                modifier = Modifier.testTag("guardarCambiosbtn")) {
                 Text(stringResource(R.string.guardar))
             }
         },
@@ -225,7 +227,8 @@ private fun SaveConfirmationDialog(
             TextButton(onClick = onDismissRequest) {
                 Text(stringResource(R.string.cancelar))
             }
-        }
+        },
+        modifier = Modifier.testTag("saveConfirmationDialog")
     )
 }
 
@@ -299,7 +302,8 @@ private fun UserInfoForm(
         TextFieldApp(
             texto = stringResource(R.string.usuario),
             value = username,
-            onValueChange = onUsernameChange
+            onValueChange = onUsernameChange,
+            modifier = Modifier.testTag("txtFieldUsername")
         )
         Spacer(modifier = Modifier.height(10.dp))
         TextFieldApp(
@@ -330,7 +334,8 @@ private fun ActionButtons(
 
         AppButton(
             textoBoton = stringResource(R.string.guardar_cambios),
-            onClick = onGuardarCambiosClick
+            onClick = onGuardarCambiosClick,
+            modifier = Modifier.testTag("btnGuardarCambios")
         )
 
         Spacer(modifier = Modifier.height(30.dp))

@@ -22,6 +22,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Outline
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -97,7 +98,8 @@ fun ProfileHeaderCard(
                             text = username,
                             fontSize = 20.sp,
                             fontWeight = FontWeight.SemiBold,
-                            color = MaterialTheme.colorScheme.onSurface
+                            color = MaterialTheme.colorScheme.onSurface,
+                            modifier = Modifier.testTag("nombreEnTarjeta")
                         )
 
                         if (showStar) {
@@ -142,7 +144,8 @@ fun ProfileHeaderCard(
                     OutlinedButton(
                         onClick = onEditClick!!,
                         border = BorderStroke(1.5.dp, colorResource(R.color.verdetp)),
-                        contentPadding = PaddingValues(horizontal = 16.dp, vertical = 6.dp)
+                        contentPadding = PaddingValues(horizontal = 16.dp, vertical = 6.dp),
+                        modifier = Modifier.testTag("profileCard")
                     ) {
                         Text(
                             text = "Editar perfil",

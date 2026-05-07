@@ -14,6 +14,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -32,7 +33,7 @@ import com.example.tuprofe.ui.utils.TextFieldContraApp
 @Composable
 fun RegisterScreen(
     registerViewModel: RegisterViewModel,
-    modifier: Modifier = Modifier,
+    modifier: Modifier = Modifier.testTag("registerScreen"),
     onRegisterClick: () -> Unit,
     onBackClick: () -> Unit,
 ) {
@@ -71,7 +72,7 @@ fun RegisterScreen(
 
             )
             if (state.mostrarMensajeError) {
-                Text(state.errorMessage, color = Color.Red, modifier = Modifier.padding(8.dp))
+                Text(state.errorMessage, color = Color.Red, modifier = Modifier.padding(8.dp).testTag("error_message"))
             } else if(state.mostrarMensaje){
                 Text(
                     stringResource(R.string.su_cuenta_ha_sido_creada_con_exito), 
@@ -123,25 +124,25 @@ fun FormularioRegistro(
         modifier = modifier
     ) {
         TextFieldApp(
-            modifier = Modifier,
+            modifier = Modifier.testTag("txtEmail"),
             stringResource(R.string.email),
             value = email,
             onValueChange = onEmailChange
         )
         TextFieldApp(
-            modifier = Modifier,
+            modifier = Modifier.testTag("txtUsuario"),
             stringResource(R.string.usuario),
             value = usuario,
             onValueChange = onUsuarioChange
         )
         TextFieldApp(
-            modifier = Modifier,
+            modifier = Modifier.testTag("txtCarrera"),
             stringResource(R.string.carrera),
             value = carrera,
             onValueChange = onCarreraChange
         )
         TextFieldContraApp(
-            modifier = Modifier,
+            modifier = Modifier.testTag("txtContraseña"),
             stringResource(R.string.contrase_a),
             value = password,
             mostrarPassword = passwordVisible,
@@ -150,7 +151,7 @@ fun FormularioRegistro(
             icono = passwordIcon
         )
         TextFieldContraApp(
-            modifier = Modifier,
+            modifier = Modifier.testTag("txtContraseña2"),
             stringResource(R.string.repetir_contrase_a),
             value = password2,
             mostrarPassword = passwordVisible,
@@ -224,10 +225,12 @@ fun BotonesRegistro(
         modifier = modifier
     ) {
         AppButton(
-            stringResource(R.string.registrarse), onClick = onRegisterClick
+            stringResource(R.string.registrarse),
+            onClick = onRegisterClick,
+            modifier = Modifier.testTag("registerbutton")
         )
         AppTextButton(
-            modifier = Modifier,
+            modifier = Modifier.testTag("volver_button"),
             stringResource(R.string.volver),
             onClick = onBackClick)
     }

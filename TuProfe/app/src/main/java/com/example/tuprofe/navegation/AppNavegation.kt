@@ -516,7 +516,7 @@ fun TuProfeBottomBar(
                                     item.filledIcon
                                 else
                                     item.outLinedIcon,
-                                contentDescription = "",
+                                contentDescription = item.route,
                                 tint = if (isSelected)
                                     colorResource(R.color.verdetp)
                                 else

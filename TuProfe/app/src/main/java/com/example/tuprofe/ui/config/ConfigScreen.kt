@@ -23,6 +23,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -48,7 +49,7 @@ fun ConfigScreen(
     onLogoutClick: () -> Unit,
     onCalifClick: () -> Unit,
     onUserClick: (String) -> Unit = {},
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier.testTag("profileScreen")
 ) {
 
        val state by configViewModel.uiState.collectAsState()
@@ -94,7 +95,8 @@ fun ConfigScreen(
                             followingCount = state.followingCount,
                             onEditClick = onEditProfileClick,
                             onFollowersClick = { configViewModel.openFollowersSheet() },
-                            onFollowingClick = { configViewModel.openFollowingSheet() }
+                            onFollowingClick = { configViewModel.openFollowingSheet() },
+                            modifier = Modifier.testTag("profileHeader")
                         )
                     }
 

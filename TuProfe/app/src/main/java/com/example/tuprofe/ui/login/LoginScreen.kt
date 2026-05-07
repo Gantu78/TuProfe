@@ -17,6 +17,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.tuprofe.R
 import com.example.tuprofe.ui.utils.*
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.ui.platform.testTag
 import kotlinx.coroutines.delay
 
 @Composable
@@ -25,7 +26,7 @@ fun HomeScreen(
     onLoginClick: () -> Unit,
     onRegisterClick: () -> Unit,
     onForgotPasswordClick: () -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier.testTag("loginScreen")
 ) {
     val state by loginViewModel.uiState.collectAsState()
     val icono = if (state.passwordVisible) R.drawable.mostrar else R.drawable.ocultar
@@ -178,7 +179,7 @@ fun Botones(
         AppButton(
             textoBoton = stringResource(R.string.iniciar_sesion),
             onClick = onLoginClick,
-            modifier = Modifier.pressScaleEffect()
+            modifier = Modifier.pressScaleEffect().testTag("login_button")
         )
         Spacer(modifier = Modifier.padding(30.dp))
         Row(
@@ -195,7 +196,7 @@ fun Botones(
             AppButtonRow(
                 stringResource(R.string.crear_cuenta),
                 onClick = onRegisterClick,
-                modifier = Modifier.pressScaleEffect()
+                modifier = Modifier.pressScaleEffect().testTag("register_button")
             )
             Spacer(modifier = Modifier.width(16.dp))
         }
