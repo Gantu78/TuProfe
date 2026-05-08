@@ -144,6 +144,9 @@ class FollowUserE2E {
         }
 
         // Ir a la pestaña Siguiendo
+        composeRule.waitUntil(timeoutMillis = 5000) {
+            composeRule.onAllNodesWithTag("tab_siguiendo").fetchSemanticsNodes().isNotEmpty()
+        }
         composeRule.onNodeWithTag("tab_siguiendo").performClick()
 
         // Verificar que aparece la reseña de userB en la pestaña Siguiendo

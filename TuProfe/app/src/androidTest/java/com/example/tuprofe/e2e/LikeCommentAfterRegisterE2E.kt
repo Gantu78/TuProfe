@@ -163,6 +163,9 @@ class LikeCommentAfterRegisterE2E {
         composeRule.onNodeWithTag("commentDetalleScreen").assertIsDisplayed()
 
         // El comentario empieza con 0 likes (dato de semilla)
+        composeRule.waitUntil(timeoutMillis = 5000) {
+            composeRule.onAllNodesWithTag("comment_likes_count").fetchSemanticsNodes().isNotEmpty()
+        }
         composeRule.onNodeWithTag("comment_likes_count").assertTextEquals("0 Likes")
 
         // Dar like al comentario
@@ -195,6 +198,9 @@ class LikeCommentAfterRegisterE2E {
         composeRule.onAllNodesWithTag("comment_card").onFirst().performClick()
         composeRule.waitUntil(timeoutMillis = 5000) {
             composeRule.onAllNodesWithTag("commentDetalleScreen").fetchSemanticsNodes().isNotEmpty()
+        }
+        composeRule.waitUntil(timeoutMillis = 5000) {
+            composeRule.onAllNodesWithTag("comment_likes_count").fetchSemanticsNodes().isNotEmpty()
         }
 
         // Quitar el like
