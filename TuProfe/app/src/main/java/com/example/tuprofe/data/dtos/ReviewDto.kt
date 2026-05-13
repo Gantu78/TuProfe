@@ -32,7 +32,9 @@ data class ReviewDto(
     val professor: ProfessorNameDto? = null,
     val user: UserDto? = null,
     val likesCount: Int,
-    var liked: Boolean = false
+    var liked: Boolean = false,
+    val latitude: Double? = null,
+    val longitude: Double? = null
 ){
     constructor(): this("", "", "", "", "", 0, 0, "", "", null, null, null, 0)
 }

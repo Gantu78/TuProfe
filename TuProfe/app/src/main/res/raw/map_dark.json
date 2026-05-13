@@ -1,0 +1,156 @@
+{
+  "variant": "dark",
+  "styles": [
+    {
+      "id": "background",
+      "geometry": {
+        "fillColor": "#202824"
+      }
+    },
+    {
+      "id": "landscape",
+      "geometry": {
+        "fillColor": "#202824"
+      }
+    },
+    {
+      "id": "natural",
+      "geometry": {
+        "fillColor": "#2A3530"
+      }
+    },
+    {
+      "id": "natural.vegetation",
+      "geometry": {
+        "fillColor": "#324039"
+      }
+    },
+    {
+      "id": "natural.water",
+      "geometry": {
+        "fillColor": "#29414A"
+      }
+    },
+    {
+      "id": "infrastructure",
+      "geometry": {
+        "fillColor": "#2D3531",
+        "strokeColor": "#3B4540"
+      }
+    },
+    {
+      "id": "infrastructure.roadNetwork",
+      "geometry": {
+        "fillColor": "#3A433F",
+        "strokeColor": "#4A5550"
+      }
+    },
+    {
+      "id": "infrastructure.roadNetwork.road",
+      "label": {
+        "visible": false
+      }
+    },
+    {
+      "id": "infrastructure.roadNetwork.highway",
+      "geometry": {
+        "fillColor": "#4A5550",
+        "strokeColor": "#5A6761"
+      },
+      "label": {
+        "visible": false
+      }
+    },
+    {
+      "id": "infrastructure.roadNetwork.highway.shield",
+      "label": {
+        "visible": false
+      }
+    },
+    {
+      "id": "infrastructure.roadNetwork.controlledAccessHighway",
+      "label": {
+        "visible": false
+      }
+    },
+    {
+      "id": "infrastructure.roadNetwork.exit",
+      "label": {
+        "visible": false
+      }
+    },
+    {
+      "id": "transit",
+      "geometry": {
+        "visible": false
+      },
+      "label": {
+        "visible": false
+      }
+    },
+    {
+      "id": "pointOfInterest",
+      "geometry": {
+        "visible": false
+      },
+      "label": {
+        "visible": false
+      }
+    },
+    {
+      "id": "pointOfInterest.business",
+      "geometry": {
+        "visible": false
+      }
+    },
+    {
+      "id": "pointOfInterest.school",
+      "geometry": {
+        "visible": false
+      }
+    },
+    {
+      "id": "pointOfInterest.medical",
+      "geometry": {
+        "visible": false
+      }
+    },
+    {
+      "id": "pointOfInterest.government",
+      "geometry": {
+        "visible": false
+      }
+    },
+    {
+      "id": "pointOfInterest.recreation",
+      "geometry": {
+        "visible": false
+      }
+    },
+    {
+      "id": "pointOfInterest.recreation.park",
+      "geometry": {
+        "visible": true,
+        "fillColor": "#3B4A42"
+      },
+      "label": {
+        "visible": false
+      }
+    },
+    {
+      "id": "political",
+      "geometry": {
+        "visible": false
+      },
+      "label": {
+        "visible": false
+      }
+    },
+    {
+      "id": "administrativeArea",
+      "label": {
+        "visible": false
+      }
+    }
+  ]
+}

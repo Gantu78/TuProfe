@@ -8,7 +8,9 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
-
+    <meta-data
+        android:name="com.google.android.geo.AIzaSyADmv3cTkYvmbVS_OSAjYSJD_e5r2NLy_0"
+        android:value="AIzaSyADmv3cTkYvmbVS_OSAjYSJD_e5r2NLy_0"/>
     <application
         android:networkSecurityConfig="@xml/network_security_config"
         android:name=".BaseApplication"

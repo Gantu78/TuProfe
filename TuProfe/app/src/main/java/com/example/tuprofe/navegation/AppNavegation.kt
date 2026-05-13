@@ -61,6 +61,8 @@ import com.example.tuprofe.ui.splash.SplashScreen
 import androidx.compose.animation.*
 import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.tween
+import androidx.compose.ui.tooling.preview.Preview
+import com.example.tuprofe.ui.mapa.MapaScreen
 
 
 // ── Reusable transition specs ─────────────────────────────────────────────────
@@ -110,6 +112,7 @@ sealed class Screen(val route: String){
     }
     object Historial : Screen("Historial")
     object Loading : Screen("Loading")
+    object Mapa : Screen("Mapa")
     object CreateReview : Screen("CreateReview")
     object EditReview : Screen("EditReview/{reviewId}") {
         fun createRoute(reviewId: String) = "EditReview/$reviewId"
@@ -365,6 +368,15 @@ fun AppNavegation(
         composable(route = Screen.Loading.route){
             LoadingScreen()
         }
+        composable(
+            route = Screen.Mapa.route,
+            enterTransition = { tabEnter() },
+            exitTransition = { tabExit() },
+            popEnterTransition = { tabEnter() },
+            popExitTransition = { tabExit() }
+        ) {
+            MapaScreen()
+        }
         composable(route = Screen.Configuracion.route){
             val configViewModel: ConfigViewModel = hiltViewModel()
 
@@ -468,7 +480,7 @@ val bottomNavItems = listOf(
     BottomNavItem(filledIcon = Icons.Filled.Home, outLinedIcon = Icons.Outlined.Home, route = Screen.Main.route),
     BottomNavItem(filledIcon = Icons.Filled.Search, outLinedIcon = Icons.Outlined.Search, route = Screen.Search.route),
     BottomNavItem(filledIcon = Icons.Filled.Add, outLinedIcon = Icons.Outlined.Add, route = Screen.CreateReview.route),
-    BottomNavItem(filledIcon = Icons.Filled.Notifications, outLinedIcon = Icons.Outlined.Notifications, route = Screen.Loading.route),
+    BottomNavItem(filledIcon = Icons.Filled.Map, outLinedIcon = Icons.Outlined.Map, route = Screen.Mapa.route),
     BottomNavItem(filledIcon = Icons.Filled.Person, outLinedIcon = Icons.Outlined.Person, route = Screen.Configuracion.route)
 )
 
@@ -480,6 +492,7 @@ fun TuProfeBottomBar(
 
     val currentBackStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = currentBackStackEntry?.destination?.route
+    
 
     Box {
 
@@ -566,4 +579,13 @@ fun TuProfeBottomBar(
             )
         }
     }
+}
+
+@Preview
+@Composable
+fun TuProfeBottomBarPreview(){
+    TuProfeBottomBar(
+        navController = rememberNavController(),
+        items = bottomNavItems
+    )
 }

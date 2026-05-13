@@ -16,7 +16,8 @@ data class CreateReviewDto(
     val rating: Int? = null,
     val time: String? = null,
     val materia: String? = null,
-
+    val latitude: Double? = null,
+    val longitude: Double? = null,
     var user: CreateReviewUserDto? = null,
     val professor: CreateReviewProfessorDto? = null
 )
