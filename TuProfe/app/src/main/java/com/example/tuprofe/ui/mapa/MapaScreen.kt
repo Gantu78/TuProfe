@@ -24,7 +24,7 @@ import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
 import com.google.maps.android.compose.*
 
-private const val MAP_ID_LIGHT = "bf3da9be2a1ab1b22986850b"
+private const val MAP_ID_LIGHT = "4aec427e39b392623bfaa491"
 
 @Composable
 fun MapaScreen(

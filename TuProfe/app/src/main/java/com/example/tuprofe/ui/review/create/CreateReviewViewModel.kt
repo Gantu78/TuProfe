@@ -3,6 +3,7 @@ package com.example.tuprofe.ui.review.create
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.tuprofe.data.Profesor
+import com.example.tuprofe.data.location.LocationService
 import com.example.tuprofe.data.repository.AuthRepository
 import com.example.tuprofe.data.repository.ProfessorRepository
 import com.example.tuprofe.data.repository.ReviewRepository
@@ -18,7 +19,8 @@ import javax.inject.Inject
 class CreateReviewViewModel @Inject constructor(
     private val reviewRepository: ReviewRepository,
     private val professorRepository: ProfessorRepository,
-    private val authRepository: AuthRepository
+    private val authRepository: AuthRepository,
+    private val locationService: LocationService          // ← nuevo
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(CreateReviewState())
@@ -32,16 +34,20 @@ class CreateReviewViewModel @Inject constructor(
         _uiState.update { it.copy(isSearchingProfessors = true) }
         viewModelScope.launch {
             professorRepository.getProfessors().onSuccess { list ->
-                _uiState.update { it.copy(
-                    professors = list,
-                    filteredProfessors = list,
-                    isSearchingProfessors = false
-                ) }
+                _uiState.update {
+                    it.copy(
+                        professors = list,
+                        filteredProfessors = list,
+                        isSearchingProfessors = false
+                    )
+                }
             }.onFailure { e ->
-                _uiState.update { it.copy(
-                    error = e.message,
-                    isSearchingProfessors = false
-                ) }
+                _uiState.update {
+                    it.copy(
+                        error = e.message,
+                        isSearchingProfessors = false
+                    )
+                }
             }
         }
     }
@@ -62,26 +68,27 @@ class CreateReviewViewModel @Inject constructor(
             state.copy(
                 professorQuery = query,
                 filteredProfessors = filtered,
-                isDropdownExpanded = query.isNotBlank() && filtered.isNotEmpty() && state.selectedProfessor?.nombreProfe != query
+                isDropdownExpanded = query.isNotBlank() &&
+                        filtered.isNotEmpty() &&
+                        state.selectedProfessor?.nombreProfe != query
             )
         }
     }
 
     fun onProfessorSelected(professor: Profesor) {
-        _uiState.update { it.copy(
-            selectedProfessor = professor,
-            professorQuery = professor.nombreProfe,
-            isDropdownExpanded = false,
-            selectedMateria = "",
-            isMateriaDropdownExpanded = false
-        ) }
+        _uiState.update {
+            it.copy(
+                selectedProfessor = professor,
+                professorQuery = professor.nombreProfe,
+                isDropdownExpanded = false,
+                selectedMateria = "",
+                isMateriaDropdownExpanded = false
+            )
+        }
     }
 
     fun onMateriaSelected(materia: String) {
-        _uiState.update { it.copy(
-            selectedMateria = materia,
-            isMateriaDropdownExpanded = false
-        ) }
+        _uiState.update { it.copy(selectedMateria = materia, isMateriaDropdownExpanded = false) }
     }
 
     fun toggleMateriaDropdown() {
@@ -104,12 +111,10 @@ class CreateReviewViewModel @Inject constructor(
             _uiState.update { it.copy(error = "Debes seleccionar un profesor") }
             return
         }
-
         if (currentState.selectedMateria.isBlank()) {
             _uiState.update { it.copy(error = "Debes seleccionar una materia") }
             return
         }
-
         if (currentState.rating < 1 || currentState.rating > 5) {
             _uiState.update { it.copy(error = "La calificación debe estar entre 1 y 5") }
             return
@@ -117,19 +122,22 @@ class CreateReviewViewModel @Inject constructor(
 
         _uiState.update { it.copy(isLoading = true, error = null) }
 
-        val userId = authRepository.currentUser?.uid ?:return
-
+        val userId = authRepository.currentUser?.uid ?: return
 
         viewModelScope.launch {
-            // Hardcoded userId "1"
-            val result = reviewRepository.createReview(
-                userId = userId,
-                professorId = professorId,
-                content = currentState.reviewText,
-                rating = currentState.rating,
-                materia = currentState.selectedMateria
-            )
+            // Intentar obtener ubicación — si falla o se denegó, coords = null
+            // La reseña se publica igual, solo no aparece en el mapa
+            val coords = locationService.getCurrentLocation()
 
+            val result = reviewRepository.createReview(
+                userId      = userId,
+                professorId = professorId,
+                content     = currentState.reviewText,
+                rating      = currentState.rating,
+                materia     = currentState.selectedMateria,
+                latitude    = coords?.first,
+                longitude   = coords?.second
+            )
 
             if (result.isSuccess) {
                 _uiState.update { it.copy(isLoading = false, success = true) }
@@ -145,7 +153,6 @@ class CreateReviewViewModel @Inject constructor(
     }
 
     fun resetSuccess() {
-        // En lugar de solo resetear success, reseteamos el estado entero para la próxima vez
         _uiState.update { CreateReviewState() }
         cargarProfesores()
     }
