@@ -58,8 +58,47 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MapStyleOptions
 import com.google.maps.android.compose.*
 import kotlinx.coroutines.launch
+import kotlin.math.abs
+import kotlin.math.pow
+import androidx.compose.foundation.border
+import androidx.compose.material.icons.filled.LocationOn
+import androidx.compose.ui.unit.sp
 
 private const val MAP_ID_LIGHT = "bf3da9be2a1ab1b22986850b"
+
+private data class MarkerGroup(
+    val markers: List<ReviewMapMarker>,
+    val centerLat: Double,
+    val centerLng: Double
+) {
+    val count = markers.size
+    val representative = markers.first()
+}
+
+private fun groupMarkers(markers: List<ReviewMapMarker>, zoom: Float): List<MarkerGroup> {
+    val threshold = 40.0 / 2.0.pow(zoom.toDouble())
+    val assigned = BooleanArray(markers.size)
+    val groups = mutableListOf<MarkerGroup>()
+    for (i in markers.indices) {
+        if (assigned[i]) continue
+        val group = mutableListOf(markers[i])
+        assigned[i] = true
+        for (j in i + 1 until markers.size) {
+            if (assigned[j]) continue
+            if (abs(markers[i].latitude - markers[j].latitude) < threshold &&
+                abs(markers[i].longitude - markers[j].longitude) < threshold) {
+                group.add(markers[j])
+                assigned[j] = true
+            }
+        }
+        groups.add(MarkerGroup(
+            markers  = group,
+            centerLat = group.sumOf { it.latitude } / group.size,
+            centerLng = group.sumOf { it.longitude } / group.size
+        ))
+    }
+    return groups
+}
 
 @Composable
 fun MapaScreen(
@@ -69,6 +108,7 @@ fun MapaScreen(
     val uiState by viewModel.uiState.collectAsState()
     val isDarkTheme = isSystemInDarkTheme()
     val context = LocalContext.current
+    val scope = rememberCoroutineScope()
 
     var locationGranted by remember {
         mutableStateOf(
@@ -149,16 +189,39 @@ fun MapaScreen(
                     if (uiState.showReviewList) viewModel.toggleReviewList()
                 }
             ) {
-                uiState.markers.forEach { marker ->
-                    Marker(
-                        state = MarkerState(position = LatLng(marker.latitude, marker.longitude)),
-                        title = marker.profesorNombre,
-                        snippet = "Rating: ${marker.rating}/5",
-                        onClick = {
-                            viewModel.onMarkerSelected(marker)
-                            true
+                val groups by remember(uiState.markers) {
+                    derivedStateOf { groupMarkers(uiState.markers, cameraPositionState.position.zoom) }
+                }
+                groups.forEach { group ->
+                    key(group.centerLat, group.centerLng) {
+                        if (group.count == 1) {
+                            MarkerComposable(
+                                state = MarkerState(position = LatLng(group.representative.latitude, group.representative.longitude)),
+                                onClick = {
+                                    viewModel.onMarkerSelected(group.representative)
+                                    true
+                                }
+                            ) {
+                                GroupMarkerBadge(count = 0)
+                            }
+                        } else {
+                            val center = LatLng(group.centerLat, group.centerLng)
+                            MarkerComposable(
+                                state = MarkerState(position = center),
+                                onClick = {
+                                    scope.launch {
+                                        cameraPositionState.animate(
+                                            CameraUpdateFactory.newLatLngZoom(center, cameraPositionState.position.zoom + 2f),
+                                            durationMs = 500
+                                        )
+                                    }
+                                    true
+                                }
+                            ) {
+                                GroupMarkerBadge(count = group.count)
+                            }
                         }
-                    )
+                    }
                 }
             }
         }
@@ -396,6 +459,38 @@ private fun MapFabItem(
             elevation = FloatingActionButtonDefaults.elevation(4.dp)
         ) {
             Icon(imageVector = icon, contentDescription = label, modifier = Modifier.size(20.dp))
+        }
+    }
+}
+
+@Composable
+private fun GroupMarkerBadge(count: Int) {
+    Box(modifier = Modifier.size(if (count > 0) 48.dp else 44.dp)) {
+        Icon(
+            imageVector = Icons.Default.LocationOn,
+            contentDescription = null,
+            tint = Color(0xFFE53935),
+            modifier = Modifier
+                .size(44.dp)
+                .align(Alignment.BottomCenter)
+        )
+        if (count > 0) {
+            Box(
+                modifier = Modifier
+                    .size(18.dp)
+                    .align(Alignment.TopEnd)
+                    .background(Color(0xFF43A047), CircleShape)
+                    .border(1.5.dp, MaterialTheme.colorScheme.surface, CircleShape),
+                contentAlignment = Alignment.Center
+            ) {
+                Text(
+                    text = if (count > 9) "9+" else "$count",
+                    color = Color.White,
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 9.sp,
+                    lineHeight = 9.sp
+                )
+            }
         }
     }
 }
