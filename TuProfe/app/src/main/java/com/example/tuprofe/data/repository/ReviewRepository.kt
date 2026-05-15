@@ -159,13 +159,7 @@ class ReviewRepository @Inject constructor(
     ): Result<List<ReviewMapMarker>> {
         return try {
             val markers = reviewRemoteDataSource
-                .getMapMarkers()
-                .filter { dto ->
-                    dto.latitude != null && dto.longitude != null &&
-                    (filterStars.isEmpty() || dto.rating in filterStars) &&
-                    (filterProfesores.isEmpty() || dto.professor?.name in filterProfesores) &&
-                    (filterMaterias.isEmpty() || dto.materia in filterMaterias)
-                }
+                .getMapMarkers(filterStars, filterProfesores, filterMaterias)
                 .map { dto ->
                     ReviewMapMarker(
                         reviewId        = dto.id ?: "",

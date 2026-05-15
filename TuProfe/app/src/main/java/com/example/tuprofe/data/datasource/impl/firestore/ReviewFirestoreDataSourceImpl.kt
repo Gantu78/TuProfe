@@ -91,18 +91,26 @@ class ReviewFirestoreDataSourceImpl @Inject constructor(
         }.await()
     }
 
-    override suspend fun getMapMarkers(): List<ReviewDto> {
+    override suspend fun getMapMarkers(
+        stars: Set<Int>,
+        profesorNombres: Set<String>,
+        materias: Set<String>
+    ): List<ReviewDto> {
         val sdf = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.US)
         sdf.timeZone = TimeZone.getTimeZone("UTC")
         val cutoff = sdf.format(Date(System.currentTimeMillis() - 24 * 60 * 60 * 1000L))
 
-        // Solo aplica el filtro de fecha en Firestore (índice de campo único, automático).
-        // Los filtros de stars/profesor/materia se aplican en el Repository para evitar
-        // requerir índices compuestos que causarían un error FAILED_PRECONDITION.
+        // Firestore filtra por fecha (índice automático). Los demás filtros se aplican en memoria para evitar índices compuestos que requieren configuración manual.
         return db.collection("reviews")
             .whereGreaterThan("time", cutoff)
             .get().await().documents.mapNotNull { doc ->
                 doc.toObject(ReviewDto::class.java)?.copy(id = doc.id)
+            }
+            .filter { dto ->
+                dto.latitude != null && dto.longitude != null &&
+                (stars.isEmpty() || dto.rating in stars) &&
+                (profesorNombres.isEmpty() || dto.professor?.name in profesorNombres) &&
+                (materias.isEmpty() || dto.materia in materias)
             }
     }
 
