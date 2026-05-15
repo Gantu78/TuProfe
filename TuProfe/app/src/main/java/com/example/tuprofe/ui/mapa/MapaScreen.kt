@@ -64,8 +64,14 @@ import kotlin.math.abs
 import kotlin.math.log2
 import kotlin.math.pow
 import androidx.compose.foundation.border
+import androidx.compose.material.icons.filled.Check
+import androidx.compose.material.icons.filled.FilterList
 import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.ui.unit.sp
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 
 private const val MAP_ID_LIGHT = "bf3da9be2a1ab1b22986850b"
 
@@ -208,8 +214,8 @@ fun MapaScreen(
                     if (uiState.showReviewList) viewModel.toggleReviewList()
                 }
             ) {
-                val groups by remember(uiState.markers) {
-                    derivedStateOf { groupMarkers(uiState.markers, cameraPositionState.position.zoom) }
+                val groups by remember(uiState.filteredMarkers) {
+                    derivedStateOf { groupMarkers(uiState.filteredMarkers, cameraPositionState.position.zoom) }
                 }
                 groups.forEach { group ->
                     key(group.centerLat, group.centerLng) {
@@ -315,7 +321,10 @@ fun MapaScreen(
                         horizontalArrangement = Arrangement.spacedBy(4.dp)
                     ) {
                         Text(
-                            text = "${uiState.markers.size} reseñas hoy",
+                            text = if (uiState.hasActiveFilters)
+                                "${uiState.filteredMarkers.size} de ${uiState.markers.size} reseñas"
+                            else
+                                "${uiState.markers.size} reseñas hoy",
                             style = MaterialTheme.typography.labelMedium,
                             color = if (uiState.showReviewList)
                                 MaterialTheme.colorScheme.onPrimaryContainer
@@ -341,7 +350,7 @@ fun MapaScreen(
                     exit = fadeOut(tween(150)) + shrinkVertically(tween(200), shrinkTowards = Alignment.Top)
                 ) {
                     ReviewListDropdown(
-                        markers = uiState.markers,
+                        markers = uiState.filteredMarkers,
                         userLocation = userLocation,
                         onItemClick = { marker -> viewModel.onReviewListItemClick(marker) },
                         modifier = Modifier.padding(top = 6.dp)
@@ -359,6 +368,42 @@ fun MapaScreen(
                 .align(Alignment.BottomEnd)
                 .padding(bottom = 16.dp, end = 16.dp)
         )
+
+        // Filter FAB (esquina inferior izquierda)
+        BadgedBox(
+            modifier = Modifier
+                .align(Alignment.BottomStart)
+                .padding(bottom = 16.dp, start = 16.dp),
+            badge = { if (uiState.hasActiveFilters) Badge() }
+        ) {
+            FloatingActionButton(
+                onClick = { viewModel.toggleFilterPanel() },
+                containerColor = if (uiState.hasActiveFilters)
+                    MaterialTheme.colorScheme.primaryContainer
+                else
+                    MaterialTheme.colorScheme.surface,
+                contentColor = if (uiState.hasActiveFilters)
+                    MaterialTheme.colorScheme.onPrimaryContainer
+                else
+                    MaterialTheme.colorScheme.primary,
+                shape = CircleShape,
+                elevation = FloatingActionButtonDefaults.elevation(6.dp)
+            ) {
+                Icon(Icons.Default.FilterList, contentDescription = "Filtrar marcadores")
+            }
+        }
+
+        // Filter bottom sheet
+        if (uiState.showFilterPanel) {
+            FilterBottomSheet(
+                uiState = uiState,
+                onToggleStar = { viewModel.toggleStarFilter(it) },
+                onToggleProfesor = { viewModel.toggleProfesorFilter(it) },
+                onToggleMateria = { viewModel.toggleMateriaFilter(it) },
+                onClearFilters = { viewModel.clearFilters() },
+                onDismiss = { viewModel.toggleFilterPanel() }
+            )
+        }
 
         // Tarjeta al tocar marcador individual
         AnimatedVisibility(
@@ -828,6 +873,145 @@ private fun ReviewListDropdown(
                         HorizontalDivider(
                             color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.4f),
                             thickness = 0.5.dp
+                        )
+                    }
+                }
+            }
+        }
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun FilterBottomSheet(
+    uiState: MapaState,
+    onToggleStar: (Int) -> Unit,
+    onToggleProfesor: (String) -> Unit,
+    onToggleMateria: (String) -> Unit,
+    onClearFilters: () -> Unit,
+    onDismiss: () -> Unit
+) {
+    val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = false)
+
+    val availableProfesores = remember(uiState.markers) {
+        uiState.markers.map { it.profesorNombre }.distinct().sorted()
+    }
+    val availableMaterias = remember(uiState.markers) {
+        uiState.markers.map { it.materia }.filter { it.isNotBlank() }.distinct().sorted()
+    }
+
+    ModalBottomSheet(
+        onDismissRequest = onDismiss,
+        sheetState = sheetState
+    ) {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .verticalScroll(rememberScrollState())
+                .padding(horizontal = 20.dp)
+                .padding(bottom = 32.dp)
+        ) {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Text(
+                    text = "Filtrar marcadores",
+                    style = MaterialTheme.typography.titleMedium,
+                    fontWeight = FontWeight.Bold,
+                    color = MaterialTheme.colorScheme.onSurface
+                )
+                if (uiState.hasActiveFilters) {
+                    TextButton(onClick = onClearFilters) {
+                        Text("Limpiar todo")
+                    }
+                }
+            }
+
+            Spacer(modifier = Modifier.height(20.dp))
+
+            Text(
+                text = "Calificación",
+                style = MaterialTheme.typography.labelLarge,
+                fontWeight = FontWeight.SemiBold,
+                color = MaterialTheme.colorScheme.onSurfaceVariant
+            )
+            Spacer(modifier = Modifier.height(8.dp))
+            Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                (1..5).forEach { star ->
+                    FilterChip(
+                        selected = star in uiState.filterStars,
+                        onClick = { onToggleStar(star) },
+                        label = { Text("$star ★") },
+                        leadingIcon = if (star in uiState.filterStars) {
+                            { Icon(Icons.Default.Check, contentDescription = null, modifier = Modifier.size(16.dp)) }
+                        } else null
+                    )
+                }
+            }
+
+            if (availableProfesores.isNotEmpty()) {
+                Spacer(modifier = Modifier.height(20.dp))
+                Text(
+                    text = "Profesor",
+                    style = MaterialTheme.typography.labelLarge,
+                    fontWeight = FontWeight.SemiBold,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+                Spacer(modifier = Modifier.height(8.dp))
+                LazyRow(
+                    horizontalArrangement = Arrangement.spacedBy(8.dp),
+                    contentPadding = PaddingValues(end = 8.dp)
+                ) {
+                    items(availableProfesores) { profesor ->
+                        FilterChip(
+                            selected = profesor in uiState.filterProfesores,
+                            onClick = { onToggleProfesor(profesor) },
+                            label = {
+                                Text(
+                                    text = profesor,
+                                    maxLines = 1,
+                                    overflow = TextOverflow.Ellipsis,
+                                    modifier = Modifier.widthIn(max = 130.dp)
+                                )
+                            },
+                            leadingIcon = if (profesor in uiState.filterProfesores) {
+                                { Icon(Icons.Default.Check, contentDescription = null, modifier = Modifier.size(16.dp)) }
+                            } else null
+                        )
+                    }
+                }
+            }
+
+            if (availableMaterias.isNotEmpty()) {
+                Spacer(modifier = Modifier.height(20.dp))
+                Text(
+                    text = "Materia",
+                    style = MaterialTheme.typography.labelLarge,
+                    fontWeight = FontWeight.SemiBold,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+                Spacer(modifier = Modifier.height(8.dp))
+                LazyRow(
+                    horizontalArrangement = Arrangement.spacedBy(8.dp),
+                    contentPadding = PaddingValues(end = 8.dp)
+                ) {
+                    items(availableMaterias) { materia ->
+                        FilterChip(
+                            selected = materia in uiState.filterMaterias,
+                            onClick = { onToggleMateria(materia) },
+                            label = {
+                                Text(
+                                    text = materia,
+                                    maxLines = 1,
+                                    overflow = TextOverflow.Ellipsis,
+                                    modifier = Modifier.widthIn(max = 130.dp)
+                                )
+                            },
+                            leadingIcon = if (materia in uiState.filterMaterias) {
+                                { Icon(Icons.Default.Check, contentDescription = null, modifier = Modifier.size(16.dp)) }
+                            } else null
                         )
                     }
                 }

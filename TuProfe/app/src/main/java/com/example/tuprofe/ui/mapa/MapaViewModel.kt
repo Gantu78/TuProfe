@@ -28,7 +28,15 @@ class MapaViewModel @Inject constructor(
             _uiState.update { it.copy(isLoading = true, error = null) }
             reviewRepository.getMapMarkers().fold(
                 onSuccess = { markers ->
-                    _uiState.update { it.copy(isLoading = false, markers = markers) }
+                    _uiState.update { state ->
+                        state.copy(
+                            isLoading = false,
+                            markers = markers,
+                            filteredMarkers = applyFiltersTo(
+                                markers, state.filterStars, state.filterProfesores, state.filterMaterias
+                            )
+                        )
+                    }
                 },
                 onFailure = { e ->
                     _uiState.update { it.copy(isLoading = false, error = e.message) }
@@ -65,5 +73,61 @@ class MapaViewModel @Inject constructor(
 
     fun onNavigationConsumed() {
         _uiState.update { it.copy(navigateToMarker = null) }
+    }
+
+    fun toggleFilterPanel() {
+        _uiState.update { it.copy(showFilterPanel = !it.showFilterPanel) }
+    }
+
+    fun toggleStarFilter(star: Int) {
+        _uiState.update { state ->
+            val newStars = if (star in state.filterStars) state.filterStars - star else state.filterStars + star
+            state.copy(
+                filterStars = newStars,
+                filteredMarkers = applyFiltersTo(state.markers, newStars, state.filterProfesores, state.filterMaterias)
+            )
+        }
+    }
+
+    fun toggleProfesorFilter(profesor: String) {
+        _uiState.update { state ->
+            val newProfesores = if (profesor in state.filterProfesores) state.filterProfesores - profesor else state.filterProfesores + profesor
+            state.copy(
+                filterProfesores = newProfesores,
+                filteredMarkers = applyFiltersTo(state.markers, state.filterStars, newProfesores, state.filterMaterias)
+            )
+        }
+    }
+
+    fun toggleMateriaFilter(materia: String) {
+        _uiState.update { state ->
+            val newMaterias = if (materia in state.filterMaterias) state.filterMaterias - materia else state.filterMaterias + materia
+            state.copy(
+                filterMaterias = newMaterias,
+                filteredMarkers = applyFiltersTo(state.markers, state.filterStars, state.filterProfesores, newMaterias)
+            )
+        }
+    }
+
+    fun clearFilters() {
+        _uiState.update { state ->
+            state.copy(
+                filterStars = emptySet(),
+                filterProfesores = emptySet(),
+                filterMaterias = emptySet(),
+                filteredMarkers = state.markers
+            )
+        }
+    }
+
+    private fun applyFiltersTo(
+        markers: List<ReviewMapMarker>,
+        stars: Set<Int>,
+        profesores: Set<String>,
+        materias: Set<String>
+    ): List<ReviewMapMarker> = markers.filter { marker ->
+        (stars.isEmpty() || marker.rating in stars) &&
+        (profesores.isEmpty() || marker.profesorNombre in profesores) &&
+        (materias.isEmpty() || marker.materia in materias)
     }
 }
