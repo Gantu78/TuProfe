@@ -15,20 +15,24 @@ import androidx.compose.material.icons.filled.ExpandMore
 import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.material.icons.outlined.StarBorder
+import androidx.compose.foundation.isSystemInDarkTheme
+import com.google.android.gms.maps.GoogleMapOptions
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.example.tuprofe.R
 import com.google.android.gms.maps.CameraUpdateFactory
-import com.google.android.gms.maps.GoogleMapOptions
 import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.MapStyleOptions
 import com.google.maps.android.compose.*
 
 private const val MAP_ID_LIGHT = "bf3da9be2a1ab1b22986850b"
@@ -39,6 +43,8 @@ fun MapaScreen(
     onReviewClick: (String) -> Unit = {}
 ) {
     val uiState by viewModel.uiState.collectAsState()
+    val isDarkTheme = isSystemInDarkTheme()
+    val context = LocalContext.current
 
     val colombiaLatLng = LatLng(4.6097, -74.0817)
     val cameraPositionState = rememberCameraPositionState {
@@ -61,33 +67,41 @@ fun MapaScreen(
 
     Box(modifier = Modifier.fillMaxSize()) {
 
-        GoogleMap(
-            modifier = Modifier.fillMaxSize(),
-            cameraPositionState = cameraPositionState,
-            googleMapOptionsFactory = {
-                GoogleMapOptions().mapId(MAP_ID_LIGHT)
-            },
-            uiSettings = MapUiSettings(
-                zoomControlsEnabled = false,
-                myLocationButtonEnabled = false,
-                compassEnabled = false,
-                mapToolbarEnabled = false
-            ),
-            onMapClick = {
-                viewModel.onDismissMarker()
-                if (uiState.showReviewList) viewModel.toggleReviewList()
-            }
-        ) {
-            uiState.markers.forEach { marker ->
-                Marker(
-                    state = MarkerState(position = LatLng(marker.latitude, marker.longitude)),
-                    title = marker.profesorNombre,
-                    snippet = "Rating: ${marker.rating}/5",
-                    onClick = {
-                        viewModel.onMarkerSelected(marker)
-                        true
-                    }
-                )
+        key(isDarkTheme) {
+            GoogleMap(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(if (isDarkTheme) Color(0xFF242f3e) else Color(0xFFE8EFE9)),
+                cameraPositionState = cameraPositionState,
+                googleMapOptionsFactory = {
+                    if (!isDarkTheme) GoogleMapOptions().mapId(MAP_ID_LIGHT)
+                    else GoogleMapOptions()
+                },
+                properties = if (isDarkTheme) MapProperties(
+                    mapStyleOptions = MapStyleOptions.loadRawResourceStyle(context, R.raw.map_style_dark)
+                ) else MapProperties(),
+                uiSettings = MapUiSettings(
+                    zoomControlsEnabled = false,
+                    myLocationButtonEnabled = false,
+                    compassEnabled = false,
+                    mapToolbarEnabled = false
+                ),
+                onMapClick = {
+                    viewModel.onDismissMarker()
+                    if (uiState.showReviewList) viewModel.toggleReviewList()
+                }
+            ) {
+                uiState.markers.forEach { marker ->
+                    Marker(
+                        state = MarkerState(position = LatLng(marker.latitude, marker.longitude)),
+                        title = marker.profesorNombre,
+                        snippet = "Rating: ${marker.rating}/5",
+                        onClick = {
+                            viewModel.onMarkerSelected(marker)
+                            true
+                        }
+                    )
+                }
             }
         }
 
