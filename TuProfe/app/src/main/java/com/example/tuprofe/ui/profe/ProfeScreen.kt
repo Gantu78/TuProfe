@@ -1,7 +1,8 @@
 package com.example.tuprofe.ui.profe
 
-import androidx.compose.animation.core.FastOutSlowInEasing
-import androidx.compose.animation.core.tween
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.expandVertically
+import androidx.compose.animation.fadeIn
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -10,12 +11,16 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.AutoAwesome
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
@@ -46,6 +51,7 @@ fun ProfeScreen(
         onResenaClick = onResenaClick,
         onProfileClick = onProfileClick,
         onUserClick = onUserClick,
+        onGenerarResumenClick = { profeViewModel.generarResumenIA() },
         modifier = modifier
     )
 }
@@ -56,6 +62,7 @@ fun ProfeContent(
     onResenaClick: (String) -> Unit,
     onProfileClick: (Profesor) -> Unit,
     onUserClick: (String) -> Unit,
+    onGenerarResumenClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     Box(modifier = modifier.fillMaxSize()) {
@@ -87,6 +94,67 @@ fun ProfeContent(
                             )
                         }
                     }
+
+                    // IA Summary Section
+                    item {
+                        Column(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(horizontal = 16.dp, vertical = 8.dp),
+                            horizontalAlignment = Alignment.CenterHorizontally
+                        ) {
+                            if (uiState.isLoadingIA) {
+                                CircularProgressIndicator(
+                                    color = colorResource(R.color.verdetp),
+                                    modifier = Modifier.padding(16.dp)
+                                )
+                                Text(
+                                    text = "Analizando reseñas...",
+                                    fontSize = 14.sp,
+                                    color = Color.Gray
+                                )
+                            } else if (uiState.resumenIA == null) {
+                                AppButton(
+                                    textoBoton = "Resumen",
+                                    onClick = onGenerarResumenClick,
+                                    modifier = Modifier.fillMaxWidth()
+                                )
+                            }
+
+                            uiState.errorIA?.let {
+                                Text(
+                                    text = it,
+                                    color = Color.Red,
+                                    fontSize = 12.sp,
+                                    modifier = Modifier.padding(top = 8.dp)
+                                )
+                            }
+                        }
+                    }
+
+                    item {
+                        AnimatedVisibility(
+                            visible = uiState.resumenIA != null,
+                            enter = fadeIn() + expandVertically()
+                        ) {
+                            uiState.resumenIA?.let { resumen ->
+                                ResumenIACard(resumen = resumen)
+                            }
+                        }
+                    }
+
+                    item {
+                        Text(
+                            text = "Reseñas de alumnos",
+                            fontSize = 18.sp,
+                            fontWeight = FontWeight.Bold,
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(start = 24.dp, top = 16.dp, bottom = 8.dp),
+                            color = colorResource(R.color.verdetp)
+                        )
+                    }
+
                     itemsIndexed(
                         uiState.professorReviews,
                         key = { _, r -> r.reviewId }
@@ -110,6 +178,61 @@ fun ProfeContent(
             ) {
                 Text(text = stringResource(R.string.rese_a_no_encontrada))
             }
+        }
+    }
+}
+
+@Composable
+fun ResumenIACard(resumen: String, modifier: Modifier = Modifier) {
+    Card(
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(horizontal = 16.dp, vertical = 8.dp),
+        shape = RoundedCornerShape(20.dp),
+        colors = CardDefaults.cardColors(
+            containerColor = Color.White
+        ),
+        elevation = CardDefaults.cardElevation(8.dp),
+        border = BorderStroke(
+            width = 2.dp,
+            brush = Brush.linearGradient(
+                colors = listOf(
+                    colorResource(R.color.verdetp),
+                    colorResource(R.color.verdetp2)
+                )
+            )
+        )
+    ) {
+        Column(modifier = Modifier.padding(20.dp)) {
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Icon(
+                    imageVector = Icons.Default.AutoAwesome,
+                    contentDescription = null,
+                    tint = colorResource(R.color.verdetp),
+                    modifier = Modifier.size(20.dp)
+                )
+                Spacer(modifier = Modifier.width(8.dp))
+                Text(
+                    text = "Resumen de Inteligencia Artificial",
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 16.sp,
+                    color = colorResource(R.color.verdetp)
+                )
+            }
+            Spacer(modifier = Modifier.height(12.dp))
+            Text(
+                text = resumen,
+                fontSize = 14.sp,
+                lineHeight = 20.sp,
+                color = Color.DarkGray
+            )
+            Spacer(modifier = Modifier.height(8.dp))
+            Text(
+                text = "Generado por Llama 3.1 70B en Groq",
+                fontSize = 10.sp,
+                color = Color.LightGray,
+                modifier = Modifier.align(Alignment.End)
+            )
         }
     }
 }
@@ -247,10 +370,12 @@ private fun ProfeContentPreview() {
             profesor = LocalProfesor.profesores[0],
             professorReviews = LocalReview.Reviews.take(3),
             averageRating = 4F,
-            isLoading = false
+            isLoading = false,
+            resumenIA = "Este es un resumen de prueba generado por la IA."
         ),
         onResenaClick = {},
         onProfileClick = {},
-        onUserClick = {}
+        onUserClick = {},
+        onGenerarResumenClick = {}
     )
 }

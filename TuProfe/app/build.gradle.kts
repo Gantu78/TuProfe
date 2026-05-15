@@ -26,8 +26,8 @@ android {
         targetSdk = 35
         versionCode = 1
         versionName = "1.0"
-
-        testInstrumentationRunner = "com.example.tuprofe.HiltTestRunner"
+        buildConfigField("String", "IAAPIKEY", "\"${localProps.getProperty("IAAPIKEY") ?: ""}\"")
+        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
         manifestPlaceholders["MAPS_API_KEY"] = localProps.getProperty("MAPS_API_KEY") ?: ""
     }
@@ -79,6 +79,8 @@ dependencies {
     implementation("androidx.navigation:navigation-compose:2.7.2")
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.6.2")
 
+    implementation("com.google.android.gms:play-services-location:21.3.0")
+
     implementation("com.google.maps.android:maps-compose:4.4.1")
 
     implementation("com.google.android.gms:play-services-maps:19.0.0")
@@ -91,6 +93,7 @@ dependencies {
     // Hilt
     implementation(libs.dagger.hilt)
     implementation(libs.hilt.compose.navigation)
+    implementation(libs.generativeai)
     kapt(libs.dagger.kapt)
 
     // Firebase (versiones gestionadas por el BOM)
@@ -101,6 +104,12 @@ dependencies {
     implementation(libs.firebase.analytics)
     implementation("com.google.firebase:firebase-storage-ktx")
     implementation("com.google.firebase:firebase-messaging")
+
+    // Google AI (Gemini)
+    //implementation(libs.generativeai)
+    implementation(libs.openai.client)
+    // Coroutines Play Services (para .await() en tareas de Firebase)
+    implementation(libs.kotlinx.coroutines.play.services)
 
     // Retrofit
     implementation("com.squareup.retrofit2:retrofit:2.9.0")
