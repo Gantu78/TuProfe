@@ -5,9 +5,13 @@ import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ExpandLess
+import androidx.compose.material.icons.filled.ExpandMore
 import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.material.icons.outlined.StarBorder
@@ -17,9 +21,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMapOptions
 import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
@@ -39,6 +45,20 @@ fun MapaScreen(
         position = CameraPosition.fromLatLngZoom(colombiaLatLng, 12f)
     }
 
+    val navigateToMarker = uiState.navigateToMarker
+    LaunchedEffect(navigateToMarker) {
+        navigateToMarker?.let { marker ->
+            cameraPositionState.animate(
+                update = CameraUpdateFactory.newLatLngZoom(
+                    LatLng(marker.latitude, marker.longitude),
+                    15f
+                ),
+                durationMs = 800
+            )
+            viewModel.onNavigationConsumed()
+        }
+    }
+
     Box(modifier = Modifier.fillMaxSize()) {
 
         GoogleMap(
@@ -53,7 +73,10 @@ fun MapaScreen(
                 compassEnabled = false,
                 mapToolbarEnabled = false
             ),
-            onMapClick = { viewModel.onDismissMarker() }
+            onMapClick = {
+                viewModel.onDismissMarker()
+                if (uiState.showReviewList) viewModel.toggleReviewList()
+            }
         ) {
             uiState.markers.forEach { marker ->
                 Marker(
@@ -106,23 +129,59 @@ fun MapaScreen(
             Icon(Icons.Default.Refresh, contentDescription = "Actualizar")
         }
 
-        // Chip contador
+        // Chip contador + lista desplegable
         if (!uiState.isLoading && uiState.markers.isNotEmpty()) {
-            Surface(
+            Column(
                 modifier = Modifier
                     .align(Alignment.TopStart)
-                    .padding(top = 16.dp, start = 16.dp),
-                shape = RoundedCornerShape(20.dp),
-                color = MaterialTheme.colorScheme.surface,
-                shadowElevation = 4.dp
+                    .padding(top = 16.dp, start = 16.dp)
             ) {
-                Text(
-                    text = "${uiState.markers.size} reseñas hoy",
-                    modifier = Modifier.padding(horizontal = 14.dp, vertical = 8.dp),
-                    style = MaterialTheme.typography.labelMedium,
-                    color = MaterialTheme.colorScheme.primary,
-                    fontWeight = FontWeight.SemiBold
-                )
+                Surface(
+                    modifier = Modifier.clickable { viewModel.toggleReviewList() },
+                    shape = RoundedCornerShape(20.dp),
+                    color = if (uiState.showReviewList)
+                        MaterialTheme.colorScheme.primaryContainer
+                    else
+                        MaterialTheme.colorScheme.surface,
+                    shadowElevation = 4.dp
+                ) {
+                    Row(
+                        modifier = Modifier.padding(horizontal = 14.dp, vertical = 8.dp),
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.spacedBy(4.dp)
+                    ) {
+                        Text(
+                            text = "${uiState.markers.size} reseñas hoy",
+                            style = MaterialTheme.typography.labelMedium,
+                            color = if (uiState.showReviewList)
+                                MaterialTheme.colorScheme.onPrimaryContainer
+                            else
+                                MaterialTheme.colorScheme.primary,
+                            fontWeight = FontWeight.SemiBold
+                        )
+                        Icon(
+                            imageVector = if (uiState.showReviewList) Icons.Default.ExpandLess else Icons.Default.ExpandMore,
+                            contentDescription = null,
+                            tint = if (uiState.showReviewList)
+                                MaterialTheme.colorScheme.onPrimaryContainer
+                            else
+                                MaterialTheme.colorScheme.primary,
+                            modifier = Modifier.size(16.dp)
+                        )
+                    }
+                }
+
+                AnimatedVisibility(
+                    visible = uiState.showReviewList,
+                    enter = fadeIn(tween(200)) + expandVertically(tween(250), expandFrom = Alignment.Top),
+                    exit = fadeOut(tween(150)) + shrinkVertically(tween(200), shrinkTowards = Alignment.Top)
+                ) {
+                    ReviewListDropdown(
+                        markers = uiState.markers,
+                        onItemClick = { marker -> viewModel.onReviewListItemClick(marker) },
+                        modifier = Modifier.padding(top = 6.dp)
+                    )
+                }
             }
         }
 
@@ -139,6 +198,77 @@ fun MapaScreen(
                     onDismiss = { viewModel.onDismissMarker() },
                     onClick = { onReviewClick(marker.reviewId) }
                 )
+            }
+        }
+    }
+}
+
+@Composable
+private fun ReviewListDropdown(
+    markers: List<ReviewMapMarker>,
+    onItemClick: (ReviewMapMarker) -> Unit,
+    modifier: Modifier = Modifier
+) {
+    Card(
+        modifier = modifier
+            .width(240.dp)
+            .heightIn(max = 280.dp),
+        shape = RoundedCornerShape(16.dp),
+        elevation = CardDefaults.cardElevation(defaultElevation = 8.dp),
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)
+    ) {
+        LazyColumn {
+            itemsIndexed(markers) { index, marker ->
+                Column {
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .clickable { onItemClick(marker) }
+                            .padding(horizontal = 14.dp, vertical = 10.dp),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Column(modifier = Modifier.weight(1f)) {
+                            Text(
+                                text = marker.profesorNombre,
+                                style = MaterialTheme.typography.bodySmall,
+                                fontWeight = FontWeight.SemiBold,
+                                color = MaterialTheme.colorScheme.onSurface,
+                                maxLines = 1,
+                                overflow = TextOverflow.Ellipsis
+                            )
+                            if (marker.materia.isNotBlank()) {
+                                Text(
+                                    text = marker.materia,
+                                    style = MaterialTheme.typography.labelSmall,
+                                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                                    maxLines = 1,
+                                    overflow = TextOverflow.Ellipsis
+                                )
+                            }
+                        }
+                        Spacer(modifier = Modifier.width(8.dp))
+                        Row(verticalAlignment = Alignment.CenterVertically) {
+                            Icon(
+                                imageVector = Icons.Filled.Star,
+                                contentDescription = null,
+                                tint = Color(0xFFFFB300),
+                                modifier = Modifier.size(13.dp)
+                            )
+                            Spacer(modifier = Modifier.width(2.dp))
+                            Text(
+                                text = "${marker.rating}",
+                                style = MaterialTheme.typography.labelSmall,
+                                color = MaterialTheme.colorScheme.onSurfaceVariant
+                            )
+                        }
+                    }
+                    if (index < markers.lastIndex) {
+                        HorizontalDivider(
+                            color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.4f),
+                            thickness = 0.5.dp
+                        )
+                    }
+                }
             }
         }
     }

@@ -44,4 +44,22 @@ class MapaViewModel @Inject constructor(
     fun onDismissMarker() {
         _uiState.update { it.copy(selectedMarker = null) }
     }
+
+    fun toggleReviewList() {
+        _uiState.update { it.copy(showReviewList = !it.showReviewList) }
+    }
+
+    fun onReviewListItemClick(marker: ReviewMapMarker) {
+        _uiState.update {
+            it.copy(
+                showReviewList = false,
+                selectedMarker = marker,
+                navigateToMarker = marker
+            )
+        }
+    }
+
+    fun onNavigationConsumed() {
+        _uiState.update { it.copy(navigateToMarker = null) }
+    }
 }

@@ -170,7 +170,8 @@ class ReviewRepository @Inject constructor(
                         profesorNombre = dto.professor?.name ?: "Profesor",
                         rating      = dto.rating ?: 0,
                         latitude    = dto.latitude!!,
-                        longitude   = dto.longitude!!
+                        longitude   = dto.longitude!!,
+                        materia     = dto.materia ?: ""
                     )
                 }
             Result.success(markers)
