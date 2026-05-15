@@ -1,14 +1,6 @@
 package com.example.tuprofe.ui.mapa
 
-data class ReviewMapMarker(
-    val reviewId: String,
-    val profesorNombre: String,
-    val rating: Int,
-    val latitude: Double,
-    val longitude: Double,
-    val materia: String = "",
-    val profesorFotoUrl: String? = null
-)
+import com.example.tuprofe.data.ReviewMapMarker
 
 data class MapaState(
     val isLoading: Boolean = true,

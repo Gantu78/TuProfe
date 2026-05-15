@@ -2,6 +2,7 @@ package com.example.tuprofe.data.repository
 
 import android.util.Log
 import com.example.tuprofe.data.ReviewInfo
+import com.example.tuprofe.data.ReviewMapMarker
 import com.example.tuprofe.data.datasource.AuthRemoteDataSource
 import com.example.tuprofe.data.datasource.ProfessorRemoteDataSource
 import com.example.tuprofe.data.datasource.ReviewRemoteDataSource
@@ -155,10 +156,10 @@ class ReviewRepository @Inject constructor(
         filterStars: Set<Int> = emptySet(),
         filterProfesores: Set<String> = emptySet(),
         filterMaterias: Set<String> = emptySet()
-    ): Result<List<com.example.tuprofe.ui.mapa.ReviewMapMarker>> {
+    ): Result<List<ReviewMapMarker>> {
         return try {
             val markers = reviewRemoteDataSource
-                .getMapMarkers(filterStars, filterProfesores, filterMaterias)
+                .getMapMarkers()
                 .filter { dto ->
                     dto.latitude != null && dto.longitude != null &&
                     (filterStars.isEmpty() || dto.rating in filterStars) &&
@@ -166,7 +167,7 @@ class ReviewRepository @Inject constructor(
                     (filterMaterias.isEmpty() || dto.materia in filterMaterias)
                 }
                 .map { dto ->
-                    com.example.tuprofe.ui.mapa.ReviewMapMarker(
+                    ReviewMapMarker(
                         reviewId        = dto.id ?: "",
                         profesorNombre  = dto.professor?.name ?: "Profesor",
                         rating          = dto.rating ?: 0,

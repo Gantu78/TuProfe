@@ -91,11 +91,7 @@ class ReviewFirestoreDataSourceImpl @Inject constructor(
         }.await()
     }
 
-    override suspend fun getMapMarkers(
-        stars: Set<Int>,
-        profesorNombres: Set<String>,
-        materias: Set<String>
-    ): List<ReviewDto> {
+    override suspend fun getMapMarkers(): List<ReviewDto> {
         val sdf = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.US)
         sdf.timeZone = TimeZone.getTimeZone("UTC")
         val cutoff = sdf.format(Date(System.currentTimeMillis() - 24 * 60 * 60 * 1000L))

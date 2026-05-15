@@ -48,10 +48,6 @@ class ReviewRetrofitDataSourceImpl @Inject constructor(
         TODO("Not yet implemented")
     }
 
-    override suspend fun getMapMarkers(
-        stars: Set<Int>,
-        profesorNombres: Set<String>,
-        materias: Set<String>
-    ): List<ReviewDto> = getAllReviews()
+    override suspend fun getMapMarkers(): List<ReviewDto> = getAllReviews()
 
 }

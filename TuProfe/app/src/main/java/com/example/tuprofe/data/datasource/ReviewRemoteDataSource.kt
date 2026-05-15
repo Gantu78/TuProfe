@@ -20,9 +20,5 @@ interface ReviewRemoteDataSource  {
 
     suspend fun listenAllReviews(): Flow<List<ReviewDto>>
 
-    suspend fun getMapMarkers(
-        stars: Set<Int>,
-        profesorNombres: Set<String>,
-        materias: Set<String>
-    ): List<ReviewDto>
+    suspend fun getMapMarkers(): List<ReviewDto>
 }

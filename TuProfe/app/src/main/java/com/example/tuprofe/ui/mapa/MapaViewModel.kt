@@ -2,12 +2,14 @@ package com.example.tuprofe.ui.mapa
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.tuprofe.data.ReviewMapMarker
 import com.example.tuprofe.data.repository.ReviewRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.flow.updateAndGet
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -24,8 +26,8 @@ class MapaViewModel @Inject constructor(
     }
 
     fun loadMarkers() {
-        val state = _uiState.value
-        fetchMarkers(state.filterStars, state.filterProfesores, state.filterMaterias)
+        val s = _uiState.value
+        fetchMarkers(s.filterStars, s.filterProfesores, s.filterMaterias)
     }
 
     fun onMarkerSelected(marker: ReviewMapMarker) {
@@ -46,11 +48,7 @@ class MapaViewModel @Inject constructor(
 
     fun onReviewListItemClick(marker: ReviewMapMarker) {
         _uiState.update {
-            it.copy(
-                showReviewList = false,
-                selectedMarker = marker,
-                navigateToMarker = marker
-            )
+            it.copy(showReviewList = false, selectedMarker = marker, navigateToMarker = marker)
         }
     }
 
@@ -63,24 +61,27 @@ class MapaViewModel @Inject constructor(
     }
 
     fun toggleStarFilter(star: Int) {
-        val state = _uiState.value
-        val newStars = if (star in state.filterStars) state.filterStars - star else state.filterStars + star
-        _uiState.update { it.copy(filterStars = newStars) }
-        fetchMarkers(newStars, state.filterProfesores, state.filterMaterias)
+        val s = _uiState.updateAndGet { state ->
+            val newStars = if (star in state.filterStars) state.filterStars - star else state.filterStars + star
+            state.copy(filterStars = newStars)
+        }
+        fetchMarkers(s.filterStars, s.filterProfesores, s.filterMaterias)
     }
 
     fun toggleProfesorFilter(profesor: String) {
-        val state = _uiState.value
-        val newProfesores = if (profesor in state.filterProfesores) state.filterProfesores - profesor else state.filterProfesores + profesor
-        _uiState.update { it.copy(filterProfesores = newProfesores) }
-        fetchMarkers(state.filterStars, newProfesores, state.filterMaterias)
+        val s = _uiState.updateAndGet { state ->
+            val newProfesores = if (profesor in state.filterProfesores) state.filterProfesores - profesor else state.filterProfesores + profesor
+            state.copy(filterProfesores = newProfesores)
+        }
+        fetchMarkers(s.filterStars, s.filterProfesores, s.filterMaterias)
     }
 
     fun toggleMateriaFilter(materia: String) {
-        val state = _uiState.value
-        val newMaterias = if (materia in state.filterMaterias) state.filterMaterias - materia else state.filterMaterias + materia
-        _uiState.update { it.copy(filterMaterias = newMaterias) }
-        fetchMarkers(state.filterStars, state.filterProfesores, newMaterias)
+        val s = _uiState.updateAndGet { state ->
+            val newMaterias = if (materia in state.filterMaterias) state.filterMaterias - materia else state.filterMaterias + materia
+            state.copy(filterMaterias = newMaterias)
+        }
+        fetchMarkers(s.filterStars, s.filterProfesores, s.filterMaterias)
     }
 
     fun clearFilters() {
@@ -88,11 +89,7 @@ class MapaViewModel @Inject constructor(
         fetchMarkers(emptySet(), emptySet(), emptySet())
     }
 
-    private fun fetchMarkers(
-        stars: Set<Int>,
-        profesores: Set<String>,
-        materias: Set<String>
-    ) {
+    private fun fetchMarkers(stars: Set<Int>, profesores: Set<String>, materias: Set<String>) {
         viewModelScope.launch {
             _uiState.update { it.copy(isLoading = true, error = null) }
             reviewRepository.getMapMarkers(stars, profesores, materias).fold(
@@ -101,7 +98,6 @@ class MapaViewModel @Inject constructor(
                         state.copy(
                             isLoading = false,
                             markers = markers,
-                            // Solo actualiza el pool completo cuando no hay filtros activos
                             allMarkers = if (stars.isEmpty() && profesores.isEmpty() && materias.isEmpty())
                                 markers else state.allMarkers
                         )
