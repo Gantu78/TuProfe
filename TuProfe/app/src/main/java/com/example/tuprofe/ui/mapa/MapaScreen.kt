@@ -214,8 +214,8 @@ fun MapaScreen(
                     if (uiState.showReviewList) viewModel.toggleReviewList()
                 }
             ) {
-                val groups by remember(uiState.filteredMarkers) {
-                    derivedStateOf { groupMarkers(uiState.filteredMarkers, cameraPositionState.position.zoom) }
+                val groups by remember(uiState.markers) {
+                    derivedStateOf { groupMarkers(uiState.markers, cameraPositionState.position.zoom) }
                 }
                 groups.forEach { group ->
                     key(group.centerLat, group.centerLng) {
@@ -300,7 +300,7 @@ fun MapaScreen(
         }
 
         // Chip contador + lista desplegable
-        if (!uiState.isLoading && uiState.markers.isNotEmpty()) {
+        if (!uiState.isLoading && uiState.allMarkers.isNotEmpty()) {
             Column(
                 modifier = Modifier
                     .align(Alignment.TopStart)
@@ -322,7 +322,7 @@ fun MapaScreen(
                     ) {
                         Text(
                             text = if (uiState.hasActiveFilters)
-                                "${uiState.filteredMarkers.size} de ${uiState.markers.size} reseñas"
+                                "${uiState.markers.size} de ${uiState.allMarkers.size} reseñas"
                             else
                                 "${uiState.markers.size} reseñas hoy",
                             style = MaterialTheme.typography.labelMedium,
@@ -350,7 +350,7 @@ fun MapaScreen(
                     exit = fadeOut(tween(150)) + shrinkVertically(tween(200), shrinkTowards = Alignment.Top)
                 ) {
                     ReviewListDropdown(
-                        markers = uiState.filteredMarkers,
+                        markers = uiState.markers,
                         userLocation = userLocation,
                         onItemClick = { marker -> viewModel.onReviewListItemClick(marker) },
                         modifier = Modifier.padding(top = 6.dp)
@@ -893,11 +893,11 @@ private fun FilterBottomSheet(
 ) {
     val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = false)
 
-    val availableProfesores = remember(uiState.markers) {
-        uiState.markers.map { it.profesorNombre }.distinct().sorted()
+    val availableProfesores = remember(uiState.allMarkers) {
+        uiState.allMarkers.map { it.profesorNombre }.distinct().sorted()
     }
-    val availableMaterias = remember(uiState.markers) {
-        uiState.markers.map { it.materia }.filter { it.isNotBlank() }.distinct().sorted()
+    val availableMaterias = remember(uiState.allMarkers) {
+        uiState.allMarkers.map { it.materia }.filter { it.isNotBlank() }.distinct().sorted()
     }
 
     ModalBottomSheet(

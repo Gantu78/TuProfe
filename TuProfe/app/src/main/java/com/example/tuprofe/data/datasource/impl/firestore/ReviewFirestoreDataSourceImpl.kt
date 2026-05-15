@@ -9,6 +9,10 @@ import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.tasks.await
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
+import java.util.TimeZone
 import javax.inject.Inject
 
 class ReviewFirestoreDataSourceImpl @Inject constructor(
@@ -85,6 +89,25 @@ class ReviewFirestoreDataSourceImpl @Inject constructor(
 
 
         }.await()
+    }
+
+    override suspend fun getMapMarkers(
+        stars: Set<Int>,
+        profesorNombres: Set<String>,
+        materias: Set<String>
+    ): List<ReviewDto> {
+        val sdf = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.US)
+        sdf.timeZone = TimeZone.getTimeZone("UTC")
+        val cutoff = sdf.format(Date(System.currentTimeMillis() - 24 * 60 * 60 * 1000L))
+
+        // Solo aplica el filtro de fecha en Firestore (índice de campo único, automático).
+        // Los filtros de stars/profesor/materia se aplican en el Repository para evitar
+        // requerir índices compuestos que causarían un error FAILED_PRECONDITION.
+        return db.collection("reviews")
+            .whereGreaterThan("time", cutoff)
+            .get().await().documents.mapNotNull { doc ->
+                doc.toObject(ReviewDto::class.java)?.copy(id = doc.id)
+            }
     }
 
     override suspend fun listenAllReviews(): Flow<List<ReviewDto>> = callbackFlow {

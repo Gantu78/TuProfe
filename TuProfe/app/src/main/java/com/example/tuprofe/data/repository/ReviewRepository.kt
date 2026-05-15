@@ -151,27 +151,28 @@ class ReviewRepository @Inject constructor(
     }
 
 
-    suspend fun getMapMarkers(): Result<List<com.example.tuprofe.ui.mapa.ReviewMapMarker>> {
+    suspend fun getMapMarkers(
+        filterStars: Set<Int> = emptySet(),
+        filterProfesores: Set<String> = emptySet(),
+        filterMaterias: Set<String> = emptySet()
+    ): Result<List<com.example.tuprofe.ui.mapa.ReviewMapMarker>> {
         return try {
-            val sdf = java.text.SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.US)
-            sdf.timeZone = java.util.TimeZone.getTimeZone("UTC")
-            val cutoff = Date(System.currentTimeMillis() - 24 * 60 * 60 * 1000L)
-
-            val markers = reviewRemoteDataSource.getAllReviews()
+            val markers = reviewRemoteDataSource
+                .getMapMarkers(filterStars, filterProfesores, filterMaterias)
                 .filter { dto ->
                     dto.latitude != null && dto.longitude != null &&
-                    dto.time != null && try {
-                        sdf.parse(dto.time)?.after(cutoff) == true
-                    } catch (e: Exception) { false }
+                    (filterStars.isEmpty() || dto.rating in filterStars) &&
+                    (filterProfesores.isEmpty() || dto.professor?.name in filterProfesores) &&
+                    (filterMaterias.isEmpty() || dto.materia in filterMaterias)
                 }
                 .map { dto ->
                     com.example.tuprofe.ui.mapa.ReviewMapMarker(
-                        reviewId       = dto.id ?: "",
-                        profesorNombre = dto.professor?.name ?: "Profesor",
-                        rating         = dto.rating ?: 0,
-                        latitude       = dto.latitude!!,
-                        longitude      = dto.longitude!!,
-                        materia        = dto.materia ?: "",
+                        reviewId        = dto.id ?: "",
+                        profesorNombre  = dto.professor?.name ?: "Profesor",
+                        rating          = dto.rating ?: 0,
+                        latitude        = dto.latitude!!,
+                        longitude       = dto.longitude!!,
+                        materia         = dto.materia ?: "",
                         profesorFotoUrl = dto.professor?.foto
                     )
                 }

@@ -13,7 +13,7 @@ data class ReviewMapMarker(
 data class MapaState(
     val isLoading: Boolean = true,
     val markers: List<ReviewMapMarker> = emptyList(),
-    val filteredMarkers: List<ReviewMapMarker> = emptyList(),
+    val allMarkers: List<ReviewMapMarker> = emptyList(),
     val selectedMarker: ReviewMapMarker? = null,
     val selectedGroup: List<ReviewMapMarker>? = null,
     val error: String? = null,
