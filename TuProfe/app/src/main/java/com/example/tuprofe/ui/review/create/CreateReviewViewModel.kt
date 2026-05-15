@@ -96,6 +96,10 @@ class CreateReviewViewModel @Inject constructor(
         _uiState.update { it.copy(rating = newRating) }
     }
 
+    fun onLocationReceived(latitude: Double?, longitude: Double?) {
+        _uiState.update { it.copy(latitude = latitude, longitude = longitude) }
+    }
+
     fun createReview() {
         val currentState = _uiState.value
         val professorId = currentState.selectedProfessor?.profeId ?: ""
@@ -117,17 +121,17 @@ class CreateReviewViewModel @Inject constructor(
 
         _uiState.update { it.copy(isLoading = true, error = null) }
 
-        val userId = authRepository.currentUser?.uid ?:return
-
+        val userId = authRepository.currentUser?.uid ?: return
 
         viewModelScope.launch {
-            // Hardcoded userId "1"
             val result = reviewRepository.createReview(
                 userId = userId,
                 professorId = professorId,
                 content = currentState.reviewText,
                 rating = currentState.rating,
-                materia = currentState.selectedMateria
+                materia = currentState.selectedMateria,
+                latitude = currentState.latitude,
+                longitude = currentState.longitude
             )
 
 

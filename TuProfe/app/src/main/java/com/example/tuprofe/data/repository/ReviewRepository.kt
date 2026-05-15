@@ -60,7 +60,7 @@ class ReviewRepository @Inject constructor(
         }
     }
 
-    suspend fun createReview(userId: String, professorId: String, content: String, rating: Int, materia: String): Result<Unit> {
+    suspend fun createReview(userId: String, professorId: String, content: String, rating: Int, materia: String, latitude: Double? = null, longitude: Double? = null): Result<Unit> {
         return try {
 
             Log.d("ReviewRepo", "Buscando usuario: $userId")
@@ -94,6 +94,8 @@ class ReviewRepository @Inject constructor(
                 rating = rating,
                 time = currentTime,
                 materia = materia,
+                latitude = latitude,
+                longitude = longitude,
                 user =  createReviewUserDto,
                 professor = createReviewProfessorDto
             )
