@@ -11,6 +11,7 @@ import com.example.tuprofe.data.dtos.CreateReviewDto
 import com.example.tuprofe.data.dtos.CreateReviewProfessorDto
 import com.example.tuprofe.data.dtos.CreateReviewUserDto
 import com.example.tuprofe.data.dtos.toReviewInfo
+import com.example.tuprofe.data.dtos.toReviewMapMarker
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import retrofit2.HttpException
@@ -160,17 +161,7 @@ class ReviewRepository @Inject constructor(
         return try {
             val markers = reviewRemoteDataSource
                 .getMapMarkers(filterStars, filterProfesores, filterMaterias)
-                .map { dto ->
-                    ReviewMapMarker(
-                        reviewId        = dto.id ?: "",
-                        profesorNombre  = dto.professor?.name ?: "Profesor",
-                        rating          = dto.rating ?: 0,
-                        latitude        = dto.latitude!!,
-                        longitude       = dto.longitude!!,
-                        materia         = dto.materia ?: "",
-                        profesorFotoUrl = dto.professor?.foto
-                    )
-                }
+                .mapNotNull { it.toReviewMapMarker() }
             Result.success(markers)
         } catch (e: Exception) {
             Result.failure(e)
