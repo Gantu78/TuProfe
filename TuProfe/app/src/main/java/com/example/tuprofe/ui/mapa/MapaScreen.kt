@@ -3,6 +3,7 @@ package com.example.tuprofe.ui.mapa
 import androidx.compose.animation.*
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -28,7 +29,8 @@ private const val MAP_ID_LIGHT = "bf3da9be2a1ab1b22986850b"
 
 @Composable
 fun MapaScreen(
-    viewModel: MapaViewModel = hiltViewModel()
+    viewModel: MapaViewModel = hiltViewModel(),
+    onReviewClick: (String) -> Unit = {}
 ) {
     val uiState by viewModel.uiState.collectAsState()
 
@@ -132,7 +134,11 @@ fun MapaScreen(
             exit = slideOutVertically(tween(250)) { it } + fadeOut(tween(200))
         ) {
             uiState.selectedMarker?.let { marker ->
-                MarkerInfoCard(marker = marker, onDismiss = { viewModel.onDismissMarker() })
+                MarkerInfoCard(
+                    marker = marker,
+                    onDismiss = { viewModel.onDismissMarker() },
+                    onClick = { onReviewClick(marker.reviewId) }
+                )
             }
         }
     }
@@ -141,12 +147,14 @@ fun MapaScreen(
 @Composable
 private fun MarkerInfoCard(
     marker: ReviewMapMarker,
-    onDismiss: () -> Unit
+    onDismiss: () -> Unit,
+    onClick: () -> Unit
 ) {
     Surface(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(start = 16.dp, end = 16.dp, bottom = 90.dp),
+            .padding(start = 16.dp, end = 16.dp, bottom = 90.dp)
+            .clickable { onClick() },
         shape = RoundedCornerShape(20.dp),
         color = MaterialTheme.colorScheme.surface,
         shadowElevation = 12.dp,

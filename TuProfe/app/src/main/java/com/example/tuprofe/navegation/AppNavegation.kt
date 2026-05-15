@@ -375,7 +375,11 @@ fun AppNavegation(
             popEnterTransition = { tabEnter() },
             popExitTransition = { tabExit() }
         ) {
-            MapaScreen()
+            MapaScreen(
+                onReviewClick = { reviewId ->
+                    navController.navigate(Screen.Detalle.createRoute(reviewId))
+                }
+            )
         }
         composable(route = Screen.Configuracion.route){
             val configViewModel: ConfigViewModel = hiltViewModel()
