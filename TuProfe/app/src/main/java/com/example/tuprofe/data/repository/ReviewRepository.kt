@@ -166,12 +166,13 @@ class ReviewRepository @Inject constructor(
                 }
                 .map { dto ->
                     com.example.tuprofe.ui.mapa.ReviewMapMarker(
-                        reviewId    = dto.id ?: "",
+                        reviewId       = dto.id ?: "",
                         profesorNombre = dto.professor?.name ?: "Profesor",
-                        rating      = dto.rating ?: 0,
-                        latitude    = dto.latitude!!,
-                        longitude   = dto.longitude!!,
-                        materia     = dto.materia ?: ""
+                        rating         = dto.rating ?: 0,
+                        latitude       = dto.latitude!!,
+                        longitude      = dto.longitude!!,
+                        materia        = dto.materia ?: "",
+                        profesorFotoUrl = dto.professor?.foto
                     )
                 }
             Result.success(markers)

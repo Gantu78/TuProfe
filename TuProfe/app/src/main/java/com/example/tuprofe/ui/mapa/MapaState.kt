@@ -6,7 +6,8 @@ data class ReviewMapMarker(
     val rating: Int,
     val latitude: Double,
     val longitude: Double,
-    val materia: String = ""
+    val materia: String = "",
+    val profesorFotoUrl: String? = null
 )
 
 data class MapaState(

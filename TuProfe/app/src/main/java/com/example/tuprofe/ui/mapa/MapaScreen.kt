@@ -15,18 +15,41 @@ import androidx.compose.material.icons.filled.ExpandMore
 import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.material.icons.outlined.StarBorder
+import android.Manifest
+import android.content.Context
+import android.content.pm.PackageManager
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.isSystemInDarkTheme
 import com.google.android.gms.maps.GoogleMapOptions
+import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.automirrored.filled.ArrowForward
+import androidx.compose.material.icons.filled.Close
+import androidx.compose.material.icons.filled.MyLocation
+import androidx.compose.material.icons.filled.Remove
+import androidx.compose.material.icons.filled.Tune
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.drawWithContent
+import androidx.compose.ui.geometry.CornerRadius
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.geometry.Size
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
+import androidx.compose.foundation.lazy.LazyListState
+import androidx.compose.foundation.lazy.rememberLazyListState
+import coil.compose.AsyncImage
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
+import androidx.core.content.ContextCompat
+import com.google.android.gms.location.LocationServices
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.tuprofe.R
 import com.google.android.gms.maps.CameraUpdateFactory
@@ -34,6 +57,7 @@ import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MapStyleOptions
 import com.google.maps.android.compose.*
+import kotlinx.coroutines.launch
 
 private const val MAP_ID_LIGHT = "bf3da9be2a1ab1b22986850b"
 
@@ -46,9 +70,40 @@ fun MapaScreen(
     val isDarkTheme = isSystemInDarkTheme()
     val context = LocalContext.current
 
+    var locationGranted by remember {
+        mutableStateOf(
+            ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION)
+                == PackageManager.PERMISSION_GRANTED
+        )
+    }
+    val permissionLauncher = rememberLauncherForActivityResult(
+        ActivityResultContracts.RequestPermission()
+    ) { granted -> locationGranted = granted }
+
     val colombiaLatLng = LatLng(4.6097, -74.0817)
     val cameraPositionState = rememberCameraPositionState {
         position = CameraPosition.fromLatLngZoom(colombiaLatLng, 12f)
+    }
+
+    LaunchedEffect(Unit) {
+        if (!locationGranted) {
+            permissionLauncher.launch(Manifest.permission.ACCESS_FINE_LOCATION)
+        }
+    }
+
+    var userLocation by remember { mutableStateOf<LatLng?>(null) }
+
+    LaunchedEffect(locationGranted) {
+        if (locationGranted) {
+            val fusedClient = LocationServices.getFusedLocationProviderClient(context)
+            fusedClient.lastLocation.addOnSuccessListener { location ->
+                location?.let {
+                    val latLng = LatLng(it.latitude, it.longitude)
+                    userLocation = latLng
+                    cameraPositionState.move(CameraUpdateFactory.newLatLngZoom(latLng, 15f))
+                }
+            }
+        }
     }
 
     val navigateToMarker = uiState.navigateToMarker
@@ -78,8 +133,11 @@ fun MapaScreen(
                     else GoogleMapOptions()
                 },
                 properties = if (isDarkTheme) MapProperties(
-                    mapStyleOptions = MapStyleOptions.loadRawResourceStyle(context, R.raw.map_style_dark)
-                ) else MapProperties(),
+                    mapStyleOptions = MapStyleOptions.loadRawResourceStyle(context, R.raw.map_style_dark),
+                    isMyLocationEnabled = locationGranted
+                ) else MapProperties(
+                    isMyLocationEnabled = locationGranted
+                ),
                 uiSettings = MapUiSettings(
                     zoomControlsEnabled = false,
                     myLocationButtonEnabled = false,
@@ -192,12 +250,23 @@ fun MapaScreen(
                 ) {
                     ReviewListDropdown(
                         markers = uiState.markers,
+                        userLocation = userLocation,
                         onItemClick = { marker -> viewModel.onReviewListItemClick(marker) },
                         modifier = Modifier.padding(top = 6.dp)
                     )
                 }
             }
         }
+
+        // Speed dial FAB
+        MapControlsFab(
+            cameraPositionState = cameraPositionState,
+            locationGranted = locationGranted,
+            context = context,
+            modifier = Modifier
+                .align(Alignment.BottomEnd)
+                .padding(bottom = 16.dp, end = 16.dp)
+        )
 
         // Tarjeta al tocar marcador
         AnimatedVisibility(
@@ -218,11 +287,178 @@ fun MapaScreen(
 }
 
 @Composable
+private fun MapControlsFab(
+    cameraPositionState: CameraPositionState,
+    locationGranted: Boolean,
+    context: Context,
+    modifier: Modifier = Modifier
+) {
+    val scope = rememberCoroutineScope()
+    var expanded by remember { mutableStateOf(false) }
+
+    Column(
+        modifier = modifier,
+        horizontalAlignment = Alignment.End,
+        verticalArrangement = Arrangement.spacedBy(12.dp)
+    ) {
+        AnimatedVisibility(
+            visible = expanded,
+            enter = fadeIn(tween(150)) + expandVertically(tween(200), expandFrom = Alignment.Bottom),
+            exit = fadeOut(tween(100)) + shrinkVertically(tween(150), shrinkTowards = Alignment.Bottom)
+        ) {
+            Column(
+                horizontalAlignment = Alignment.End,
+                verticalArrangement = Arrangement.spacedBy(12.dp)
+            ) {
+                if (locationGranted) {
+                    MapFabItem(
+                        icon = Icons.Default.MyLocation,
+                        label = "Mi ubicación",
+                        onClick = {
+                            expanded = false
+                            val fusedClient = LocationServices.getFusedLocationProviderClient(context)
+                            fusedClient.lastLocation.addOnSuccessListener { location ->
+                                location?.let {
+                                    scope.launch {
+                                        cameraPositionState.animate(
+                                            CameraUpdateFactory.newLatLngZoom(LatLng(it.latitude, it.longitude), 15f),
+                                            durationMs = 800
+                                        )
+                                    }
+                                }
+                            }
+                        }
+                    )
+                }
+                MapFabItem(
+                    icon = Icons.Default.Add,
+                    label = "Acercar",
+                    onClick = { scope.launch { cameraPositionState.animate(CameraUpdateFactory.zoomIn(), 300) } }
+                )
+                MapFabItem(
+                    icon = Icons.Default.Remove,
+                    label = "Alejar",
+                    onClick = { scope.launch { cameraPositionState.animate(CameraUpdateFactory.zoomOut(), 300) } }
+                )
+            }
+        }
+
+        FloatingActionButton(
+            onClick = { expanded = !expanded },
+            containerColor = MaterialTheme.colorScheme.surface,
+            contentColor = MaterialTheme.colorScheme.primary,
+            shape = CircleShape,
+            elevation = FloatingActionButtonDefaults.elevation(6.dp)
+        ) {
+            AnimatedContent(
+                targetState = expanded,
+                transitionSpec = {
+                    fadeIn(tween(150)) togetherWith fadeOut(tween(150))
+                },
+                label = "fabIcon"
+            ) { isExpanded ->
+                Icon(
+                    imageVector = if (isExpanded) Icons.Default.Close else Icons.Default.Tune,
+                    contentDescription = "Controles del mapa"
+                )
+            }
+        }
+    }
+}
+
+@Composable
+private fun MapFabItem(
+    icon: ImageVector,
+    label: String,
+    onClick: () -> Unit
+) {
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.spacedBy(8.dp)
+    ) {
+        Surface(
+            shape = RoundedCornerShape(8.dp),
+            color = MaterialTheme.colorScheme.surface,
+            shadowElevation = 4.dp
+        ) {
+            Text(
+                text = label,
+                modifier = Modifier.padding(horizontal = 10.dp, vertical = 6.dp),
+                style = MaterialTheme.typography.labelMedium,
+                color = MaterialTheme.colorScheme.onSurface
+            )
+        }
+        SmallFloatingActionButton(
+            onClick = onClick,
+            containerColor = MaterialTheme.colorScheme.surface,
+            contentColor = MaterialTheme.colorScheme.primary,
+            shape = CircleShape,
+            elevation = FloatingActionButtonDefaults.elevation(4.dp)
+        ) {
+            Icon(imageVector = icon, contentDescription = label, modifier = Modifier.size(20.dp))
+        }
+    }
+}
+
+private fun Modifier.scrollbar(
+    state: LazyListState,
+    thumbColor: Color,
+    trackColor: Color
+): Modifier = drawWithContent {
+    drawContent()
+    val info = state.layoutInfo
+    val totalItems = info.totalItemsCount
+    val visible = info.visibleItemsInfo
+    if (totalItems == 0 || visible.isEmpty()) return@drawWithContent
+    val viewportH = (info.viewportEndOffset - info.viewportStartOffset).toFloat()
+    val avgH = visible.sumOf { it.size } / visible.size.toFloat()
+    val totalH = totalItems * avgH
+    if (totalH <= viewportH) return@drawWithContent
+    val w = 3.dp.toPx()
+    val thumbH = (viewportH * viewportH / totalH).coerceAtLeast(24.dp.toPx())
+    val scrolled = state.firstVisibleItemIndex * avgH + state.firstVisibleItemScrollOffset
+    val thumbTop = (scrolled / (totalH - viewportH)) * (viewportH - thumbH)
+    drawRoundRect(
+        color = trackColor,
+        topLeft = Offset(size.width - w, 0f),
+        size = Size(w, viewportH),
+        cornerRadius = CornerRadius(w / 2)
+    )
+    drawRoundRect(
+        color = thumbColor,
+        topLeft = Offset(size.width - w, thumbTop),
+        size = Size(w, thumbH),
+        cornerRadius = CornerRadius(w / 2)
+    )
+}
+
+private fun formatDistance(meters: Float): String =
+    if (meters < 1000f) "${meters.toInt()} m" else "${"%.1f".format(meters / 1000f)} km"
+
+@Composable
 private fun ReviewListDropdown(
     markers: List<ReviewMapMarker>,
+    userLocation: LatLng?,
     onItemClick: (ReviewMapMarker) -> Unit,
     modifier: Modifier = Modifier
 ) {
+    val sortedMarkers = remember(markers, userLocation) {
+        if (userLocation == null) markers
+        else markers.sortedBy { marker ->
+            val result = FloatArray(1)
+            android.location.Location.distanceBetween(
+                userLocation.latitude, userLocation.longitude,
+                marker.latitude, marker.longitude,
+                result
+            )
+            result[0]
+        }
+    }
+
+    val listState = rememberLazyListState()
+    val thumbColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.6f)
+    val trackColor = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.25f)
+
     Card(
         modifier = modifier
             .width(240.dp)
@@ -231,8 +467,20 @@ private fun ReviewListDropdown(
         elevation = CardDefaults.cardElevation(defaultElevation = 8.dp),
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)
     ) {
-        LazyColumn {
-            itemsIndexed(markers) { index, marker ->
+        LazyColumn(
+            state = listState,
+            modifier = Modifier.scrollbar(listState, thumbColor, trackColor)
+        ) {
+            itemsIndexed(sortedMarkers) { index, marker ->
+                val distanceText = userLocation?.let {
+                    val result = FloatArray(1)
+                    android.location.Location.distanceBetween(
+                        it.latitude, it.longitude,
+                        marker.latitude, marker.longitude,
+                        result
+                    )
+                    formatDistance(result[0])
+                }
                 Column {
                     Row(
                         modifier = Modifier
@@ -259,6 +507,14 @@ private fun ReviewListDropdown(
                                     overflow = TextOverflow.Ellipsis
                                 )
                             }
+                            if (distanceText != null) {
+                                Text(
+                                    text = distanceText,
+                                    style = MaterialTheme.typography.labelSmall,
+                                    color = MaterialTheme.colorScheme.primary,
+                                    maxLines = 1
+                                )
+                            }
                         }
                         Spacer(modifier = Modifier.width(8.dp))
                         Row(verticalAlignment = Alignment.CenterVertically) {
@@ -276,7 +532,7 @@ private fun ReviewListDropdown(
                             )
                         }
                     }
-                    if (index < markers.lastIndex) {
+                    if (index < sortedMarkers.lastIndex) {
                         HorizontalDivider(
                             color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.4f),
                             thickness = 0.5.dp
@@ -294,69 +550,119 @@ private fun MarkerInfoCard(
     onDismiss: () -> Unit,
     onClick: () -> Unit
 ) {
-    Surface(
+    ElevatedCard(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(start = 16.dp, end = 16.dp, bottom = 90.dp)
-            .clickable { onClick() },
-        shape = RoundedCornerShape(20.dp),
-        color = MaterialTheme.colorScheme.surface,
-        shadowElevation = 12.dp,
-        tonalElevation = 2.dp
+            .padding(start = 16.dp, end = 16.dp, bottom = 90.dp),
+        shape = RoundedCornerShape(24.dp),
+        elevation = CardDefaults.elevatedCardElevation(defaultElevation = 16.dp),
+        colors = CardDefaults.elevatedCardColors(containerColor = MaterialTheme.colorScheme.surface)
     ) {
-        Column(
-            modifier = Modifier.padding(20.dp),
-            verticalArrangement = Arrangement.spacedBy(10.dp)
-        ) {
+        Column(modifier = Modifier.padding(horizontal = 20.dp, vertical = 16.dp)) {
+
+            // Handle
+            Box(
+                modifier = Modifier
+                    .width(36.dp)
+                    .height(4.dp)
+                    .clip(CircleShape)
+                    .background(MaterialTheme.colorScheme.outlineVariant)
+                    .align(Alignment.CenterHorizontally)
+            )
+
+            Spacer(modifier = Modifier.height(16.dp))
+
             Row(
                 modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Text(
-                    text = marker.profesorNombre,
-                    style = MaterialTheme.typography.titleMedium,
-                    fontWeight = FontWeight.Bold,
-                    color = MaterialTheme.colorScheme.onSurface,
-                    modifier = Modifier.weight(1f)
-                )
-                TextButton(
-                    onClick = onDismiss,
-                    contentPadding = PaddingValues(0.dp)
-                ) {
-                    Text("✕", color = MaterialTheme.colorScheme.onSurfaceVariant, fontSize = 16.sp)
-                }
-            }
-
-            Row(
                 verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.spacedBy(4.dp)
+                horizontalArrangement = Arrangement.spacedBy(14.dp)
             ) {
-                repeat(5) { index ->
+                // Avatar
+                AsyncImage(
+                    model = marker.profesorFotoUrl.takeUnless { it.isNullOrBlank() },
+                    contentDescription = marker.profesorNombre,
+                    modifier = Modifier
+                        .size(52.dp)
+                        .clip(CircleShape),
+                    contentScale = ContentScale.Crop,
+                    placeholder = painterResource(R.drawable.avatar),
+                    error = painterResource(R.drawable.avatar)
+                )
+
+                // Nombre, materia y estrellas
+                Column(modifier = Modifier.weight(1f)) {
+                    Text(
+                        text = marker.profesorNombre,
+                        style = MaterialTheme.typography.titleMedium,
+                        fontWeight = FontWeight.Bold,
+                        color = MaterialTheme.colorScheme.onSurface,
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis
+                    )
+                    if (marker.materia.isNotBlank()) {
+                        Text(
+                            text = marker.materia,
+                            style = MaterialTheme.typography.bodySmall,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
+                            maxLines = 1,
+                            overflow = TextOverflow.Ellipsis
+                        )
+                    }
+                    Spacer(modifier = Modifier.height(4.dp))
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        repeat(5) { index ->
+                            Icon(
+                                imageVector = if (index < marker.rating) Icons.Filled.Star else Icons.Outlined.StarBorder,
+                                contentDescription = null,
+                                tint = if (index < marker.rating) Color(0xFFFFB300) else MaterialTheme.colorScheme.outlineVariant,
+                                modifier = Modifier.size(15.dp)
+                            )
+                        }
+                        Spacer(modifier = Modifier.width(5.dp))
+                        Text(
+                            text = "${marker.rating}.0",
+                            style = MaterialTheme.typography.labelMedium,
+                            fontWeight = FontWeight.SemiBold,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                        )
+                    }
+                }
+
+                // Botón cerrar
+                Box(
+                    modifier = Modifier
+                        .size(32.dp)
+                        .clip(CircleShape)
+                        .background(MaterialTheme.colorScheme.surfaceVariant)
+                        .clickable { onDismiss() },
+                    contentAlignment = Alignment.Center
+                ) {
                     Icon(
-                        imageVector = if (index < marker.rating) Icons.Filled.Star else Icons.Outlined.StarBorder,
-                        contentDescription = null,
-                        tint = if (index < marker.rating) Color(0xFFFFB300) else MaterialTheme.colorScheme.outlineVariant,
-                        modifier = Modifier.size(22.dp)
+                        imageVector = Icons.Default.Close,
+                        contentDescription = "Cerrar",
+                        tint = MaterialTheme.colorScheme.onSurfaceVariant,
+                        modifier = Modifier.size(16.dp)
                     )
                 }
-                Spacer(modifier = Modifier.width(6.dp))
-                Text(
-                    text = "${marker.rating}/5",
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
-                )
             }
 
-            Surface(
-                shape = RoundedCornerShape(12.dp),
-                color = MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.6f)
+            Spacer(modifier = Modifier.height(16.dp))
+
+            Button(
+                onClick = onClick,
+                modifier = Modifier.fillMaxWidth(),
+                shape = RoundedCornerShape(12.dp)
             ) {
                 Text(
-                    text = "📍 Reseña reciente",
-                    modifier = Modifier.padding(horizontal = 10.dp, vertical = 4.dp),
-                    style = MaterialTheme.typography.labelSmall,
-                    color = MaterialTheme.colorScheme.onPrimaryContainer
+                    text = "Ver reseña completa",
+                    style = MaterialTheme.typography.labelLarge,
+                    fontWeight = FontWeight.SemiBold
+                )
+                Spacer(modifier = Modifier.width(6.dp))
+                Icon(
+                    imageVector = Icons.AutoMirrored.Filled.ArrowForward,
+                    contentDescription = null,
+                    modifier = Modifier.size(16.dp)
                 )
             }
         }
