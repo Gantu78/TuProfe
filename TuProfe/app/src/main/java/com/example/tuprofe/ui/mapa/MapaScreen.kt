@@ -16,6 +16,7 @@ import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.material.icons.outlined.StarBorder
 import android.Manifest
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.pm.PackageManager
 import androidx.activity.compose.rememberLauncherForActivityResult
@@ -60,9 +61,6 @@ import com.google.maps.android.compose.*
 import kotlinx.coroutines.launch
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
-import kotlin.math.abs
-import kotlin.math.log2
-import kotlin.math.pow
 import androidx.compose.foundation.border
 import com.example.tuprofe.data.ReviewMapMarker
 import androidx.compose.material.icons.filled.Check
@@ -76,56 +74,7 @@ import androidx.compose.foundation.verticalScroll
 
 private const val MAP_ID_LIGHT = "bf3da9be2a1ab1b22986850b"
 
-private data class MarkerGroup(
-    val markers: List<ReviewMapMarker>,
-    val centerLat: Double,
-    val centerLng: Double
-) {
-    val count = markers.size
-    val representative = markers.first()
-}
-
-private fun zoomToDissolve(group: MarkerGroup): Float {
-    var maxDist = 0.0
-    val markers = group.markers
-    for (i in markers.indices) {
-        for (j in i + 1 until markers.size) {
-            val dist = maxOf(
-                abs(markers[i].latitude - markers[j].latitude),
-                abs(markers[i].longitude - markers[j].longitude)
-            )
-            if (dist > maxDist) maxDist = dist
-        }
-    }
-    return if (maxDist <= 0.0) 21f
-    else (log2(40.0 / maxDist).toFloat() + 0.5f).coerceAtMost(21f)
-}
-
-private fun groupMarkers(markers: List<ReviewMapMarker>, zoom: Float): List<MarkerGroup> {
-    val threshold = 40.0 / 2.0.pow(zoom.toDouble())
-    val assigned = BooleanArray(markers.size)
-    val groups = mutableListOf<MarkerGroup>()
-    for (i in markers.indices) {
-        if (assigned[i]) continue
-        val group = mutableListOf(markers[i])
-        assigned[i] = true
-        for (j in i + 1 until markers.size) {
-            if (assigned[j]) continue
-            if (abs(markers[i].latitude - markers[j].latitude) < threshold &&
-                abs(markers[i].longitude - markers[j].longitude) < threshold) {
-                group.add(markers[j])
-                assigned[j] = true
-            }
-        }
-        groups.add(MarkerGroup(
-            markers  = group,
-            centerLat = group.sumOf { it.latitude } / group.size,
-            centerLng = group.sumOf { it.longitude } / group.size
-        ))
-    }
-    return groups
-}
-
+@SuppressLint("MissingPermission")
 @Composable
 fun MapaScreen(
     viewModel: MapaViewModel = hiltViewModel(),
@@ -440,6 +389,7 @@ fun MapaScreen(
     }
 }
 
+@SuppressLint("MissingPermission")
 @Composable
 private fun MapControlsFab(
     cameraPositionState: CameraPositionState,
@@ -470,14 +420,16 @@ private fun MapControlsFab(
                         label = "Mi ubicación",
                         onClick = {
                             expanded = false
-                            val fusedClient = LocationServices.getFusedLocationProviderClient(context)
-                            fusedClient.lastLocation.addOnSuccessListener { location ->
-                                location?.let {
-                                    scope.launch {
-                                        cameraPositionState.animate(
-                                            CameraUpdateFactory.newLatLngZoom(LatLng(it.latitude, it.longitude), 15f),
-                                            durationMs = 800
-                                        )
+                            if (ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+                                val fusedClient = LocationServices.getFusedLocationProviderClient(context)
+                                fusedClient.lastLocation.addOnSuccessListener { location ->
+                                    location?.let {
+                                        scope.launch {
+                                            cameraPositionState.animate(
+                                                CameraUpdateFactory.newLatLngZoom(LatLng(it.latitude, it.longitude), 15f),
+                                                durationMs = 800
+                                            )
+                                        }
                                     }
                                 }
                             }
