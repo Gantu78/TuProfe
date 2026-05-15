@@ -4,10 +4,14 @@ import androidx.compose.animation.*
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Check
+import androidx.compose.material.icons.filled.Sort
 import androidx.compose.material3.*
 import androidx.compose.material3.TabRowDefaults.tabIndicatorOffset
 import androidx.compose.runtime.*
@@ -73,7 +77,9 @@ fun MainScreen(
                 Column(modifier = Modifier.fillMaxSize()) {
                     FeedTabBar(
                         selectedTab = uiState.selectedTab,
-                        onTabSelected = { mainViewModel.selectTab(it) }
+                        onTabSelected = { mainViewModel.selectTab(it) },
+                        sortOrder = uiState.sortOrder,
+                        onSortSelected = { mainViewModel.setSortOrder(it) }
                     )
 
                     // AnimatedContent for smooth tab switching
@@ -88,8 +94,12 @@ fun MainScreen(
                         },
                         label = "tabContent"
                     ) { selectedTab ->
-                        val currentList =
-                            if (selectedTab == 0) uiState.reviews else uiState.followingReviews
+                        val rawList = if (selectedTab == 0) uiState.reviews else uiState.followingReviews
+                        val currentList = when (uiState.sortOrder) {
+                            SortOrder.RECIENTES -> rawList
+                            SortOrder.MEJOR_CALIFICADAS -> rawList.sortedByDescending { it.rating }
+                            SortOrder.MAS_GUSTADAS -> rawList.sortedByDescending { it.likes }
+                        }
 
                         if (selectedTab == 1 && currentList.isEmpty()) {
                             Box(
@@ -135,45 +145,88 @@ fun MainScreen(
 fun FeedTabBar(
     selectedTab: Int,
     onTabSelected: (Int) -> Unit,
+    sortOrder: SortOrder,
+    onSortSelected: (SortOrder) -> Unit,
     modifier: Modifier = Modifier
 ) {
-    TabRow(
-        selectedTabIndex = selectedTab,
-        modifier = modifier.fillMaxWidth(),
-        containerColor = MaterialTheme.colorScheme.surface.copy(alpha = 0.95f),
-        contentColor = colorResource(R.color.verdetp),
-        indicator = { tabPositions ->
-            TabRowDefaults.SecondaryIndicator(
-                modifier = Modifier.tabIndicatorOffset(tabPositions[selectedTab]),
-                height = 2.dp,
-                color = colorResource(R.color.verdetp)
-            )
-        },
-        divider = {}
+    var showSortMenu by remember { mutableStateOf(false) }
+
+    Row(
+        modifier = modifier
+            .fillMaxWidth()
+            .height(48.dp),
+        verticalAlignment = Alignment.CenterVertically
     ) {
-        tabs.forEachIndexed { index, label ->
-            Tab(
-                selected = selectedTab == index,
-                onClick = { onTabSelected(index) },
-                modifier = Modifier
-                    .height(48.dp)
-                    .testTag(if (index == 1) "tab_siguiendo" else "tab_para_ti")
-            ) {
-                // Animate font weight change on selection
-                val weight by animateFloatAsState(
-                    targetValue = if (selectedTab == index) 700f else 400f,
-                    animationSpec = tween(200),
-                    label = "tabWeight"
+        TabRow(
+            selectedTabIndex = selectedTab,
+            modifier = Modifier.weight(1f),
+            containerColor = MaterialTheme.colorScheme.surface.copy(alpha = 0.95f),
+            contentColor = colorResource(R.color.verdetp),
+            indicator = { tabPositions ->
+                TabRowDefaults.SecondaryIndicator(
+                    modifier = Modifier.tabIndicatorOffset(tabPositions[selectedTab]),
+                    height = 2.dp,
+                    color = colorResource(R.color.verdetp)
                 )
-                Text(
-                    text = label,
-                    fontWeight = if (selectedTab == index) FontWeight.Bold else FontWeight.Normal,
-                    fontSize = 15.sp,
-                    color = if (selectedTab == index)
+            },
+            divider = {}
+        ) {
+            tabs.forEachIndexed { index, label ->
+                Tab(
+                    selected = selectedTab == index,
+                    onClick = { onTabSelected(index) },
+                    modifier = Modifier
+                        .height(48.dp)
+                        .testTag(if (index == 1) "tab_siguiendo" else "tab_para_ti")
+                ) {
+                    val weight by animateFloatAsState(
+                        targetValue = if (selectedTab == index) 700f else 400f,
+                        animationSpec = tween(200),
+                        label = "tabWeight"
+                    )
+                    Text(
+                        text = label,
+                        fontWeight = if (selectedTab == index) FontWeight.Bold else FontWeight.Normal,
+                        fontSize = 15.sp,
+                        color = if (selectedTab == index)
+                            colorResource(R.color.verdetp)
+                        else
+                            MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                }
+            }
+        }
+
+        Box(
+            modifier = Modifier
+                .fillMaxHeight()
+                .width(48.dp)
+                .background(MaterialTheme.colorScheme.surface.copy(alpha = 0.95f)),
+            contentAlignment = Alignment.Center
+        ) {
+            IconButton(onClick = { showSortMenu = true }) {
+                Icon(
+                    imageVector = Icons.Default.Sort,
+                    contentDescription = "Ordenar",
+                    tint = if (sortOrder != SortOrder.RECIENTES)
                         colorResource(R.color.verdetp)
                     else
                         MaterialTheme.colorScheme.onSurfaceVariant
                 )
+            }
+            DropdownMenu(
+                expanded = showSortMenu,
+                onDismissRequest = { showSortMenu = false }
+            ) {
+                SortOrder.entries.forEach { order ->
+                    DropdownMenuItem(
+                        text = { Text(order.label) },
+                        onClick = { onSortSelected(order); showSortMenu = false },
+                        trailingIcon = if (order == sortOrder) {
+                            { Icon(Icons.Default.Check, contentDescription = null) }
+                        } else null
+                    )
+                }
             }
         }
     }
