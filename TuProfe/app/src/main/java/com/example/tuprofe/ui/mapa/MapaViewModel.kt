@@ -38,11 +38,15 @@ class MapaViewModel @Inject constructor(
     }
 
     fun onMarkerSelected(marker: ReviewMapMarker) {
-        _uiState.update { it.copy(selectedMarker = marker) }
+        _uiState.update { it.copy(selectedMarker = marker, selectedGroup = null) }
+    }
+
+    fun onGroupSelected(markers: List<ReviewMapMarker>) {
+        _uiState.update { it.copy(selectedGroup = markers, selectedMarker = null) }
     }
 
     fun onDismissMarker() {
-        _uiState.update { it.copy(selectedMarker = null) }
+        _uiState.update { it.copy(selectedMarker = null, selectedGroup = null) }
     }
 
     fun toggleReviewList() {

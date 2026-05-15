@@ -58,7 +58,10 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MapStyleOptions
 import com.google.maps.android.compose.*
 import kotlinx.coroutines.launch
+import androidx.compose.foundation.pager.HorizontalPager
+import androidx.compose.foundation.pager.rememberPagerState
 import kotlin.math.abs
+import kotlin.math.log2
 import kotlin.math.pow
 import androidx.compose.foundation.border
 import androidx.compose.material.icons.filled.LocationOn
@@ -73,6 +76,22 @@ private data class MarkerGroup(
 ) {
     val count = markers.size
     val representative = markers.first()
+}
+
+private fun zoomToDissolve(group: MarkerGroup): Float {
+    var maxDist = 0.0
+    val markers = group.markers
+    for (i in markers.indices) {
+        for (j in i + 1 until markers.size) {
+            val dist = maxOf(
+                abs(markers[i].latitude - markers[j].latitude),
+                abs(markers[i].longitude - markers[j].longitude)
+            )
+            if (dist > maxDist) maxDist = dist
+        }
+    }
+    return if (maxDist <= 0.0) 21f
+    else (log2(40.0 / maxDist).toFloat() + 0.5f).coerceAtMost(21f)
 }
 
 private fun groupMarkers(markers: List<ReviewMapMarker>, zoom: Float): List<MarkerGroup> {
@@ -199,6 +218,15 @@ fun MapaScreen(
                                 state = MarkerState(position = LatLng(group.representative.latitude, group.representative.longitude)),
                                 onClick = {
                                     viewModel.onMarkerSelected(group.representative)
+                                    scope.launch {
+                                        cameraPositionState.animate(
+                                            CameraUpdateFactory.newLatLngZoom(
+                                                LatLng(group.representative.latitude, group.representative.longitude),
+                                                cameraPositionState.position.zoom.coerceAtLeast(17f)
+                                            ),
+                                            durationMs = 700
+                                        )
+                                    }
                                     true
                                 }
                             ) {
@@ -209,10 +237,11 @@ fun MapaScreen(
                             MarkerComposable(
                                 state = MarkerState(position = center),
                                 onClick = {
+                                    viewModel.onGroupSelected(group.markers)
                                     scope.launch {
                                         cameraPositionState.animate(
-                                            CameraUpdateFactory.newLatLngZoom(center, cameraPositionState.position.zoom + 2f),
-                                            durationMs = 500
+                                            CameraUpdateFactory.newLatLngZoom(center, zoomToDissolve(group)),
+                                            durationMs = 700
                                         )
                                     }
                                     true
@@ -331,7 +360,7 @@ fun MapaScreen(
                 .padding(bottom = 16.dp, end = 16.dp)
         )
 
-        // Tarjeta al tocar marcador
+        // Tarjeta al tocar marcador individual
         AnimatedVisibility(
             visible = uiState.selectedMarker != null,
             modifier = Modifier.align(Alignment.BottomCenter),
@@ -343,6 +372,22 @@ fun MapaScreen(
                     marker = marker,
                     onDismiss = { viewModel.onDismissMarker() },
                     onClick = { onReviewClick(marker.reviewId) }
+                )
+            }
+        }
+
+        // Carousel al tocar grupo
+        AnimatedVisibility(
+            visible = uiState.selectedGroup != null,
+            modifier = Modifier.align(Alignment.BottomCenter),
+            enter = slideInVertically(tween(300)) { it } + fadeIn(tween(250)),
+            exit = slideOutVertically(tween(250)) { it } + fadeOut(tween(200))
+        ) {
+            uiState.selectedGroup?.let { group ->
+                MarkerCarouselCard(
+                    markers = group,
+                    onDismiss = { viewModel.onDismissMarker() },
+                    onReviewClick = onReviewClick
                 )
             }
         }
@@ -529,6 +574,158 @@ private fun Modifier.scrollbar(
 
 private fun formatDistance(meters: Float): String =
     if (meters < 1000f) "${meters.toInt()} m" else "${"%.1f".format(meters / 1000f)} km"
+
+@Composable
+private fun MarkerCarouselCard(
+    markers: List<ReviewMapMarker>,
+    onDismiss: () -> Unit,
+    onReviewClick: (String) -> Unit
+) {
+    val pagerState = rememberPagerState { markers.size }
+
+    ElevatedCard(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(start = 16.dp, end = 16.dp, bottom = 90.dp),
+        shape = RoundedCornerShape(24.dp),
+        elevation = CardDefaults.elevatedCardElevation(defaultElevation = 16.dp),
+        colors = CardDefaults.elevatedCardColors(containerColor = MaterialTheme.colorScheme.surface)
+    ) {
+        Column(modifier = Modifier.padding(horizontal = 20.dp, vertical = 16.dp)) {
+
+            // Handle + indicador X/Y
+            Box(modifier = Modifier.fillMaxWidth()) {
+                Box(
+                    modifier = Modifier
+                        .width(36.dp)
+                        .height(4.dp)
+                        .clip(CircleShape)
+                        .background(MaterialTheme.colorScheme.outlineVariant)
+                        .align(Alignment.Center)
+                )
+                Text(
+                    text = "${pagerState.currentPage + 1}/${markers.size}",
+                    style = MaterialTheme.typography.labelMedium,
+                    fontWeight = FontWeight.SemiBold,
+                    color = MaterialTheme.colorScheme.primary,
+                    modifier = Modifier.align(Alignment.CenterEnd)
+                )
+            }
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            HorizontalPager(
+                state = pagerState,
+                modifier = Modifier.fillMaxWidth()
+            ) { page ->
+                val marker = markers[page]
+                Column(verticalArrangement = Arrangement.spacedBy(0.dp)) {
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.spacedBy(14.dp)
+                    ) {
+                        AsyncImage(
+                            model = marker.profesorFotoUrl.takeUnless { it.isNullOrBlank() },
+                            contentDescription = marker.profesorNombre,
+                            modifier = Modifier.size(52.dp).clip(CircleShape),
+                            contentScale = ContentScale.Crop,
+                            placeholder = painterResource(R.drawable.avatar),
+                            error = painterResource(R.drawable.avatar)
+                        )
+                        Column(modifier = Modifier.weight(1f)) {
+                            Text(
+                                text = marker.profesorNombre,
+                                style = MaterialTheme.typography.titleMedium,
+                                fontWeight = FontWeight.Bold,
+                                color = MaterialTheme.colorScheme.onSurface,
+                                maxLines = 1,
+                                overflow = TextOverflow.Ellipsis
+                            )
+                            if (marker.materia.isNotBlank()) {
+                                Text(
+                                    text = marker.materia,
+                                    style = MaterialTheme.typography.bodySmall,
+                                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                                    maxLines = 1,
+                                    overflow = TextOverflow.Ellipsis
+                                )
+                            }
+                            Spacer(modifier = Modifier.height(4.dp))
+                            Row(verticalAlignment = Alignment.CenterVertically) {
+                                repeat(5) { index ->
+                                    Icon(
+                                        imageVector = if (index < marker.rating) Icons.Filled.Star else Icons.Outlined.StarBorder,
+                                        contentDescription = null,
+                                        tint = if (index < marker.rating) Color(0xFFFFB300) else MaterialTheme.colorScheme.outlineVariant,
+                                        modifier = Modifier.size(15.dp)
+                                    )
+                                }
+                                Spacer(modifier = Modifier.width(5.dp))
+                                Text(
+                                    text = "${marker.rating}.0",
+                                    style = MaterialTheme.typography.labelMedium,
+                                    fontWeight = FontWeight.SemiBold,
+                                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                                )
+                            }
+                        }
+                        Box(
+                            modifier = Modifier
+                                .size(32.dp)
+                                .clip(CircleShape)
+                                .background(MaterialTheme.colorScheme.surfaceVariant)
+                                .clickable { onDismiss() },
+                            contentAlignment = Alignment.Center
+                        ) {
+                            Icon(
+                                imageVector = Icons.Default.Close,
+                                contentDescription = "Cerrar",
+                                tint = MaterialTheme.colorScheme.onSurfaceVariant,
+                                modifier = Modifier.size(16.dp)
+                            )
+                        }
+                    }
+
+                    Spacer(modifier = Modifier.height(16.dp))
+
+                    Button(
+                        onClick = { onReviewClick(marker.reviewId) },
+                        modifier = Modifier.fillMaxWidth(),
+                        shape = RoundedCornerShape(12.dp)
+                    ) {
+                        Text("Ver reseña completa", style = MaterialTheme.typography.labelLarge, fontWeight = FontWeight.SemiBold)
+                        Spacer(modifier = Modifier.width(6.dp))
+                        Icon(Icons.AutoMirrored.Filled.ArrowForward, contentDescription = null, modifier = Modifier.size(16.dp))
+                    }
+                }
+            }
+
+            // Dots
+            Spacer(modifier = Modifier.height(12.dp))
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.Center,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                repeat(markers.size) { index ->
+                    Box(
+                        modifier = Modifier
+                            .padding(horizontal = 3.dp)
+                            .size(if (index == pagerState.currentPage) 8.dp else 5.dp)
+                            .clip(CircleShape)
+                            .background(
+                                if (index == pagerState.currentPage)
+                                    MaterialTheme.colorScheme.primary
+                                else
+                                    MaterialTheme.colorScheme.outlineVariant
+                            )
+                    )
+                }
+            }
+        }
+    }
+}
 
 @Composable
 private fun ReviewListDropdown(

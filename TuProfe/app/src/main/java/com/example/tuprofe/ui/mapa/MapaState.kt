@@ -14,6 +14,7 @@ data class MapaState(
     val isLoading: Boolean = true,
     val markers: List<ReviewMapMarker> = emptyList(),
     val selectedMarker: ReviewMapMarker? = null,
+    val selectedGroup: List<ReviewMapMarker>? = null,
     val error: String? = null,
     val showReviewList: Boolean = false,
     val navigateToMarker: ReviewMapMarker? = null
