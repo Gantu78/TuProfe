@@ -1,5 +1,6 @@
 package com.example.tuprofe.ui.comment.detalle
 
+import android.content.Intent
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.*
 import androidx.compose.animation.fadeIn
@@ -21,6 +22,7 @@ import androidx.compose.material.icons.outlined.ThumbUp
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -91,6 +93,7 @@ fun CommentDetalleScreen(
                     initialOffsetY = { it / 6 }
                 )
             ) {
+                val context = LocalContext.current
                 uiState.selectedComment?.let { comment ->
                     LazyColumn(
                         modifier = Modifier
@@ -103,7 +106,16 @@ fun CommentDetalleScreen(
                                 comment = comment,
                                 onLike = { viewModel.sendOrDeleteCommentLike(comment.commentId) },
                                 onReply = { viewModel.openReplySheet() },
-                                onUserClick = { onUserClick(comment.usuario.usuarioId) }
+                                onUserClick = { onUserClick(comment.usuario.usuarioId) },
+                                onShare = {
+                                    val text = "Comentario de @${comment.usuario.nombreUsu}:\n\n" +
+                                            "\"${comment.content}\"\n\nVisto en TuProfe"
+                                    val intent = Intent(Intent.ACTION_SEND).apply {
+                                        type = "text/plain"
+                                        putExtra(Intent.EXTRA_TEXT, text)
+                                    }
+                                    context.startActivity(Intent.createChooser(intent, null))
+                                }
                             )
                             Spacer(modifier = Modifier.height(28.dp))
                         }
@@ -137,6 +149,7 @@ private fun CommentMainCard(
     comment: CommentInfo,
     onLike: () -> Unit,
     onReply: () -> Unit,
+    onShare: () -> Unit,
     onUserClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -157,7 +170,7 @@ private fun CommentMainCard(
                 isLiked = comment.liked,
                 onLike = onLike,
                 onReply = onReply,
-                onShare = {}
+                onShare = onShare
             )
         }
     }
