@@ -53,6 +53,7 @@ fun EditReviewScreen(
                             text = stringResource(R.string.editar_rese_a),
                             fontSize = 24.sp,
                             fontWeight = FontWeight.Bold,
+                            color = MaterialTheme.colorScheme.onSurface,
                             modifier = Modifier.padding(vertical = 24.dp)
                         )
 
@@ -68,7 +69,8 @@ fun EditReviewScreen(
                         // ── Star rating with bounce animation ─────────────────
                         Text(
                             text = stringResource(R.string.calificaci_n),
-                            fontWeight = FontWeight.Medium
+                            fontWeight = FontWeight.Medium,
+                            color = MaterialTheme.colorScheme.onSurface
                         )
                         Row(modifier = Modifier.padding(vertical = 8.dp)) {
                             repeat(5) { index ->
@@ -96,6 +98,7 @@ fun EditReviewScreen(
                             texto = stringResource(R.string.tu_opini_n_sobre_el_profesor),
                             value = state.reviewText,
                             onValueChange = { viewModel.onReviewTextChange(it) },
+                            singleLine = false,
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .height(150.dp)
