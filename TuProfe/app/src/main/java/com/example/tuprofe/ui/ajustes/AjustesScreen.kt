@@ -2,6 +2,7 @@ package com.example.tuprofe.ui.ajustes
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.*
+import androidx.compose.ui.draw.alpha
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
@@ -86,7 +87,8 @@ fun AjustesScreen(
                     icon = Icons.Default.Star,
                     title = stringResource(R.string.resenas_en_perfil),
                     subtitle = stringResource(R.string.resenas_en_perfil_desc),
-                    checked = state.resenasEnPerfil,
+                    checked = state.resenasEnPerfil && state.perfilPublico,
+                    enabled = state.perfilPublico,
                     onCheckedChange = { viewModel.toggleResenasEnPerfil() }
                 )
                 Spacer(Modifier.height(20.dp))
@@ -171,12 +173,15 @@ private fun PrivacyToggleItem(
     title: String,
     subtitle: String,
     checked: Boolean,
-    onCheckedChange: () -> Unit
+    onCheckedChange: () -> Unit,
+    enabled: Boolean = true
 ) {
+    val alpha = if (enabled) 1f else 0.4f
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(vertical = 6.dp),
+            .padding(vertical = 6.dp)
+            .alpha(alpha),
         shape = RoundedCornerShape(20.dp),
         border = BorderStroke(1.5.dp, colorResource(R.color.BordeTuProfe)),
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)
@@ -205,7 +210,8 @@ private fun PrivacyToggleItem(
             Spacer(Modifier.width(16.dp))
             Switch(
                 checked = checked,
-                onCheckedChange = { onCheckedChange() },
+                onCheckedChange = { if (enabled) onCheckedChange() },
+                enabled = enabled,
                 colors = SwitchDefaults.colors(
                     checkedThumbColor = MaterialTheme.colorScheme.surface,
                     checkedTrackColor = colorResource(R.color.verdetp)

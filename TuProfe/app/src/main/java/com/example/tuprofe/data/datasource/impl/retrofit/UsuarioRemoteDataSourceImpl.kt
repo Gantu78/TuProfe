@@ -47,4 +47,11 @@ class UsuarioRemoteDataSourceImpl @Inject constructor(
     override suspend fun getFollowingIds(userId: String): List<String> {
         TODO("Not yet implemented")
     }
+
+    override suspend fun updatePrivacySettings(
+        userId: String,
+        perfilAnonimo: Boolean,
+        perfilPublico: Boolean,
+        resenasEnPerfil: Boolean
+    ) { /* no-op: not supported via Retrofit backend */ }
 }

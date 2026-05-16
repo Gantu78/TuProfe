@@ -10,6 +10,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material.icons.outlined.Star
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
@@ -82,16 +83,24 @@ fun UserProfileContent(
         when {
             state.isLoading -> UserProfileLoadingState()
             state.errorMessage != null -> UserProfileErrorState(state.errorMessage)
-            else -> UserProfileLoaded(
-                user = state.user,
-                reviews = state.userReviews,
-                isOwnProfile = state.currentUserId == state.user.usuarioId,
-                onProfessorClick = onProfessorClick,
-                onReviewClick = onReviewClick,
-                onFollowClick = onFollowClick,
-                onFollowersClick = onFollowersClick,
-                onFollowingClick = onFollowingClick
-            )
+            else -> {
+                val isOwn = state.currentUserId == state.user.usuarioId
+                if (!isOwn && !state.user.perfilPublico) {
+                    PrivateProfileMessage()
+                } else {
+                    UserProfileLoaded(
+                        user = state.user,
+                        reviews = state.userReviews,
+                        isOwnProfile = isOwn,
+                        showReviews = isOwn || state.user.resenasEnPerfil,
+                        onProfessorClick = onProfessorClick,
+                        onReviewClick = onReviewClick,
+                        onFollowClick = onFollowClick,
+                        onFollowersClick = onFollowersClick,
+                        onFollowingClick = onFollowingClick
+                    )
+                }
+            }
         }
     }
 
@@ -155,6 +164,7 @@ private fun UserProfileLoaded(
     user: Usuario,
     reviews: List<ReviewInfo>,
     isOwnProfile: Boolean,
+    showReviews: Boolean = true,
     onProfessorClick: (String) -> Unit,
     onReviewClick: (String) -> Unit = {},
     onFollowClick: () -> Unit,
@@ -177,27 +187,31 @@ private fun UserProfileLoaded(
 
         item { Spacer(Modifier.height(16.dp)) }
 
-        item {
-            ReviewsSectionHeader(
-                reviewCount = reviews.size,
-                modifier = Modifier.padding(horizontal = 20.dp)
-            )
-        }
-
-        item { Spacer(Modifier.height(8.dp)) }
-
-        if (reviews.isEmpty()) {
-            item { EmptyReviewsMessage() }
-        } else {
-            items(reviews, key = { it.reviewId }) { review ->
-                ReviewCard(
-                    review = review,
-                    onProfessorClick = onProfessorClick,
-                    onReviewClick = onReviewClick,
+        if (showReviews) {
+            item {
+                ReviewsSectionHeader(
+                    reviewCount = reviews.size,
                     modifier = Modifier.padding(horizontal = 20.dp)
                 )
-                Spacer(Modifier.height(12.dp))
             }
+
+            item { Spacer(Modifier.height(8.dp)) }
+
+            if (reviews.isEmpty()) {
+                item { EmptyReviewsMessage() }
+            } else {
+                items(reviews, key = { it.reviewId }) { review ->
+                    ReviewCard(
+                        review = review,
+                        onProfessorClick = onProfessorClick,
+                        onReviewClick = onReviewClick,
+                        modifier = Modifier.padding(horizontal = 20.dp)
+                    )
+                    Spacer(Modifier.height(12.dp))
+                }
+            }
+        } else {
+            item { HiddenReviewsMessage() }
         }
     }
 }
@@ -460,6 +474,56 @@ private fun UserProfileErrorState(message: String, modifier: Modifier = Modifier
             color = MaterialTheme.colorScheme.error,
             textAlign = TextAlign.Center,
             modifier = Modifier.padding(24.dp)
+        )
+    }
+}
+
+@Composable
+private fun PrivateProfileMessage(modifier: Modifier = Modifier) {
+    Box(
+        modifier = modifier
+            .fillMaxSize()
+            .padding(32.dp),
+        contentAlignment = Alignment.Center
+    ) {
+        Column(horizontalAlignment = Alignment.CenterHorizontally) {
+            Icon(
+                imageVector = Icons.Default.Lock,
+                contentDescription = null,
+                modifier = Modifier.size(56.dp),
+                tint = colorResource(R.color.verdetp).copy(alpha = 0.45f)
+            )
+            Spacer(Modifier.height(16.dp))
+            Text(
+                text = "Perfil privado",
+                fontFamily = BebasNeue,
+                fontSize = 26.sp,
+                color = colorResource(R.color.verdetp).copy(alpha = 0.65f)
+            )
+            Spacer(Modifier.height(8.dp))
+            Text(
+                text = "Este usuario ha configurado su perfil como privado.",
+                fontSize = 14.sp,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                textAlign = TextAlign.Center
+            )
+        }
+    }
+}
+
+@Composable
+private fun HiddenReviewsMessage(modifier: Modifier = Modifier) {
+    Box(
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(horizontal = 20.dp, vertical = 48.dp),
+        contentAlignment = Alignment.Center
+    ) {
+        Text(
+            text = "Este usuario ha ocultado sus reseñas.",
+            fontSize = 14.sp,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
+            textAlign = TextAlign.Center
         )
     }
 }

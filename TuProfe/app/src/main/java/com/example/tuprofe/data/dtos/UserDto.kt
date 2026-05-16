@@ -11,7 +11,10 @@ data class UserDto(
     val foto: String? = null,
     val followingCount: Int = 0,
     val followersCount: Int = 0,
-    var followed: Boolean = false
+    var followed: Boolean = false,
+    val perfilAnonimo: Boolean = false,
+    val perfilPublico: Boolean = true,
+    val resenasEnPerfil: Boolean = true
 ){
     constructor(): this("0","","","","","")
 }
@@ -27,6 +30,9 @@ fun UserDto.toUsuario(): Usuario {
         imageprofeUrl = foto,
         followingCount = followingCount,
         followersCount = followersCount,
-        followed = followed
+        followed = followed,
+        perfilAnonimo = perfilAnonimo,
+        perfilPublico = perfilPublico,
+        resenasEnPerfil = resenasEnPerfil
     )
 }

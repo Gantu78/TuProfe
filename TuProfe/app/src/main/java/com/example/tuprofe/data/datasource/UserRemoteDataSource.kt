@@ -10,6 +10,13 @@ interface UserRemoteDataSource {
 
     suspend fun updateUser(userId: String, username: String, email: String, carrera: String)
 
+    suspend fun updatePrivacySettings(
+        userId: String,
+        perfilAnonimo: Boolean,
+        perfilPublico: Boolean,
+        resenasEnPerfil: Boolean
+    )
+
     suspend fun updateUserPhoto(userId: String, photoUrl: String)
 
     suspend fun followOrUnfollowUser(currentUserId: String, targetUserId: String)

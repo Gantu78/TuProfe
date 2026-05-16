@@ -62,6 +62,20 @@ class UserRepository @Inject constructor(
         }
     }
 
+    suspend fun updatePrivacySettings(
+        userId: String,
+        perfilAnonimo: Boolean,
+        perfilPublico: Boolean,
+        resenasEnPerfil: Boolean
+    ): Result<Unit> {
+        return try {
+            userRemoteDataSource.updatePrivacySettings(userId, perfilAnonimo, perfilPublico, resenasEnPerfil)
+            Result.success(Unit)
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
+
     suspend fun updateUserPhoto(userId: String, photoUrl: String): Result<Unit> {
         return try {
             userRemoteDataSource.updateUserPhoto(userId, photoUrl)
