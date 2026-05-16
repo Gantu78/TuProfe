@@ -57,6 +57,10 @@ import com.example.tuprofe.ui.review.create.CreateReviewViewModel
 import com.example.tuprofe.ui.review.edit.EditReviewScreen
 import com.example.tuprofe.ui.review.edit.EditReviewViewModel
 import com.example.tuprofe.ui.search.SearchScreen
+import com.example.tuprofe.ui.ajustes.AjustesScreen
+import com.example.tuprofe.ui.ayuda.AyudaYSoporteScreen
+import com.example.tuprofe.ui.notificaciones.NotificacionesScreen
+import com.example.tuprofe.ui.notificaciones.NotificacionesViewModel
 import com.example.tuprofe.ui.splash.SplashScreen
 import androidx.compose.animation.*
 import androidx.compose.animation.core.FastOutSlowInEasing
@@ -135,6 +139,9 @@ sealed class Screen(val route: String){
         fun createRoute(commentId: String) = "EditComment/$commentId"
     }
 
+    object AyudaYSoporte : Screen("AyudaYSoporte")
+    object Notificaciones : Screen("Notificaciones")
+    object Ajustes : Screen("Ajustes")
 }
 
 
@@ -400,9 +407,29 @@ fun AppNavegation(
                 },
                 onUserClick = { userId ->
                     navController.navigate(Screen.Profile.createRoute(userId))
-                }
+                },
+                onAyudaClick = { navController.navigate(Screen.AyudaYSoporte.route) },
+                onNotificacionesClick = { navController.navigate(Screen.Notificaciones.route) },
+                onAjustesClick = { navController.navigate(Screen.Ajustes.route) }
             )
         }
+
+        composable(route = Screen.AyudaYSoporte.route) {
+            AyudaYSoporteScreen(onBackClick = { navController.popBackStack() })
+        }
+
+        composable(route = Screen.Notificaciones.route) {
+            val notifViewModel: NotificacionesViewModel = hiltViewModel()
+            NotificacionesScreen(
+                viewModel = notifViewModel,
+                onBackClick = { navController.popBackStack() }
+            )
+        }
+
+        composable(route = Screen.Ajustes.route) {
+            AjustesScreen(onBackClick = { navController.popBackStack() })
+        }
+
         composable(
             route = Screen.Detalle.route,
             arguments = listOf(navArgument("reviewId"){type = NavType.StringType})

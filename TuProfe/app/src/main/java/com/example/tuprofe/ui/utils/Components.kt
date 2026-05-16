@@ -259,8 +259,8 @@ placeholder: String = "Busca a TuProfe"
 fun TitleHeader(title: String, modifier: Modifier = Modifier) {
     Text(
         text = title,
-        fontSize = 32.sp,
-        fontWeight = FontWeight.Bold,
+        fontSize = 36.sp,
+        fontWeight = FontWeight.ExtraBold,
         color = colorResource(R.color.verdetp),
         modifier = modifier
     )
@@ -273,14 +273,15 @@ fun BackButtonHeader(onBackClick: () -> Unit, modifier: Modifier = Modifier) {
     Row(
         modifier = modifier
             .fillMaxWidth()
-            .padding(start = 30.dp),
+            .padding(start = 4.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        IconButton(onClick = onBackClick) {
+        IconButton(onClick = onBackClick, modifier = Modifier.size(48.dp)) {
             Icon(
                 imageVector = Icons.Default.ArrowBack,
                 contentDescription = "Back",
-                tint = colorResource(R.color.verdetp)
+                tint = colorResource(R.color.verdetp),
+                modifier = Modifier.size(28.dp)
             )
         }
     }
