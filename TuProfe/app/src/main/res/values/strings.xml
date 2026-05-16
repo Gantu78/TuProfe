@@ -83,6 +83,16 @@
     <string name="contacto_soporte">Contactar soporte</string>
     <string name="version_app">Versión de la aplicación</string>
 
+    <!-- Ajustes - Privacidad -->
+    <string name="perfil_anonimo">Perfil anónimo</string>
+    <string name="perfil_anonimo_desc">Tu nombre de usuario no aparecerá en las reseñas que publiques.</string>
+    <string name="perfil_publico">Perfil público</string>
+    <string name="perfil_publico_desc">Otros usuarios podrán visitar tu perfil y ver tu actividad.</string>
+    <string name="resenas_en_perfil">Mostrar reseñas en perfil</string>
+    <string name="resenas_en_perfil_desc">Tus reseñas serán visibles en tu perfil público.</string>
+    <string name="politica_privacidad">Política de privacidad</string>
+    <string name="politica_privacidad_desc">TuProfe protege tus datos de acuerdo con nuestra política de privacidad. Solo usamos tu información para mejorar la experiencia dentro de la aplicación.</string>
+
     <!-- Notificaciones -->
     <string name="likes_resenas">Likes en mis reseñas</string>
     <string name="likes_resenas_desc">Recibe una notificación cuando alguien le dé like a tu reseña.</string>

@@ -58,6 +58,7 @@ import com.example.tuprofe.ui.review.edit.EditReviewScreen
 import com.example.tuprofe.ui.review.edit.EditReviewViewModel
 import com.example.tuprofe.ui.search.SearchScreen
 import com.example.tuprofe.ui.ajustes.AjustesScreen
+import com.example.tuprofe.ui.ajustes.AjustesViewModel
 import com.example.tuprofe.ui.ayuda.AyudaYSoporteScreen
 import com.example.tuprofe.ui.notificaciones.NotificacionesScreen
 import com.example.tuprofe.ui.notificaciones.NotificacionesViewModel
@@ -427,7 +428,11 @@ fun AppNavegation(
         }
 
         composable(route = Screen.Ajustes.route) {
-            AjustesScreen(onBackClick = { navController.popBackStack() })
+            val ajustesViewModel: AjustesViewModel = hiltViewModel()
+            AjustesScreen(
+                viewModel = ajustesViewModel,
+                onBackClick = { navController.popBackStack() }
+            )
         }
 
         composable(
