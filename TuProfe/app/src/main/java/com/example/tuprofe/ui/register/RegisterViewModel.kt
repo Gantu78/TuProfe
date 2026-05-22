@@ -10,11 +10,10 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
-import android.util.Log
 import com.example.tuprofe.data.injection.IoDispatcher
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
-
+import kotlinx.coroutines.delay
 
 @HiltViewModel
 class RegisterViewModel @Inject constructor(
@@ -50,85 +49,65 @@ class RegisterViewModel @Inject constructor(
         _uiState.update { it.copy(passwordVisible = !_uiState.value.passwordVisible) }
     }
 
+
     fun onRegisterClickSecure() {
-
-        viewModelScope.launch(ioDispatcher) {
-            registerUserOnline()
-        }
-    }
-
-    suspend fun registerUserOnline(){
         val currentState = _uiState.value
-        if (
-            currentState.password1.isBlank() ||
-            currentState.password2.isBlank() ||
-            currentState.email.isBlank() ||
-            currentState.usuario.isBlank() ||
-            currentState.carrera.isBlank()
-        ) {
+
+
+        if (currentState.email.isBlank() || currentState.usuario.isBlank() ||
+            currentState.password1.isBlank() || currentState.password2.isBlank()) {
             _uiState.update {
-                it.copy(
-                    mostrarMensajeError = true,
-                    errorMessage = "Por favor complete todos los campos"
-                )
+                it.copy(mostrarMensajeError = true, errorMessage = "Por favor completa todos los campos")
             }
             return
         }
 
         if (currentState.password1 != currentState.password2) {
             _uiState.update {
-                it.copy(
-                    mostrarMensajeError = true,
-                    errorMessage = "Las contraseñas no coinciden"
-                )
+                it.copy(mostrarMensajeError = true, errorMessage = "Las contraseñas no coinciden")
             }
             return
         }
 
-        val result = authRepository.signUp(
-            currentState.email,
-            currentState.password1
-        )
+        viewModelScope.launch(ioDispatcher) {
 
-        if (result.isSuccess) {
-            val userId = authRepository.currentUser?.uid ?: throw Exception("No se pudo obtener el usuario actual")
+            val result = authRepository.signUp(currentState.email, currentState.password1)
 
-            val firestoreResult = userRepository.registerUser(
-                username = currentState.usuario,
-                carrera = currentState.carrera,
-                userId = userId
-            )
+            if (result.isSuccess) {
+                val userId = authRepository.currentUser?.uid ?: ""
 
-            if (firestoreResult.isSuccess) {
-                _uiState.update {
-                    it.copy(
-                        mostrarMensajeError = false,
-                        mostrarMensaje = true,
-                        navigateHome = true
-                    )
+
+                val firestoreResult = userRepository.registerUser(
+                    username = currentState.usuario,
+                    carrera = currentState.carrera,
+                    userId = userId
+                )
+
+                if (firestoreResult.isSuccess) {
+
+                    authRepository.sendEmailVerification()
+
+                    _uiState.update {
+                        it.copy(
+                            mostrarMensaje = true
+                        )
+                    }
+                    delay(3000)
+                    _uiState.update {
+                        it.copy(
+                            navigateHome = true
+                        )
+                    }
+
+
+                } else {
+                    val error = firestoreResult.exceptionOrNull()?.message ?: "Error al guardar perfil"
+                    _uiState.update { it.copy(mostrarMensajeError = true, errorMessage = error) }
                 }
             } else {
-                val errorMessage =
-                    firestoreResult.exceptionOrNull()?.message ?: "Error al guardar el perfil"
-                Log.e("RegisterViewModel", "Firestore Error: $errorMessage") // Add this line
-                _uiState.update {
-                    it.copy(
-                        mostrarMensajeError = true,
-                        errorMessage = errorMessage
-                    )
-                }
-            }
-        } else {
-            val errorMessage =
-                result.exceptionOrNull()?.message ?: "Error al registrar el usuario"
-
-            _uiState.update {
-                it.copy(
-                    mostrarMensajeError = true,
-                    errorMessage = errorMessage
-                )
+                val error = result.exceptionOrNull()?.message ?: "Error en el registro"
+                _uiState.update { it.copy(mostrarMensajeError = true, errorMessage = error) }
             }
         }
     }
-
 }

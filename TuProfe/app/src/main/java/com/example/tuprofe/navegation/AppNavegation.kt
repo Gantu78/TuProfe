@@ -231,7 +231,7 @@ fun AppNavegation(
 
             androidx.compose.runtime.LaunchedEffect(registerState.navigateHome) {
                 if (registerState.navigateHome) {
-                    navController.navigate(Screen.Main.route) {
+                    navController.navigate(Screen.Login.route) {
                         popUpTo(Screen.Login.route) { inclusive = true }
                     }
                 }
@@ -243,7 +243,7 @@ fun AppNavegation(
                     registerViewModel.onRegisterClickSecure()
                 },
                 onBackClick = {
-                    navController.popBackStack()
+                    navController.navigate(Screen.Login.route)
                 }
             )
         }

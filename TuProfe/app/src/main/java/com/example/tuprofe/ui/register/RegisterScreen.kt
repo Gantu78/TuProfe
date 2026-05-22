@@ -17,6 +17,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -30,30 +31,47 @@ import com.example.tuprofe.ui.utils.LogoApp
 import com.example.tuprofe.ui.utils.TextFieldApp
 import com.example.tuprofe.ui.utils.TextFieldContraApp
 
+
 @Composable
 fun RegisterScreen(
     registerViewModel: RegisterViewModel,
-    modifier: Modifier = Modifier.testTag("registerScreen"),
     onRegisterClick: () -> Unit,
-    onBackClick: () -> Unit,
+    onBackClick: () -> Unit
 ) {
-
     val state by registerViewModel.uiState.collectAsState()
 
     val passwordIcon = if (state.passwordVisible) R.drawable.mostrar else R.drawable.ocultar
     val password2Icon = if (state.passwordVisible) R.drawable.mostrar else R.drawable.ocultar
 
-    Box(
-        modifier = modifier
-    ) {
+    Box(modifier = Modifier.fillMaxSize()) {
         BackgroundImage()
-        Column(
-            verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.CenterHorizontally,
-            modifier = Modifier.fillMaxSize()
-        ) {
 
+        Column(
+            modifier = Modifier.fillMaxSize().padding(16.dp),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center
+        ) {
             Header()
+
+
+            if (state.mostrarMensajeError) {
+                Text(
+                    text = state.errorMessage,
+                    color = Color.Red,
+                    modifier = Modifier.padding(8.dp)
+                )
+            }
+
+
+            if (state.mostrarMensaje) {
+                Text(
+                    text = "¡Cuenta creada! Por favor, verifica tu correo.",
+                    color = colorResource(id = R.color.verdetp),
+                    textAlign = TextAlign.Center,
+                    modifier = Modifier.padding(16.dp)
+                )
+            }
+
             FormularioRegistro(
                 email = state.email,
                 usuario = state.usuario,
@@ -71,24 +89,13 @@ fun RegisterScreen(
                 onPasswordVisibleChange = { registerViewModel.togglePasswordVisibility() }
 
             )
-            if (state.mostrarMensajeError) {
-                Text(state.errorMessage, color = Color.Red, modifier = Modifier.padding(8.dp).testTag("error_message"))
-            } else if(state.mostrarMensaje){
-                Text(
-                    stringResource(R.string.su_cuenta_ha_sido_creada_con_exito), 
-                    color = Color.Green,
-                    modifier = Modifier.padding(8.dp)
-                )
-            }
 
-            Spacer(modifier = Modifier.padding(15.dp))
             BotonesRegistro(
                 onRegisterClick = onRegisterClick,
                 onBackClick = onBackClick
             )
         }
     }
-
 }
 
 @Composable
