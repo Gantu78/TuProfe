@@ -21,7 +21,7 @@ android {
     compileSdk = 35
 
     defaultConfig {
-        applicationId = "com.example.tuprofe"
+        applicationId = "com.angarita.tuprofe"
         minSdk = 26
         targetSdk = 35
         versionCode = 1
