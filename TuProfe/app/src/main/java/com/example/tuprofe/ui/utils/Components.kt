@@ -60,14 +60,15 @@ fun LogoApp(
 fun AppButton(
     textoBoton: String,
     onClick: () -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    enabled: Boolean = true
 ){
     Button(
-        onClick =  onClick,
+        onClick = onClick,
+        enabled = enabled,
         colors = ButtonDefaults.buttonColors(
             containerColor = colorResource(R.color.verdetp)
         ),
-
         modifier = modifier
     ) {
         Text(textoBoton, fontSize = 20.sp, fontFamily = BebasNeue)
