@@ -195,11 +195,11 @@ fun Resena(
     ) {
         TuProfeCardHeader(
             profeName = reviewInfo.profesor.nombreProfe,
-            userName = reviewInfo.usuario.nombreUsu,
+            userName = if (reviewInfo.usuario.perfilAnonimo) "Anónimo" else reviewInfo.usuario.nombreUsu,
             carrera = reviewInfo.materia.nombreMateria,
             imageUrl = reviewInfo.profesor.imageprofeUrl,
             onProfessorClick = onProfileClick,
-            onUserClick = onUserClick
+            onUserClick = if (reviewInfo.usuario.perfilAnonimo) ({}) else onUserClick
         )
 
         RatingStars(

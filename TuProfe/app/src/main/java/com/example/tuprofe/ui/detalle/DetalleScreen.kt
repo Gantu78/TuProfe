@@ -1,5 +1,6 @@
 package com.example.tuprofe.ui.detalle
 
+import android.content.Intent
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.*
 import androidx.compose.animation.fadeIn
@@ -19,6 +20,7 @@ import androidx.compose.material.icons.outlined.ThumbUp
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -77,11 +79,24 @@ fun DetalleScreen(
         )
     }
 
+    val context = LocalContext.current
+
     DetalleContent(
         detalleViewModel = detalleViewModel,
         reviewId = reviewId,
         uiState = uiState,
-        onShare = {},
+        onShare = {
+            uiState.selectedReview?.let { review ->
+                val text = "Reseña de @${review.usuario.nombreUsu} sobre ${review.profesor.nombreProfe} " +
+                        "(${review.materia.nombreMateria}) — ${review.rating}/5 ⭐\n\n" +
+                        "\"${review.content}\"\n\nVisto en TuProfe"
+                val intent = Intent(Intent.ACTION_SEND).apply {
+                    type = "text/plain"
+                    putExtra(Intent.EXTRA_TEXT, text)
+                }
+                context.startActivity(Intent.createChooser(intent, null))
+            }
+        },
         onComment = { detalleViewModel.openCommentSheet() },
         onProfileClick = onProfileClick,
         onUserClick = onUserClick,

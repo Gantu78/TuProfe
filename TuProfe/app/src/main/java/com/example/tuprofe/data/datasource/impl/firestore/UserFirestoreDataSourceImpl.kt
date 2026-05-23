@@ -43,6 +43,21 @@ class UserFirestoreDataSourceImpl @Inject constructor(
         db.collection("users").document(userId).update("foto", photoUrl).await()
     }
 
+    override suspend fun updatePrivacySettings(
+        userId: String,
+        perfilAnonimo: Boolean,
+        perfilPublico: Boolean,
+        resenasEnPerfil: Boolean
+    ) {
+        db.collection("users").document(userId).update(
+            mapOf(
+                "perfilAnonimo" to perfilAnonimo,
+                "perfilPublico" to perfilPublico,
+                "resenasEnPerfil" to resenasEnPerfil
+            )
+        ).await()
+    }
+
 
     override suspend fun getFollowers(userId: String, currentUserId: String): List<UserDto> {
         val docs = db.collection("users").document(userId).collection("followers").get().await()

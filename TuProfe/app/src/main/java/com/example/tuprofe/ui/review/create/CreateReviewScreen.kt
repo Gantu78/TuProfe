@@ -1,5 +1,9 @@
 package com.example.tuprofe.ui.review.create
 
+import android.Manifest
+import android.annotation.SuppressLint
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.animation.core.*
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -13,6 +17,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -21,8 +26,10 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.tuprofe.R
 import com.example.tuprofe.ui.utils.*
+import com.google.android.gms.location.LocationServices
 import kotlinx.coroutines.delay
 
+@SuppressLint("MissingPermission")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CreateReviewScreen(
@@ -31,6 +38,23 @@ fun CreateReviewScreen(
     modifier: Modifier = Modifier
 ) {
     val state by viewModel.uiState.collectAsState()
+    val context = LocalContext.current
+
+    val locationLauncher = rememberLauncherForActivityResult(
+        ActivityResultContracts.RequestPermission()
+    ) { granted ->
+        if (granted) {
+            LocationServices.getFusedLocationProviderClient(context)
+                .lastLocation
+                .addOnSuccessListener { location ->
+                    viewModel.onLocationReceived(location?.latitude, location?.longitude)
+                }
+        }
+    }
+
+    LaunchedEffect(Unit) {
+        locationLauncher.launch(Manifest.permission.ACCESS_FINE_LOCATION)
+    }
 
     LaunchedEffect(state.success) {
         if (state.success) {
@@ -63,6 +87,7 @@ fun CreateReviewScreen(
                     text = stringResource(R.string.crear_rese_a),
                     fontSize = 24.sp,
                     fontWeight = FontWeight.Bold,
+                    color = MaterialTheme.colorScheme.onSurface,
                     modifier = Modifier.padding(vertical = 24.dp)
                 )
             }
@@ -143,7 +168,8 @@ fun CreateReviewScreen(
                     // ── Star rating with bounce animation ─────────────────────
                     Text(
                         text = stringResource(R.string.calificaci_n),
-                        fontWeight = FontWeight.Medium
+                        fontWeight = FontWeight.Medium,
+                        color = MaterialTheme.colorScheme.onSurface
                     )
                     Row(modifier = Modifier.padding(vertical = 8.dp)) {
                         repeat(5) { index ->
@@ -171,6 +197,7 @@ fun CreateReviewScreen(
                         texto = stringResource(R.string.tu_opini_n_sobre_el_profesor),
                         value = state.reviewText,
                         onValueChange = { viewModel.onReviewTextChange(it) },
+                        singleLine = false,
                         modifier = Modifier
                             .fillMaxWidth()
                             .height(150.dp)

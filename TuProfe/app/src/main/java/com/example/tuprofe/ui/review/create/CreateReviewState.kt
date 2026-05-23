@@ -15,5 +15,7 @@ data class CreateReviewState(
     val isSearchingProfessors: Boolean = false,
     val success: Boolean = false,
     val error: String? = null,
-    val isDropdownExpanded: Boolean = false
+    val isDropdownExpanded: Boolean = false,
+    val latitude: Double? = null,
+    val longitude: Double? = null
 )

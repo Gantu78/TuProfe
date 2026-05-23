@@ -3,6 +3,7 @@ package com.example.tuprofe.data.dtos
 import com.example.tuprofe.data.Profesor
 import com.example.tuprofe.data.Materia
 import com.example.tuprofe.data.ReviewInfo
+import com.example.tuprofe.data.ReviewMapMarker
 import com.example.tuprofe.data.Usuario
 import java.text.SimpleDateFormat
 import java.util.Locale
@@ -44,6 +45,18 @@ data class ProfessorNameDto(
     val foto: String? = null
 )
  
+fun ReviewDto.toReviewMapMarker(): ReviewMapMarker? {
+    return ReviewMapMarker(
+        reviewId        = id ?: "",
+        profesorNombre  = professor?.name ?: "Profesor",
+        rating          = rating ?: 0,
+        latitude        = latitude ?: return null,
+        longitude       = longitude ?: return null,
+        materia         = materia ?: "",
+        profesorFotoUrl = professor?.foto
+    )
+}
+
 fun ReviewDto.toReviewInfo(): ReviewInfo {
     // El ID real de navegación es el userId (UID de Firebase) del autor.
     // Si el objeto 'user' anidado no trae ID, usamos el 'userId' del nivel superior del DTO.

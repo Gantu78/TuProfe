@@ -19,4 +19,10 @@ interface ReviewRemoteDataSource  {
     suspend fun SendOrDeleteReviewLike(reviewId: String, userId: String)
 
     suspend fun listenAllReviews(): Flow<List<ReviewDto>>
+
+    suspend fun getMapMarkers(
+        stars: Set<Int>,
+        profesorNombres: Set<String>,
+        materias: Set<String>
+    ): List<ReviewDto>
 }

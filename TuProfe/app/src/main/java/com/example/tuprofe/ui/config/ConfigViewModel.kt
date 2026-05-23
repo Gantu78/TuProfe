@@ -30,7 +30,7 @@ class ConfigViewModel @Inject constructor(
 
     }
 
-    fun onPrivacidadClick() {
+    fun onNotificacionesClick() {
 
     }
 

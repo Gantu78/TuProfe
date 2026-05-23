@@ -9,8 +9,8 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material.icons.filled.MailOutline
+import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.filled.ThumbsUpDown
 import androidx.compose.material3.*
@@ -48,6 +48,9 @@ fun ConfigScreen(
     onEditProfileClick: () -> Unit,
     onLogoutClick: () -> Unit,
     onCalifClick: () -> Unit,
+    onAyudaClick: () -> Unit = {},
+    onNotificacionesClick: () -> Unit = {},
+    onAjustesClick: () -> Unit = {},
     onUserClick: (String) -> Unit = {},
     modifier: Modifier = Modifier.testTag("profileScreen")
 ) {
@@ -105,9 +108,9 @@ fun ConfigScreen(
                     item {
                         ConfigBody(
                             onCalifClick = onCalifClick,
-                            onAyudaClick = {configViewModel.onAyudaClick()},
-                            onPrivacidadClick = {configViewModel.onPrivacidadClick()},
-                            onAjustesClick = {configViewModel.onAjustesClick()},
+                            onAyudaClick = onAyudaClick,
+                            onNotificacionesClick = onNotificacionesClick,
+                            onAjustesClick = onAjustesClick,
                             modifier = Modifier
                         )
                     }
@@ -234,7 +237,7 @@ private fun ConfigUserListItem(
 fun ConfigBody(
     onCalifClick: () -> Unit,
     onAyudaClick: () -> Unit,
-    onPrivacidadClick: () -> Unit,
+    onNotificacionesClick: () -> Unit,
     onAjustesClick: () -> Unit,
     modifier: Modifier
 ){
@@ -262,10 +265,10 @@ fun ConfigBody(
 
 
             ConfigItem(
-                icon = Icons.Default.Lock,
-                title = stringResource(R.string.privacidad),
-                subtitle = stringResource(R.string.perfil_an_nimo_visibilidad),
-                onClick = onPrivacidadClick
+                icon = Icons.Default.Notifications,
+                title = stringResource(R.string.notificaciones),
+                subtitle = stringResource(R.string.alertas_y_novedades),
+                onClick = onNotificacionesClick
             )
 
 

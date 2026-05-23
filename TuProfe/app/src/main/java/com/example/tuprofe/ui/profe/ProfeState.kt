@@ -7,5 +7,8 @@ data class ProfeState(
     val profesor: Profesor? = null,
     val professorReviews: List<ReviewInfo> = emptyList(),
     val averageRating: Float = 0f,
-    val isLoading: Boolean = true
+    val isLoading: Boolean = true,
+    val resumenIA: String? = null,
+    val isLoadingIA: Boolean = false,
+    val errorIA: String? = null
 )

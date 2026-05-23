@@ -122,5 +122,18 @@ class AuthRepository @Inject constructor(
         }
     }
 
+    suspend fun sendEmailVerification(): Result<Unit> {
+        return try {
+            authRemoteDataSource.currentUser?.sendEmailVerification()?.await()
+            Result.success(Unit)
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
+
+    fun isEmailVerified(): Boolean {
+        return authRemoteDataSource.currentUser?.isEmailVerified ?: false
+    }
+
 
 }

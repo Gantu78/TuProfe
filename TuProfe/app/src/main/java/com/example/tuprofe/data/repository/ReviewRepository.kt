@@ -2,6 +2,7 @@ package com.example.tuprofe.data.repository
 
 import android.util.Log
 import com.example.tuprofe.data.ReviewInfo
+import com.example.tuprofe.data.ReviewMapMarker
 import com.example.tuprofe.data.datasource.AuthRemoteDataSource
 import com.example.tuprofe.data.datasource.ProfessorRemoteDataSource
 import com.example.tuprofe.data.datasource.ReviewRemoteDataSource
@@ -10,6 +11,7 @@ import com.example.tuprofe.data.dtos.CreateReviewDto
 import com.example.tuprofe.data.dtos.CreateReviewProfessorDto
 import com.example.tuprofe.data.dtos.CreateReviewUserDto
 import com.example.tuprofe.data.dtos.toReviewInfo
+import com.example.tuprofe.data.dtos.toReviewMapMarker
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import retrofit2.HttpException
@@ -60,15 +62,7 @@ class ReviewRepository @Inject constructor(
         }
     }
 
-    suspend fun createReview(
-        userId: String,
-        professorId: String,
-        content: String,
-        rating: Int,
-        materia: String,
-        latitude: Double? = null,
-        longitude: Double? = null
-    ): Result<Unit> {
+    suspend fun createReview(userId: String, professorId: String, content: String, rating: Int, materia: String, latitude: Double? = null, longitude: Double? = null): Result<Unit> {
         return try {
 
             Log.d("ReviewRepo", "Buscando usuario: $userId")
@@ -104,7 +98,7 @@ class ReviewRepository @Inject constructor(
                 materia = materia,
                 latitude = latitude,
                 longitude = longitude,
-                user = createReviewUserDto,
+                user =  createReviewUserDto,
                 professor = createReviewProfessorDto
             )
             reviewRemoteDataSource.createReview(createReviewDto)
@@ -159,28 +153,15 @@ class ReviewRepository @Inject constructor(
     }
 
 
-    suspend fun getMapMarkers(): Result<List<com.example.tuprofe.ui.mapa.ReviewMapMarker>> {
+    suspend fun getMapMarkers(
+        filterStars: Set<Int> = emptySet(),
+        filterProfesores: Set<String> = emptySet(),
+        filterMaterias: Set<String> = emptySet()
+    ): Result<List<ReviewMapMarker>> {
         return try {
-            val sdf = java.text.SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.US)
-            sdf.timeZone = java.util.TimeZone.getTimeZone("UTC")
-            val cutoff = Date(System.currentTimeMillis() - 24 * 60 * 60 * 1000L)
-
-            val markers = reviewRemoteDataSource.getAllReviews()
-                .filter { dto ->
-                    dto.latitude != null && dto.longitude != null &&
-                    dto.time != null && try {
-                        sdf.parse(dto.time)?.after(cutoff) == true
-                    } catch (e: Exception) { false }
-                }
-                .map { dto ->
-                    com.example.tuprofe.ui.mapa.ReviewMapMarker(
-                        reviewId    = dto.id ?: "",
-                        profesorNombre = dto.professor?.name ?: "Profesor",
-                        rating      = dto.rating ?: 0,
-                        latitude    = dto.latitude!!,
-                        longitude   = dto.longitude!!
-                    )
-                }
+            val markers = reviewRemoteDataSource
+                .getMapMarkers(filterStars, filterProfesores, filterMaterias)
+                .mapNotNull { it.toReviewMapMarker() }
             Result.success(markers)
         } catch (e: Exception) {
             Result.failure(e)

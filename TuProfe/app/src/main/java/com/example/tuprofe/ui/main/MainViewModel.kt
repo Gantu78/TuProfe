@@ -29,6 +29,10 @@ class MainViewModel @Inject constructor(
         _uiState.update { it.copy(selectedTab = index) }
     }
 
+    fun setSortOrder(order: SortOrder) {
+        _uiState.update { it.copy(sortOrder = order) }
+    }
+
     fun refreshFollowingReviews() {
         val current = _uiState.value.reviews
         if (current.isEmpty()) return

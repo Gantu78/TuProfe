@@ -22,11 +22,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.TuProfe">
-
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyArks8BnzeKC1zYOqd1JjdF37W44JDqgcA"/>
-
+            android:value="${MAPS_API_KEY}"/>
         <activity
             android:name=".MainActivity"
             android:exported="true"
@@ -34,10 +32,10 @@
             android:theme="@style/Theme.TuProfe">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <service
             android:name=".data.datasource.services.MyFirebaseMessagingService"
             android:enabled="true"

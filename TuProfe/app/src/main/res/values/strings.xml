@@ -67,4 +67,40 @@
     <string name="publicar_rese_a">Publicar Reseña</string>
     <string name="ajustes">Ajustes</string>
     <string name="configuraci_n_de_la_aplicaci_n">Configuración de la aplicación</string>
+
+    <!-- Ayuda y Soporte -->
+    <string name="faq">Preguntas frecuentes</string>
+    <string name="faq_q1">¿Cómo funciona TuProfe?</string>
+    <string name="faq_a1">TuProfe es una plataforma donde los estudiantes pueden calificar y dejar reseñas sobre sus profesores, ayudando a la comunidad a elegir mejor sus cursos.</string>
+    <string name="faq_q2">¿Cómo dejo una reseña?</string>
+    <string name="faq_a2">Busca al profesor en el buscador, entra a su perfil y toca el botón "Calificar". Completa el formulario y publica tu reseña.</string>
+    <string name="faq_q3">¿Puedo editar o eliminar mi reseña?</string>
+    <string name="faq_a3">Sí. Desde el historial de calificaciones puedes editar o eliminar tus reseñas publicadas en cualquier momento.</string>
+    <string name="faq_q4">¿Mis reseñas son anónimas?</string>
+    <string name="faq_a4">Las reseñas están asociadas a tu cuenta. Otros usuarios pueden ver tu nombre de usuario, por lo que no son completamente anónimas.</string>
+    <string name="terminos_y_condiciones">Términos y condiciones</string>
+    <string name="terminos_desc">Al usar TuProfe aceptas nuestros términos de servicio y política de privacidad.</string>
+    <string name="contacto_soporte">Contactar soporte</string>
+    <string name="version_app">Versión de la aplicación</string>
+
+    <!-- Ajustes - Privacidad -->
+    <string name="perfil_anonimo">Perfil anónimo</string>
+    <string name="perfil_anonimo_desc">Tu nombre de usuario no aparecerá en las reseñas que publiques.</string>
+    <string name="perfil_publico">Perfil público</string>
+    <string name="perfil_publico_desc">Otros usuarios podrán visitar tu perfil y ver tu actividad.</string>
+    <string name="resenas_en_perfil">Mostrar reseñas en perfil</string>
+    <string name="resenas_en_perfil_desc">Tus reseñas serán visibles en tu perfil público.</string>
+    <string name="politica_privacidad">Política de privacidad</string>
+    <string name="politica_privacidad_desc">TuProfe protege tus datos de acuerdo con nuestra política de privacidad. Solo usamos tu información para mejorar la experiencia dentro de la aplicación.</string>
+
+    <!-- Notificaciones -->
+    <string name="likes_resenas">Likes en mis reseñas</string>
+    <string name="likes_resenas_desc">Recibe una notificación cuando alguien le dé like a tu reseña.</string>
+    <string name="comentarios_resenas">Comentarios en mis reseñas</string>
+    <string name="comentarios_resenas_desc">Recibe una notificación cuando alguien comente tu reseña.</string>
+    <string name="nuevos_seguidores">Nuevos seguidores</string>
+    <string name="nuevos_seguidores_desc">Recibe una notificación cuando alguien empiece a seguirte.</string>
+    <string name="activar_permisos">Activar notificaciones del sistema</string>
+    <string name="activar_permisos_desc">Permite que TuProfe envíe notificaciones en tu dispositivo.</string>
+    <string name="permiso_otorgado">Notificaciones activadas</string>
 </resources>

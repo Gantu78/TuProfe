@@ -185,7 +185,7 @@ fun HeaderSection(
     Column(
         modifier = modifier
             .fillMaxWidth()
-            .padding(top = 40.dp),
+            .padding(top = 12.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         if (onBackClick != null) {
