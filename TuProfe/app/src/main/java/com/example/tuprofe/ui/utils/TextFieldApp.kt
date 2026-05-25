@@ -24,13 +24,16 @@ fun TextFieldApp(
         value = value,
         onValueChange = onValueChange,
         label = { Text(texto) },
-        modifier = modifier.fillMaxWidth(),
+        modifier = modifier,
         trailingIcon = trailingIcon,
         shape = RoundedCornerShape(25.dp),
         singleLine = singleLine,
         colors = OutlinedTextFieldDefaults.colors(
-            focusedBorderColor = colorResource(R.color.verdetp),
+            unfocusedContainerColor = colorResource(R.color.pastel),
+            focusedContainerColor = colorResource(R.color.pastel),
             unfocusedBorderColor = colorResource(R.color.BordeTuProfe),
+            focusedBorderColor = colorResource(R.color.verdetp),
+            unfocusedLabelColor = colorResource(R.color.gris),
             focusedLabelColor = colorResource(R.color.verdetp)
         )
     )
