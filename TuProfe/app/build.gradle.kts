@@ -24,7 +24,7 @@ android {
         applicationId = "com.angarita.tuprofe"
         minSdk = 26
         targetSdk = 35
-        versionCode = 3
+        versionCode = 4
         versionName = "1.0"
         buildConfigField("String", "IAAPIKEY", "\"${localProps.getProperty("IAAPIKEY") ?: ""}\"")
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
