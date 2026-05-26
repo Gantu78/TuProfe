@@ -11,6 +11,7 @@ import com.google.firebase.auth.FirebaseAuthRecentLoginRequiredException
 import com.google.firebase.auth.FirebaseAuthUserCollisionException
 import com.google.firebase.auth.FirebaseAuthWeakPasswordException
 import com.google.firebase.auth.UserProfileChangeRequest
+import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.tasks.await
 
 import javax.inject.Inject
@@ -75,7 +76,13 @@ class AuthRepository @Inject constructor(
 
     suspend fun deleteAccount(email: String, password: String): Result<Unit> {
         return try {
-         authRemoteDataSource.reauthenticateAndDelete(email, password);
+            val userId = currentUser?.uid ?: return Result.failure(Exception("Usuario no autenticado"))
+            FirebaseFirestore.getInstance()
+                .collection("users")
+                .document(userId)
+                .delete()
+                .await()
+            authRemoteDataSource.reauthenticateAndDelete(email, password)
             Result.success(Unit)
         } catch (e: FirebaseAuthInvalidCredentialsException) {
         Result.failure(Exception("Contraseña incorrecta"))
