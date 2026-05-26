@@ -1,5 +1,6 @@
 package com.example.tuprofe.data.injection
 
+import com.example.tuprofe.data.datasource.services.CommentRetrofitService
 import com.example.tuprofe.data.datasource.services.ProfesorRetrofitService
 import com.example.tuprofe.data.datasource.services.ReviewRetrofitService
 import com.example.tuprofe.data.datasource.services.UserRetrofitService
@@ -61,5 +62,11 @@ object AppModule {
     @Provides
     fun providesUserRetrofitService(retrofit: Retrofit): UserRetrofitService {
         return retrofit.create(UserRetrofitService::class.java)
+    }
+
+    @Singleton
+    @Provides
+    fun providesCommentRetrofitService(retrofit: Retrofit): CommentRetrofitService {
+        return retrofit.create(CommentRetrofitService::class.java)
     }
 }

@@ -35,6 +35,8 @@ import com.example.tuprofe.ui.utils.BackButtonHeader
 import com.example.tuprofe.ui.utils.BackgroundImage
 import com.example.tuprofe.ui.utils.TitleHeader
 import com.example.tuprofe.ui.theme.Montserrat
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.messaging.FirebaseMessaging
 
 @Composable
@@ -42,9 +44,17 @@ import com.google.firebase.messaging.FirebaseMessaging
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 fun TuProfeApp() {
 
-    FirebaseMessaging.getInstance().token.addOnCompleteListener{ task ->
-        if(task.isSuccessful){
-           Log.d("Token", task.result)
+    FirebaseMessaging.getInstance().token.addOnCompleteListener { task ->
+        if (task.isSuccessful) {
+            val token = task.result
+            Log.d("Token", token)
+            val userId = FirebaseAuth.getInstance().currentUser?.uid
+            if (userId != null) {
+                FirebaseFirestore.getInstance()
+                    .collection("users")
+                    .document(userId)
+                    .update("fcmtoken", token)
+            }
         } else {
             Log.d("Token", "Error al obtener el token")
         }

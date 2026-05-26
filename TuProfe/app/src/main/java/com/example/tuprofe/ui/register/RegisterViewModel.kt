@@ -13,7 +13,6 @@ import javax.inject.Inject
 import com.example.tuprofe.data.injection.IoDispatcher
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
 
 @HiltViewModel
 class RegisterViewModel @Inject constructor(
@@ -45,6 +44,10 @@ class RegisterViewModel @Inject constructor(
         _uiState.update { it.copy(password2 = newPassword) }
     }
 
+    fun onSuccessDialogDismissed() {
+        _uiState.update { it.copy(mostrarMensaje = false, navigateHome = true) }
+    }
+
     fun togglePasswordVisibility() {
         _uiState.update { it.copy(passwordVisible = !_uiState.value.passwordVisible) }
     }
@@ -70,6 +73,7 @@ class RegisterViewModel @Inject constructor(
         }
 
         viewModelScope.launch(ioDispatcher) {
+            _uiState.update { it.copy(isLoading = true, mostrarMensajeError = false) }
 
             val result = authRepository.signUp(currentState.email, currentState.password1)
 
@@ -84,29 +88,15 @@ class RegisterViewModel @Inject constructor(
                 )
 
                 if (firestoreResult.isSuccess) {
-
                     authRepository.sendEmailVerification()
-
-                    _uiState.update {
-                        it.copy(
-                            mostrarMensaje = true
-                        )
-                    }
-                    delay(3000)
-                    _uiState.update {
-                        it.copy(
-                            navigateHome = true
-                        )
-                    }
-
-
+                    _uiState.update { it.copy(isLoading = false, mostrarMensaje = true) }
                 } else {
                     val error = firestoreResult.exceptionOrNull()?.message ?: "Error al guardar perfil"
-                    _uiState.update { it.copy(mostrarMensajeError = true, errorMessage = error) }
+                    _uiState.update { it.copy(isLoading = false, mostrarMensajeError = true, errorMessage = error) }
                 }
             } else {
                 val error = result.exceptionOrNull()?.message ?: "Error en el registro"
-                _uiState.update { it.copy(mostrarMensajeError = true, errorMessage = error) }
+                _uiState.update { it.copy(isLoading = false, mostrarMensajeError = true, errorMessage = error) }
             }
         }
     }

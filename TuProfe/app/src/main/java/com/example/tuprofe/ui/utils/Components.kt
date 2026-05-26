@@ -22,6 +22,7 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
+import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -60,14 +61,15 @@ fun LogoApp(
 fun AppButton(
     textoBoton: String,
     onClick: () -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    enabled: Boolean = true
 ){
     Button(
-        onClick =  onClick,
+        onClick = onClick,
+        enabled = enabled,
         colors = ButtonDefaults.buttonColors(
             containerColor = colorResource(R.color.verdetp)
         ),
-
         modifier = modifier
     ) {
         Text(textoBoton, fontSize = 20.sp, fontFamily = BebasNeue)
@@ -126,16 +128,16 @@ fun TextFieldApp(
         value = value,
         onValueChange = onValueChange,
         singleLine = true,
-        label = { Text(text = texto)},
-        colors = TextFieldDefaults.colors(
+        label = { Text(text = texto) },
+        colors = OutlinedTextFieldDefaults.colors(
             unfocusedContainerColor = colorResource(R.color.pastel),
             focusedContainerColor = colorResource(R.color.pastel),
+            unfocusedBorderColor = colorResource(R.color.BordeTuProfe),
+            focusedBorderColor = colorResource(R.color.verdetp),
             unfocusedLabelColor = colorResource(R.color.gris),
-            focusedLabelColor = colorResource(R.color.gris),
-            unfocusedIndicatorColor = colorResource(R.color.gris),
-            focusedIndicatorColor = colorResource(R.color.gris)
+            focusedLabelColor = colorResource(R.color.verdetp)
         ),
-        shape = RoundedCornerShape(30.dp),
+        shape = RoundedCornerShape(25.dp),
         modifier = modifier
     )
 }
@@ -155,16 +157,16 @@ fun TextFieldContraApp(
         value = value,
         onValueChange = onValueChange,
         singleLine = true,
-        label = { Text(text = texto)},
-        colors = TextFieldDefaults.colors(
+        label = { Text(text = texto) },
+        colors = OutlinedTextFieldDefaults.colors(
             unfocusedContainerColor = colorResource(R.color.pastel),
             focusedContainerColor = colorResource(R.color.pastel),
+            unfocusedBorderColor = colorResource(R.color.BordeTuProfe),
+            focusedBorderColor = colorResource(R.color.verdetp),
             unfocusedLabelColor = colorResource(R.color.gris),
-            focusedLabelColor = colorResource(R.color.gris),
-            unfocusedIndicatorColor = colorResource(R.color.gris),
-            focusedIndicatorColor = colorResource(R.color.gris)
+            focusedLabelColor = colorResource(R.color.verdetp)
         ),
-        shape = RoundedCornerShape(30.dp),
+        shape = RoundedCornerShape(25.dp),
         visualTransformation = if(mostrarPassword) VisualTransformation.None else PasswordVisualTransformation(),
         trailingIcon = {
             IconButton(onClick = click) {

@@ -10,6 +10,8 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import androidx.lifecycle.ViewModel
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
 import javax.inject.Inject
 
 @HiltViewModel
@@ -33,18 +35,21 @@ class NotificacionesViewModel @Inject constructor(
         val new = !_uiState.value.likesEnabled
         prefs.edit().putBoolean("likes_enabled", new).apply()
         _uiState.update { it.copy(likesEnabled = new) }
+        syncPrefsToFirestore()
     }
 
     fun toggleComentarios() {
         val new = !_uiState.value.comentariosEnabled
         prefs.edit().putBoolean("comentarios_enabled", new).apply()
         _uiState.update { it.copy(comentariosEnabled = new) }
+        syncPrefsToFirestore()
     }
 
     fun toggleSeguidores() {
         val new = !_uiState.value.seguidoresEnabled
         prefs.edit().putBoolean("seguidores_enabled", new).apply()
         _uiState.update { it.copy(seguidoresEnabled = new) }
+        syncPrefsToFirestore()
     }
 
     fun onPermissionResult(granted: Boolean) {
@@ -53,6 +58,21 @@ class NotificacionesViewModel @Inject constructor(
 
     fun refreshPermissionState() {
         _uiState.update { it.copy(permissionGranted = hasNotificationPermission()) }
+    }
+
+    private fun syncPrefsToFirestore() {
+        val userId = FirebaseAuth.getInstance().currentUser?.uid ?: return
+        val state = _uiState.value
+        FirebaseFirestore.getInstance()
+            .collection("users")
+            .document(userId)
+            .update(
+                "notifPrefs", mapOf(
+                    "likes" to state.likesEnabled,
+                    "comentarios" to state.comentariosEnabled,
+                    "seguidores" to state.seguidoresEnabled
+                )
+            )
     }
 
     private fun hasNotificationPermission(): Boolean {

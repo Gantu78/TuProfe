@@ -8,6 +8,7 @@ import com.example.tuprofe.data.datasource.impl.firestore.CommentFirestoreDataSo
 import com.example.tuprofe.data.datasource.impl.firestore.ProfessorFirestoreDataSourceImpl
 import com.example.tuprofe.data.datasource.impl.firestore.ReviewFirestoreDataSourceImpl
 import com.example.tuprofe.data.datasource.impl.firestore.UserFirestoreDataSourceImpl
+import com.example.tuprofe.data.datasource.impl.retrofit.CommentRetrofitDataSourceImpl
 import com.example.tuprofe.data.datasource.impl.retrofit.ProfessorRemoteDataSourceImpl
 import com.example.tuprofe.data.datasource.impl.retrofit.ReviewRetrofitDataSourceImpl
 import com.example.tuprofe.data.datasource.impl.retrofit.UsuarioRemoteDataSourceImpl
@@ -48,6 +49,8 @@ object DataModule {
     @Singleton
     @Provides
     fun provideCommentDataSource(
-        firestoreImpl: CommentFirestoreDataSourceImpl
-    ): CommentRemoteDataSource = firestoreImpl
+        firestoreImpl: CommentFirestoreDataSourceImpl,
+        retrofitImpl: CommentRetrofitDataSourceImpl
+    ): CommentRemoteDataSource =
+        if (DataSourceConfig.USE_FIRESTORE) firestoreImpl else retrofitImpl
 }

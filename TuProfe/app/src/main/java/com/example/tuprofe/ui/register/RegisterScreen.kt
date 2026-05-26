@@ -6,8 +6,12 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -16,6 +20,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -36,7 +41,8 @@ import com.example.tuprofe.ui.utils.TextFieldContraApp
 fun RegisterScreen(
     registerViewModel: RegisterViewModel,
     onRegisterClick: () -> Unit,
-    onBackClick: () -> Unit
+    onBackClick: () -> Unit,
+    onSuccessDismiss: () -> Unit = { registerViewModel.onSuccessDialogDismissed() }
 ) {
     val state by registerViewModel.uiState.collectAsState()
 
@@ -53,22 +59,37 @@ fun RegisterScreen(
         ) {
             Header()
 
-
             if (state.mostrarMensajeError) {
                 Text(
                     text = state.errorMessage,
                     color = Color.Red,
-                    modifier = Modifier.padding(8.dp)
+                    textAlign = TextAlign.Center,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(top = 8.dp, start = 16.dp, end = 16.dp)
                 )
             }
 
-
             if (state.mostrarMensaje) {
-                Text(
-                    text = "¡Cuenta creada! Por favor, verifica tu correo.",
-                    color = colorResource(id = R.color.verdetp),
-                    textAlign = TextAlign.Center,
-                    modifier = Modifier.padding(16.dp)
+                AlertDialog(
+                    onDismissRequest = onSuccessDismiss,
+                    title = {
+                        Text(
+                            text = "¡Cuenta creada!",
+                            color = colorResource(id = R.color.verdetp)
+                        )
+                    },
+                    text = {
+                        Text(text = "Por favor, verifica tu correo para activar tu cuenta.")
+                    },
+                    confirmButton = {
+                        TextButton(onClick = onSuccessDismiss) {
+                            Text(
+                                text = "Aceptar",
+                                color = colorResource(id = R.color.verdetp)
+                            )
+                        }
+                    }
                 )
             }
 
@@ -87,13 +108,24 @@ fun RegisterScreen(
                 onPasswordChange = { registerViewModel.setPassword1(it) },
                 onPassword2Change = { registerViewModel.setPassword2(it) },
                 onPasswordVisibleChange = { registerViewModel.togglePasswordVisibility() }
-
             )
 
             BotonesRegistro(
+                isLoading = state.isLoading,
                 onRegisterClick = onRegisterClick,
                 onBackClick = onBackClick
             )
+        }
+
+        if (state.isLoading) {
+            Box(
+                modifier = Modifier.fillMaxSize(),
+                contentAlignment = Alignment.Center
+            ) {
+                CircularProgressIndicator(
+                    color = colorResource(id = R.color.verdetp)
+                )
+            }
         }
     }
 }
@@ -223,6 +255,7 @@ fun HeaderPreview() {
 @Composable
 fun BotonesRegistro(
     modifier: Modifier = Modifier,
+    isLoading: Boolean = false,
     onRegisterClick: () -> Unit,
     onBackClick: () -> Unit
 ) {
@@ -234,6 +267,7 @@ fun BotonesRegistro(
         AppButton(
             stringResource(R.string.registrarse),
             onClick = onRegisterClick,
+            enabled = !isLoading,
             modifier = Modifier.testTag("registerbutton")
         )
         AppTextButton(

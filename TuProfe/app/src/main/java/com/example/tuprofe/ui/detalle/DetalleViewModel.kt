@@ -1,5 +1,6 @@
 package com.example.tuprofe.ui.detalle
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.tuprofe.data.repository.AuthRepository
@@ -50,7 +51,8 @@ class DetalleViewModel @Inject constructor(
                 .onSuccess { comments ->
                     _uiState.update { it.copy(comments = comments, isLoadingComments = false) }
                 }
-                .onFailure {
+                .onFailure { error ->
+                    Log.e("DetalleViewModel", "Error cargando comentarios (reviewId=$reviewId): ${error.message}", error)
                     _uiState.update { it.copy(isLoadingComments = false) }
                 }
         }
