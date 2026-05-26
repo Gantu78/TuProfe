@@ -438,11 +438,11 @@ fun AppNavegation(
         composable(
             route = Screen.Detalle.route,
             arguments = listOf(navArgument("reviewId"){type = NavType.StringType})
-        ){
+        ){ backStackEntry ->
             val detalleViewModel: DetalleViewModel = hiltViewModel()
 
             DetalleScreen(
-                reviewId = navController.currentBackStackEntry?.arguments?.getString("reviewId") ?: "",
+                reviewId = backStackEntry.arguments?.getString("reviewId") ?: "",
                 detalleViewModel = detalleViewModel,
                 onProfileClick = { profesor ->
                     navController.navigate(Screen.Profe.createRoute(profesor.profeId))
@@ -459,10 +459,10 @@ fun AppNavegation(
         composable(
             route = Screen.CommentDetalle.route,
             arguments = listOf(navArgument("commentId") { type = NavType.StringType })
-        ) {
+        ) { backStackEntry ->
             val commentDetalleViewModel: CommentDetalleViewModel = hiltViewModel()
             CommentDetalleScreen(
-                commentId = navController.currentBackStackEntry?.arguments?.getString("commentId") ?: "",
+                commentId = backStackEntry.arguments?.getString("commentId") ?: "",
                 viewModel = commentDetalleViewModel,
                 onCommentClick = { commentId ->
                     navController.navigate(Screen.CommentDetalle.createRoute(commentId))

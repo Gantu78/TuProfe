@@ -5,47 +5,49 @@ import com.example.tuprofe.data.datasource.services.ReviewRetrofitService
 import com.example.tuprofe.data.dtos.CreateReviewDto
 import com.example.tuprofe.data.dtos.ReviewDto
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
 
 class ReviewRetrofitDataSourceImpl @Inject constructor(
     val service: ReviewRetrofitService
 ) : ReviewRemoteDataSource {
 
-
-    override suspend fun getAllReviews(): List<ReviewDto>{
-         return service.getAllReviews()
+    override suspend fun getAllReviews(): List<ReviewDto> {
+        return service.getAllReviews()
     }
 
-    override suspend fun getReviewById(
-        id: String,
-        currentUserId: String
-    ): ReviewDto {
-        return service.getReviewById(id)
+    override suspend fun getReviewById(id: String, currentUserId: String): ReviewDto {
+        return service.getReviewById(id, currentUserId.ifEmpty { null })
     }
 
     override suspend fun createReview(review: CreateReviewDto) {
-        review.userId = "1"
+        // userId lo asigna el Repository desde el currentUser de Firebase Auth
         service.createReview(review)
     }
 
-    override suspend fun deleteReview(id: String){
+    override suspend fun deleteReview(id: String) {
         service.deleteReview(id.toInt())
     }
 
-    override suspend fun updateReview(id: String, review: CreateReviewDto){
-        service.updateReview(id.toInt(),review)
+    override suspend fun updateReview(id: String, review: CreateReviewDto) {
+        service.updateReview(id.toInt(), review)
     }
 
     override suspend fun getUserReviews(userId: String): List<ReviewDto> {
-        return service.getUserReviews(userId.toInt())
+        return service.getUserReviews(userId)
     }
 
     override suspend fun SendOrDeleteReviewLike(reviewId: String, userId: String) {
-        TODO("Not yet implemented")
+        service.toggleLike(reviewId, mapOf("userId" to userId))
     }
 
-    override suspend fun listenAllReviews(): Flow<List<ReviewDto>> {
-        TODO("Not yet implemented")
+    /**
+     * Express no tiene sockets en tiempo real.
+     * Emitimos una sola vez al suscribirse (equivalent a un fetch).
+     * Para verdadero tiempo real, considera añadir SSE o WebSockets al servidor.
+     */
+    override suspend fun listenAllReviews(): Flow<List<ReviewDto>> = flow {
+        emit(service.getAllReviews())
     }
 
     override suspend fun getMapMarkers(
@@ -58,5 +60,4 @@ class ReviewRetrofitDataSourceImpl @Inject constructor(
         (profesorNombres.isEmpty() || dto.professor?.name in profesorNombres) &&
         (materias.isEmpty() || dto.materia in materias)
     }
-
 }
