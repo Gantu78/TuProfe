@@ -3,6 +3,7 @@ package com.example.tuprofe.ui.ajustes
 import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.tuprofe.data.language.LanguageManager
 import com.example.tuprofe.data.repository.AuthRepository
 import com.example.tuprofe.data.repository.UserRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -25,9 +26,10 @@ class AjustesViewModel @Inject constructor(
 
     private val _uiState = MutableStateFlow(
         AjustesState(
-            perfilAnonimo = prefs.getBoolean("perfil_anonimo", false),
-            perfilPublico = prefs.getBoolean("perfil_publico", true),
-            resenasEnPerfil = prefs.getBoolean("resenas_en_perfil", true)
+            perfilAnonimo    = prefs.getBoolean("perfil_anonimo", false),
+            perfilPublico    = prefs.getBoolean("perfil_publico", true),
+            resenasEnPerfil  = prefs.getBoolean("resenas_en_perfil", true),
+            selectedLanguage = LanguageManager.getSaved(context)   // ← cargar idioma guardado
         )
     )
     val uiState: StateFlow<AjustesState> = _uiState.asStateFlow()
@@ -35,6 +37,8 @@ class AjustesViewModel @Inject constructor(
     init {
         loadFromFirestore()
     }
+
+
 
     private fun loadFromFirestore() {
         val userId = authRepository.currentUser?.uid ?: return
@@ -60,9 +64,9 @@ class AjustesViewModel @Inject constructor(
         val snapshot = _uiState.value
         viewModelScope.launch {
             userRepository.updatePrivacySettings(
-                userId = userId,
-                perfilAnonimo = snapshot.perfilAnonimo,
-                perfilPublico = snapshot.perfilPublico,
+                userId         = userId,
+                perfilAnonimo  = snapshot.perfilAnonimo,
+                perfilPublico  = snapshot.perfilPublico,
                 resenasEnPerfil = snapshot.resenasEnPerfil
             )
         }
@@ -87,5 +91,15 @@ class AjustesViewModel @Inject constructor(
         prefs.edit().putBoolean("resenas_en_perfil", new).apply()
         _uiState.update { it.copy(resenasEnPerfil = new) }
         persistToFirestore()
+    }
+
+    fun setLanguage(code: String) {
+        if (code == _uiState.value.selectedLanguage) return
+        LanguageManager.save(context, code)
+        _uiState.update { it.copy(selectedLanguage = code, languageChanged = true) }
+    }
+
+    fun onLanguageChangeHandled() {
+        _uiState.update { it.copy(languageChanged = false) }
     }
 }

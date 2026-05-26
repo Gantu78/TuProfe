@@ -94,6 +94,7 @@ dependencies {
     implementation(libs.dagger.hilt)
     implementation(libs.hilt.compose.navigation)
     implementation(libs.generativeai)
+    implementation(libs.androidx.ui)
     kapt(libs.dagger.kapt)
 
     // Firebase (versiones gestionadas por el BOM)

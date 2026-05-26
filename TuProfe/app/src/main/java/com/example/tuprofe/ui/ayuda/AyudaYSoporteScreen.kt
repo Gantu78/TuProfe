@@ -53,6 +53,8 @@ fun AyudaYSoporteScreen(
                 )
             }
 
+
+
             item {
                 SectionLabel(stringResource(R.string.faq))
                 Spacer(Modifier.height(8.dp))

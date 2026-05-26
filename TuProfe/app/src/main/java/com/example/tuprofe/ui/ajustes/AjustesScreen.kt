@@ -1,23 +1,23 @@
 package com.example.tuprofe.ui.ajustes
 
+import android.app.Activity
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.*
-import androidx.compose.ui.draw.alpha
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Info
+import androidx.compose.material.icons.filled.Language
 import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Shield
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.material3.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
@@ -29,6 +29,29 @@ import com.example.tuprofe.HeaderSection
 import com.example.tuprofe.R
 import com.example.tuprofe.ui.utils.BackgroundImage
 
+// Mapa código → recurso de string del nombre del idioma
+private val LANGUAGE_LABELS = mapOf(
+    ""   to R.string.idioma_sistema,
+    "es" to R.string.idioma_espanol,
+    "en" to R.string.idioma_ingles,
+    "fr" to R.string.idioma_frances,
+    "pt" to R.string.idioma_portugues,
+    "ar" to R.string.idioma_arabe,
+    "de" to R.string.idioma_aleman,
+    "it" to R.string.idioma_italiano,
+    "ja" to R.string.idioma_japones,
+    "ko" to R.string.idioma_coreano,
+    "ru" to R.string.idioma_ruso,
+    "hi" to R.string.idioma_hindi,
+    "th" to R.string.idioma_tailandes,
+    "vi" to R.string.idioma_vietnamita,
+    "zh" to R.string.idioma_chino,
+    "nl" to R.string.idioma_holandes,
+    "pl" to R.string.idioma_polaco,
+    "sv" to R.string.idioma_sueco,
+    "tr" to R.string.idioma_turco
+)
+
 @Composable
 fun AjustesScreen(
     viewModel: AjustesViewModel,
@@ -36,9 +59,18 @@ fun AjustesScreen(
     modifier: Modifier = Modifier
 ) {
     val context = LocalContext.current
+    val activity = context as? Activity
     val state by viewModel.uiState.collectAsState()
     val versionName = context.packageManager
         .getPackageInfo(context.packageName, 0).versionName
+
+
+    LaunchedEffect(state.languageChanged) {
+        if (state.languageChanged) {
+            viewModel.onLanguageChangeHandled()
+            activity?.recreate()
+        }
+    }
 
     Box(modifier = modifier.fillMaxSize()) {
         BackgroundImage()
@@ -56,7 +88,7 @@ fun AjustesScreen(
                 )
             }
 
-            // ── Sección: Privacidad ───────────────────────────────────────────
+
             item {
                 SectionLabel(stringResource(R.string.privacidad))
                 Spacer(Modifier.height(8.dp))
@@ -99,7 +131,32 @@ fun AjustesScreen(
                 Spacer(Modifier.height(20.dp))
             }
 
-            // ── Sección: Política de privacidad ──────────────────────────────
+
+            item {
+                SectionLabel(stringResource(R.string.idioma))
+                Spacer(Modifier.height(4.dp))
+                Text(
+                    text = stringResource(R.string.idioma_desc),
+                    fontSize = 13.sp,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+                Spacer(Modifier.height(12.dp))
+            }
+
+            item {
+                LanguageSelectorCard(
+                    selectedCode = state.selectedLanguage,
+                    onLanguageSelected = { viewModel.setLanguage(it) }
+                )
+                Spacer(Modifier.height(20.dp))
+            }
+
+            item {
+                HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant)
+                Spacer(Modifier.height(20.dp))
+            }
+
+
             item {
                 SectionLabel(stringResource(R.string.politica_privacidad))
                 Spacer(Modifier.height(8.dp))
@@ -115,7 +172,7 @@ fun AjustesScreen(
                 Spacer(Modifier.height(20.dp))
             }
 
-            // ── Sección: Versión ──────────────────────────────────────────────
+
             item {
                 SectionLabel(stringResource(R.string.version_app))
                 Spacer(Modifier.height(8.dp))
@@ -156,6 +213,85 @@ fun AjustesScreen(
         }
     }
 }
+
+
+
+@Composable
+private fun LanguageSelectorCard(
+    selectedCode: String,
+    onLanguageSelected: (String) -> Unit,
+    modifier: Modifier = Modifier
+) {
+    Card(
+        modifier = modifier.fillMaxWidth(),
+        shape = RoundedCornerShape(20.dp),
+        border = BorderStroke(1.5.dp, colorResource(R.color.BordeTuProfe)),
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)
+    ) {
+        Column(modifier = Modifier.padding(horizontal = 20.dp, vertical = 12.dp)) {
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Icon(
+                    imageVector = Icons.Default.Language,
+                    contentDescription = null,
+                    tint = colorResource(R.color.verdetp),
+                    modifier = Modifier.size(26.dp)
+                )
+                Spacer(Modifier.width(12.dp))
+                Text(
+                    text = stringResource(R.string.idioma),
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 15.sp
+                )
+            }
+
+            Spacer(Modifier.height(14.dp))
+
+            // Chips: uno por idioma disponible
+            LANGUAGE_LABELS.entries.forEach { (code, labelRes) ->
+                val isSelected = selectedCode == code
+                LanguageOptionRow(
+                    label = stringResource(labelRes),
+                    selected = isSelected,
+                    onClick = { onLanguageSelected(code) }
+                )
+            }
+        }
+    }
+}
+
+@Composable
+private fun LanguageOptionRow(
+    label: String,
+    selected: Boolean,
+    onClick: () -> Unit
+) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(vertical = 4.dp),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        RadioButton(
+            selected = selected,
+            onClick = onClick,
+            colors = RadioButtonDefaults.colors(
+                selectedColor = colorResource(R.color.verdetp)
+            )
+        )
+        Spacer(Modifier.width(8.dp))
+        Text(
+            text = label,
+            fontSize = 14.sp,
+            fontWeight = if (selected) FontWeight.SemiBold else FontWeight.Normal,
+            color = if (selected)
+                colorResource(R.color.verdetp)
+            else
+                MaterialTheme.colorScheme.onSurface
+        )
+    }
+}
+
+
 
 @Composable
 private fun SectionLabel(text: String) {

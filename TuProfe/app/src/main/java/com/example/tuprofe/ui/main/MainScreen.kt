@@ -19,6 +19,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -34,8 +35,6 @@ import com.example.tuprofe.ui.utils.BackgroundImage
 import com.example.tuprofe.ui.utils.Resena
 import com.example.tuprofe.ui.utils.ReviewListSkeleton
 import com.example.tuprofe.ui.utils.pressScaleEffect
-
-private val tabs = listOf("Para ti", "Siguiendo")
 
 @Composable
 fun MainScreen(
@@ -57,7 +56,7 @@ fun MainScreen(
 
     when {
         uiState.isLoading -> {
-            // Shimmer skeletons instead of a spinner
+
             Box(modifier = modifier.fillMaxSize()) {
                 BackgroundImage()
                 ReviewListSkeleton(count = 5)
@@ -149,6 +148,10 @@ fun FeedTabBar(
     onSortSelected: (SortOrder) -> Unit,
     modifier: Modifier = Modifier
 ) {
+    val tabs = listOf(
+        stringResource(R.string.para_ti),
+        stringResource(R.string.siguiendo)
+    )
     var showSortMenu by remember { mutableStateOf(false) }
 
     Row(

@@ -12,7 +12,8 @@ private fun formatReviewDate(raw: String?): String {
     if (raw.isNullOrEmpty()) return ""
     return try {
         val input = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.US)
-        val output = SimpleDateFormat("d 'de' MMMM 'de' yyyy", Locale("es"))
+        // Usa el locale activo de la app (respeta el idioma seleccionado por el usuario)
+        val output = SimpleDateFormat("d MMMM yyyy", Locale.getDefault())
         output.format(input.parse(raw)!!)
     } catch (e: Exception) {
         raw

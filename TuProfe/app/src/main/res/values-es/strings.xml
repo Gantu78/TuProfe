@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">TuProfe</string>
+    <string name="logo_tuprofe">Logo TuProfe</string>
+    <string name="fondo_tuprofe">Fondo TuProfe</string>
+    <string name="email">Email</string>
+    <string name="contrase_a">Contraseña</string>
+    <string name="repetir_contrase_a">Repetir Contraseña</string>
+    <string name="registrarse">Registrarse</string>
+    <string name="mostrar_password">Mostrar contraseña</string>
+    <string name="ya_tengo_una_cuenta">YA TENGO UNA CUENTA</string>
+    <string name="volver">VOLVER</string>
+    <string name="usuario">Usuario</string>
+    <string name="carrera">Carrera</string>
+    <string name="olvide_la_contrase_a">Olvidé la contraseña</string>
+    <string name="crear_cuenta">Crear Cuenta</string>
+    <string name="recuperar_contrase_a">RECUPERAR CONTRASEÑA</string>
+    <string name="textorespass">Ingresa tu dirección de correo electrónico y te enviaremos un enlace para reestablecer tu contraseña</string>
+    <string name="enviar_enlace">Enviar Enlace</string>
+    <string name="loading">Cargando</string>
+    <string name="iniciar_sesion">INICIAR SESIÓN</string>
+    <string name="las_contrase_as_no_coinciden">Las contraseñas no coinciden</string>
+    <string name="likes">Me gustas</string>
+    <string name="comentarios">Comentarios</string>
+    <string name="tuprofe">TuProfe</string>
+    <string name="calificaci_n_general">Calificación General</string>
+    <string name="foto_de_perfil_del_profesor">Foto de perfil del profesor</string>
+    <string name="a_adir_comentario">Añadir comentario</string>
+    <string name="calificar">Calificar</string>
+    <string name="atras">Atrás</string>
+    <string name="perfil">PERFIL</string>
+    <string name="foto_de_perfil">Foto de perfil</string>
+    <string name="cambiar_foto">CAMBIAR FOTO</string>
+    <string name="cambiar_contrase_a">CAMBIAR CONTRASEÑA</string>
+    <string name="guardar_cambios">GUARDAR CAMBIOS</string>
+    <string name="borrar_cuenta">BORRAR CUENTA</string>
+    <string name="confirmacionBorrar">Esta acción borrará tus datos, ¿estás seguro?</string>
+    <string name="cancelar">Cancelar</string>
+    <string name="historial_de_calificaciones">Historial de calificaciones</string>
+    <string name="qu_profes_has_calificado">¿Qué profes has calificado?</string>
+    <string name="ayuda_y_soporte">Ayuda y Soporte</string>
+    <string name="faq_t_rminos_y_condiciones">FAQ, Términos y condiciones</string>
+    <string name="privacidad">Privacidad</string>
+    <string name="perfil_an_nimo_visibilidad">Perfil Anónimo, Visibilidad&#8230;</string>
+    <string name="notificaciones">Notificaciones</string>
+    <string name="alertas_y_novedades">Alertas y novedades</string>
+    <string name="cerrar_sesi_n">CERRAR SESIÓN</string>
+    <string name="rese_a_no_encontrada">Reseña no encontrada</string>
+    <string name="ver_calificaci_n">VER CALIFICACIÓN</string>
+    <string name="filtrar">FILTRAR</string>
+    <string name="texto_calificaciones">Aquí puedes ver todos los profes que has calificado para llevar un seguimiento de tus favoritos</string>
+    <string name="por">Por:</string>
+    <string name="arroba">:@</string>
+    <string name="ver_rese_a">VER RESEÑA</string>
+    <string name="comentarios_m_s_relevantes">Comentarios más relevantes</string>
+    <string name="su_cuenta_ha_sido_creada_con_exito">Su cuenta ha sido creada con éxito</string>
+    <string name="eliminar_cuenta">Eliminar cuenta</string>
+    <string name="ingresa_tu_contrase_a_para_confirmar">Ingresa tu contraseña para confirmar</string>
+    <string name="eliminar">Eliminar</string>
+    <string name="guardar">Guardar</string>
+    <string name="deseas_guardar_los_cambios">¿Deseas guardar los cambios?</string>
+    <string name="editar_rese_a">Editar Reseña</string>
+    <string name="calificaci_n">Calificación</string>
+    <string name="tu_opini_n_sobre_el_profesor">Tu opinión sobre el profesor</string>
+    <string name="crear_rese_a">Crear Reseña</string>
+    <string name="buscar_profesor">Buscar Profesor</string>
+    <string name="seleccionar_materia">Seleccionar Materia</string>
+    <string name="publicar_rese_a">Publicar Reseña</string>
+    <string name="ajustes">Ajustes</string>
+    <string name="configuraci_n_de_la_aplicaci_n">Configuración de la aplicación</string>
+
+    <string name="cuenta_creada_verificar">¡Cuenta creada! Por favor, verifica tu correo.</string>
+    <string name="respondiendo_a">Respondiendo a @%1$s</string>
+    <string name="respuestas_mas_relevantes">Respuestas más relevantes</string>
+    <string name="likes_count">%1$d Me gusta</string>
+    <string name="editado">Editado</string>
+    <string name="respuestas_count">%1$d Respuestas</string>
+    <string name="no_hay_usuarios">No hay usuarios aún</string>
+    <string name="perfil_privado">Perfil privado</string>
+    <string name="perfil_privado_desc_long">Este usuario ha configurado su perfil como privado.</string>
+    <string name="resenas_ocultas">Este usuario ha ocultado sus reseñas.</string>
+    <string name="sin_resenas">Sin reseñas aún</string>
+    <string name="resenas">Reseñas</string>
+    <string name="no_sigues_a_nadie">Aún no sigues a nadie</string>
+    <string name="editar_perfil">Editar perfil</string>
+    <string name="por_usuario">Por: @%1$s</string>
+    <string name="editar_comentario">Editar Comentario</string>
+    <string name="generado_por_ia">Generado por %1$s</string>
+    <string name="analizando_resenas">Analizando reseñas&#8230;</string>
+    <string name="resumen_ia">Resumen de IA</string>
+    <string name="resenas_alumnos">Reseñas de alumnos</string>
+    <string name="comentario">Comentario</string>
+    <string name="ver_rese_a_completa">Ver reseña completa</string>
+    <string name="profesor">Profesor</string>
+    <string name="materia">Materia</string>
+    <string name="filtrar_marcadores">Filtrar marcadores</string>
+    <string name="profesor_label">Profesor: %1$s</string>
+    <string name="reintentar">Reintentar</string>
+    <string name="actualizar">Actualizar</string>
+    <string name="markers_count_today">%1$d reseñas hoy</string>
+    <string name="markers_count_filtered">%1$d de %2$d reseñas</string>
+    <string name="controles_mapa">Controles del mapa</string>
+    <string name="mi_ubicacion">Mi ubicación</string>
+    <string name="acercar">Acercar</string>
+    <string name="alejar">Alejar</string>
+    <string name="cerrar">Cerrar</string>
+    <string name="limpiar_todo">Limpiar todo</string>
+    <string name="responder">Responder</string>
+    <string name="compartir">Compartir</string>
+    <string name="escribe_tu_comentario">Escribe tu comentario&#8230;</string>
+    <string name="comentario_de_share">Comentario de @%1$s</string>
+    <string name="visto_en_tuprofe">Visto en TuProfe</string>
+    <string name="seguidores">Seguidores</string>
+    <string name="siguiendo">Siguiendo</string>
+    <string name="para_ti">Para ti</string>
+    <string name="seguir">Seguir</string>
+    <string name="soporte_tuprofe_subject">Soporte TuProfe</string>
+
+    <!-- Help and Support -->
+    <string name="faq">Preguntas frecuentes</string>
+    <string name="faq_q1">¿Cómo funciona TuProfe?</string>
+    <string name="faq_a1">TuProfe es una plataforma donde los estudiantes pueden calificar y dejar reseñas sobre sus profesores, ayudando a la comunidad a elegir mejor sus cursos.</string>
+    <string name="faq_q2">¿Cómo dejo una reseña?</string>
+    <string name="faq_a2">Busca al profesor en el buscador, entra a su perfil y toca el botón \"Calificar\". Completa el formulario y publica tu reseña.</string>
+    <string name="faq_q3">¿Puedo editar o eliminar mi reseña?</string>
+    <string name="faq_a3">Sí. Desde el historial de calificaciones puedes editar o eliminar tus reseñas publicadas en cualquier momento.</string>
+    <string name="faq_q4">¿Mis reseñas son anónimas?</string>
+    <string name="faq_a4">Las reseñas están asociadas a tu cuenta. Otros usuarios pueden ver tu nombre de usuario, por lo que no son completamente anónimas.</string>
+    <string name="terminos_y_condiciones">Términos y condiciones</string>
+    <string name="terminos_desc">Al usar TuProfe aceptas nuestros términos de servicio y política de privacidad.</string>
+    <string name="contacto_soporte">Contactar soporte</string>
+    <string name="version_app">Versión de la aplicación</string>
+
+    <!-- Settings - Privacy -->
+    <string name="perfil_anonimo">Perfil anónimo</string>
+    <string name="perfil_anonimo_desc">Tu nombre de usuario no aparecerá en las reseñas que publiques.</string>
+    <string name="perfil_publico">Perfil público</string>
+    <string name="perfil_publico_desc">Otros usuarios podrán visitar tu perfil y ver tu actividad.</string>
+    <string name="resenas_en_perfil">Mostrar reseñas en perfil</string>
+    <string name="resenas_en_perfil_desc">Tus reseñas serán visibles en tu perfil público.</string>
+    <string name="politica_privacidad">Política de privacidad</string>
+    <string name="politica_privacidad_desc">TuProfe protege tus datos de acuerdo con nuestra política de privacidad. Solo usamos tu información para mejorar la experiencia dentro de la aplicación.</string>
+
+    <!-- Notifications -->
+    <string name="likes_resenas">Likes en mis reseñas</string>
+    <string name="likes_resenas_desc">Recibe una notificación cuando alguien le dé like a tu reseña.</string>
+    <string name="comentarios_resenas">Comentarios en mis reseñas</string>
+    <string name="comentarios_resenas_desc">Recibe una notificación cuando alguien comente tu reseña.</string>
+    <string name="nuevos_seguidores">Nuevos seguidores</string>
+    <string name="nuevos_seguidores_desc">Recibe una notificación cuando alguien empiece a seguirte.</string>
+    <string name="activar_permisos">Activar notificaciones del sistema</string>
+    <string name="activar_permisos_desc">Permite que TuProfe envíe notificaciones en tu dispositivo.</string>
+    <string name="permiso_otorgado">Notificaciones activadas</string>
+
+    <!-- Language selector -->
+    <string name="idioma">Idioma</string>
+    <string name="idioma_desc">Elige tu idioma preferido</string>
+    <string name="idioma_sistema">Predeterminado del sistema</string>
+    <string name="idioma_espanol">Español</string>
+    <string name="idioma_ingles">Inglés</string>
+    <string name="idioma_frances">Francés</string>
+    <string name="idioma_portugues">Portugués</string>
+    <string name="idioma_aplicado">Idioma aplicado</string>
+
+    <!-- Notification channel -->
+    <string name="notif_channel_name">Notificaciones TuProfe</string>
+    <string name="notif_channel_desc">Notificaciones de likes, comentarios y seguidores</string>
+
+    <!-- Strings hardcodeados corregidos -->
+    <string name="por_usuario_label">Por: @%1$s</string>
+    <string name="anonimo">Anónimo</string>
+    <string name="buscar_tu_profe_favorito">Busca a tu profe favorito</string>
+    <string name="no_resultados_para">No se encontraron resultados\npara "%1$s"</string>
+    <string name="un_profesor_encontrado">1 profesor encontrado</string>
+    <string name="profesores_encontrados_count">%1$d profesores encontrados</string>
+    <string name="busca_a_tuprofe">Busca a TuProfe</string>
+</resources>
