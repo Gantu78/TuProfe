@@ -21,6 +21,7 @@ import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
@@ -135,7 +136,10 @@ private fun ProfessorList(
 
 @Composable
 private fun SearchResultsCount(count: Int, modifier: Modifier = Modifier) {
-    val label = if (count == 1) "1 profesor encontrado" else "$count profesores encontrados"
+    val label = if (count == 1)
+        stringResource(R.string.un_profesor_encontrado)
+    else
+        stringResource(R.string.profesores_encontrados_count, count)
     Text(
         text = label,
         fontSize = 13.sp,
@@ -241,11 +245,10 @@ private fun SearchLoadingState(modifier: Modifier = Modifier) {
 
 @Composable
 private fun SearchEmptyState(query: String, modifier: Modifier = Modifier) {
-    val message = if (query.isBlank()) {
-        "Busca a tu profe favorito"
-    } else {
-        "No se encontraron resultados\npara \"$query\""
-    }
+    val message = if (query.isBlank())
+        stringResource(R.string.buscar_tu_profe_favorito)
+    else
+        stringResource(R.string.no_resultados_para, query)
     Box(modifier = modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,

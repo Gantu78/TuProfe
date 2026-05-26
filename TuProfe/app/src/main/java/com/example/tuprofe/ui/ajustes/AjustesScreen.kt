@@ -4,17 +4,14 @@ import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.*
 import androidx.compose.ui.draw.alpha
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material.icons.filled.Person
-import androidx.compose.material.icons.filled.PersonOff
 import androidx.compose.material.icons.filled.Shield
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.material.icons.filled.VisibilityOff
-import com.example.tuprofe.data.repository.BlockedUser
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -98,46 +95,6 @@ fun AjustesScreen(
             }
 
             item {
-                HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant)
-                Spacer(Modifier.height(20.dp))
-            }
-
-            // ── Sección: Usuarios bloqueados ──────────────────────────────────
-            item {
-                SectionLabel("Usuarios bloqueados")
-                Spacer(Modifier.height(8.dp))
-            }
-
-            if (state.isLoadingBlocked) {
-                item {
-                    Box(
-                        modifier = Modifier.fillMaxWidth().padding(vertical = 12.dp),
-                        contentAlignment = Alignment.Center
-                    ) {
-                        CircularProgressIndicator(
-                            color = colorResource(R.color.verdetp),
-                            modifier = Modifier.size(28.dp)
-                        )
-                    }
-                }
-            } else if (state.blockedUsers.isEmpty()) {
-                item {
-                    PrivacyInfoCard(
-                        icon = Icons.Default.PersonOff,
-                        text = "No has bloqueado a ningún usuario"
-                    )
-                }
-            } else {
-                items(state.blockedUsers, key = { it.userId }) { user ->
-                    BlockedUserCard(
-                        user = user,
-                        onUnblock = { viewModel.unblockUser(user.userId) }
-                    )
-                }
-            }
-
-            item {
-                Spacer(Modifier.height(20.dp))
                 HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant)
                 Spacer(Modifier.height(20.dp))
             }
@@ -260,51 +217,6 @@ private fun PrivacyToggleItem(
                     checkedTrackColor = colorResource(R.color.verdetp)
                 )
             )
-        }
-    }
-}
-
-@Composable
-private fun BlockedUserCard(user: BlockedUser, onUnblock: () -> Unit) {
-    Card(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(vertical = 6.dp),
-        shape = RoundedCornerShape(20.dp),
-        border = BorderStroke(1.5.dp, colorResource(R.color.BordeTuProfe)),
-        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)
-    ) {
-        Row(
-            modifier = Modifier
-                .padding(horizontal = 20.dp, vertical = 12.dp)
-                .fillMaxWidth(),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Icon(
-                imageVector = Icons.Default.Person,
-                contentDescription = null,
-                tint = colorResource(R.color.verdetp),
-                modifier = Modifier.size(28.dp)
-            )
-            Spacer(Modifier.width(16.dp))
-            Text(
-                text = user.username,
-                fontWeight = FontWeight.Bold,
-                fontSize = 15.sp,
-                modifier = Modifier.weight(1f)
-            )
-            OutlinedButton(
-                onClick = onUnblock,
-                shape = RoundedCornerShape(12.dp),
-                border = BorderStroke(1.dp, MaterialTheme.colorScheme.error),
-                contentPadding = PaddingValues(horizontal = 12.dp, vertical = 6.dp)
-            ) {
-                Text(
-                    text = "Desbloquear",
-                    color = MaterialTheme.colorScheme.error,
-                    fontSize = 13.sp
-                )
-            }
         }
     }
 }

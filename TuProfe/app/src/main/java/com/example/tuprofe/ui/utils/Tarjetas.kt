@@ -138,8 +138,8 @@ fun ProfileHeaderCard(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Row(horizontalArrangement = Arrangement.spacedBy(24.dp)) {
-                        ProfileStat(label = "Seguidores", count = followersCount!!, onClick = onFollowersClick)
-                        ProfileStat(label = "Siguiendo", count = followingCount!!, onClick = onFollowingClick)
+                        ProfileStat(label = stringResource(R.string.seguidores), count = followersCount!!, onClick = onFollowersClick)
+                        ProfileStat(label = stringResource(R.string.siguiendo), count = followingCount!!, onClick = onFollowingClick)
                     }
                     OutlinedButton(
                         onClick = onEditClick!!,
@@ -148,7 +148,7 @@ fun ProfileHeaderCard(
                         modifier = Modifier.testTag("profileCard")
                     ) {
                         Text(
-                            text = "Editar perfil",
+                            text = stringResource(R.string.editar_perfil),
                             color = colorResource(R.color.verdetp),
                             fontSize = 13.sp,
                             fontWeight = FontWeight.Medium
@@ -195,7 +195,7 @@ fun Resena(
     ) {
         TuProfeCardHeader(
             profeName = reviewInfo.profesor.nombreProfe,
-            userName = if (reviewInfo.usuario.perfilAnonimo) "Anónimo" else reviewInfo.usuario.nombreUsu,
+            userName = if (reviewInfo.usuario.perfilAnonimo) stringResource(R.string.anonimo) else reviewInfo.usuario.nombreUsu,
             carrera = reviewInfo.materia.nombreMateria,
             imageUrl = reviewInfo.profesor.imageprofeUrl,
             onProfessorClick = onProfileClick,
@@ -279,7 +279,7 @@ fun TuProfeCardHeader(
                 Spacer(modifier = Modifier.width(8.dp))
 
                 Text(
-                    text = "Por: @$userName",
+                    text = stringResource(R.string.por_usuario_label, userName),
                     fontSize = 12.sp,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                     maxLines = 1,
@@ -409,7 +409,7 @@ fun TuProfeCardBody(
                     color = colorResource(R.color.verdetp).copy(alpha = 0.12f)
                 ) {
                     Text(
-                        text = "Editado",
+                        text = stringResource(R.string.editado),
                         fontSize = 11.sp,
                         color = colorResource(R.color.verdetp),
                         modifier = Modifier.padding(horizontal = 6.dp, vertical = 2.dp)

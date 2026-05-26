@@ -72,7 +72,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 
-private const val MAP_ID_LIGHT = "bf3da9be2a1ab1b22986850b"
+private const val MAP_ID_LIGHT = "4aec427e39b392623bfaa491"
 
 @SuppressLint("MissingPermission")
 @Composable

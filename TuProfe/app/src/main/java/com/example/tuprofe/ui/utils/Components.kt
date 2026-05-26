@@ -231,7 +231,7 @@ fun SearchBar(
 query: String,
 onQueryChange: (String) -> Unit,
 modifier: Modifier = Modifier,
-placeholder: String = "Busca a TuProfe"
+placeholder: String = stringResource(R.string.busca_a_tuprofe)
 ) {
     OutlinedTextField(
         value = query,
