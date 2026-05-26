@@ -5,6 +5,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.tuprofe.data.Usuario
 import com.example.tuprofe.data.repository.AuthRepository
+import com.example.tuprofe.data.repository.ModerationCache
+import com.example.tuprofe.data.repository.ModerationRepository
 import com.example.tuprofe.data.repository.ReviewRepository
 import com.example.tuprofe.data.repository.UserRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -20,6 +22,7 @@ class UserProfileViewModel @Inject constructor(
     private val reviewRepository: ReviewRepository,
     private val userRepository: UserRepository,
     private val authRepository: AuthRepository,
+    private val moderationRepository: ModerationRepository,
     savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
@@ -42,12 +45,14 @@ class UserProfileViewModel @Inject constructor(
             val reviewsResult = reviewRepository.getUserReviews(userId)
 
             if (userResult.isSuccess && reviewsResult.isSuccess) {
+                val loadedUser = userResult.getOrNull() ?: Usuario("", "", "", "", "", 0, 0, false)
                 _uiState.update {
                     it.copy(
-                        user = userResult.getOrNull()?: Usuario("", "", "", "", "", 0, 0, false),
+                        user = loadedUser,
                         userReviews = reviewsResult.getOrNull() ?: emptyList(),
                         isLoading = false,
-                        errorMessage = null
+                        errorMessage = null,
+                        isBlockedByUser = loadedUser.usuarioId in ModerationCache.blockedByUserIds
                     )
                 }
             } else {
@@ -110,6 +115,30 @@ class UserProfileViewModel @Inject constructor(
 
     fun closeSheet() {
         _uiState.update { it.copy(showFollowersSheet = false, showFollowingSheet = false) }
+    }
+
+    fun openBlockConfirm() {
+        _uiState.update { it.copy(showBlockConfirm = true) }
+    }
+
+    fun dismissBlockConfirm() {
+        _uiState.update { it.copy(showBlockConfirm = false) }
+    }
+
+    fun confirmBlock() {
+        val currentUserId = authRepository.currentUser?.uid ?: return
+        val blockedId = _uiState.value.user.usuarioId
+        val wasFollowing = _uiState.value.user.followed
+        _uiState.update { it.copy(showBlockConfirm = false) }
+        viewModelScope.launch {
+            try {
+                moderationRepository.blockUser(currentUserId, blockedId)
+                if (wasFollowing) {
+                    userRepository.followOrUnfollow(currentUserId, blockedId)
+                }
+                _uiState.update { it.copy(navigateBack = true) }
+            } catch (_: Exception) {}
+        }
     }
 
     fun followOrUnfollowInList(targetUserId: String) {

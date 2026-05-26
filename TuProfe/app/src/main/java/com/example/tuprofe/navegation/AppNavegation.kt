@@ -440,6 +440,11 @@ fun AppNavegation(
             arguments = listOf(navArgument("reviewId"){type = NavType.StringType})
         ){ backStackEntry ->
             val detalleViewModel: DetalleViewModel = hiltViewModel()
+            val detalleUiState by detalleViewModel.uiState.collectAsState()
+
+            androidx.compose.runtime.LaunchedEffect(detalleUiState.navigateBack) {
+                if (detalleUiState.navigateBack) navController.popBackStack()
+            }
 
             DetalleScreen(
                 reviewId = backStackEntry.arguments?.getString("reviewId") ?: "",
@@ -461,6 +466,12 @@ fun AppNavegation(
             arguments = listOf(navArgument("commentId") { type = NavType.StringType })
         ) { backStackEntry ->
             val commentDetalleViewModel: CommentDetalleViewModel = hiltViewModel()
+            val commentDetalleUiState by commentDetalleViewModel.uiState.collectAsState()
+
+            androidx.compose.runtime.LaunchedEffect(commentDetalleUiState.navigateBack) {
+                if (commentDetalleUiState.navigateBack) navController.popBackStack()
+            }
+
             CommentDetalleScreen(
                 commentId = backStackEntry.arguments?.getString("commentId") ?: "",
                 viewModel = commentDetalleViewModel,
@@ -499,7 +510,8 @@ fun AppNavegation(
                 },
                 onReviewClick = { reviewId ->
                     navController.navigate(Screen.Detalle.createRoute(reviewId))
-                }
+                },
+                onNavigateBack = { navController.popBackStack() }
             )
         }
     }

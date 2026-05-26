@@ -4,8 +4,11 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.tuprofe.data.repository.AuthRepository
+import com.example.tuprofe.data.repository.ModerationCache
+import com.example.tuprofe.data.repository.ModerationRepository
 import com.example.tuprofe.data.repository.ReviewRepository
 import com.example.tuprofe.data.repository.UserRepository
+import com.example.tuprofe.data.repository.applyModerationFilter
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -19,11 +22,30 @@ import javax.inject.Inject
 class MainViewModel @Inject constructor(
     private val reviewRepository: ReviewRepository,
     private val userRepository: UserRepository,
-    private val authRepository: AuthRepository
+    private val authRepository: AuthRepository,
+    private val moderationRepository: ModerationRepository
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(MainState())
     val uiState: StateFlow<MainState> = _uiState.asStateFlow()
+
+    init {
+        val userId = authRepository.currentUser?.uid ?: ""
+        if (userId.isNotEmpty()) {
+            viewModelScope.launch { moderationRepository.loadCacheForUser(userId) }
+        }
+        viewModelScope.launch {
+            ModerationCache.updateEvent.collect {
+                _uiState.update { state ->
+                    val filtered = state.reviews.applyModerationFilter()
+                    state.copy(
+                        reviews = filtered,
+                        followingReviews = state.followingReviews.applyModerationFilter()
+                    )
+                }
+            }
+        }
+    }
 
     fun selectTab(index: Int) {
         _uiState.update { it.copy(selectedTab = index) }
@@ -83,9 +105,8 @@ class MainViewModel @Inject constructor(
         viewModelScope.launch {
             reviewRepository.getReviewsLive()
                 .catch { e -> _uiState.update { it.copy(errorMessage = e.message, isLoading = false) } }
-                .collect { reviews ->
-
-                    val reviews = reviews
+                .collect { rawReviews ->
+                    val reviews = rawReviews.applyModerationFilter()
                     Log.d("MainViewModel", "Reseñas obtenidas con éxito: ${reviews.size}")
 
                     val currentUserId = authRepository.currentUser?.uid ?: ""

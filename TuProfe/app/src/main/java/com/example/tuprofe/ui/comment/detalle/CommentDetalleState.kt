@@ -1,6 +1,7 @@
 package com.example.tuprofe.ui.comment.detalle
 
 import com.example.tuprofe.data.CommentInfo
+import com.example.tuprofe.data.ModerationAction
 
 data class CommentDetalleState(
     val selectedComment: CommentInfo? = null,
@@ -11,5 +12,8 @@ data class CommentDetalleState(
     val errorMessage: String? = null,
     val showReplySheet: Boolean = false,
     val replyText: String = "",
-    val isSubmittingReply: Boolean = false
+    val isSubmittingReply: Boolean = false,
+    val moderationDialog: ModerationAction? = null,
+    val moderationFeedback: String? = null,
+    val navigateBack: Boolean = false
 )

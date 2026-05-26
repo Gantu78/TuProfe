@@ -10,8 +10,10 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Block
 import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material.icons.outlined.Star
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -47,9 +49,15 @@ fun UserProfileScreen(
     viewModel: UserProfileViewModel = hiltViewModel(),
     onProfessorClick: (String) -> Unit,
     onUserClick: (String) -> Unit = {},
-    onReviewClick: (String) -> Unit = {}
+    onReviewClick: (String) -> Unit = {},
+    onNavigateBack: () -> Unit = {}
 ) {
     val uiState by viewModel.uiState.collectAsState()
+
+    LaunchedEffect(uiState.navigateBack) {
+        if (uiState.navigateBack) onNavigateBack()
+    }
+
     UserProfileContent(
         state = uiState,
         onProfessorClick = onProfessorClick,
@@ -60,6 +68,9 @@ fun UserProfileScreen(
         onFollowingClick = { viewModel.openFollowingSheet() },
         onDismissSheet = { viewModel.closeSheet() },
         onFollowInList = { viewModel.followOrUnfollowInList(it) },
+        onBlockClick = { viewModel.openBlockConfirm() },
+        onDismissBlock = { viewModel.dismissBlockConfirm() },
+        onConfirmBlock = { viewModel.confirmBlock() },
         modifier = modifier
     )
 }
@@ -76,6 +87,9 @@ fun UserProfileContent(
     onFollowingClick: () -> Unit = {},
     onDismissSheet: () -> Unit = {},
     onFollowInList: (String) -> Unit = {},
+    onBlockClick: () -> Unit = {},
+    onDismissBlock: () -> Unit = {},
+    onConfirmBlock: () -> Unit = {},
     modifier: Modifier = Modifier
 ) {
     Box(modifier = modifier.fillMaxSize().testTag("userProfileScreen")) {
@@ -85,10 +99,10 @@ fun UserProfileContent(
             state.errorMessage != null -> UserProfileErrorState(state.errorMessage)
             else -> {
                 val isOwn = state.currentUserId == state.user.usuarioId
-                if (!isOwn && !state.user.perfilPublico) {
-                    PrivateProfileMessage()
-                } else {
-                    UserProfileLoaded(
+                when {
+                    !isOwn && state.isBlockedByUser -> BlockedByUserMessage()
+                    !isOwn && !state.user.perfilPublico -> PrivateProfileMessage()
+                    else -> UserProfileLoaded(
                         user = state.user,
                         reviews = state.userReviews,
                         isOwnProfile = isOwn,
@@ -97,11 +111,30 @@ fun UserProfileContent(
                         onReviewClick = onReviewClick,
                         onFollowClick = onFollowClick,
                         onFollowersClick = onFollowersClick,
-                        onFollowingClick = onFollowingClick
+                        onFollowingClick = onFollowingClick,
+                        onBlockClick = onBlockClick
                     )
                 }
             }
         }
+    }
+
+    if (state.showBlockConfirm) {
+        AlertDialog(
+            onDismissRequest = onDismissBlock,
+            title = { Text("Bloquear usuario") },
+            text = {
+                Text("¿Bloquear a ${state.user.nombreUsu}? Ya no verás su contenido.")
+            },
+            confirmButton = {
+                TextButton(onClick = onConfirmBlock) {
+                    Text("Bloquear", color = MaterialTheme.colorScheme.error)
+                }
+            },
+            dismissButton = {
+                TextButton(onClick = onDismissBlock) { Text("Cancelar") }
+            }
+        )
     }
 
     val showSheet = state.showFollowersSheet || state.showFollowingSheet
@@ -169,7 +202,8 @@ private fun UserProfileLoaded(
     onReviewClick: (String) -> Unit = {},
     onFollowClick: () -> Unit,
     onFollowersClick: () -> Unit = {},
-    onFollowingClick: () -> Unit = {}
+    onFollowingClick: () -> Unit = {},
+    onBlockClick: () -> Unit = {}
 ) {
     LazyColumn(
         modifier = Modifier.fillMaxSize(),
@@ -181,7 +215,8 @@ private fun UserProfileLoaded(
                 isOwnProfile = isOwnProfile,
                 onFollowClick = onFollowClick,
                 onFollowersClick = onFollowersClick,
-                onFollowingClick = onFollowingClick
+                onFollowingClick = onFollowingClick,
+                onBlockClick = onBlockClick
             )
         }
 
@@ -223,6 +258,7 @@ private fun UserProfileHeader(
     onFollowClick: () -> Unit,
     onFollowersClick: () -> Unit = {},
     onFollowingClick: () -> Unit = {},
+    onBlockClick: () -> Unit = {},
     modifier: Modifier = Modifier
 ) {
     Column(
@@ -232,6 +268,21 @@ private fun UserProfileHeader(
             .padding(top = 28.dp, bottom = 8.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
+        if (!isOwnProfile) {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.Start
+            ) {
+                IconButton(onClick = onBlockClick) {
+                    Icon(
+                        imageVector = Icons.Default.Block,
+                        contentDescription = "Bloquear usuario",
+                        tint = colorResource(R.color.verdetp)
+                    )
+                }
+            }
+        }
+
         AsyncImage(
             model = user.imageprofeUrl,
             contentDescription = null,
@@ -475,6 +526,40 @@ private fun UserProfileErrorState(message: String, modifier: Modifier = Modifier
             textAlign = TextAlign.Center,
             modifier = Modifier.padding(24.dp)
         )
+    }
+}
+
+@Composable
+private fun BlockedByUserMessage(modifier: Modifier = Modifier) {
+    Box(
+        modifier = modifier
+            .fillMaxSize()
+            .padding(32.dp),
+        contentAlignment = Alignment.Center
+    ) {
+        Column(horizontalAlignment = Alignment.CenterHorizontally) {
+            Icon(
+                imageVector = Icons.Default.Block,
+                contentDescription = null,
+                modifier = Modifier.size(56.dp),
+                tint = colorResource(R.color.verdetp).copy(alpha = 0.45f)
+            )
+            Spacer(Modifier.height(16.dp))
+            Text(
+                text = "Este usuario te ha bloqueado",
+                fontFamily = BebasNeue,
+                fontSize = 24.sp,
+                color = colorResource(R.color.verdetp).copy(alpha = 0.65f),
+                textAlign = TextAlign.Center
+            )
+            Spacer(Modifier.height(8.dp))
+            Text(
+                text = "No puedes seguirlo ni ver sus reseñas.",
+                fontSize = 14.sp,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                textAlign = TextAlign.Center
+            )
+        }
     }
 }
 

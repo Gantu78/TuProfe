@@ -13,5 +13,8 @@ data class UserProfileState(
     val showFollowingSheet: Boolean = false,
     val followersList: List<Usuario> = emptyList(),
     val followingList: List<Usuario> = emptyList(),
-    val isLoadingList: Boolean = false
+    val isLoadingList: Boolean = false,
+    val showBlockConfirm: Boolean = false,
+    val navigateBack: Boolean = false,
+    val isBlockedByUser: Boolean = false
 )

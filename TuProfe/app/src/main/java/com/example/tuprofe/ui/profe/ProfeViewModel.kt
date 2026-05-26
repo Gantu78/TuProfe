@@ -13,6 +13,7 @@ import com.aallam.openai.client.OpenAIConfig
 import com.example.tuprofe.BuildConfig
 import com.example.tuprofe.data.repository.ProfessorRepository
 import com.example.tuprofe.data.repository.ReviewRepository
+import com.example.tuprofe.data.repository.applyModerationFilter
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -55,8 +56,10 @@ class ProfeViewModel @Inject constructor(
                 val professor = professorResult.getOrNull()
                 val allReviews = reviewsResult.getOrNull() ?: emptyList()
                 
-                // Filtrar reseñas para el profesor
-                val filteredReviews = allReviews.filter { it.profesor.profeId == profeId}
+                // Filtrar reseñas para el profesor + moderación
+                val filteredReviews = allReviews
+                    .filter { it.profesor.profeId == profeId }
+                    .applyModerationFilter()
 
                 val average = if (filteredReviews.isNotEmpty()) {
                     val raw = filteredReviews.map { it.rating }.average()

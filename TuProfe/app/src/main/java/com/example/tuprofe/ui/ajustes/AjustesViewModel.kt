@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.tuprofe.data.repository.AuthRepository
+import com.example.tuprofe.data.repository.ModerationRepository
 import com.example.tuprofe.data.repository.UserRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
@@ -18,7 +19,8 @@ import javax.inject.Inject
 class AjustesViewModel @Inject constructor(
     @ApplicationContext private val context: Context,
     private val userRepository: UserRepository,
-    private val authRepository: AuthRepository
+    private val authRepository: AuthRepository,
+    private val moderationRepository: ModerationRepository
 ) : ViewModel() {
 
     private val prefs = context.getSharedPreferences("ajustes_privacidad_prefs", Context.MODE_PRIVATE)
@@ -34,6 +36,28 @@ class AjustesViewModel @Inject constructor(
 
     init {
         loadFromFirestore()
+        loadBlockedUsers()
+    }
+
+    fun loadBlockedUsers() {
+        val userId = authRepository.currentUser?.uid ?: return
+        viewModelScope.launch {
+            _uiState.update { it.copy(isLoadingBlocked = true) }
+            val list = try { moderationRepository.getBlockedUsers(userId) } catch (_: Exception) { emptyList() }
+            _uiState.update { it.copy(blockedUsers = list, isLoadingBlocked = false) }
+        }
+    }
+
+    fun unblockUser(blockedId: String) {
+        val userId = authRepository.currentUser?.uid ?: return
+        viewModelScope.launch {
+            try {
+                moderationRepository.unblockUser(userId, blockedId)
+                _uiState.update { state ->
+                    state.copy(blockedUsers = state.blockedUsers.filter { it.userId != blockedId })
+                }
+            } catch (_: Exception) {}
+        }
     }
 
     private fun loadFromFirestore() {

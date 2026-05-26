@@ -2,8 +2,10 @@ package com.example.tuprofe.ui.comment.detalle
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.tuprofe.data.ModerationAction
 import com.example.tuprofe.data.repository.AuthRepository
 import com.example.tuprofe.data.repository.CommentRepository
+import com.example.tuprofe.data.repository.ModerationRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -15,7 +17,8 @@ import javax.inject.Inject
 @HiltViewModel
 class CommentDetalleViewModel @Inject constructor(
     private val commentRepository: CommentRepository,
-    private val authRepository: AuthRepository
+    private val authRepository: AuthRepository,
+    private val moderationRepository: ModerationRepository
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(CommentDetalleState())
@@ -81,6 +84,44 @@ class CommentDetalleViewModel @Inject constructor(
                         )
                     }
                 }
+            }
+        }
+    }
+
+    fun openModerationDialog(action: ModerationAction) {
+        _uiState.update { it.copy(moderationDialog = action) }
+    }
+
+    fun dismissModerationDialog() {
+        _uiState.update { it.copy(moderationDialog = null) }
+    }
+
+    fun clearModerationFeedback() {
+        _uiState.update { it.copy(moderationFeedback = null) }
+    }
+
+    fun confirmModeration() {
+        val action = _uiState.value.moderationDialog ?: return
+        val userId = _uiState.value.currentUserId
+        _uiState.update { it.copy(moderationDialog = null) }
+        viewModelScope.launch {
+            try {
+                when (action) {
+                    is ModerationAction.Report -> {
+                        moderationRepository.report(userId, action.targetId, action.targetType)
+                        _uiState.update { it.copy(moderationFeedback = "Comentario reportado") }
+                    }
+                    is ModerationAction.Block -> {
+                        moderationRepository.blockUser(userId, action.authorId)
+                        _uiState.update { it.copy(navigateBack = true) }
+                    }
+                    is ModerationAction.Mute -> {
+                        moderationRepository.mute(userId, action.targetId, action.targetType)
+                        _uiState.update { it.copy(navigateBack = true) }
+                    }
+                }
+            } catch (e: Exception) {
+                _uiState.update { it.copy(moderationFeedback = "Error al procesar la solicitud") }
             }
         }
     }

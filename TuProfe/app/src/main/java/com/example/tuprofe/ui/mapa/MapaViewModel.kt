@@ -3,6 +3,9 @@ package com.example.tuprofe.ui.mapa
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.tuprofe.data.ReviewMapMarker
+import com.example.tuprofe.data.repository.ModerationCache
+import com.example.tuprofe.data.repository.ModerationRepository
+import com.example.tuprofe.data.repository.applyModerationFilter
 import com.example.tuprofe.data.repository.ReviewRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -15,13 +18,21 @@ import javax.inject.Inject
 
 @HiltViewModel
 class MapaViewModel @Inject constructor(
-    private val reviewRepository: ReviewRepository
+    private val reviewRepository: ReviewRepository,
+    private val moderationRepository: ModerationRepository
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(MapaState())
     val uiState: StateFlow<MapaState> = _uiState.asStateFlow()
 
     init {
+        viewModelScope.launch {
+            ModerationCache.updateEvent.collect {
+                _uiState.update { state ->
+                    state.copy(markers = state.allMarkers.applyModerationFilter())
+                }
+            }
+        }
         loadMarkers()
     }
 
@@ -93,7 +104,8 @@ class MapaViewModel @Inject constructor(
         viewModelScope.launch {
             _uiState.update { it.copy(isLoading = true, error = null) }
             reviewRepository.getMapMarkers(stars, profesores, materias).fold(
-                onSuccess = { markers ->
+                onSuccess = { rawMarkers ->
+                    val markers = rawMarkers.applyModerationFilter()
                     _uiState.update { state ->
                         state.copy(
                             isLoading = false,

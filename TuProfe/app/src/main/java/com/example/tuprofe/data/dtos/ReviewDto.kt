@@ -53,7 +53,8 @@ fun ReviewDto.toReviewMapMarker(): ReviewMapMarker? {
         latitude        = latitude ?: return null,
         longitude       = longitude ?: return null,
         materia         = materia ?: "",
-        profesorFotoUrl = professor?.foto
+        profesorFotoUrl = professor?.foto,
+        authorUserId    = userId ?: user?.id ?: ""
     )
 }
 

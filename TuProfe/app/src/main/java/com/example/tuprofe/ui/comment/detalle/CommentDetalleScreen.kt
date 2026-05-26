@@ -16,9 +16,11 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.Comment
+import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.filled.ThumbUp
 import androidx.compose.material.icons.outlined.Share
 import androidx.compose.material.icons.outlined.ThumbUp
+import com.example.tuprofe.data.ModerationAction
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -65,6 +67,41 @@ fun CommentDetalleScreen(
         }
         lifecycleOwner.lifecycle.addObserver(observer)
         onDispose { lifecycleOwner.lifecycle.removeObserver(observer) }
+    }
+
+    uiState.moderationDialog?.let { action ->
+        val (title, message) = when (action) {
+            is ModerationAction.Report -> "¿Reportar comentario?" to "Se enviará un reporte a los administradores."
+            is ModerationAction.Block -> "¿Bloquear a @${action.authorName}?" to "Ya no verás su contenido."
+            is ModerationAction.Mute -> "¿Silenciar comentario?" to "No aparecerá en tu feed."
+        }
+        AlertDialog(
+            onDismissRequest = { viewModel.dismissModerationDialog() },
+            title = { Text(title) },
+            text = { Text(message) },
+            confirmButton = {
+                TextButton(onClick = { viewModel.confirmModeration() }) {
+                    Text("Confirmar", color = colorResource(R.color.verdetp))
+                }
+            },
+            dismissButton = {
+                TextButton(onClick = { viewModel.dismissModerationDialog() }) {
+                    Text("Cancelar")
+                }
+            }
+        )
+    }
+
+    uiState.moderationFeedback?.let { feedback ->
+        AlertDialog(
+            onDismissRequest = { viewModel.clearModerationFeedback() },
+            title = { Text(feedback) },
+            confirmButton = {
+                TextButton(onClick = { viewModel.clearModerationFeedback() }) {
+                    Text("OK", color = colorResource(R.color.verdetp))
+                }
+            }
+        )
     }
 
     if (uiState.showReplySheet) {
@@ -115,6 +152,21 @@ fun CommentDetalleScreen(
                                         putExtra(Intent.EXTRA_TEXT, text)
                                     }
                                     context.startActivity(Intent.createChooser(intent, null))
+                                },
+                                onReport = {
+                                    viewModel.openModerationDialog(
+                                        ModerationAction.Report(comment.commentId, "comment", comment.usuario.usuarioId)
+                                    )
+                                },
+                                onBlock = {
+                                    viewModel.openModerationDialog(
+                                        ModerationAction.Block(comment.usuario.usuarioId, comment.usuario.nombreUsu)
+                                    )
+                                },
+                                onMute = {
+                                    viewModel.openModerationDialog(
+                                        ModerationAction.Mute(comment.commentId, "comment")
+                                    )
                                 }
                             )
                             Spacer(modifier = Modifier.height(28.dp))
@@ -151,6 +203,9 @@ private fun CommentMainCard(
     onReply: () -> Unit,
     onShare: () -> Unit,
     onUserClick: () -> Unit,
+    onReport: () -> Unit,
+    onBlock: () -> Unit,
+    onMute: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     Card(
@@ -170,7 +225,10 @@ private fun CommentMainCard(
                 isLiked = comment.liked,
                 onLike = onLike,
                 onReply = onReply,
-                onShare = onShare
+                onShare = onShare,
+                onReport = onReport,
+                onBlock = onBlock,
+                onMute = onMute
             )
         }
     }
@@ -265,6 +323,9 @@ fun CommentActionBar(
     onLike: () -> Unit,
     onReply: () -> Unit,
     onShare: () -> Unit,
+    onReport: () -> Unit,
+    onBlock: () -> Unit,
+    onMute: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     Row(
@@ -305,6 +366,31 @@ fun CommentActionBar(
                 contentDescription = "Compartir",
                 tint = colorResource(R.color.verdetp)
             )
+        }
+
+        Box {
+            var expanded by remember { mutableStateOf(false) }
+            IconButton(onClick = { expanded = true }) {
+                Icon(
+                    imageVector = Icons.Filled.MoreVert,
+                    contentDescription = "Más opciones",
+                    tint = colorResource(R.color.verdetp)
+                )
+            }
+            DropdownMenu(expanded = expanded, onDismissRequest = { expanded = false }) {
+                DropdownMenuItem(
+                    text = { Text("Reportar") },
+                    onClick = { expanded = false; onReport() }
+                )
+                DropdownMenuItem(
+                    text = { Text("Bloquear perfil") },
+                    onClick = { expanded = false; onBlock() }
+                )
+                DropdownMenuItem(
+                    text = { Text("Silenciar") },
+                    onClick = { expanded = false; onMute() }
+                )
+            }
         }
     }
 }

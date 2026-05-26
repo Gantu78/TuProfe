@@ -14,9 +14,11 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.Comment
+import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.filled.ThumbUp
 import androidx.compose.material.icons.outlined.Share
 import androidx.compose.material.icons.outlined.ThumbUp
+import com.example.tuprofe.data.ModerationAction
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -64,6 +66,41 @@ fun DetalleScreen(
         }
         lifecycleOwner.lifecycle.addObserver(observer)
         onDispose { lifecycleOwner.lifecycle.removeObserver(observer) }
+    }
+
+    uiState.moderationDialog?.let { action ->
+        val (title, message) = when (action) {
+            is ModerationAction.Report -> "¿Reportar reseña?" to "Se enviará un reporte a los administradores."
+            is ModerationAction.Block -> "¿Bloquear a @${action.authorName}?" to "Ya no verás su contenido."
+            is ModerationAction.Mute -> "¿Silenciar reseña?" to "No aparecerá en tu feed."
+        }
+        AlertDialog(
+            onDismissRequest = { detalleViewModel.dismissModerationDialog() },
+            title = { Text(title) },
+            text = { Text(message) },
+            confirmButton = {
+                TextButton(onClick = { detalleViewModel.confirmModeration() }) {
+                    Text("Confirmar", color = colorResource(R.color.verdetp))
+                }
+            },
+            dismissButton = {
+                TextButton(onClick = { detalleViewModel.dismissModerationDialog() }) {
+                    Text("Cancelar")
+                }
+            }
+        )
+    }
+
+    uiState.moderationFeedback?.let { feedback ->
+        AlertDialog(
+            onDismissRequest = { detalleViewModel.clearModerationFeedback() },
+            title = { Text(feedback) },
+            confirmButton = {
+                TextButton(onClick = { detalleViewModel.clearModerationFeedback() }) {
+                    Text("OK", color = colorResource(R.color.verdetp))
+                }
+            }
+        )
     }
 
     if (uiState.showCommentSheet) {
@@ -221,7 +258,22 @@ private fun ReviewCard(
                 },
                 onComment = onComment,
                 onShare = onShare,
-                isLiked = uiState.selectedReview?.liked ?: false
+                isLiked = uiState.selectedReview?.liked ?: false,
+                onReport = {
+                    detalleViewModel.openModerationDialog(
+                        ModerationAction.Report(reviewId, "review", review.usuario.usuarioId)
+                    )
+                },
+                onBlock = {
+                    detalleViewModel.openModerationDialog(
+                        ModerationAction.Block(review.usuario.usuarioId, review.usuario.nombreUsu)
+                    )
+                },
+                onMute = {
+                    detalleViewModel.openModerationDialog(
+                        ModerationAction.Mute(reviewId, "review")
+                    )
+                }
             )
         }
     }
@@ -280,7 +332,10 @@ fun ReviewActionBar(
     onLike: () -> Unit,
     onComment: () -> Unit,
     onShare: () -> Unit,
-    isLiked: Boolean
+    isLiked: Boolean,
+    onReport: () -> Unit,
+    onBlock: () -> Unit,
+    onMute: () -> Unit
 ) {
     Row(
         modifier = Modifier
@@ -330,6 +385,31 @@ fun ReviewActionBar(
                 contentDescription = "Share",
                 tint = colorResource(R.color.verdetp)
             )
+        }
+
+        Box {
+            var expanded by remember { mutableStateOf(false) }
+            IconButton(onClick = { expanded = true }) {
+                Icon(
+                    imageVector = Icons.Filled.MoreVert,
+                    contentDescription = "Más opciones",
+                    tint = colorResource(R.color.verdetp)
+                )
+            }
+            DropdownMenu(expanded = expanded, onDismissRequest = { expanded = false }) {
+                DropdownMenuItem(
+                    text = { Text("Reportar") },
+                    onClick = { expanded = false; onReport() }
+                )
+                DropdownMenuItem(
+                    text = { Text("Bloquear perfil") },
+                    onClick = { expanded = false; onBlock() }
+                )
+                DropdownMenuItem(
+                    text = { Text("Silenciar") },
+                    onClick = { expanded = false; onMute() }
+                )
+            }
         }
     }
 }

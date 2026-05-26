@@ -1,6 +1,7 @@
 package com.example.tuprofe.ui.detalle
 
 import com.example.tuprofe.data.CommentInfo
+import com.example.tuprofe.data.ModerationAction
 import com.example.tuprofe.data.ReviewInfo
 
 data class DetalleState(
@@ -14,7 +15,9 @@ data class DetalleState(
     val navigateBack: Boolean = false,
     val showCommentSheet: Boolean = false,
     val commentText: String = "",
-    val isSubmittingComment: Boolean = false
+    val isSubmittingComment: Boolean = false,
+    val moderationDialog: ModerationAction? = null,
+    val moderationFeedback: String? = null
 ) {
     // Keep for backwards compat with preview
     val respuestas: List<CommentInfo> get() = comments

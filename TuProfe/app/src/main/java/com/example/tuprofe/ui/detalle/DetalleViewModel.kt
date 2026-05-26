@@ -3,8 +3,10 @@ package com.example.tuprofe.ui.detalle
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.tuprofe.data.ModerationAction
 import com.example.tuprofe.data.repository.AuthRepository
 import com.example.tuprofe.data.repository.CommentRepository
+import com.example.tuprofe.data.repository.ModerationRepository
 import com.example.tuprofe.data.repository.ReviewRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -18,7 +20,8 @@ import javax.inject.Inject
 class DetalleViewModel @Inject constructor(
     private val reviewRepository: ReviewRepository,
     private val commentRepository: CommentRepository,
-    private val authRepository: AuthRepository
+    private val authRepository: AuthRepository,
+    private val moderationRepository: ModerationRepository
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(DetalleState())
@@ -106,6 +109,44 @@ class DetalleViewModel @Inject constructor(
 
     fun onCommentTextChange(text: String) {
         _uiState.update { it.copy(commentText = text) }
+    }
+
+    fun openModerationDialog(action: ModerationAction) {
+        _uiState.update { it.copy(moderationDialog = action) }
+    }
+
+    fun dismissModerationDialog() {
+        _uiState.update { it.copy(moderationDialog = null) }
+    }
+
+    fun clearModerationFeedback() {
+        _uiState.update { it.copy(moderationFeedback = null) }
+    }
+
+    fun confirmModeration() {
+        val action = _uiState.value.moderationDialog ?: return
+        val userId = _uiState.value.currentUserId
+        _uiState.update { it.copy(moderationDialog = null) }
+        viewModelScope.launch {
+            try {
+                when (action) {
+                    is ModerationAction.Report -> {
+                        moderationRepository.report(userId, action.targetId, action.targetType)
+                        _uiState.update { it.copy(moderationFeedback = "Reseña reportada") }
+                    }
+                    is ModerationAction.Block -> {
+                        moderationRepository.blockUser(userId, action.authorId)
+                        _uiState.update { it.copy(navigateBack = true) }
+                    }
+                    is ModerationAction.Mute -> {
+                        moderationRepository.mute(userId, action.targetId, action.targetType)
+                        _uiState.update { it.copy(navigateBack = true) }
+                    }
+                }
+            } catch (e: Exception) {
+                _uiState.update { it.copy(moderationFeedback = "Error al procesar la solicitud") }
+            }
+        }
     }
 
     fun submitComment(reviewId: String) {
