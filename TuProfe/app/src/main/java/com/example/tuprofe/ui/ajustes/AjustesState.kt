@@ -6,8 +6,8 @@ data class AjustesState(
     val perfilAnonimo: Boolean = false,
     val perfilPublico: Boolean = true,
     val resenasEnPerfil: Boolean = true,
-    val selectedLanguage: String = "",
-    val languageChanged: Boolean = false,
     val blockedUsers: List<BlockedUser> = emptyList(),
-    val isLoadingBlocked: Boolean = false
+    val isLoadingBlocked: Boolean = false,
+    val selectedLanguage: String = "",
+    val languageChanged: Boolean = false
 )

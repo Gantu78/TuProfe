@@ -39,7 +39,7 @@ object AppModule {
     @Provides
     fun providesRetrofit(okHttpClient: OkHttpClient): Retrofit{
         return Retrofit.Builder()
-            .baseUrl("http://10.0.2.2:3000/")
+            .baseUrl("https://tuprofe-api.onrender.com")
             .client(okHttpClient)
             .addConverterFactory(GsonConverterFactory.create())
             .addConverterFactory(ScalarsConverterFactory.create())

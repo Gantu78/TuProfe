@@ -1,21 +1,24 @@
 package com.example.tuprofe.ui.ajustes
 
+import android.app.Activity
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.*
 import androidx.compose.ui.draw.alpha
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Info
+import androidx.compose.material.icons.filled.Language
 import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material.icons.filled.Person
+import androidx.compose.material.icons.filled.PersonOff
 import androidx.compose.material.icons.filled.Shield
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.material.icons.filled.VisibilityOff
+import com.example.tuprofe.data.repository.BlockedUser
 import androidx.compose.material3.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -29,6 +32,28 @@ import com.example.tuprofe.HeaderSection
 import com.example.tuprofe.R
 import com.example.tuprofe.ui.utils.BackgroundImage
 
+private val LANGUAGE_LABELS = mapOf(
+    ""   to R.string.idioma_sistema,
+    "es" to R.string.idioma_espanol,
+    "en" to R.string.idioma_ingles,
+    "fr" to R.string.idioma_frances,
+    "pt" to R.string.idioma_portugues,
+    "ar" to R.string.idioma_arabe,
+    "de" to R.string.idioma_aleman,
+    "it" to R.string.idioma_italiano,
+    "ja" to R.string.idioma_japones,
+    "ko" to R.string.idioma_coreano,
+    "ru" to R.string.idioma_ruso,
+    "hi" to R.string.idioma_hindi,
+    "th" to R.string.idioma_tailandes,
+    "vi" to R.string.idioma_vietnamita,
+    "zh" to R.string.idioma_chino,
+    "nl" to R.string.idioma_holandes,
+    "pl" to R.string.idioma_polaco,
+    "sv" to R.string.idioma_sueco,
+    "tr" to R.string.idioma_turco
+)
+
 @Composable
 fun AjustesScreen(
     viewModel: AjustesViewModel,
@@ -36,9 +61,17 @@ fun AjustesScreen(
     modifier: Modifier = Modifier
 ) {
     val context = LocalContext.current
+    val activity = context as? Activity
     val state by viewModel.uiState.collectAsState()
     val versionName = context.packageManager
         .getPackageInfo(context.packageName, 0).versionName
+
+    LaunchedEffect(state.languageChanged) {
+        if (state.languageChanged) {
+            viewModel.onLanguageChangeHandled()
+            activity?.recreate()
+        }
+    }
 
     Box(modifier = modifier.fillMaxSize()) {
         BackgroundImage()
@@ -90,6 +123,71 @@ fun AjustesScreen(
                     checked = state.resenasEnPerfil && state.perfilPublico,
                     enabled = state.perfilPublico,
                     onCheckedChange = { viewModel.toggleResenasEnPerfil() }
+                )
+                Spacer(Modifier.height(20.dp))
+            }
+
+            item {
+                HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant)
+                Spacer(Modifier.height(20.dp))
+            }
+
+            // ── Sección: Usuarios bloqueados ──────────────────────────────────
+            item {
+                SectionLabel("Usuarios bloqueados")
+                Spacer(Modifier.height(8.dp))
+            }
+
+            if (state.isLoadingBlocked) {
+                item {
+                    Box(
+                        modifier = Modifier.fillMaxWidth().padding(vertical = 12.dp),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        CircularProgressIndicator(
+                            color = colorResource(R.color.verdetp),
+                            modifier = Modifier.size(28.dp)
+                        )
+                    }
+                }
+            } else if (state.blockedUsers.isEmpty()) {
+                item {
+                    PrivacyInfoCard(
+                        icon = Icons.Default.PersonOff,
+                        text = "No has bloqueado a ningún usuario"
+                    )
+                }
+            } else {
+                items(state.blockedUsers, key = { it.userId }) { user ->
+                    BlockedUserCard(
+                        user = user,
+                        onUnblock = { viewModel.unblockUser(user.userId) }
+                    )
+                }
+            }
+
+            item {
+                Spacer(Modifier.height(20.dp))
+                HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant)
+                Spacer(Modifier.height(20.dp))
+            }
+
+            // ── Sección: Idioma ───────────────────────────────────────────────
+            item {
+                SectionLabel(stringResource(R.string.idioma))
+                Spacer(Modifier.height(4.dp))
+                Text(
+                    text = stringResource(R.string.idioma_desc),
+                    fontSize = 13.sp,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+                Spacer(Modifier.height(12.dp))
+            }
+
+            item {
+                LanguageSelectorCard(
+                    selectedCode = state.selectedLanguage,
+                    onLanguageSelected = { viewModel.setLanguage(it) }
                 )
                 Spacer(Modifier.height(20.dp))
             }
@@ -218,6 +316,123 @@ private fun PrivacyToggleItem(
                 )
             )
         }
+    }
+}
+
+@Composable
+private fun BlockedUserCard(user: BlockedUser, onUnblock: () -> Unit) {
+    Card(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(vertical = 6.dp),
+        shape = RoundedCornerShape(20.dp),
+        border = BorderStroke(1.5.dp, colorResource(R.color.BordeTuProfe)),
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)
+    ) {
+        Row(
+            modifier = Modifier
+                .padding(horizontal = 20.dp, vertical = 12.dp)
+                .fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Icon(
+                imageVector = Icons.Default.Person,
+                contentDescription = null,
+                tint = colorResource(R.color.verdetp),
+                modifier = Modifier.size(28.dp)
+            )
+            Spacer(Modifier.width(16.dp))
+            Text(
+                text = user.username,
+                fontWeight = FontWeight.Bold,
+                fontSize = 15.sp,
+                modifier = Modifier.weight(1f)
+            )
+            OutlinedButton(
+                onClick = onUnblock,
+                shape = RoundedCornerShape(12.dp),
+                border = BorderStroke(1.dp, MaterialTheme.colorScheme.error),
+                contentPadding = PaddingValues(horizontal = 12.dp, vertical = 6.dp)
+            ) {
+                Text(
+                    text = "Desbloquear",
+                    color = MaterialTheme.colorScheme.error,
+                    fontSize = 13.sp
+                )
+            }
+        }
+    }
+}
+
+@Composable
+private fun LanguageSelectorCard(
+    selectedCode: String,
+    onLanguageSelected: (String) -> Unit,
+    modifier: Modifier = Modifier
+) {
+    Card(
+        modifier = modifier.fillMaxWidth(),
+        shape = RoundedCornerShape(20.dp),
+        border = BorderStroke(1.5.dp, colorResource(R.color.BordeTuProfe)),
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)
+    ) {
+        Column(modifier = Modifier.padding(horizontal = 20.dp, vertical = 12.dp)) {
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Icon(
+                    imageVector = Icons.Default.Language,
+                    contentDescription = null,
+                    tint = colorResource(R.color.verdetp),
+                    modifier = Modifier.size(26.dp)
+                )
+                Spacer(Modifier.width(12.dp))
+                Text(
+                    text = stringResource(R.string.idioma),
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 15.sp
+                )
+            }
+            Spacer(Modifier.height(14.dp))
+            LANGUAGE_LABELS.entries.forEach { (code, labelRes) ->
+                val isSelected = selectedCode == code
+                LanguageOptionRow(
+                    label = stringResource(labelRes),
+                    selected = isSelected,
+                    onClick = { onLanguageSelected(code) }
+                )
+            }
+        }
+    }
+}
+
+@Composable
+private fun LanguageOptionRow(
+    label: String,
+    selected: Boolean,
+    onClick: () -> Unit
+) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(vertical = 4.dp),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        RadioButton(
+            selected = selected,
+            onClick = onClick,
+            colors = RadioButtonDefaults.colors(
+                selectedColor = colorResource(R.color.verdetp)
+            )
+        )
+        Spacer(Modifier.width(8.dp))
+        Text(
+            text = label,
+            fontSize = 14.sp,
+            fontWeight = if (selected) FontWeight.SemiBold else FontWeight.Normal,
+            color = if (selected)
+                colorResource(R.color.verdetp)
+            else
+                MaterialTheme.colorScheme.onSurface
+        )
     }
 }
 
