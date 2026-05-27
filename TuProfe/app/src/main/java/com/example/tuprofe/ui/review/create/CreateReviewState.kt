@@ -1,5 +1,6 @@
 package com.example.tuprofe.ui.review.create
 
+import android.net.Uri
 import com.example.tuprofe.data.Profesor
 
 data class CreateReviewState(
@@ -17,5 +18,7 @@ data class CreateReviewState(
     val error: String? = null,
     val isDropdownExpanded: Boolean = false,
     val latitude: Double? = null,
-    val longitude: Double? = null
+    val longitude: Double? = null,
+    val selectedImageUris: List<Uri> = emptyList(),
+    val isUploadingImages: Boolean = false
 )

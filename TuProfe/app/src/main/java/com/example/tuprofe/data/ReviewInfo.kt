@@ -11,5 +11,6 @@ data class ReviewInfo(
     val likes: Int,
     val commentsCount: Int = 0,
     val liked: Boolean = false,
-    val editado: Boolean = false
+    val editado: Boolean = false,
+    val imageUrls: List<String> = emptyList()
 )

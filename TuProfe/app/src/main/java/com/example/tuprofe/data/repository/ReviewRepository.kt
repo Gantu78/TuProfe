@@ -62,7 +62,7 @@ class ReviewRepository @Inject constructor(
         }
     }
 
-    suspend fun createReview(userId: String, professorId: String, content: String, rating: Int, materia: String, latitude: Double? = null, longitude: Double? = null): Result<Unit> {
+    suspend fun createReview(userId: String, professorId: String, content: String, rating: Int, materia: String, latitude: Double? = null, longitude: Double? = null, imageUrls: List<String> = emptyList()): Result<Unit> {
         return try {
 
             Log.d("ReviewRepo", "Buscando usuario: $userId")
@@ -99,7 +99,8 @@ class ReviewRepository @Inject constructor(
                 latitude = latitude,
                 longitude = longitude,
                 user =  createReviewUserDto,
-                professor = createReviewProfessorDto
+                professor = createReviewProfessorDto,
+                imageUrls = imageUrls.ifEmpty { null }
             )
             reviewRemoteDataSource.createReview(createReviewDto)
             Result.success(Unit)

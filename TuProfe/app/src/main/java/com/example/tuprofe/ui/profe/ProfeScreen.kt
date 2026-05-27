@@ -6,6 +6,7 @@ import androidx.compose.animation.fadeIn
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
@@ -247,6 +248,13 @@ fun ProfessorInfoCard(
     departamento: String = "",
     modifier: Modifier = Modifier
 ) {
+    var showImageViewer by remember { mutableStateOf(false) }
+    if (showImageViewer && !professorImageUrl.isNullOrEmpty()) {
+        com.example.tuprofe.ui.utils.FullScreenImageViewer(
+            imageUrl = professorImageUrl,
+            onDismiss = { showImageViewer = false }
+        )
+    }
     Card(
         modifier = modifier
             .fillMaxWidth()
@@ -272,7 +280,8 @@ fun ProfessorInfoCard(
                     .shadow(6.dp, CircleShape, clip = false)
                     .clip(CircleShape)
                     .background(MaterialTheme.colorScheme.surfaceVariant)
-                    .border(2.dp, MaterialTheme.colorScheme.outline.copy(alpha = 0.3f), CircleShape),
+                    .border(2.dp, MaterialTheme.colorScheme.outline.copy(alpha = 0.3f), CircleShape)
+                    .clickable(enabled = !professorImageUrl.isNullOrEmpty()) { showImageViewer = true },
                 contentScale = ContentScale.Crop
             )
             Spacer(modifier = Modifier.height(16.dp))

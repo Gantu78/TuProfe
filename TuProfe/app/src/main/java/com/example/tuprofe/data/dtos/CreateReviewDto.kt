@@ -19,7 +19,8 @@ data class CreateReviewDto(
     val latitude: Double? = null,
     val longitude: Double? = null,
     var user: CreateReviewUserDto? = null,
-    val professor: CreateReviewProfessorDto? = null
+    val professor: CreateReviewProfessorDto? = null,
+    val imageUrls: List<String>? = null
 )
 
 

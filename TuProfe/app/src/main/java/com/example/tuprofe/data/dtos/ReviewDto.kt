@@ -36,7 +36,8 @@ data class ReviewDto(
     val likesCount: Int,
     var liked: Boolean = false,
     val latitude: Double? = null,
-    val longitude: Double? = null
+    val longitude: Double? = null,
+    val imageUrls: List<String>? = null
 ){
     constructor(): this("", "", "", "", "", 0, 0, "", "", null, null, null, 0)
 }
@@ -94,6 +95,7 @@ fun ReviewDto.toReviewInfo(): ReviewInfo {
         likes = likesCount,
         commentsCount = comment ?: 0,
         liked = liked,
-        editado = !updatedAt.isNullOrEmpty()
+        editado = !updatedAt.isNullOrEmpty(),
+        imageUrls = imageUrls ?: emptyList()
     )
 }

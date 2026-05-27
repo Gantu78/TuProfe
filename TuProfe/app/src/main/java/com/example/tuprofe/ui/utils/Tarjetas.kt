@@ -9,9 +9,10 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.material3.*
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -32,9 +33,47 @@ import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.window.Dialog
+import androidx.compose.ui.window.DialogProperties
 import coil.compose.AsyncImage
 import com.example.tuprofe.R
 import com.example.tuprofe.data.ReviewInfo
+
+@Composable
+fun FullScreenImageViewer(imageUrl: String, onDismiss: () -> Unit) {
+    Dialog(
+        onDismissRequest = onDismiss,
+        properties = DialogProperties(usePlatformDefaultWidth = false)
+    ) {
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(Color.Black.copy(alpha = 0.95f))
+                .clickable(onClick = onDismiss),
+            contentAlignment = Alignment.Center
+        ) {
+            AsyncImage(
+                model = imageUrl,
+                contentDescription = null,
+                contentScale = ContentScale.Fit,
+                modifier = Modifier.fillMaxWidth()
+            )
+            IconButton(
+                onClick = onDismiss,
+                modifier = Modifier
+                    .align(Alignment.TopEnd)
+                    .padding(16.dp)
+            ) {
+                Icon(
+                    imageVector = Icons.Default.Close,
+                    contentDescription = "Cerrar",
+                    tint = Color.White,
+                    modifier = Modifier.size(28.dp)
+                )
+            }
+        }
+    }
+}
 
 @Composable
 fun ProfileHeaderCard(
@@ -51,6 +90,10 @@ fun ProfileHeaderCard(
     onFollowersClick: () -> Unit = {},
     onFollowingClick: () -> Unit = {}
 ) {
+    var showImageViewer by remember { mutableStateOf(false) }
+    if (showImageViewer && !imageUrl.isNullOrEmpty()) {
+        FullScreenImageViewer(imageUrl = imageUrl, onDismiss = { showImageViewer = false })
+    }
     val hasStats = followersCount != null && followingCount != null && onEditClick != null
     Card(
         modifier = modifier
@@ -83,7 +126,8 @@ fun ProfileHeaderCard(
                             2.dp,
                             MaterialTheme.colorScheme.outline.copy(alpha = 0.25f),
                             CircleShape
-                        ),
+                        )
+                        .clickable(enabled = !imageUrl.isNullOrEmpty()) { showImageViewer = true },
                     contentScale = ContentScale.Crop
                 )
 
@@ -181,6 +225,68 @@ private fun ProfileStat(label: String, count: Int, onClick: () -> Unit = {}) {
 }
 
 @Composable
+fun ReviewImageMosaic(
+    imageUrls: List<String>,
+    modifier: Modifier = Modifier
+) {
+    if (imageUrls.isEmpty()) return
+    var selectedUrl by remember { mutableStateOf<String?>(null) }
+    if (selectedUrl != null) {
+        FullScreenImageViewer(imageUrl = selectedUrl!!, onDismiss = { selectedUrl = null })
+    }
+    val cellShape = RoundedCornerShape(8.dp)
+    fun Modifier.imageCell(url: String) = this
+        .clip(cellShape)
+        .clickable { selectedUrl = url }
+
+    when (imageUrls.size) {
+        1 -> AsyncImage(
+            model = imageUrls[0], contentDescription = null,
+            contentScale = ContentScale.Crop,
+            modifier = modifier.fillMaxWidth().height(200.dp).imageCell(imageUrls[0])
+        )
+        2 -> Row(modifier = modifier.fillMaxWidth().height(160.dp), horizontalArrangement = Arrangement.spacedBy(2.dp)) {
+            imageUrls.forEach { url ->
+                AsyncImage(
+                    model = url, contentDescription = null,
+                    contentScale = ContentScale.Crop,
+                    modifier = Modifier.weight(1f).fillMaxHeight().imageCell(url)
+                )
+            }
+        }
+        3 -> Row(modifier = modifier.fillMaxWidth().height(160.dp), horizontalArrangement = Arrangement.spacedBy(2.dp)) {
+            AsyncImage(
+                model = imageUrls[0], contentDescription = null,
+                contentScale = ContentScale.Crop,
+                modifier = Modifier.weight(1f).fillMaxHeight().imageCell(imageUrls[0])
+            )
+            Column(modifier = Modifier.weight(1f).fillMaxHeight(), verticalArrangement = Arrangement.spacedBy(2.dp)) {
+                imageUrls.drop(1).forEach { url ->
+                    AsyncImage(
+                        model = url, contentDescription = null,
+                        contentScale = ContentScale.Crop,
+                        modifier = Modifier.weight(1f).fillMaxWidth().imageCell(url)
+                    )
+                }
+            }
+        }
+        else -> Column(modifier = modifier.fillMaxWidth(), verticalArrangement = Arrangement.spacedBy(2.dp)) {
+            listOf(imageUrls.take(2), imageUrls.drop(2).take(2)).forEach { row ->
+                Row(modifier = Modifier.fillMaxWidth().height(120.dp), horizontalArrangement = Arrangement.spacedBy(2.dp)) {
+                    row.forEach { url ->
+                        AsyncImage(
+                            model = url, contentDescription = null,
+                            contentScale = ContentScale.Crop,
+                            modifier = Modifier.weight(1f).fillMaxHeight().imageCell(url)
+                        )
+                    }
+                }
+            }
+        }
+    }
+}
+
+@Composable
 fun Resena(
     reviewInfo: ReviewInfo,
     modifier: Modifier = Modifier,
@@ -212,6 +318,10 @@ fun Resena(
             date = reviewInfo.time,
             editado = reviewInfo.editado
         )
+
+        if (reviewInfo.imageUrls.isNotEmpty()) {
+            ReviewImageMosaic(imageUrls = reviewInfo.imageUrls)
+        }
 
         ResenaCardActions(
             likes = reviewInfo.likes,
