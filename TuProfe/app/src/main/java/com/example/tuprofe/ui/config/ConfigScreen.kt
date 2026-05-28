@@ -121,7 +121,23 @@ fun ConfigScreen(
 
                     item { Spacer(modifier = Modifier.height(20.dp)) }
                     item {
-                        SuscripcionBanner(onClick = onSuscripcionClick)
+                        when {
+                            // Suscripción activa con más de 3 días → no mostrar nada
+                            state.subscriptionActive && (state.subscriptionDaysLeft ?: 0) > 3 -> { }
+
+                            // Suscripción por vencer (3 días o menos) → recordatorio
+                            state.subscriptionActive && (state.subscriptionDaysLeft ?: 0) <= 3 -> {
+                                RecordatorioVencimiento(
+                                    diasRestantes = state.subscriptionDaysLeft ?: 0,
+                                    onClick = onSuscripcionClick
+                                )
+                            }
+
+                            // Sin suscripción → banner normal
+                            else -> {
+                                SuscripcionBanner(onClick = onSuscripcionClick)
+                            }
+                        }
                     }
                     item {
                         AppButton(
@@ -291,6 +307,50 @@ fun ConfigBody(
 
     }
 
+}
+@Composable
+fun RecordatorioVencimiento(diasRestantes: Int, onClick: () -> Unit) {
+    Card(
+        onClick = onClick,
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 20.dp, vertical = 8.dp),
+        shape = RoundedCornerShape(20.dp),
+        colors = CardDefaults.cardColors(
+            containerColor = MaterialTheme.colorScheme.errorContainer
+        ),
+        elevation = CardDefaults.cardElevation(6.dp)
+    ) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 20.dp, vertical = 16.dp),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceBetween
+        ) {
+            Column(modifier = Modifier.weight(1f)) {
+                Text(
+                    text = if (diasRestantes == 0) "⚠️ Tu suscripción vence hoy"
+                    else "⚠️ Tu suscripción vence en $diasRestantes día${if (diasRestantes == 1) "" else "s"}",
+                    color = MaterialTheme.colorScheme.onErrorContainer,
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 15.sp
+                )
+                Spacer(Modifier.height(2.dp))
+                Text(
+                    text = "Renueva para no perder el acceso",
+                    color = MaterialTheme.colorScheme.onErrorContainer.copy(alpha = 0.85f),
+                    fontSize = 13.sp
+                )
+            }
+            Icon(
+                imageVector = Icons.Default.ChevronRight,
+                contentDescription = null,
+                tint = MaterialTheme.colorScheme.onErrorContainer,
+                modifier = Modifier.size(24.dp)
+            )
+        }
+    }
 }
 @Composable
 fun SuscripcionBanner(onClick: () -> Unit) {

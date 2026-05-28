@@ -1,5 +1,6 @@
 package com.example.tuprofe.ui.config
 
+import java.util.Date
 data class ConfigState(
     val username: String = "",
     val email: String = "",
@@ -13,5 +14,8 @@ data class ConfigState(
     val showFollowingSheet: Boolean = false,
     val followersList: List<com.example.tuprofe.data.Usuario> = emptyList(),
     val followingList: List<com.example.tuprofe.data.Usuario> = emptyList(),
-    val isLoadingList: Boolean = false
+    val isLoadingList: Boolean = false,
+    val subscriptionActive: Boolean = false,
+    val subscriptionEnd: Date? = null,
+    val subscriptionDaysLeft: Int? = null
 )

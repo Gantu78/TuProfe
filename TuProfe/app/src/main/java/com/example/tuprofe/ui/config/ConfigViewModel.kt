@@ -10,6 +10,8 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import com.google.firebase.firestore.FirebaseFirestore
+import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
 
 @HiltViewModel
@@ -46,6 +48,7 @@ class ConfigViewModel @Inject constructor(
             )
         }
         loadUserProfile()
+        loadSubscriptionStatus()
     }
 
     fun openFollowersSheet() {
@@ -96,7 +99,36 @@ class ConfigViewModel @Inject constructor(
             }
         }
     }
+    fun loadSubscriptionStatus() {
+        val userId = authRepository.currentUser?.uid ?: return
+        viewModelScope.launch {
+            try {
+                val doc = FirebaseFirestore.getInstance()
+                    .collection("users")
+                    .document(userId)
+                    .get()
+                    .await()
 
+                val active = doc.getBoolean("subscriptionActive") ?: false
+                val endDate = doc.getDate("subscriptionEnd")
+
+                val daysLeft = if (active && endDate != null) {
+                    val diff = endDate.time - System.currentTimeMillis()
+                    (diff / (1000 * 60 * 60 * 24)).toInt()
+                } else null
+
+                _uiState.update {
+                    it.copy(
+                        subscriptionActive = active && (daysLeft ?: -1) >= 0,
+                        subscriptionEnd = endDate,
+                        subscriptionDaysLeft = daysLeft
+                    )
+                }
+            } catch (e: Exception) {
+                // Si falla, asumimos sin suscripción
+            }
+        }
+    }
     fun loadUserProfile() {
         val userId = authRepository.currentUser?.uid
         if (userId != null) {
