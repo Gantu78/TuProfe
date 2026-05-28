@@ -174,4 +174,46 @@
     <!-- Notification channel -->
     <string name="notif_channel_name">TuProfe सूचना```### 10. हिन्दीएं</string>
     <string name="notif_channel_desc">लाइक, कमेंट और फॉलोअर्स के लिए सूचनाएं</string>
+
+    <!-- New strings from internationalization pass -->
+    <string name="confirmar">पुष्टि करें</string>
+    <string name="ok">ठीक है</string>
+    <string name="reportar">रिपोर्ट करें</string>
+    <string name="bloquear_perfil">प्रोफाइल ब्लॉक करें</string>
+    <string name="silenciar">म्यूट करें</string>
+    <string name="bloquear_usuario">उपयोगकर्ता ब्लॉक करें</string>
+    <string name="bloquear">ब्लॉक करें</string>
+    <string name="suscribirme_ahora">अभी सब्सक्राइब करें</string>
+    <string name="ahora_no">अभी नहीं</string>
+    <string name="plan_mensual">मासिक योजना</string>
+    <string name="reportar_resena_titulo">समीक्षा रिपोर्ट करें?</string>
+    <string name="reporte_admins">प्रशासकों को एक रिपोर्ट भेजी जाएगी।</string>
+    <string name="bloquear_a_usuario_titulo">@%1$s को ब्लॉक करें?</string>
+    <string name="ya_no_veras_contenido">आप उनकी सामग्री अब नहीं देखेंगे।</string>
+    <string name="silenciar_resena_titulo">समीक्षा म्यूट करें?</string>
+    <string name="no_aparecera_feed">यह आपके फ़ीड में नहीं दिखेगा।</string>
+    <string name="reportar_comentario_titulo">टिप्पणी रिपोर्ट करें?</string>
+    <string name="silenciar_comentario_titulo">टिप्पणी म्यूट करें?</string>
+    <string name="comentar">टिप्पणी करें</string>
+    <string name="desbloquear">अनब्लॉक करें</string>
+    <string name="usuarios_bloqueados">ब्लॉक किए गए उपयोगकर्ता</string>
+    <string name="cuenta_creada">खाता बनाया गया!</string>
+    <string name="aceptar">स्वीकार करें</string>
+    <string name="error_al_iniciar_sesion">साइन इन करने में त्रुटि</string>
+    <string name="por_mes">प्रति माह</string>
+    <string name="apoya_proyecto_funciones">प्रोजेक्ट को सपोर्ट करें और सभी सुविधाओं तक पहुंचें</string>
+    <string name="resenas_ilimitadas">✓ असीमित समीक्षाएं</string>
+    <string name="sin_anuncios">✓ कोई विज्ञापन नहीं</string>
+    <string name="acceso_prioritario">✓ प्राथमिकता एक्सेस</string>
+    <string name="suscripcion_vence_hoy">⚠️ आपकी सदस्यता आज समाप्त हो रही है</string>
+    <string name="suscripcion_vence_dias">⚠️ आपकी सदस्यता %1$d दिनों में समाप्त होगी</string>
+    <string name="renueva_acceso">एक्सेस न खोने के लिए नवीनीकृत करें</string>
+    <string name="ayudanos_mejorar">❤ हमें बेहतर होने में मदद करें</string>
+    <string name="apoya_tuprofe_precio">केवल $9,900/माह के लिए TuProfe को सपोर्ट करें</string>
+    <string name="calificacion">रेटिंग</string>
+    <string name="historial_vacio">आपने अभी तक कोई रेटिंग नहीं दी है</string>
+    <string name="sin_resenas_historial">आपके पास अभी तक कोई समीक्षा नहीं है</string>
+    <string name="sin_comentarios_historial">आपके पास अभी तक कोई टिप्पणी नहीं है</string>
+    <string name="error_al_subir_imagenes">छवियां अपलोड करने में त्रुटि</string>
+    <string name="error_al_publicar">प्रकाशन में त्रुटि</string>
 </resources>

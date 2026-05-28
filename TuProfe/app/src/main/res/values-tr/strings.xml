@@ -159,4 +159,46 @@
 
     <string name="notif_channel_name">TuProfe Bildirimleri</string>
     <string name="notif_channel_desc">Beğeniler, yorumlar ve takipçiler için bildirimler</string>
+
+    <!-- New strings from internationalization pass -->
+    <string name="confirmar">Onayla</string>
+    <string name="ok">Tamam</string>
+    <string name="reportar">Şikayet Et</string>
+    <string name="bloquear_perfil">Profili Engelle</string>
+    <string name="silenciar">Sessize Al</string>
+    <string name="bloquear_usuario">Kullanıcıyı Engelle</string>
+    <string name="bloquear">Engelle</string>
+    <string name="suscribirme_ahora">Şimdi Abone Ol</string>
+    <string name="ahora_no">Şimdi Değil</string>
+    <string name="plan_mensual">Aylık Plan</string>
+    <string name="reportar_resena_titulo">Yorumu Şikayet Et?</string>
+    <string name="reporte_admins">Yöneticilere bir rapor gönderilecek.</string>
+    <string name="bloquear_a_usuario_titulo">@%1$s Engelle?</string>
+    <string name="ya_no_veras_contenido">Artık onların içeriğini görmeyeceksin.</string>
+    <string name="silenciar_resena_titulo">Yorumu Sessize Al?</string>
+    <string name="no_aparecera_feed">Akışında görünmeyecek.</string>
+    <string name="reportar_comentario_titulo">Yorumu Şikayet Et?</string>
+    <string name="silenciar_comentario_titulo">Yorumu Sessize Al?</string>
+    <string name="comentar">YORUM YAP</string>
+    <string name="desbloquear">Engeli Kaldır</string>
+    <string name="usuarios_bloqueados">Engellenen Kullanıcılar</string>
+    <string name="cuenta_creada">Hesap Oluşturuldu!</string>
+    <string name="aceptar">Kabul Et</string>
+    <string name="error_al_iniciar_sesion">Giriş Hatası</string>
+    <string name="por_mes">aylık</string>
+    <string name="apoya_proyecto_funciones">Projeyi destekle ve tüm özelliklere eriş</string>
+    <string name="resenas_ilimitadas">✓ Sınırsız Yorum</string>
+    <string name="sin_anuncios">✓ Reklam Yok</string>
+    <string name="acceso_prioritario">✓ Öncelikli Erişim</string>
+    <string name="suscripcion_vence_hoy">⚠️ Aboneliğiniz bugün sona eriyor</string>
+    <string name="suscripcion_vence_dias">⚠️ Aboneliğiniz %1$d gün içinde sona eriyor</string>
+    <string name="renueva_acceso">Erişimi kaybetmemek için yenile</string>
+    <string name="ayudanos_mejorar">❤ Gelişmeye devam etmemize yardımcı olun</string>
+    <string name="apoya_tuprofe_precio">TuProfe\'yi sadece $9.900/ay destekleyin</string>
+    <string name="calificacion">Puan</string>
+    <string name="historial_vacio">Henüz hiç değerlendirme yapmadınız</string>
+    <string name="sin_resenas_historial">Henüz yorumunuz yok</string>
+    <string name="sin_comentarios_historial">Henüz yorumunuz yok</string>
+    <string name="error_al_subir_imagenes">Görsel Yükleme Hatası</string>
+    <string name="error_al_publicar">Yayınlama Hatası</string>
 </resources>

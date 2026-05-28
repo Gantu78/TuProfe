@@ -147,4 +147,46 @@
     <string name="activar_permisos">Systeemmeldingen activeren</string>
     <string name="activar_permisos_desc">Geef TuProfe toestemming om meldingen te sturen op je apparaat.</string>
     <string name="permiso_otorgado">Meldingen geactiveerd</string>
+
+    <!-- New strings from internationalization pass -->
+    <string name="confirmar">Bevestigen</string>
+    <string name="ok">OK</string>
+    <string name="reportar">Rapporteren</string>
+    <string name="bloquear_perfil">Profiel blokkeren</string>
+    <string name="silenciar">Dempen</string>
+    <string name="bloquear_usuario">Gebruiker blokkeren</string>
+    <string name="bloquear">Blokkeren</string>
+    <string name="suscribirme_ahora">Nu abonneren</string>
+    <string name="ahora_no">Niet nu</string>
+    <string name="plan_mensual">Maandelijks plan</string>
+    <string name="reportar_resena_titulo">Beoordeling melden?</string>
+    <string name="reporte_admins">Er wordt een rapport naar de beheerders gestuurd.</string>
+    <string name="bloquear_a_usuario_titulo">@%1$s blokkeren?</string>
+    <string name="ya_no_veras_contenido">Je zult hun inhoud niet meer zien.</string>
+    <string name="silenciar_resena_titulo">Beoordeling dempen?</string>
+    <string name="no_aparecera_feed">Het verschijnt niet in je feed.</string>
+    <string name="reportar_comentario_titulo">Reactie melden?</string>
+    <string name="silenciar_comentario_titulo">Reactie dempen?</string>
+    <string name="comentar">REAGEREN</string>
+    <string name="desbloquear">Deblokkeren</string>
+    <string name="usuarios_bloqueados">Geblokkeerde gebruikers</string>
+    <string name="cuenta_creada">Account aangemaakt!</string>
+    <string name="aceptar">Accepteren</string>
+    <string name="error_al_iniciar_sesion">Fout bij inloggen</string>
+    <string name="por_mes">per maand</string>
+    <string name="apoya_proyecto_funciones">Ondersteun het project en toegang tot alle functies</string>
+    <string name="resenas_ilimitadas">✓ Onbeperkte beoordelingen</string>
+    <string name="sin_anuncios">✓ Geen advertenties</string>
+    <string name="acceso_prioritario">✓ Prioritaire toegang</string>
+    <string name="suscripcion_vence_hoy">⚠️ Uw abonnement verloopt vandaag</string>
+    <string name="suscripcion_vence_dias">⚠️ Uw abonnement verloopt over %1$d dagen</string>
+    <string name="renueva_acceso">Vernieuwen om toegang niet te verliezen</string>
+    <string name="ayudanos_mejorar">❤ Help ons te blijven verbeteren</string>
+    <string name="apoya_tuprofe_precio">Steun TuProfe voor slechts $9.900/maand</string>
+    <string name="calificacion">Beoordeling</string>
+    <string name="historial_vacio">Je hebt nog geen beoordelingen gemaakt</string>
+    <string name="sin_resenas_historial">Je hebt nog geen beoordelingen</string>
+    <string name="sin_comentarios_historial">Je hebt nog geen reacties</string>
+    <string name="error_al_subir_imagenes">Fout bij uploaden van afbeeldingen</string>
+    <string name="error_al_publicar">Fout bij publiceren</string>
 </resources>

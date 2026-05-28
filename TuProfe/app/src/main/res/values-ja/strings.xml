@@ -177,4 +177,46 @@
     <!-- Notification channel -->
 <string name="notif_channel_name">TuProfe 通知</string>
 <string name="notif_channel_desc">「いいね！」、コメント、フォロワーの通知</string>
+
+    <!-- New strings from internationalization pass -->
+    <string name="confirmar">確認</string>
+    <string name="ok">OK</string>
+    <string name="reportar">報告</string>
+    <string name="bloquear_perfil">プロフィールをブロック</string>
+    <string name="silenciar">ミュート</string>
+    <string name="bloquear_usuario">ユーザーをブロック</string>
+    <string name="bloquear">ブロック</string>
+    <string name="suscribirme_ahora">今すぐ登録</string>
+    <string name="ahora_no">今はしない</string>
+    <string name="plan_mensual">月額プラン</string>
+    <string name="reportar_resena_titulo">レビューを報告しますか?</string>
+    <string name="reporte_admins">管理者に報告が送信されます。</string>
+    <string name="bloquear_a_usuario_titulo">@%1$s をブロックしますか?</string>
+    <string name="ya_no_veras_contenido">そのコンテンツは表示されなくなります。</string>
+    <string name="silenciar_resena_titulo">レビューをミュートしますか?</string>
+    <string name="no_aparecera_feed">フィードに表示されなくなります。</string>
+    <string name="reportar_comentario_titulo">コメントを報告しますか?</string>
+    <string name="silenciar_comentario_titulo">コメントをミュートしますか?</string>
+    <string name="comentar">コメント</string>
+    <string name="desbloquear">ブロック解除</string>
+    <string name="usuarios_bloqueados">ブロックしたユーザー</string>
+    <string name="cuenta_creada">アカウントが作成されました！</string>
+    <string name="aceptar">承認</string>
+    <string name="error_al_iniciar_sesion">サインインエラー</string>
+    <string name="por_mes">月あたり</string>
+    <string name="apoya_proyecto_funciones">プロジェクトをサポートして全機能にアクセス</string>
+    <string name="resenas_ilimitadas">✓ 無制限レビュー</string>
+    <string name="sin_anuncios">✓ 広告なし</string>
+    <string name="acceso_prioritario">✓ 優先アクセス</string>
+    <string name="suscripcion_vence_hoy">⚠️ サブスクリプションは本日期限切れです</string>
+    <string name="suscripcion_vence_dias">⚠️ サブスクリプションは%1$d日後に期限切れです</string>
+    <string name="renueva_acceso">アクセスを失わないように更新する</string>
+    <string name="ayudanos_mejorar">❤ 改善を続けるのを助けてください</string>
+    <string name="apoya_tuprofe_precio">TuProfeを月$9,900だけで応援</string>
+    <string name="calificacion">評価</string>
+    <string name="historial_vacio">まだ評価をしていません</string>
+    <string name="sin_resenas_historial">まだレビューがありません</string>
+    <string name="sin_comentarios_historial">まだコメントがありません</string>
+    <string name="error_al_subir_imagenes">画像のアップロードエラー</string>
+    <string name="error_al_publicar">公開エラー</string>
 </resources>

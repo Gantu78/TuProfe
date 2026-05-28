@@ -164,4 +164,46 @@
     <!-- Notification channel -->
     <string name="notif_channel_name">TuProfe-aviseringar</string>
     <string name="notif_channel_desc">Aviseringar för gilla-markeringar, kommentarer och följare</string>
+
+    <!-- New strings from internationalization pass -->
+    <string name="confirmar">Bekräfta</string>
+    <string name="ok">OK</string>
+    <string name="reportar">Rapportera</string>
+    <string name="bloquear_perfil">Blockera profil</string>
+    <string name="silenciar">Tysta</string>
+    <string name="bloquear_usuario">Blockera användare</string>
+    <string name="bloquear">Blockera</string>
+    <string name="suscribirme_ahora">Prenumerera nu</string>
+    <string name="ahora_no">Inte nu</string>
+    <string name="plan_mensual">Månadsplan</string>
+    <string name="reportar_resena_titulo">Rapportera recension?</string>
+    <string name="reporte_admins">En rapport skickas till administratörerna.</string>
+    <string name="bloquear_a_usuario_titulo">Blockera @%1$s?</string>
+    <string name="ya_no_veras_contenido">Du kommer inte längre se deras innehåll.</string>
+    <string name="silenciar_resena_titulo">Tysta recension?</string>
+    <string name="no_aparecera_feed">Det visas inte i ditt flöde.</string>
+    <string name="reportar_comentario_titulo">Rapportera kommentar?</string>
+    <string name="silenciar_comentario_titulo">Tysta kommentar?</string>
+    <string name="comentar">KOMMENTERA</string>
+    <string name="desbloquear">Avblockera</string>
+    <string name="usuarios_bloqueados">Blockerade användare</string>
+    <string name="cuenta_creada">Konto skapat!</string>
+    <string name="aceptar">Acceptera</string>
+    <string name="error_al_iniciar_sesion">Inloggningsfel</string>
+    <string name="por_mes">per månad</string>
+    <string name="apoya_proyecto_funciones">Stöd projektet och få tillgång till alla funktioner</string>
+    <string name="resenas_ilimitadas">✓ Obegränsade recensioner</string>
+    <string name="sin_anuncios">✓ Inga annonser</string>
+    <string name="acceso_prioritario">✓ Prioriterad åtkomst</string>
+    <string name="suscripcion_vence_hoy">⚠️ Din prenumeration löper ut idag</string>
+    <string name="suscripcion_vence_dias">⚠️ Din prenumeration löper ut om %1$d dagar</string>
+    <string name="renueva_acceso">Förnya för att inte förlora åtkomst</string>
+    <string name="ayudanos_mejorar">❤ Hjälp oss att fortsätta förbättra</string>
+    <string name="apoya_tuprofe_precio">Stöd TuProfe för bara $9 900/månad</string>
+    <string name="calificacion">Betyg</string>
+    <string name="historial_vacio">Du har inte gjort några betyg ännu</string>
+    <string name="sin_resenas_historial">Du har inga recensioner ännu</string>
+    <string name="sin_comentarios_historial">Du har inga kommentarer ännu</string>
+    <string name="error_al_subir_imagenes">Fel vid uppladdning av bilder</string>
+    <string name="error_al_publicar">Publiseringsfel</string>
 </resources>

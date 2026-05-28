@@ -174,4 +174,46 @@
     <!-- Notification channel -->
     <string name="notif_channel_name">TuProfe 通知</string>
     <string name="notif_channel_desc">有关点赞、评论和关注者的通知</string>
+
+    <!-- New strings from internationalization pass -->
+    <string name="confirmar">确认</string>
+    <string name="ok">确定</string>
+    <string name="reportar">举报</string>
+    <string name="bloquear_perfil">屏蔽主页</string>
+    <string name="silenciar">静音</string>
+    <string name="bloquear_usuario">屏蔽用户</string>
+    <string name="bloquear">屏蔽</string>
+    <string name="suscribirme_ahora">立即订阅</string>
+    <string name="ahora_no">暂不</string>
+    <string name="plan_mensual">月度套餐</string>
+    <string name="reportar_resena_titulo">举报评论?</string>
+    <string name="reporte_admins">报告将发送给管理员。</string>
+    <string name="bloquear_a_usuario_titulo">屏蔽 @%1$s?</string>
+    <string name="ya_no_veras_contenido">您将不再看到他们的内容。</string>
+    <string name="silenciar_resena_titulo">静音评论?</string>
+    <string name="no_aparecera_feed">它不会出现在您的动态中。</string>
+    <string name="reportar_comentario_titulo">举报评论?</string>
+    <string name="silenciar_comentario_titulo">静音评论?</string>
+    <string name="comentar">评论</string>
+    <string name="desbloquear">解除屏蔽</string>
+    <string name="usuarios_bloqueados">已屏蔽的用户</string>
+    <string name="cuenta_creada">账户已创建！</string>
+    <string name="aceptar">接受</string>
+    <string name="error_al_iniciar_sesion">登录错误</string>
+    <string name="por_mes">每月</string>
+    <string name="apoya_proyecto_funciones">支持项目并访问所有功能</string>
+    <string name="resenas_ilimitadas">✓ 无限评论</string>
+    <string name="sin_anuncios">✓ 无广告</string>
+    <string name="acceso_prioritario">✓ 优先访问</string>
+    <string name="suscripcion_vence_hoy">⚠️ 您的订阅今天到期</string>
+    <string name="suscripcion_vence_dias">⚠️ 您的订阅将在%1$d天后到期</string>
+    <string name="renueva_acceso">续订以保持访问权限</string>
+    <string name="ayudanos_mejorar">❤ 帮助我们不断改进</string>
+    <string name="apoya_tuprofe_precio">仅需$9,900/月支持TuProfe</string>
+    <string name="calificacion">评分</string>
+    <string name="historial_vacio">您还没有进行任何评分</string>
+    <string name="sin_resenas_historial">您还没有评论</string>
+    <string name="sin_comentarios_historial">您还没有评论</string>
+    <string name="error_al_subir_imagenes">上传图片出错</string>
+    <string name="error_al_publicar">发布出错</string>
 </resources>

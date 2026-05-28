@@ -171,4 +171,46 @@
 <string name="idioma_turco">Турецкий</string>
 <string name="idioma_aplicado">Язык применен</string>
 
-    </resources>
+    
+    <!-- New strings from internationalization pass -->
+    <string name="confirmar">Подтвердить</string>
+    <string name="ok">ОК</string>
+    <string name="reportar">Пожаловаться</string>
+    <string name="bloquear_perfil">Заблокировать профиль</string>
+    <string name="silenciar">Отключить</string>
+    <string name="bloquear_usuario">Заблокировать пользователя</string>
+    <string name="bloquear">Заблокировать</string>
+    <string name="suscribirme_ahora">Подписаться сейчас</string>
+    <string name="ahora_no">Не сейчас</string>
+    <string name="plan_mensual">Месячный план</string>
+    <string name="reportar_resena_titulo">Пожаловаться на отзыв?</string>
+    <string name="reporte_admins">Отчёт будет отправлен администраторам.</string>
+    <string name="bloquear_a_usuario_titulo">Заблокировать @%1$s?</string>
+    <string name="ya_no_veras_contenido">Вы больше не будете видеть их контент.</string>
+    <string name="silenciar_resena_titulo">Отключить отзыв?</string>
+    <string name="no_aparecera_feed">Не будет отображаться в вашей ленте.</string>
+    <string name="reportar_comentario_titulo">Пожаловаться на комментарий?</string>
+    <string name="silenciar_comentario_titulo">Отключить комментарий?</string>
+    <string name="comentar">КОММЕНТИРОВАТЬ</string>
+    <string name="desbloquear">Разблокировать</string>
+    <string name="usuarios_bloqueados">Заблокированные пользователи</string>
+    <string name="cuenta_creada">Аккаунт создан!</string>
+    <string name="aceptar">Принять</string>
+    <string name="error_al_iniciar_sesion">Ошибка входа</string>
+    <string name="por_mes">в месяц</string>
+    <string name="apoya_proyecto_funciones">Поддержите проект и получите доступ ко всем функциям</string>
+    <string name="resenas_ilimitadas">✓ Неограниченные отзывы</string>
+    <string name="sin_anuncios">✓ Без рекламы</string>
+    <string name="acceso_prioritario">✓ Приоритетный доступ</string>
+    <string name="suscripcion_vence_hoy">⚠️ Ваша подписка истекает сегодня</string>
+    <string name="suscripcion_vence_dias">⚠️ Ваша подписка истекает через %1$d дней</string>
+    <string name="renueva_acceso">Обновите, чтобы не потерять доступ</string>
+    <string name="ayudanos_mejorar">❤ Помогите нам продолжать улучшаться</string>
+    <string name="apoya_tuprofe_precio">Поддержите TuProfe всего за $9,900/месяц</string>
+    <string name="calificacion">Рейтинг</string>
+    <string name="historial_vacio">Вы ещё не сделали ни одной оценки</string>
+    <string name="sin_resenas_historial">У вас ещё нет отзывов</string>
+    <string name="sin_comentarios_historial">У вас ещё нет комментариев</string>
+    <string name="error_al_subir_imagenes">Ошибка загрузки изображений</string>
+    <string name="error_al_publicar">Ошибка публикации</string>
+</resources>

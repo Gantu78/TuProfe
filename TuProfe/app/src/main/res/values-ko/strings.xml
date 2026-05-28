@@ -172,4 +172,46 @@
     <!-- Notification channel -->
     <string name="notif_channel_name">TuProfe 알림</string>
     <string name="notif_channel_desc">좋아요, 댓글 및 팔로워 알림</string>
+
+    <!-- New strings from internationalization pass -->
+    <string name="confirmar">확인</string>
+    <string name="ok">확인</string>
+    <string name="reportar">신고</string>
+    <string name="bloquear_perfil">프로필 차단</string>
+    <string name="silenciar">뮤트</string>
+    <string name="bloquear_usuario">사용자 차단</string>
+    <string name="bloquear">차단</string>
+    <string name="suscribirme_ahora">지금 구독</string>
+    <string name="ahora_no">나중에</string>
+    <string name="plan_mensual">월간 플랜</string>
+    <string name="reportar_resena_titulo">리뷰를 신고하시겠습니까?</string>
+    <string name="reporte_admins">관리자에게 신고가 전송됩니다.</string>
+    <string name="bloquear_a_usuario_titulo">@%1$s 를 차단하시겠습니까?</string>
+    <string name="ya_no_veras_contenido">해당 콘텐츠를 더 이상 볼 수 없습니다.</string>
+    <string name="silenciar_resena_titulo">리뷰를 뮤트하시겠습니까?</string>
+    <string name="no_aparecera_feed">피드에 표시되지 않습니다.</string>
+    <string name="reportar_comentario_titulo">댓글을 신고하시겠습니까?</string>
+    <string name="silenciar_comentario_titulo">댓글을 뮤트하시겠습니까?</string>
+    <string name="comentar">댓글</string>
+    <string name="desbloquear">차단 해제</string>
+    <string name="usuarios_bloqueados">차단된 사용자</string>
+    <string name="cuenta_creada">계정이 생성되었습니다!</string>
+    <string name="aceptar">수락</string>
+    <string name="error_al_iniciar_sesion">로그인 오류</string>
+    <string name="por_mes">월당</string>
+    <string name="apoya_proyecto_funciones">프로젝트를 지원하고 모든 기능에 액세스</string>
+    <string name="resenas_ilimitadas">✓ 무제한 리뷰</string>
+    <string name="sin_anuncios">✓ 광고 없음</string>
+    <string name="acceso_prioritario">✓ 우선 접근</string>
+    <string name="suscripcion_vence_hoy">⚠️ 오늘 구독이 만료됩니다</string>
+    <string name="suscripcion_vence_dias">⚠️ 구독이 %1$d일 후에 만료됩니다</string>
+    <string name="renueva_acceso">액세스를 잃지 않도록 갱신하세요</string>
+    <string name="ayudanos_mejorar">❤ 계속 개선하도록 도와주세요</string>
+    <string name="apoya_tuprofe_precio">월 $9,900으로 TuProfe 지원</string>
+    <string name="calificacion">평점</string>
+    <string name="historial_vacio">아직 평가를 하지 않았습니다</string>
+    <string name="sin_resenas_historial">아직 리뷰가 없습니다</string>
+    <string name="sin_comentarios_historial">아직 댓글이 없습니다</string>
+    <string name="error_al_subir_imagenes">이미지 업로드 오류</string>
+    <string name="error_al_publicar">게시 오류</string>
 </resources>

@@ -187,4 +187,46 @@
     <string name="un_profesor_encontrado">1 professor encontrado</string>
     <string name="profesores_encontrados_count">%1$d professores encontrados</string>
     <string name="busca_a_tuprofe">Buscar no TuProfe</string>
+
+    <!-- New strings from internationalization pass -->
+    <string name="confirmar">Confirmar</string>
+    <string name="ok">OK</string>
+    <string name="reportar">Denunciar</string>
+    <string name="bloquear_perfil">Bloquear perfil</string>
+    <string name="silenciar">Silenciar</string>
+    <string name="bloquear_usuario">Bloquear usuário</string>
+    <string name="bloquear">Bloquear</string>
+    <string name="suscribirme_ahora">Assinar agora</string>
+    <string name="ahora_no">Agora não</string>
+    <string name="plan_mensual">Plano mensal</string>
+    <string name="reportar_resena_titulo">Denunciar avaliação?</string>
+    <string name="reporte_admins">Um relatório será enviado aos administradores.</string>
+    <string name="bloquear_a_usuario_titulo">Bloquear @%1$s?</string>
+    <string name="ya_no_veras_contenido">Você não verá mais o conteúdo deles.</string>
+    <string name="silenciar_resena_titulo">Silenciar avaliação?</string>
+    <string name="no_aparecera_feed">Não aparecerá no seu feed.</string>
+    <string name="reportar_comentario_titulo">Denunciar comentário?</string>
+    <string name="silenciar_comentario_titulo">Silenciar comentário?</string>
+    <string name="comentar">COMENTAR</string>
+    <string name="desbloquear">Desbloquear</string>
+    <string name="usuarios_bloqueados">Usuários bloqueados</string>
+    <string name="cuenta_creada">Conta criada!</string>
+    <string name="aceptar">Aceitar</string>
+    <string name="error_al_iniciar_sesion">Erro ao entrar</string>
+    <string name="por_mes">por mês</string>
+    <string name="apoya_proyecto_funciones">Apoie o projeto e acesse todos os recursos</string>
+    <string name="resenas_ilimitadas">✓ Avaliações ilimitadas</string>
+    <string name="sin_anuncios">✓ Sem anúncios</string>
+    <string name="acceso_prioritario">✓ Acesso prioritário</string>
+    <string name="suscripcion_vence_hoy">⚠️ Sua assinatura expira hoje</string>
+    <string name="suscripcion_vence_dias">⚠️ Sua assinatura expira em %1$d dias</string>
+    <string name="renueva_acceso">Renove para não perder o acesso</string>
+    <string name="ayudanos_mejorar">❤ Ajude-nos a continuar melhorando</string>
+    <string name="apoya_tuprofe_precio">Apoie o TuProfe por apenas $9.900/mês</string>
+    <string name="calificacion">Avaliação</string>
+    <string name="historial_vacio">Você ainda não fez nenhuma avaliação</string>
+    <string name="sin_resenas_historial">Você ainda não tem avaliações</string>
+    <string name="sin_comentarios_historial">Você ainda não tem comentários</string>
+    <string name="error_al_subir_imagenes">Erro ao enviar imagens</string>
+    <string name="error_al_publicar">Erro ao publicar</string>
 </resources>

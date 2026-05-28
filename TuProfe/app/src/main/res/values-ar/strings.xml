@@ -174,4 +174,46 @@
     <!-- Notification channel -->
     <string name="notif_channel_name">تنبيهات TuProfe</string>
     <string name="notif_channel_desc">تنبيهات للإعجابات والتعليقات والمتابعين</string>
+
+    <!-- New strings from internationalization pass -->
+    <string name="confirmar">تأكيد</string>
+    <string name="ok">موافق</string>
+    <string name="reportar">إبلاغ</string>
+    <string name="bloquear_perfil">حظر الملف الشخصي</string>
+    <string name="silenciar">كتم</string>
+    <string name="bloquear_usuario">حظر المستخدم</string>
+    <string name="bloquear">حظر</string>
+    <string name="suscribirme_ahora">اشترك الآن</string>
+    <string name="ahora_no">ليس الآن</string>
+    <string name="plan_mensual">الخطة الشهرية</string>
+    <string name="reportar_resena_titulo">الإبلاغ عن المراجعة؟</string>
+    <string name="reporte_admins">سيتم إرسال تقرير إلى المسؤولين.</string>
+    <string name="bloquear_a_usuario_titulo">حظر @%1$s؟</string>
+    <string name="ya_no_veras_contenido">لن ترى محتواه بعد الآن.</string>
+    <string name="silenciar_resena_titulo">كتم المراجعة؟</string>
+    <string name="no_aparecera_feed">لن يظهر في تغذيتك.</string>
+    <string name="reportar_comentario_titulo">الإبلاغ عن التعليق؟</string>
+    <string name="silenciar_comentario_titulo">كتم التعليق؟</string>
+    <string name="comentar">تعليق</string>
+    <string name="desbloquear">إلغاء الحظر</string>
+    <string name="usuarios_bloqueados">المستخدمون المحظورون</string>
+    <string name="cuenta_creada">تم إنشاء الحساب!</string>
+    <string name="aceptar">قبول</string>
+    <string name="error_al_iniciar_sesion">خطأ في تسجيل الدخول</string>
+    <string name="por_mes">في الشهر</string>
+    <string name="apoya_proyecto_funciones">ادعم المشروع وادخل إلى جميع الميزات</string>
+    <string name="resenas_ilimitadas">✓ مراجعات غير محدودة</string>
+    <string name="sin_anuncios">✓ بدون إعلانات</string>
+    <string name="acceso_prioritario">✓ وصول ذو أولوية</string>
+    <string name="suscripcion_vence_hoy">⚠️ اشتراكك ينتهي اليوم</string>
+    <string name="suscripcion_vence_dias">⚠️ اشتراكك ينتهي خلال %1$d أيام</string>
+    <string name="renueva_acceso">جدد لعدم فقدان الوصول</string>
+    <string name="ayudanos_mejorar">❤ ساعدنا في الاستمرار في التحسين</string>
+    <string name="apoya_tuprofe_precio">ادعم TuProfe مقابل 9,900/شهر فقط</string>
+    <string name="calificacion">التقييم</string>
+    <string name="historial_vacio">لم تقيّم أي شيء بعد</string>
+    <string name="sin_resenas_historial">ليس لديك أي مراجعات بعد</string>
+    <string name="sin_comentarios_historial">ليس لديك أي تعليقات بعد</string>
+    <string name="error_al_subir_imagenes">خطأ في تحميل الصور</string>
+    <string name="error_al_publicar">خطأ في النشر</string>
 </resources>

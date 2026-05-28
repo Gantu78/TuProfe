@@ -181,4 +181,46 @@
     <string name="un_profesor_encontrado">1 professeur trouvé</string>
     <string name="profesores_encontrados_count">%1$d professeurs trouvés</string>
     <string name="busca_a_tuprofe">Rechercher sur TuProfe</string>
+
+    <!-- New strings from internationalization pass -->
+    <string name="confirmar">Confirmer</string>
+    <string name="ok">OK</string>
+    <string name="reportar">Signaler</string>
+    <string name="bloquear_perfil">Bloquer le profil</string>
+    <string name="silenciar">Mettre en sourdine</string>
+    <string name="bloquear_usuario">Bloquer l\'utilisateur</string>
+    <string name="bloquear">Bloquer</string>
+    <string name="suscribirme_ahora">S\'abonner maintenant</string>
+    <string name="ahora_no">Pas maintenant</string>
+    <string name="plan_mensual">Formule mensuelle</string>
+    <string name="reportar_resena_titulo">Signaler l\'avis?</string>
+    <string name="reporte_admins">Un rapport sera envoyé aux administrateurs.</string>
+    <string name="bloquear_a_usuario_titulo">Bloquer @%1$s?</string>
+    <string name="ya_no_veras_contenido">Vous ne verrez plus son contenu.</string>
+    <string name="silenciar_resena_titulo">Mettre l\'avis en sourdine?</string>
+    <string name="no_aparecera_feed">Il n\'apparaîtra pas dans votre fil.</string>
+    <string name="reportar_comentario_titulo">Signaler le commentaire?</string>
+    <string name="silenciar_comentario_titulo">Mettre le commentaire en sourdine?</string>
+    <string name="comentar">COMMENTER</string>
+    <string name="desbloquear">Débloquer</string>
+    <string name="usuarios_bloqueados">Utilisateurs bloqués</string>
+    <string name="cuenta_creada">Compte créé!</string>
+    <string name="aceptar">Accepter</string>
+    <string name="error_al_iniciar_sesion">Erreur de connexion</string>
+    <string name="por_mes">par mois</string>
+    <string name="apoya_proyecto_funciones">Soutenez le projet et accédez à toutes les fonctionnalités</string>
+    <string name="resenas_ilimitadas">✓ Avis illimités</string>
+    <string name="sin_anuncios">✓ Sans publicités</string>
+    <string name="acceso_prioritario">✓ Accès prioritaire</string>
+    <string name="suscripcion_vence_hoy">⚠️ Votre abonnement expire aujourd\'hui</string>
+    <string name="suscripcion_vence_dias">⚠️ Votre abonnement expire dans %1$d jours</string>
+    <string name="renueva_acceso">Renouvelez pour ne pas perdre l\'accès</string>
+    <string name="ayudanos_mejorar">❤ Aidez-nous à continuer à améliorer</string>
+    <string name="apoya_tuprofe_precio">Soutenez TuProfe pour seulement 9\ 900/mois</string>
+    <string name="calificacion">Note</string>
+    <string name="historial_vacio">Vous n\'avez pas encore fait d\'évaluation</string>
+    <string name="sin_resenas_historial">Vous n\'avez pas encore d\'avis</string>
+    <string name="sin_comentarios_historial">Vous n\'avez pas encore de commentaires</string>
+    <string name="error_al_subir_imagenes">Erreur lors du chargement des images</string>
+    <string name="error_al_publicar">Erreur lors de la publication</string>
 </resources>

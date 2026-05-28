@@ -172,4 +172,46 @@
 <!-- Notification channel -->
 <string name="notif_channel_name">Thông báo TuProfe</string>
 <string name="notif_channel_desc">Thông báo về lượt thích, bình luận và người theo dõi</string>
+
+    <!-- New strings from internationalization pass -->
+    <string name="confirmar">Xác nhận</string>
+    <string name="ok">OK</string>
+    <string name="reportar">Báo cáo</string>
+    <string name="bloquear_perfil">Chặn hồ sơ</string>
+    <string name="silenciar">Tắt tiếng</string>
+    <string name="bloquear_usuario">Chặn người dùng</string>
+    <string name="bloquear">Chặn</string>
+    <string name="suscribirme_ahora">Đăng ký ngay</string>
+    <string name="ahora_no">Không phải bây giờ</string>
+    <string name="plan_mensual">Gói hàng tháng</string>
+    <string name="reportar_resena_titulo">Báo cáo đánh giá?</string>
+    <string name="reporte_admins">Báo cáo sẽ được gửi đến quản trị viên.</string>
+    <string name="bloquear_a_usuario_titulo">Chặn @%1$s?</string>
+    <string name="ya_no_veras_contenido">Bạn sẽ không còn thấy nội dung của họ nữa.</string>
+    <string name="silenciar_resena_titulo">Tắt tiếng đánh giá?</string>
+    <string name="no_aparecera_feed">Nó sẽ không xuất hiện trong feed của bạn.</string>
+    <string name="reportar_comentario_titulo">Báo cáo bình luận?</string>
+    <string name="silenciar_comentario_titulo">Tắt tiếng bình luận?</string>
+    <string name="comentar">BÌNH LUẬN</string>
+    <string name="desbloquear">Bỏ chặn</string>
+    <string name="usuarios_bloqueados">Người dùng bị chặn</string>
+    <string name="cuenta_creada">Tài khoản đã được tạo!</string>
+    <string name="aceptar">Chấp nhận</string>
+    <string name="error_al_iniciar_sesion">Lỗi đăng nhập</string>
+    <string name="por_mes">mỗi tháng</string>
+    <string name="apoya_proyecto_funciones">Hỗ trợ dự án và truy cập tất cả tính năng</string>
+    <string name="resenas_ilimitadas">✓ Đánh giá không giới hạn</string>
+    <string name="sin_anuncios">✓ Không có quảng cáo</string>
+    <string name="acceso_prioritario">✓ Truy cập ưu tiên</string>
+    <string name="suscripcion_vence_hoy">⚠️ Đăng ký của bạn hết hạn hôm nay</string>
+    <string name="suscripcion_vence_dias">⚠️ Đăng ký của bạn hết hạn sau %1$d ngày</string>
+    <string name="renueva_acceso">Gia hạn để không mất quyền truy cập</string>
+    <string name="ayudanos_mejorar">❤ Giúp chúng tôi tiếp tục cải thiện</string>
+    <string name="apoya_tuprofe_precio">Hỗ trợ TuProfe chỉ $9.900/tháng</string>
+    <string name="calificacion">Xếp hạng</string>
+    <string name="historial_vacio">Bạn chưa thực hiện đánh giá nào</string>
+    <string name="sin_resenas_historial">Bạn chưa có đánh giá nào</string>
+    <string name="sin_comentarios_historial">Bạn chưa có bình luận nào</string>
+    <string name="error_al_subir_imagenes">Lỗi tải ảnh lên</string>
+    <string name="error_al_publicar">Lỗi xuất bản</string>
 </resources>

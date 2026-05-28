@@ -159,4 +159,46 @@
 
     <string name="notif_channel_name">Powiadomienia TuProfe</string>
     <string name="notif_channel_desc">Powiadomienia o polubieniach, komentarzach i obserwujących</string>
+
+    <!-- New strings from internationalization pass -->
+    <string name="confirmar">Potwierdź</string>
+    <string name="ok">OK</string>
+    <string name="reportar">Zgłoś</string>
+    <string name="bloquear_perfil">Zablokuj profil</string>
+    <string name="silenciar">Wycisz</string>
+    <string name="bloquear_usuario">Zablokuj użytkownika</string>
+    <string name="bloquear">Zablokuj</string>
+    <string name="suscribirme_ahora">Subskrybuj teraz</string>
+    <string name="ahora_no">Nie teraz</string>
+    <string name="plan_mensual">Plan miesięczny</string>
+    <string name="reportar_resena_titulo">Zgłosić recenzję?</string>
+    <string name="reporte_admins">Zgłoszenie zostanie wysłane do administratorów.</string>
+    <string name="bloquear_a_usuario_titulo">Zablokować @%1$s?</string>
+    <string name="ya_no_veras_contenido">Nie zobaczysz już ich treści.</string>
+    <string name="silenciar_resena_titulo">Wyciszyć recenzję?</string>
+    <string name="no_aparecera_feed">Nie pojawi się w Twoim kanale.</string>
+    <string name="reportar_comentario_titulo">Zgłosić komentarz?</string>
+    <string name="silenciar_comentario_titulo">Wyciszyć komentarz?</string>
+    <string name="comentar">KOMENTUJ</string>
+    <string name="desbloquear">Odblokuj</string>
+    <string name="usuarios_bloqueados">Zablokowani użytkownicy</string>
+    <string name="cuenta_creada">Konto utworzone!</string>
+    <string name="aceptar">Akceptuj</string>
+    <string name="error_al_iniciar_sesion">Błąd logowania</string>
+    <string name="por_mes">miesięcznie</string>
+    <string name="apoya_proyecto_funciones">Wspieraj projekt i uzyskaj dostęp do wszystkich funkcji</string>
+    <string name="resenas_ilimitadas">✓ Nieograniczone recenzje</string>
+    <string name="sin_anuncios">✓ Brak reklam</string>
+    <string name="acceso_prioritario">✓ Priorytetowy dostęp</string>
+    <string name="suscripcion_vence_hoy">⚠️ Twoja subskrypcja wygasa dzisiaj</string>
+    <string name="suscripcion_vence_dias">⚠️ Twoja subskrypcja wygasa za %1$d dni</string>
+    <string name="renueva_acceso">Odnów, aby nie stracić dostępu</string>
+    <string name="ayudanos_mejorar">❤ Pomóż nam się doskonalić</string>
+    <string name="apoya_tuprofe_precio">Wspieraj TuProfe za jedyne $9.900/miesiąc</string>
+    <string name="calificacion">Ocena</string>
+    <string name="historial_vacio">Nie dokonałeś jeszcze żadnych ocen</string>
+    <string name="sin_resenas_historial">Nie masz jeszcze żadnych recenzji</string>
+    <string name="sin_comentarios_historial">Nie masz jeszcze żadnych komentarzy</string>
+    <string name="error_al_subir_imagenes">Błąd przesyłania obrazów</string>
+    <string name="error_al_publicar">Błąd publikowania</string>
 </resources>
