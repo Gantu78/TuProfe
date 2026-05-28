@@ -83,6 +83,8 @@
     <string name="resenas">Bewertungen</string>
     <string name="no_sigues_a_nadie">Du folgst noch niemandem</string>
     <string name="editar_perfil">Profil bearbeiten</string>
+    <string name="editar_perfil_sub">Aktualisiere deine persönlichen Daten</string>
+    <string name="chat">Chat</string>
     <string name="por_usuario">Von: @%1$s</string>
     <string name="editar_comentario">Kommentar bearbeiten</string>
     <string name="generado_por_ia">Generiert von %1$s</string>
@@ -202,4 +204,11 @@
     <string name="sin_comentarios_historial">Sie haben noch keine Kommentare</string>
     <string name="error_al_subir_imagenes">Fehler beim Hochladen der Bilder</string>
     <string name="error_al_publicar">Fehler beim Veröffentlichen</string>
+
+    <string name="chats">Chats</string>
+    <string name="sin_mensajes">Noch keine Nachrichten</string>
+    <string name="escribe_un_mensaje">Nachricht schreiben...</string>
+    <string name="enviar">Senden</string>
+    <string name="adjuntar_imagen">Bild anhängen</string>
+    <string name="tu_prefijo">Du: </string>
 </resources>

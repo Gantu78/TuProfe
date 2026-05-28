@@ -27,4 +27,9 @@ class StorageRemoteDataSource @Inject constructor(
         val path = "reviewImages/$userId/${System.currentTimeMillis()}_$index.jpg"
         return uploadImage(path, uri)
     }
+
+    suspend fun uploadChatImage(userId: String, uri: Uri): String {
+        val path = "chatImages/$userId/${System.currentTimeMillis()}.jpg"
+        return uploadImage(path, uri)
+    }
 }

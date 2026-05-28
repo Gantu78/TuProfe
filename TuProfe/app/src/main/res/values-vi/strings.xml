@@ -83,6 +83,8 @@
     <string name="resenas">Đánh giá</string>
     <string name="no_sigues_a_nadie">Bạn chưa theo dõi ai</string>
     <string name="editar_perfil">Chỉnh sửa hồ sơ</string>
+    <string name="editar_perfil_sub">Cập nhật thông tin cá nhân của bạn</string>
+    <string name="chat">Trò chuyện</string>
     <string name="por_usuario">Bởi: @%1$s</string>
     <string name="editar_comentario">Chỉnh sửa bình luận</string>
     <string name="generado_por_ia">Được tạo bởi %1$s</string>
@@ -214,4 +216,11 @@
     <string name="sin_comentarios_historial">Bạn chưa có bình luận nào</string>
     <string name="error_al_subir_imagenes">Lỗi tải ảnh lên</string>
     <string name="error_al_publicar">Lỗi xuất bản</string>
+
+    <string name="chats">Trò chuyện</string>
+    <string name="sin_mensajes">Chưa có tin nhắn</string>
+    <string name="escribe_un_mensaje">Viết tin nhắn...</string>
+    <string name="enviar">Gửi</string>
+    <string name="adjuntar_imagen">Đính kèm ảnh</string>
+    <string name="tu_prefijo">Bạn: </string>
 </resources>

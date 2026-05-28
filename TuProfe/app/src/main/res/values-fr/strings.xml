@@ -83,6 +83,8 @@
     <string name="resenas">Avis</string>
     <string name="no_sigues_a_nadie">Vous ne suivez personne pour l\'instant</string>
     <string name="editar_perfil">Modifier le profil</string>
+    <string name="editar_perfil_sub">Mettez à jour vos informations personnelles</string>
+    <string name="chat">Discussion</string>
     <string name="por_usuario">Par : @%1$s</string>
     <string name="editar_comentario">Modifier le commentaire</string>
     <string name="generado_por_ia">Généré par %1$s</string>
@@ -223,4 +225,11 @@
     <string name="sin_comentarios_historial">Vous n\'avez pas encore de commentaires</string>
     <string name="error_al_subir_imagenes">Erreur lors du chargement des images</string>
     <string name="error_al_publicar">Erreur lors de la publication</string>
+
+    <string name="chats">Discussions</string>
+    <string name="sin_mensajes">Aucun message encore</string>
+    <string name="escribe_un_mensaje">Écrire un message...</string>
+    <string name="enviar">Envoyer</string>
+    <string name="adjuntar_imagen">Joindre une image</string>
+    <string name="tu_prefijo">Toi: </string>
 </resources>

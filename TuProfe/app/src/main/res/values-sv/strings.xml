@@ -83,6 +83,8 @@
     <string name="resenas">Recensioner</string>
     <string name="no_sigues_a_nadie">Du följer ingen än</string>
     <string name="editar_perfil">Redigera profil</string>
+    <string name="editar_perfil_sub">Uppdatera din personliga information</string>
+    <string name="chat">Chatt</string>
     <string name="por_usuario">Av: @%1$s</string>
     <string name="editar_comentario">Redigera kommentar</string>
     <string name="generado_por_ia">Genererad av %1$s</string>
@@ -206,4 +208,11 @@
     <string name="sin_comentarios_historial">Du har inga kommentarer ännu</string>
     <string name="error_al_subir_imagenes">Fel vid uppladdning av bilder</string>
     <string name="error_al_publicar">Publiseringsfel</string>
+
+    <string name="chats">Chattar</string>
+    <string name="sin_mensajes">Inga meddelanden ännu</string>
+    <string name="escribe_un_mensaje">Skriv ett meddelande...</string>
+    <string name="enviar">Skicka</string>
+    <string name="adjuntar_imagen">Bifoga bild</string>
+    <string name="tu_prefijo">Du: </string>
 </resources>

@@ -83,6 +83,8 @@
     <string name="resenas">Recensioni</string>
     <string name="no_sigues_a_nadie">Non segui ancora nessuno</string>
     <string name="editar_perfil">Modifica profilo</string>
+    <string name="editar_perfil_sub">Aggiorna le tue informazioni personali</string>
+    <string name="chat">Chat</string>
     <string name="por_usuario">Da: @%1$s</string>
     <string name="editar_comentario">Modifica Commento</string>
     <string name="generado_por_ia">Generato da %1$s</string>
@@ -217,4 +219,11 @@ string name="idioma_turco">Turco</string>
     <string name="sin_comentarios_historial">Non hai ancora commenti</string>
     <string name="error_al_subir_imagenes">Errore nel caricamento delle immagini</string>
     <string name="error_al_publicar">Errore nella pubblicazione</string>
+
+    <string name="chats">Chat</string>
+    <string name="sin_mensajes">Nessun messaggio ancora</string>
+    <string name="escribe_un_mensaje">Scrivi un messaggio...</string>
+    <string name="enviar">Invia</string>
+    <string name="adjuntar_imagen">Allega immagine</string>
+    <string name="tu_prefijo">Tu: </string>
 </resources>

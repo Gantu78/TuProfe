@@ -68,6 +68,10 @@ import androidx.compose.animation.*
 import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.tween
 import androidx.compose.ui.tooling.preview.Preview
+import com.example.tuprofe.ui.chat.ChatListScreen
+import com.example.tuprofe.ui.chat.ChatListViewModel
+import com.example.tuprofe.ui.chat.ChatScreen
+import com.example.tuprofe.ui.chat.ChatViewModel
 import com.example.tuprofe.ui.mapa.MapaScreen
 import com.example.tuprofe.ui.payment.PaymentScreen
 
@@ -145,6 +149,10 @@ sealed class Screen(val route: String){
     object AyudaYSoporte : Screen("AyudaYSoporte")
     object Notificaciones : Screen("Notificaciones")
     object Ajustes : Screen("Ajustes")
+    object ChatList : Screen("ChatList")
+    object Chat : Screen("Chat/{chatId}/{otherUserId}") {
+        fun createRoute(chatId: String, otherUserId: String) = "Chat/$chatId/$otherUserId"
+    }
 }
 
 
@@ -418,7 +426,8 @@ fun AppNavegation(
                 onAyudaClick = { navController.navigate(Screen.AyudaYSoporte.route) },
                 onNotificacionesClick = { navController.navigate(Screen.Notificaciones.route) },
                 onAjustesClick = { navController.navigate(Screen.Ajustes.route) },
-                onSuscripcionClick = { navController.navigate(Screen.Payment.route) } //  nuevo
+                onSuscripcionClick = { navController.navigate(Screen.Payment.route) },
+                onChatListClick = { navController.navigate(Screen.ChatList.route) }
             )
         }
 
@@ -505,8 +514,9 @@ fun AppNavegation(
         composable(
             route = Screen.Profile.route,
             arguments = listOf(navArgument("userId") { type = NavType.StringType })
-        ) {
+        ) { backStackEntry ->
             val userProfileViewModel: UserProfileViewModel = hiltViewModel()
+            val profileState by userProfileViewModel.uiState.collectAsState()
             UserProfileScreen(
                 viewModel = userProfileViewModel,
                 onProfessorClick = { profeId ->
@@ -518,7 +528,41 @@ fun AppNavegation(
                 onReviewClick = { reviewId ->
                     navController.navigate(Screen.Detalle.createRoute(reviewId))
                 },
-                onNavigateBack = { navController.popBackStack() }
+                onNavigateBack = { navController.popBackStack() },
+                onChatClick = {
+                    val otherUserId = profileState.user.usuarioId
+                    val currentUserId = profileState.currentUserId
+                    if (otherUserId.isNotEmpty() && currentUserId.isNotEmpty()) {
+                        val chatId = listOf(currentUserId, otherUserId).sorted().joinToString("_")
+                        navController.navigate(Screen.Chat.createRoute(chatId, otherUserId))
+                    }
+                }
+            )
+        }
+
+        composable(route = Screen.ChatList.route) {
+            val chatListViewModel: ChatListViewModel = hiltViewModel()
+            ChatListScreen(
+                viewModel = chatListViewModel,
+                onChatClick = { chatId, otherUserId ->
+                    navController.navigate(Screen.Chat.createRoute(chatId, otherUserId))
+                },
+                onBackClick = { navController.popBackStack() }
+            )
+        }
+
+        composable(
+            route = Screen.Chat.route,
+            arguments = listOf(
+                navArgument("chatId") { type = NavType.StringType },
+                navArgument("otherUserId") { type = NavType.StringType }
+            )
+        ) {
+            val chatViewModel: ChatViewModel = hiltViewModel()
+            ChatScreen(
+                viewModel = chatViewModel,
+                onBackClick = { navController.popBackStack() },
+                onUserClick = { userId -> navController.navigate(Screen.Profile.createRoute(userId)) }
             )
         }
     }

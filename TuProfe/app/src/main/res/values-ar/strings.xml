@@ -83,6 +83,8 @@
     <string name="resenas">مراجعات</string>
     <string name="no_sigues_a_nadie">أنت لا تتبع أحداً بعد</string>
     <string name="editar_perfil">تعديل الملف الشخصي</string>
+    <string name="editar_perfil_sub">قم بتحديث معلوماتك الشخصية</string>
+    <string name="chat">دردشة</string>
     <string name="por_usuario">بواسطة: @%1$s</string>
     <string name="editar_comentario">تعديل التعليق</string>
     <string name="generado_por_ia">تم إنشاؤه بواسطة %1$s</string>
@@ -216,4 +218,11 @@
     <string name="sin_comentarios_historial">ليس لديك أي تعليقات بعد</string>
     <string name="error_al_subir_imagenes">خطأ في تحميل الصور</string>
     <string name="error_al_publicar">خطأ في النشر</string>
+
+    <string name="chats">المحادثات</string>
+    <string name="sin_mensajes">لا توجد رسائل بعد</string>
+    <string name="escribe_un_mensaje">اكتب رسالة...</string>
+    <string name="enviar">إرسال</string>
+    <string name="adjuntar_imagen">إرفاق صورة</string>
+    <string name="tu_prefijo">أنت: </string>
 </resources>

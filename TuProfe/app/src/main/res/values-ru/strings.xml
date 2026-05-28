@@ -83,6 +83,8 @@
     <string name="resenas">Отзывы</string>
     <string name="no_sigues_a_nadie">Вы еще ни на кого не подписаны</string>
     <string name="editar_perfil">Редактировать профиль</string>
+    <string name="editar_perfil_sub">Обновите свои личные данные</string>
+    <string name="chat">Чат</string>
     <string name="por_usuario">От: @%1$s</string>
     <string name="editar_comentario">Редактировать комментарий</string>
     <string name="generado_por_ia">Сгенерировано %1$s</string>
@@ -213,4 +215,11 @@
     <string name="sin_comentarios_historial">У вас ещё нет комментариев</string>
     <string name="error_al_subir_imagenes">Ошибка загрузки изображений</string>
     <string name="error_al_publicar">Ошибка публикации</string>
+
+    <string name="chats">Чаты</string>
+    <string name="sin_mensajes">Сообщений пока нет</string>
+    <string name="escribe_un_mensaje">Напишите сообщение...</string>
+    <string name="enviar">Отправить</string>
+    <string name="adjuntar_imagen">Прикрепить изображение</string>
+    <string name="tu_prefijo">Вы: </string>
 </resources>

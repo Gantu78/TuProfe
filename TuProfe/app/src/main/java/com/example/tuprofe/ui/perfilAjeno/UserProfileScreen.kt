@@ -11,6 +11,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Block
+import androidx.compose.material.icons.filled.Chat
 import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material.icons.outlined.Star
 import androidx.compose.runtime.LaunchedEffect
@@ -43,6 +44,7 @@ import com.example.tuprofe.ui.theme.BebasNeue
 import com.example.tuprofe.ui.theme.TuProfeTheme
 import com.example.tuprofe.ui.utils.BackgroundImage
 import com.example.tuprofe.ui.utils.Resena
+import com.example.tuprofe.ui.utils.TpIconButton
 
 @Composable
 fun UserProfileScreen(
@@ -51,7 +53,8 @@ fun UserProfileScreen(
     onProfessorClick: (String) -> Unit,
     onUserClick: (String) -> Unit = {},
     onReviewClick: (String) -> Unit = {},
-    onNavigateBack: () -> Unit = {}
+    onNavigateBack: () -> Unit = {},
+    onChatClick: () -> Unit = {}
 ) {
     val uiState by viewModel.uiState.collectAsState()
 
@@ -72,6 +75,7 @@ fun UserProfileScreen(
         onBlockClick = { viewModel.openBlockConfirm() },
         onDismissBlock = { viewModel.dismissBlockConfirm() },
         onConfirmBlock = { viewModel.confirmBlock() },
+        onChatClick = onChatClick,
         modifier = modifier
     )
 }
@@ -91,6 +95,7 @@ fun UserProfileContent(
     onBlockClick: () -> Unit = {},
     onDismissBlock: () -> Unit = {},
     onConfirmBlock: () -> Unit = {},
+    onChatClick: () -> Unit = {},
     modifier: Modifier = Modifier
 ) {
     Box(modifier = modifier.fillMaxSize().testTag("userProfileScreen")) {
@@ -113,7 +118,8 @@ fun UserProfileContent(
                         onFollowClick = onFollowClick,
                         onFollowersClick = onFollowersClick,
                         onFollowingClick = onFollowingClick,
-                        onBlockClick = onBlockClick
+                        onBlockClick = onBlockClick,
+                        onChatClick = onChatClick
                     )
                 }
             }
@@ -204,7 +210,8 @@ private fun UserProfileLoaded(
     onFollowClick: () -> Unit,
     onFollowersClick: () -> Unit = {},
     onFollowingClick: () -> Unit = {},
-    onBlockClick: () -> Unit = {}
+    onBlockClick: () -> Unit = {},
+    onChatClick: () -> Unit = {}
 ) {
     LazyColumn(
         modifier = Modifier.fillMaxSize(),
@@ -217,7 +224,8 @@ private fun UserProfileLoaded(
                 onFollowClick = onFollowClick,
                 onFollowersClick = onFollowersClick,
                 onFollowingClick = onFollowingClick,
-                onBlockClick = onBlockClick
+                onBlockClick = onBlockClick,
+                onChatClick = onChatClick
             )
         }
 
@@ -260,6 +268,7 @@ private fun UserProfileHeader(
     onFollowersClick: () -> Unit = {},
     onFollowingClick: () -> Unit = {},
     onBlockClick: () -> Unit = {},
+    onChatClick: () -> Unit = {},
     modifier: Modifier = Modifier
 ) {
     Column(
@@ -272,15 +281,18 @@ private fun UserProfileHeader(
         if (!isOwnProfile) {
             Row(
                 modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.Start
+                horizontalArrangement = Arrangement.SpaceBetween
             ) {
-                IconButton(onClick = onBlockClick) {
-                    Icon(
-                        imageVector = Icons.Default.Block,
-                        contentDescription = "Bloquear usuario",
-                        tint = colorResource(R.color.verdetp)
-                    )
-                }
+                TpIconButton(
+                    icon = Icons.Default.Block,
+                    contentDescription = stringResource(R.string.bloquear_usuario),
+                    onClick = onBlockClick
+                )
+                TpIconButton(
+                    icon = Icons.Default.Chat,
+                    contentDescription = stringResource(R.string.chat),
+                    onClick = onChatClick
+                )
             }
         }
 

@@ -2,6 +2,10 @@ package com.example.tuprofe.ui.utils
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -9,9 +13,11 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.ChevronRight
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -181,6 +187,29 @@ fun TextFieldContraApp(
     )
 }
 @Composable
+fun TpIconButton(
+    icon: ImageVector,
+    contentDescription: String,
+    onClick: () -> Unit = {}
+) {
+    Box(
+        modifier = Modifier
+            .size(42.dp)
+            .background(colorResource(R.color.verdetp).copy(alpha = 0.1f), CircleShape)
+            .border(1.dp, colorResource(R.color.verdetp).copy(alpha = 0.3f), CircleShape)
+            .clickable(onClick = onClick),
+        contentAlignment = Alignment.Center
+    ) {
+        Icon(
+            imageVector = icon,
+            contentDescription = contentDescription,
+            tint = colorResource(R.color.verdetp),
+            modifier = Modifier.size(22.dp)
+        )
+    }
+}
+
+@Composable
 fun ConfigItem(
     icon: ImageVector,
     title: String,
@@ -192,11 +221,11 @@ fun ConfigItem(
         onClick = onClick,
         modifier = modifier
             .fillMaxWidth()
-            .padding(vertical = 8.dp),
+            .padding(vertical = 4.dp),
         shape = RoundedCornerShape(20.dp),
         border = BorderStroke(2.dp, colorResource(R.color.BordeTuProfe)),
         colors = CardDefaults.cardColors(
-            MaterialTheme.colorScheme.surface
+            colorResource(R.color.pastel)
         ),
     ) {
         Row(
@@ -205,20 +234,23 @@ fun ConfigItem(
                 .fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically
         ) {
-
             Icon(
                 imageVector = icon,
                 contentDescription = null,
                 tint = colorResource(R.color.verdetp),
                 modifier = Modifier.size(30.dp)
             )
-
             Spacer(modifier = Modifier.width(20.dp))
-
-            Column {
-                Text(title, fontWeight = FontWeight.Bold)
+            Column(modifier = Modifier.weight(1f)) {
+                Text(title, fontWeight = FontWeight.SemiBold, fontSize = 15.sp)
                 Text(subtitle, color = Color.Gray, fontSize = 13.sp)
             }
+            Icon(
+                imageVector = Icons.Default.ChevronRight,
+                contentDescription = null,
+                tint = Color.Gray,
+                modifier = Modifier.size(18.dp)
+            )
         }
     }
 }

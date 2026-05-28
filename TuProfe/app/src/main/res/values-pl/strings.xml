@@ -83,6 +83,8 @@
     <string name="resenas">Recenzje</string>
     <string name="no_sigues_a_nadie">Nie obserwujesz jeszcze nikogo</string>
     <string name="editar_perfil">Edytuj profil</string>
+    <string name="editar_perfil_sub">Zaktualizuj swoje dane osobowe</string>
+    <string name="chat">Czat</string>
     <string name="por_usuario">Przez: @%1$s</string>
     <string name="editar_comentario">Edytuj komentarz</string>
     <string name="generado_por_ia">Wygenerowane przez %1$s</string>
@@ -201,4 +203,11 @@
     <string name="sin_comentarios_historial">Nie masz jeszcze żadnych komentarzy</string>
     <string name="error_al_subir_imagenes">Błąd przesyłania obrazów</string>
     <string name="error_al_publicar">Błąd publikowania</string>
+
+    <string name="chats">Czaty</string>
+    <string name="sin_mensajes">Brak wiadomości</string>
+    <string name="escribe_un_mensaje">Napisz wiadomość...</string>
+    <string name="enviar">Wyślij</string>
+    <string name="adjuntar_imagen">Dołącz zdjęcie</string>
+    <string name="tu_prefijo">Ty: </string>
 </resources>

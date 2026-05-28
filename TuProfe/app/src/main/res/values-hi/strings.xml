@@ -83,6 +83,8 @@
     <string name="resenas">समीक्षाएं</string>
     <string name="no_sigues_a_nadie">आप अभी तक किसी को फॉलो नहीं कर रहे हैं</string>
     <string name="editar_perfil">प्रोफाइल संपादित करें</string>
+    <string name="editar_perfil_sub">अपनी व्यक्तिगत जानकारी अपडेट करें</string>
+    <string name="chat">चैट</string>
     <string name="por_usuario">के द्वारा: @%1$s</string>
     <string name="editar_comentario">कमेंट संपादित करें</string>
     <string name="generado_por_ia">%1$s द्वारा जनरेट किया गया</string>
@@ -216,4 +218,11 @@
     <string name="sin_comentarios_historial">आपके पास अभी तक कोई टिप्पणी नहीं है</string>
     <string name="error_al_subir_imagenes">छवियां अपलोड करने में त्रुटि</string>
     <string name="error_al_publicar">प्रकाशन में त्रुटि</string>
+
+    <string name="chats">चैट्स</string>
+    <string name="sin_mensajes">अभी कोई संदेश नहीं</string>
+    <string name="escribe_un_mensaje">संदेश लिखें...</string>
+    <string name="enviar">भेजें</string>
+    <string name="adjuntar_imagen">छवि संलग्न करें</string>
+    <string name="tu_prefijo">आप: </string>
 </resources>

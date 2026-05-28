@@ -83,6 +83,8 @@
     <string name="resenas">レビュー</string>
     <string name="no_sigues_a_nadie">まだ誰もフォローしていません</string>
     <string name="editar_perfil">プロフィールを編集</string>
+    <string name="editar_perfil_sub">個人情報を更新する</string>
+    <string name="chat">チャット</string>
     <string name="por_usuario">投稿者: @%1$s</string>
     <string name="editar_comentario">コメントを編集</string>
     <string name="generado_por_ia">%1$s によって生成</string>
@@ -219,4 +221,11 @@
     <string name="sin_comentarios_historial">まだコメントがありません</string>
     <string name="error_al_subir_imagenes">画像のアップロードエラー</string>
     <string name="error_al_publicar">公開エラー</string>
+
+    <string name="chats">チャット</string>
+    <string name="sin_mensajes">まだメッセージはありません</string>
+    <string name="escribe_un_mensaje">メッセージを入力...</string>
+    <string name="enviar">送信</string>
+    <string name="adjuntar_imagen">画像を添付</string>
+    <string name="tu_prefijo">あなた: </string>
 </resources>

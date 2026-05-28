@@ -83,6 +83,8 @@
     <string name="resenas">Değerlendirmeler</string>
     <string name="no_sigues_a_nadie">Henüz kimseyi takip etmiyorsunuz</string>
     <string name="editar_perfil">Profili düzenle</string>
+    <string name="editar_perfil_sub">Kişisel bilgilerini güncelle</string>
+    <string name="chat">Sohbet</string>
     <string name="por_usuario">Tarafından: @%1$s</string>
     <string name="editar_comentario">Yorumu Düzenle</string>
     <string name="generado_por_ia">%1$s tarafından oluşturuldu</string>
@@ -201,4 +203,11 @@
     <string name="sin_comentarios_historial">Henüz yorumunuz yok</string>
     <string name="error_al_subir_imagenes">Görsel Yükleme Hatası</string>
     <string name="error_al_publicar">Yayınlama Hatası</string>
+
+    <string name="chats">Sohbetler</string>
+    <string name="sin_mensajes">Henüz mesaj yok</string>
+    <string name="escribe_un_mensaje">Mesaj yaz...</string>
+    <string name="enviar">Gönder</string>
+    <string name="adjuntar_imagen">Resim ekle</string>
+    <string name="tu_prefijo">Sen: </string>
 </resources>

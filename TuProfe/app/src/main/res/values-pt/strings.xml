@@ -82,6 +82,8 @@
     <string name="resenas">Avaliações</string>
     <string name="no_sigues_a_nadie">Você ainda não segue ninguém</string>
     <string name="editar_perfil">Editar perfil</string>
+    <string name="editar_perfil_sub">Atualize suas informações pessoais</string>
+    <string name="chat">Chat</string>
     <string name="por_usuario">Por: @%1$s</string>
     <string name="editar_comentario">Editar comentário</string>
     <string name="generado_por_ia">Gerado por %1$s</string>
@@ -229,4 +231,11 @@
     <string name="sin_comentarios_historial">Você ainda não tem comentários</string>
     <string name="error_al_subir_imagenes">Erro ao enviar imagens</string>
     <string name="error_al_publicar">Erro ao publicar</string>
+
+    <string name="chats">Conversas</string>
+    <string name="sin_mensajes">Sem mensagens ainda</string>
+    <string name="escribe_un_mensaje">Escreva uma mensagem...</string>
+    <string name="enviar">Enviar</string>
+    <string name="adjuntar_imagen">Anexar imagem</string>
+    <string name="tu_prefijo">Você: </string>
 </resources>

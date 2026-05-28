@@ -83,6 +83,8 @@
     <string name="resenas">Beoordelingen</string>
     <string name="no_sigues_a_nadie">Je volgt nog niemand</string>
     <string name="editar_perfil">Profiel bewerken</string>
+    <string name="editar_perfil_sub">Werk je persoonlijke gegevens bij</string>
+    <string name="chat">Chat</string>
     <string name="por_usuario">Door: @%1$s</string>
     <string name="editar_comentario">Reactie bewerken</string>
     <string name="generado_por_ia">Gegenereerd door %1$s</string>
@@ -189,4 +191,11 @@
     <string name="sin_comentarios_historial">Je hebt nog geen reacties</string>
     <string name="error_al_subir_imagenes">Fout bij uploaden van afbeeldingen</string>
     <string name="error_al_publicar">Fout bij publiceren</string>
+
+    <string name="chats">Chats</string>
+    <string name="sin_mensajes">Nog geen berichten</string>
+    <string name="escribe_un_mensaje">Schrijf een bericht...</string>
+    <string name="enviar">Verzenden</string>
+    <string name="adjuntar_imagen">Afbeelding bijvoegen</string>
+    <string name="tu_prefijo">Jij: </string>
 </resources>

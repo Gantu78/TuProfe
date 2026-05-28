@@ -83,6 +83,8 @@
     <string name="resenas">리뷰</string>
     <string name="no_sigues_a_nadie">아직 팔로우하는 사람이 없습니다</string>
     <string name="editar_perfil">프로필 수정</string>
+    <string name="editar_perfil_sub">개인 정보를 업데이트하세요</string>
+    <string name="chat">채팅</string>
     <string name="por_usuario">작성자: @%1$s</string>
     <string name="editar_comentario">댓글 수정</string>
     <string name="generado_por_ia">%1$s 작성</string>
@@ -214,4 +216,11 @@
     <string name="sin_comentarios_historial">아직 댓글이 없습니다</string>
     <string name="error_al_subir_imagenes">이미지 업로드 오류</string>
     <string name="error_al_publicar">게시 오류</string>
+
+    <string name="chats">채팅</string>
+    <string name="sin_mensajes">아직 메시지가 없습니다</string>
+    <string name="escribe_un_mensaje">메시지 입력...</string>
+    <string name="enviar">전송</string>
+    <string name="adjuntar_imagen">이미지 첨부</string>
+    <string name="tu_prefijo">나: </string>
 </resources>
