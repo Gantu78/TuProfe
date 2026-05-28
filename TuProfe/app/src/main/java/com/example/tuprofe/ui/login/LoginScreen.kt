@@ -1,24 +1,33 @@
 package com.example.tuprofe.ui.login
 
+import android.app.Activity
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.slideInVertically
+import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
-import androidx.compose.material3.Text
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.tuprofe.R
 import com.example.tuprofe.ui.utils.*
-import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.ui.platform.testTag
 import kotlinx.coroutines.delay
 
 @Composable
@@ -31,10 +40,11 @@ fun HomeScreen(
 ) {
     val state by loginViewModel.uiState.collectAsState()
     val icono = if (state.passwordVisible) R.drawable.mostrar else R.drawable.ocultar
+    val context = LocalContext.current
+    val activity = context as Activity
 
-    // Section entrance flags
-    var showLogo   by remember { mutableStateOf(false) }
-    var showForm   by remember { mutableStateOf(false) }
+    var showLogo    by remember { mutableStateOf(false) }
+    var showForm    by remember { mutableStateOf(false) }
     var showButtons by remember { mutableStateOf(false) }
 
     LaunchedEffect(Unit) {
@@ -45,6 +55,11 @@ fun HomeScreen(
         showButtons = true
     }
 
+    // Navegar cuando el sign-in social tiene éxito
+    LaunchedEffect(state.navigate) {
+        if (state.navigate) onLoginClick()
+    }
+
     Box(modifier = modifier.fillMaxSize()) {
         BackgroundImage()
         Column(
@@ -52,7 +67,6 @@ fun HomeScreen(
             horizontalAlignment = Alignment.CenterHorizontally,
             modifier = Modifier.fillMaxSize()
         ) {
-            // Logo — spring bounce scale + fade
             AnimatedVisibility(
                 visible = showLogo,
                 enter = fadeIn(tween(500)) +
@@ -61,9 +75,8 @@ fun HomeScreen(
                 LogoApp()
             }
 
-            Spacer(modifier = Modifier.padding(30.dp))
+            Spacer(modifier = Modifier.height(30.dp))
 
-            // Form — slight delay so it trails the logo
             AnimatedVisibility(
                 visible = showForm,
                 enter = fadeIn(tween(420)) +
@@ -80,7 +93,6 @@ fun HomeScreen(
                 )
             }
 
-            // Error text with fade
             AnimatedVisibility(
                 visible = state.mostrarMensajeError,
                 enter = fadeIn(tween(260))
@@ -95,9 +107,8 @@ fun HomeScreen(
                 )
             }
 
-            Spacer(modifier = Modifier.padding(15.dp))
+            Spacer(modifier = Modifier.height(16.dp))
 
-            // Buttons — last to appear
             AnimatedVisibility(
                 visible = showButtons,
                 enter = fadeIn(tween(380)) +
@@ -106,22 +117,15 @@ fun HomeScreen(
                 Botones(
                     onLoginClick = onLoginClick,
                     onForgotPasswordClick = onForgotPasswordClick,
-                    onRegisterClick = onRegisterClick
+                    onRegisterClick = onRegisterClick,
+                    onGoogleClick = { loginViewModel.signInWithGoogle(activity) },
+                    onGitHubClick = { loginViewModel.signInWithGitHub(activity) },
+                    isGoogleLoading = state.isGoogleLoading,
+                    isGitHubLoading = state.isGitHubLoading
                 )
             }
         }
     }
-}
-
-@Composable
-@Preview
-fun HomeScreenPreview() {
-    HomeScreen(
-        loginViewModel = viewModel(),
-        onLoginClick = {},
-        onRegisterClick = {},
-        onForgotPasswordClick = {}
-    )
 }
 
 @Composable
@@ -137,13 +141,11 @@ fun FormularioInicio(
 ) {
     Column(modifier = modifier) {
         TextFieldApp(
-            modifier = Modifier,
             texto = stringResource(R.string.email),
             value = email,
             onValueChange = onEmailChange
         )
         TextFieldContraApp(
-            modifier = Modifier,
             texto = stringResource(R.string.contrase_a),
             value = password,
             mostrarPassword = passwordVisible,
@@ -155,37 +157,76 @@ fun FormularioInicio(
 }
 
 @Composable
-@Preview(showBackground = true)
-fun FormularioInicioPreview() {
-    FormularioInicio(
-        email = "",
-        password = "",
-        passwordVisible = false,
-        icono = R.drawable.ocultar,
-        onEmailChange = {},
-        onPasswordChange = {},
-        onPasswordVisibleChange = {}
-    )
-}
-
-@Composable
 fun Botones(
     modifier: Modifier = Modifier,
     onLoginClick: () -> Unit = {},
     onForgotPasswordClick: () -> Unit = {},
     onRegisterClick: () -> Unit = {},
+    onGoogleClick: () -> Unit = {},
+    onGitHubClick: () -> Unit = {},
+    isGoogleLoading: Boolean = false,
+    isGitHubLoading: Boolean = false,
 ) {
     Column(
-        verticalArrangement = Arrangement.Center,
+        verticalArrangement = Arrangement.spacedBy(12.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
-        modifier = modifier
+        modifier = modifier.padding(horizontal = 24.dp)
     ) {
+        // ── Botón principal de login ───────────────────────────────────────────
         AppButton(
             textoBoton = stringResource(R.string.iniciar_sesion),
             onClick = onLoginClick,
-            modifier = Modifier.pressScaleEffect().testTag("login_button")
+            modifier = Modifier
+                .fillMaxWidth()
+                .pressScaleEffect()
+                .testTag("login_button")
         )
-        Spacer(modifier = Modifier.padding(30.dp))
+
+        // ── Divisor "o continúa con" ───────────────────────────────────────────
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            HorizontalDivider(modifier = Modifier.weight(1f), color = Color.Gray.copy(alpha = 0.4f))
+            Text(
+                text = "  o continúa con  ",
+                fontSize = 13.sp,
+                color = Color.Gray
+            )
+            HorizontalDivider(modifier = Modifier.weight(1f), color = Color.Gray.copy(alpha = 0.4f))
+        }
+
+        // ── Botones sociales lado a lado ──────────────────────────────────────
+        Row(
+            horizontalArrangement = Arrangement.spacedBy(12.dp),
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            // Google
+            SocialLoginButton(
+                label = "Google",
+                iconRes = R.drawable.ic_google,
+                isLoading = isGoogleLoading,
+                onClick = onGoogleClick,
+                containerColor = Color.White,
+                contentColor = Color(0xFF3C4043),
+                borderColor = Color(0xFFDDDDDD),
+                modifier = Modifier.weight(1f)
+            )
+
+            // GitHub
+            SocialLoginButton(
+                label = "GitHub",
+                iconRes = R.drawable.ic_github,
+                isLoading = isGitHubLoading,
+                onClick = onGitHubClick,
+                containerColor = Color(0xFF24292E),
+                contentColor = Color.White,
+                borderColor = Color(0xFF444D56),
+                modifier = Modifier.weight(1f)
+            )
+        }
+
+        // ── Links secundarios ────────────────────────────────────────────────
         Row(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.Center,
@@ -196,19 +237,92 @@ fun Botones(
                 onClick = onForgotPasswordClick,
                 modifier = Modifier.pressScaleEffect()
             )
-            Spacer(modifier = Modifier.width(30.dp))
+            Spacer(modifier = Modifier.width(16.dp))
             AppButtonRow(
                 stringResource(R.string.crear_cuenta),
                 onClick = onRegisterClick,
-                modifier = Modifier.pressScaleEffect().testTag("register_button")
+                modifier = Modifier
+                    .pressScaleEffect()
+                    .testTag("register_button")
             )
-            Spacer(modifier = Modifier.width(16.dp))
         }
     }
 }
 
+// ── Componente reutilizable para botón social ─────────────────────────────────
+
 @Composable
+fun SocialLoginButton(
+    label: String,
+    iconRes: Int,
+    isLoading: Boolean,
+    onClick: () -> Unit,
+    containerColor: Color,
+    contentColor: Color,
+    borderColor: Color,
+    modifier: Modifier = Modifier
+) {
+    OutlinedButton(
+        onClick = onClick,
+        enabled = !isLoading,
+        shape = RoundedCornerShape(12.dp),
+        border = BorderStroke(1.dp, borderColor),
+        colors = ButtonDefaults.outlinedButtonColors(
+            containerColor = containerColor,
+            contentColor = contentColor,
+            disabledContainerColor = containerColor.copy(alpha = 0.7f)
+        ),
+        contentPadding = PaddingValues(horizontal = 16.dp, vertical = 12.dp),
+        modifier = modifier
+            .height(48.dp)
+            .pressScaleEffect()
+    ) {
+        if (isLoading) {
+            CircularProgressIndicator(
+                modifier = Modifier.size(20.dp),
+                color = contentColor,
+                strokeWidth = 2.dp
+            )
+        } else {
+            Row(
+                horizontalArrangement = Arrangement.Center,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Image(
+                    painter = painterResource(iconRes),
+                    contentDescription = label,
+                    modifier = Modifier.size(20.dp)
+                )
+                Spacer(Modifier.width(8.dp))
+                Text(
+                    text = label,
+                    fontSize = 14.sp,
+                    fontWeight = FontWeight.SemiBold,
+                    color = contentColor
+                )
+            }
+        }
+    }
+}
+
+// ── Previews ──────────────────────────────────────────────────────────────────
+
 @Preview(showBackground = true)
+@Composable
 fun BotonesPreview() {
     Botones()
+}
+
+@Preview(showBackground = true)
+@Composable
+fun FormularioInicioPreview() {
+    FormularioInicio(
+        email = "",
+        password = "",
+        passwordVisible = false,
+        icono = R.drawable.ocultar,
+        onEmailChange = {},
+        onPasswordChange = {},
+        onPasswordVisibleChange = {}
+    )
 }

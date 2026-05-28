@@ -27,7 +27,9 @@ android {
         versionCode = 4
         versionName = "1.0"
         buildConfigField("String", "IAAPIKEY", "\"${localProps.getProperty("IAAPIKEY") ?: ""}\"")
+        buildConfigField("String", "GOOGLE_WEB_CLIENT_ID", "\"${localProps.getProperty("GOOGLE_WEB_CLIENT_ID") ?: ""}\"")
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        buildConfigField("String", "GOOGLE_WEB_CLIENT_ID", project.properties["GOOGLE_WEB_CLIENT_ID"].toString())
 
         manifestPlaceholders["MAPS_API_KEY"] = localProps.getProperty("MAPS_API_KEY") ?: ""
     }
@@ -80,6 +82,10 @@ dependencies {
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.6.2")
 
     implementation("com.google.android.gms:play-services-location:21.3.0")
+    implementation("com.google.android.gms:play-services-auth:21.3.0")
+    implementation("androidx.credentials:credentials:1.5.0")
+    implementation("androidx.credentials:credentials-play-services-auth:1.5.0")
+    implementation("com.google.android.libraries.identity.googleid:googleid:1.1.1")
 
     implementation("com.google.maps.android:maps-compose:4.4.1")
 
@@ -167,6 +173,8 @@ dependencies {
 
 // Para UI / instrumented tests (androidTest/)
     androidTestImplementation("io.mockk:mockk-android:1.13.14")
+
+
 
 
 }

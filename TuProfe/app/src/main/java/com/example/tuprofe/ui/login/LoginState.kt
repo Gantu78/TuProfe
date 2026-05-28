@@ -8,5 +8,8 @@ data class LoginState(
     val forgotPassword: Boolean = false,
     val register: Boolean = false,
     val mostrarMensajeError: Boolean = false,
-    val errorMessage: String = ""
+    val errorMessage: String = "",
+    // Social sign-in
+    val isGoogleLoading: Boolean = false,
+    val isGitHubLoading: Boolean = false,
 )

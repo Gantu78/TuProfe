@@ -1,5 +1,6 @@
 package com.example.tuprofe.data.repository
 
+import android.app.Activity
 import android.net.Uri
 import com.example.tuprofe.data.datasource.AuthRemoteDataSource
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException
@@ -10,6 +11,7 @@ import com.google.firebase.FirebaseNetworkException
 import com.google.firebase.auth.FirebaseAuthRecentLoginRequiredException
 import com.google.firebase.auth.FirebaseAuthUserCollisionException
 import com.google.firebase.auth.FirebaseAuthWeakPasswordException
+import com.google.firebase.auth.OAuthProvider
 import com.google.firebase.auth.UserProfileChangeRequest
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.tasks.await
@@ -142,5 +144,33 @@ class AuthRepository @Inject constructor(
         return authRemoteDataSource.currentUser?.isEmailVerified ?: false
     }
 
+
+
+    suspend fun signInWithGoogleIdToken(idToken: String): Result<Unit> {
+        return try {
+            authRemoteDataSource.signInWithGoogleIdToken(idToken)
+            Result.success(Unit)
+        } catch (e: Exception) {
+            Result.failure(Exception("Error al iniciar sesión con Google"))
+        }
+    }
+
+    suspend fun signInWithGitHub(activity: Activity): Result<Unit> {
+        return try {
+            authRemoteDataSource.signInWithGitHub(activity)
+            Result.success(Unit)
+        } catch (e: Exception) {
+            Result.failure(Exception(e.message ?: "Error al iniciar sesión con GitHub"))
+        }
+    }
+
+    suspend fun signInWithProvider(activity: Activity, provider: OAuthProvider): Result<Unit> {
+        return try {
+            authRemoteDataSource.signInWithProvider(activity, provider)
+            Result.success(Unit)
+        } catch (e: Exception) {
+            Result.failure(Exception(e.message ?: "Error al iniciar sesión con proveedor"))
+        }
+    }
 
 }
