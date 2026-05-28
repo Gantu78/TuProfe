@@ -5,9 +5,11 @@ import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.material.icons.filled.ChevronRight
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.MailOutline
 import androidx.compose.material.icons.filled.Notifications
@@ -51,9 +53,11 @@ fun ConfigScreen(
     onAyudaClick: () -> Unit = {},
     onNotificacionesClick: () -> Unit = {},
     onAjustesClick: () -> Unit = {},
+    onSuscripcionClick: () -> Unit={},
     onUserClick: (String) -> Unit = {},
     modifier: Modifier = Modifier.testTag("profileScreen")
 ) {
+
 
        val state by configViewModel.uiState.collectAsState()
 
@@ -116,7 +120,9 @@ fun ConfigScreen(
                     }
 
                     item { Spacer(modifier = Modifier.height(20.dp)) }
-
+                    item {
+                        SuscripcionBanner(onClick = onSuscripcionClick)
+                    }
                     item {
                         AppButton(
                             textoBoton = stringResource(R.string.cerrar_sesi_n),
@@ -180,6 +186,8 @@ fun ConfigScreen(
         }
     }
 }
+
+
 
 @Composable
 private fun ConfigUserListItem(
@@ -284,7 +292,49 @@ fun ConfigBody(
     }
 
 }
-
+@Composable
+fun SuscripcionBanner(onClick: () -> Unit) {
+    Card(
+        onClick = onClick,
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 20.dp, vertical = 8.dp),
+        shape = RoundedCornerShape(20.dp),
+        colors = CardDefaults.cardColors(
+            containerColor = colorResource(R.color.verdetp)
+        ),
+        elevation = CardDefaults.cardElevation(6.dp)
+    ) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 20.dp, vertical = 16.dp),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceBetween
+        ) {
+            Column(modifier = Modifier.weight(1f)) {
+                Text(
+                    text = "❤ Ayúdanos a seguir mejorando",
+                    color = Color.White,
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 15.sp
+                )
+                Spacer(Modifier.height(2.dp))
+                Text(
+                    text = "Apoya TuProfe por solo \$9.900/mes",
+                    color = Color.White.copy(alpha = 0.85f),
+                    fontSize = 13.sp
+                )
+            }
+            Icon(
+                imageVector = Icons.Default.ChevronRight,
+                contentDescription = null,
+                tint = Color.White,
+                modifier = Modifier.size(24.dp)
+            )
+        }
+    }
+}
 
 @Preview(showBackground = true)
 @Composable

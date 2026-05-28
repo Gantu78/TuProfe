@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
+import com.example.tuprofe.ui.payment.PaymentViewModel
 import androidx.compose.material.icons.outlined.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
@@ -68,7 +69,7 @@ import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.tween
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.tuprofe.ui.mapa.MapaScreen
-
+import com.example.tuprofe.ui.payment.PaymentScreen
 
 // ── Reusable transition specs ─────────────────────────────────────────────────
 
@@ -112,6 +113,7 @@ sealed class Screen(val route: String){
     object PasswordReset : Screen("PasswordReset")
     object Main : Screen("Main")
     object Search: Screen("Search")
+    object Payment : Screen("Payment")
     object Profe : Screen("profe/{profeId}") {
         fun createRoute(profeId: String) = "profe/$profeId"
     }
@@ -159,6 +161,19 @@ fun AppNavegation(
         popEnterTransition = { slidePopEnter() },
         popExitTransition = { slidePopExit() }
     ){
+        composable(
+            route = Screen.Payment.route) {
+            val paymentViewModel: PaymentViewModel = hiltViewModel()
+            PaymentScreen(
+                onBackClick = { navController.popBackStack() },
+                onSuccess = {
+                    navController.navigate(Screen.Configuracion.route) {
+                        popUpTo(Screen.Payment.route) { inclusive = true }
+                    }
+                },
+                viewModel = paymentViewModel
+            )
+        }
         // ── Splash ────────────────────────────────────────────────────────────
         composable(
             route = Screen.Splash.route,
@@ -389,29 +404,21 @@ fun AppNavegation(
                 }
             )
         }
-        composable(route = Screen.Configuracion.route){
+        composable(route = Screen.Configuracion.route) {
             val configViewModel: ConfigViewModel = hiltViewModel()
-
             ConfigScreen(
                 configViewModel = configViewModel,
-                onEditProfileClick = {
-                    navController.navigate(Screen.ConfigPerfil.route)
-                },
+                onEditProfileClick = { navController.navigate(Screen.ConfigPerfil.route) },
                 onLogoutClick = {
                     configViewModel.onLogoutClick()
-                    navController.navigate(Screen.Login.route) {
-                        popUpTo(0) { inclusive = true }
-                    }
+                    navController.navigate(Screen.Login.route) { popUpTo(0) { inclusive = true } }
                 },
-                onCalifClick = {
-                    navController.navigate(Screen.Historial.route)
-                },
-                onUserClick = { userId ->
-                    navController.navigate(Screen.Profile.createRoute(userId))
-                },
+                onCalifClick = { navController.navigate(Screen.Historial.route) },
+                onUserClick = { userId -> navController.navigate(Screen.Profile.createRoute(userId)) },
                 onAyudaClick = { navController.navigate(Screen.AyudaYSoporte.route) },
                 onNotificacionesClick = { navController.navigate(Screen.Notificaciones.route) },
-                onAjustesClick = { navController.navigate(Screen.Ajustes.route) }
+                onAjustesClick = { navController.navigate(Screen.Ajustes.route) },
+                onSuscripcionClick = { navController.navigate(Screen.Payment.route) } //  nuevo
             )
         }
 

@@ -118,6 +118,9 @@ dependencies {
     // Coroutines Play Services (para .await() en tareas de Firebase)
     implementation(libs.kotlinx.coroutines.play.services)
 
+    // Stripe
+    implementation("com.stripe:stripe-android:20.49.0")
+
     // Retrofit
     implementation("com.squareup.retrofit2:retrofit:2.9.0")
     implementation("com.squareup.retrofit2:converter-scalars:2.9.0")
