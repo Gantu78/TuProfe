@@ -30,28 +30,28 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.tuprofe.HeaderSection
 import com.example.tuprofe.R
+import com.example.tuprofe.data.language.LanguageManager
 import com.example.tuprofe.ui.utils.BackgroundImage
 
-private val LANGUAGE_LABELS = mapOf(
-    ""   to R.string.idioma_sistema,
-    "es" to R.string.idioma_espanol,
-    "en" to R.string.idioma_ingles,
-    "fr" to R.string.idioma_frances,
-    "pt" to R.string.idioma_portugues,
-    "ar" to R.string.idioma_arabe,
-    "de" to R.string.idioma_aleman,
-    "it" to R.string.idioma_italiano,
-    "ja" to R.string.idioma_japones,
-    "ko" to R.string.idioma_coreano,
-    "ru" to R.string.idioma_ruso,
-    "hi" to R.string.idioma_hindi,
-    "th" to R.string.idioma_tailandes,
-    "vi" to R.string.idioma_vietnamita,
-    "zh" to R.string.idioma_chino,
-    "nl" to R.string.idioma_holandes,
-    "pl" to R.string.idioma_polaco,
-    "sv" to R.string.idioma_sueco,
-    "tr" to R.string.idioma_turco
+private val LANGUAGE_NATIVE_NAMES = mapOf(
+    "es" to "Español",
+    "en" to "English",
+    "fr" to "Français",
+    "pt" to "Português",
+    "ar" to "العربية",
+    "de" to "Deutsch",
+    "it" to "Italiano",
+    "ja" to "日本語",
+    "ko" to "한국어",
+    "ru" to "Русский",
+    "hi" to "हिन्दी",
+    "th" to "ภาษาไทย",
+    "vi" to "Tiếng Việt",
+    "zh" to "中文",
+    "nl" to "Nederlands",
+    "pl" to "Polski",
+    "sv" to "Svenska",
+    "tr" to "Türkçe"
 )
 
 @Composable
@@ -134,7 +134,7 @@ fun AjustesScreen(
 
             // ── Sección: Usuarios bloqueados ──────────────────────────────────
             item {
-                SectionLabel("Usuarios bloqueados")
+                SectionLabel(stringResource(R.string.usuarios_bloqueados))
                 Spacer(Modifier.height(8.dp))
             }
 
@@ -154,7 +154,7 @@ fun AjustesScreen(
                 item {
                     PrivacyInfoCard(
                         icon = Icons.Default.PersonOff,
-                        text = "No has bloqueado a ningún usuario"
+                        text = stringResource(R.string.no_has_bloqueado_ninguno)
                     )
                 }
             } else {
@@ -355,7 +355,7 @@ private fun BlockedUserCard(user: BlockedUser, onUnblock: () -> Unit) {
                 contentPadding = PaddingValues(horizontal = 12.dp, vertical = 6.dp)
             ) {
                 Text(
-                    text = "Desbloquear",
+                    text = stringResource(R.string.desbloquear),
                     color = MaterialTheme.colorScheme.error,
                     fontSize = 13.sp
                 )
@@ -392,10 +392,12 @@ private fun LanguageSelectorCard(
                 )
             }
             Spacer(Modifier.height(14.dp))
-            LANGUAGE_LABELS.entries.forEach { (code, labelRes) ->
+            LanguageManager.SUPPORTED.forEach { code ->
+                val label = if (code.isEmpty()) stringResource(R.string.idioma_sistema)
+                            else LANGUAGE_NATIVE_NAMES[code] ?: code
                 val isSelected = selectedCode == code
                 LanguageOptionRow(
-                    label = stringResource(labelRes),
+                    label = label,
                     selected = isSelected,
                     onClick = { onLanguageSelected(code) }
                 )

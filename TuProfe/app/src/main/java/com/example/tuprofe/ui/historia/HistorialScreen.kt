@@ -96,9 +96,9 @@ fun HistorialScreen(
                         AnimatedScreen(delayMs = 120) {
                             Text(
                                 text = when (state.selectedFilter) {
-                                    HistorialFilter.TODO -> "Todavía no has hecho ninguna calificación"
-                                    HistorialFilter.RESENAS -> "No tienes reseñas aún"
-                                    HistorialFilter.COMENTARIOS -> "No tienes comentarios aún"
+                                    HistorialFilter.TODO -> stringResource(R.string.historial_vacio)
+                                    HistorialFilter.RESENAS -> stringResource(R.string.sin_resenas_historial)
+                                    HistorialFilter.COMENTARIOS -> stringResource(R.string.sin_comentarios_historial)
                                 },
                                 fontSize = 16.sp,
                                 textAlign = TextAlign.Center,
@@ -404,7 +404,7 @@ private fun CommentHistorialCardBody(
             verticalAlignment = Alignment.CenterVertically
         ) {
             Text(
-                text = "Comentario",
+                text = stringResource(R.string.comentario),
                 fontWeight = FontWeight.SemiBold,
                 fontSize = 15.sp,
                 color = colorResource(R.color.verdetp),

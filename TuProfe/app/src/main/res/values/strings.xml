@@ -187,4 +187,93 @@
     <string name="un_profesor_encontrado">1 professor found</string>
     <string name="profesores_encontrados_count">%1$d professors found</string>
     <string name="busca_a_tuprofe">Search TuProfe</string>
+
+    <!-- Actions (buttons/dialogs) -->
+    <string name="confirmar">Confirm</string>
+    <string name="ok">OK</string>
+    <string name="reportar">Report</string>
+    <string name="bloquear_perfil">Block profile</string>
+    <string name="silenciar">Mute</string>
+    <string name="bloquear_usuario">Block user</string>
+    <string name="bloquear">Block</string>
+    <string name="suscribirme_ahora">Subscribe now</string>
+    <string name="ahora_no">Not now</string>
+    <string name="plan_mensual">Monthly Plan</string>
+
+    <!-- UI messages -->
+    <string name="si_correo_registrado">If the email is registered, you will receive a link</string>
+    <string name="verificar_correo_activar">Please verify your email to activate your account.</string>
+    <string name="bloquear_usuario_desc">Block @%1$s? You will no longer see their content.</string>
+    <string name="este_usuario_te_ha_bloqueado">This user has blocked you</string>
+    <string name="no_puedes_seguirlo_resenas">You can\'t follow them or see their reviews.</string>
+    <string name="no_has_bloqueado_ninguno">You haven\'t blocked any user</string>
+    <string name="sin_resenas_aun">No reviews yet</string>
+
+    <!-- ViewModel error/feedback messages -->
+    <string name="error_al_procesar_solicitud">Error processing request</string>
+    <string name="resena_reportada">Review reported</string>
+    <string name="comentario_reportado">Comment reported</string>
+    <string name="se_ha_enviado_correo_contrasena">A password reset email has been sent</string>
+    <string name="error_al_enviar_correo">Error sending email</string>
+    <string name="comentario_no_encontrado">Comment not found</string>
+    <string name="error_al_cargar_datos">Error loading data</string>
+    <string name="contenido_no_puede_vacio">Content cannot be empty</string>
+    <string name="error_al_actualizar">Error updating</string>
+    <string name="no_hay_resenas_suficientes">Not enough reviews to generate a summary</string>
+    <string name="error_al_generar_resumen">Error generating summary</string>
+    <string name="error_al_eliminar_sincronizando">Error deleting. Syncing…</string>
+    <string name="por_favor_completa_campos">Please complete all fields</string>
+    <string name="por_favor_ingresa_correo">Please enter your email address</string>
+    <string name="debes_seleccionar_profesor">You must select a professor</string>
+    <string name="debes_seleccionar_materia">You must select a subject</string>
+    <string name="calificacion_entre_1_y_5">Rating must be between 1 and 5</string>
+    <string name="debes_verificar_correo">You must verify your email before signing in.</string>
+    <string name="error_google_signin">Error signing in with Google</string>
+    <string name="error_github_signin">Error signing in with GitHub</string>
+
+    <!-- Moderation dialog strings -->
+    <string name="reportar_resena_titulo">Report review?</string>
+    <string name="reporte_admins">A report will be sent to the administrators.</string>
+    <string name="bloquear_a_usuario_titulo">Block @%1$s?</string>
+    <string name="ya_no_veras_contenido">You will no longer see their content.</string>
+    <string name="silenciar_resena_titulo">Mute review?</string>
+    <string name="no_aparecera_feed">It will not appear in your feed.</string>
+    <string name="reportar_comentario_titulo">Report comment?</string>
+    <string name="silenciar_comentario_titulo">Mute comment?</string>
+
+    <!-- Action labels -->
+    <string name="comentar">COMMENT</string>
+    <string name="desbloquear">Unblock</string>
+    <string name="usuarios_bloqueados">Blocked users</string>
+    <string name="cuenta_creada">Account created!</string>
+    <string name="aceptar">Accept</string>
+    <string name="error_al_iniciar_sesion">Error signing in</string>
+
+    <!-- Payment screen -->
+    <string name="por_mes">per month</string>
+    <string name="apoya_proyecto_funciones">Support the project and access all features</string>
+    <string name="resenas_ilimitadas">✓ Unlimited reviews</string>
+    <string name="sin_anuncios">✓ No ads</string>
+    <string name="acceso_prioritario">✓ Priority access</string>
+
+    <!-- Config screen subscription -->
+    <string name="suscripcion_vence_hoy">⚠️ Your subscription expires today</string>
+    <string name="suscripcion_vence_dias">⚠️ Your subscription expires in %1$d days</string>
+    <string name="renueva_acceso">Renew to not lose access</string>
+    <string name="ayudanos_mejorar">❤ Help us keep improving</string>
+    <string name="apoya_tuprofe_precio">Support TuProfe for only $9,900/month</string>
+
+    <!-- Map screen -->
+    <string name="calificacion">Rating</string>
+
+
+    <!-- Historial empty states -->
+    <string name="historial_vacio">You haven\'t made any ratings yet</string>
+    <string name="sin_resenas_historial">You don\'t have any reviews yet</string>
+    <string name="sin_comentarios_historial">You don\'t have any comments yet</string>
+
+
+    <string name="error_al_subir_imagenes">Error uploading images</string>
+    <string name="error_al_publicar">Error publishing</string>
+
 </resources>

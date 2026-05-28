@@ -1,5 +1,6 @@
 package com.example.tuprofe.ui.register
 
+import com.example.tuprofe.R
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.tuprofe.data.repository.AuthRepository
@@ -60,14 +61,14 @@ class RegisterViewModel @Inject constructor(
         if (currentState.email.isBlank() || currentState.usuario.isBlank() ||
             currentState.password1.isBlank() || currentState.password2.isBlank()) {
             _uiState.update {
-                it.copy(mostrarMensajeError = true, errorMessage = "Por favor completa todos los campos")
+                it.copy(mostrarMensajeError = true, errorMessage = R.string.por_favor_completa_campos)
             }
             return
         }
 
         if (currentState.password1 != currentState.password2) {
             _uiState.update {
-                it.copy(mostrarMensajeError = true, errorMessage = "Las contraseñas no coinciden")
+                it.copy(mostrarMensajeError = true, errorMessage = R.string.las_contrase_as_no_coinciden)
             }
             return
         }
@@ -92,11 +93,11 @@ class RegisterViewModel @Inject constructor(
                     _uiState.update { it.copy(isLoading = false, mostrarMensaje = true) }
                 } else {
                     val error = firestoreResult.exceptionOrNull()?.message ?: "Error al guardar perfil"
-                    _uiState.update { it.copy(isLoading = false, mostrarMensajeError = true, errorMessage = error) }
+                    _uiState.update { it.copy(isLoading = false, mostrarMensajeError = true, errorMessage = R.string.error_al_procesar_solicitud) }
                 }
             } else {
                 val error = result.exceptionOrNull()?.message ?: "Error en el registro"
-                _uiState.update { it.copy(isLoading = false, mostrarMensajeError = true, errorMessage = error) }
+                _uiState.update { it.copy(isLoading = false, mostrarMensajeError = true, errorMessage = R.string.error_al_procesar_solicitud) }
             }
         }
     }

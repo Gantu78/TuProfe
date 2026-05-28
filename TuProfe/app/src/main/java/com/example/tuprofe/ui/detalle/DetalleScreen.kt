@@ -70,9 +70,9 @@ fun DetalleScreen(
 
     uiState.moderationDialog?.let { action ->
         val (title, message) = when (action) {
-            is ModerationAction.Report -> "¿Reportar reseña?" to "Se enviará un reporte a los administradores."
-            is ModerationAction.Block -> "¿Bloquear a @${action.authorName}?" to "Ya no verás su contenido."
-            is ModerationAction.Mute -> "¿Silenciar reseña?" to "No aparecerá en tu feed."
+            is ModerationAction.Report -> stringResource(R.string.reportar_resena_titulo) to stringResource(R.string.reporte_admins)
+            is ModerationAction.Block -> stringResource(R.string.bloquear_a_usuario_titulo, action.authorName) to stringResource(R.string.ya_no_veras_contenido)
+            is ModerationAction.Mute -> stringResource(R.string.silenciar_resena_titulo) to stringResource(R.string.no_aparecera_feed)
         }
         AlertDialog(
             onDismissRequest = { detalleViewModel.dismissModerationDialog() },
@@ -80,24 +80,24 @@ fun DetalleScreen(
             text = { Text(message) },
             confirmButton = {
                 TextButton(onClick = { detalleViewModel.confirmModeration() }) {
-                    Text("Confirmar", color = colorResource(R.color.verdetp))
+                    Text(stringResource(R.string.confirmar), color = colorResource(R.color.verdetp))
                 }
             },
             dismissButton = {
                 TextButton(onClick = { detalleViewModel.dismissModerationDialog() }) {
-                    Text("Cancelar")
+                    Text(stringResource(R.string.cancelar))
                 }
             }
         )
     }
 
-    uiState.moderationFeedback?.let { feedback ->
+    uiState.moderationFeedback?.let { feedbackRes ->
         AlertDialog(
             onDismissRequest = { detalleViewModel.clearModerationFeedback() },
-            title = { Text(feedback) },
+            title = { Text(stringResource(feedbackRes)) },
             confirmButton = {
                 TextButton(onClick = { detalleViewModel.clearModerationFeedback() }) {
-                    Text("OK", color = colorResource(R.color.verdetp))
+                    Text(stringResource(R.string.ok), color = colorResource(R.color.verdetp))
                 }
             }
         )
@@ -112,7 +112,7 @@ fun DetalleScreen(
             onDismiss = { detalleViewModel.closeCommentSheet() },
             onSubmit = { detalleViewModel.submitComment(reviewId) },
             isSubmitting = uiState.isSubmittingComment,
-            submitLabel = "COMENTAR"
+            submitLabel = stringResource(R.string.comentar)
         )
     }
 
@@ -398,15 +398,15 @@ fun ReviewActionBar(
             }
             DropdownMenu(expanded = expanded, onDismissRequest = { expanded = false }) {
                 DropdownMenuItem(
-                    text = { Text("Reportar") },
+                    text = { Text(stringResource(R.string.reportar)) },
                     onClick = { expanded = false; onReport() }
                 )
                 DropdownMenuItem(
-                    text = { Text("Bloquear perfil") },
+                    text = { Text(stringResource(R.string.bloquear_perfil)) },
                     onClick = { expanded = false; onBlock() }
                 )
                 DropdownMenuItem(
-                    text = { Text("Silenciar") },
+                    text = { Text(stringResource(R.string.silenciar)) },
                     onClick = { expanded = false; onMute() }
                 )
             }

@@ -98,7 +98,7 @@ fun HomeScreen(
                 enter = fadeIn(tween(260))
             ) {
                 Text(
-                    text = state.errorMessage,
+                    text = state.errorMessage?.let { stringResource(it) } ?: "",
                     color = Color.Red,
                     textAlign = TextAlign.Center,
                     modifier = Modifier

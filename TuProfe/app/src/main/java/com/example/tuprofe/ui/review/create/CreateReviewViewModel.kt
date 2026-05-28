@@ -1,6 +1,7 @@
 package com.example.tuprofe.ui.review.create
 
 import android.net.Uri
+import com.example.tuprofe.R
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.tuprofe.data.Profesor
@@ -42,7 +43,7 @@ class CreateReviewViewModel @Inject constructor(
                 ) }
             }.onFailure { e ->
                 _uiState.update { it.copy(
-                    error = e.message,
+                    error = R.string.error_al_cargar_datos,
                     isSearchingProfessors = false
                 ) }
             }
@@ -119,17 +120,17 @@ class CreateReviewViewModel @Inject constructor(
         val professorId = currentState.selectedProfessor?.profeId ?: ""
 
         if (professorId.isBlank()) {
-            _uiState.update { it.copy(error = "Debes seleccionar un profesor") }
+            _uiState.update { it.copy(error = R.string.debes_seleccionar_profesor) }
             return
         }
 
         if (currentState.selectedMateria.isBlank()) {
-            _uiState.update { it.copy(error = "Debes seleccionar una materia") }
+            _uiState.update { it.copy(error = R.string.debes_seleccionar_materia) }
             return
         }
 
         if (currentState.rating < 1 || currentState.rating > 5) {
-            _uiState.update { it.copy(error = "La calificación debe estar entre 1 y 5") }
+            _uiState.update { it.copy(error = R.string.calificacion_entre_1_y_5) }
             return
         }
 
@@ -144,7 +145,7 @@ class CreateReviewViewModel @Inject constructor(
                 _uiState.update { it.copy(isUploadingImages = false) }
                 if (uploadResult.isFailure) {
                     _uiState.update {
-                        it.copy(isLoading = false, error = uploadResult.exceptionOrNull()?.message ?: "Error al subir imágenes")
+                        it.copy(isLoading = false, error = R.string.error_al_subir_imagenes)
                     }
                     return@launch
                 }
@@ -168,7 +169,7 @@ class CreateReviewViewModel @Inject constructor(
                 _uiState.update {
                     it.copy(
                         isLoading = false,
-                        error = result.exceptionOrNull()?.message ?: "Error desconocido"
+                        error = R.string.error_al_publicar
                     )
                 }
             }

@@ -1,5 +1,6 @@
 package com.example.tuprofe.ui.comment.detalle
 
+import androidx.annotation.StringRes
 import com.example.tuprofe.data.CommentInfo
 import com.example.tuprofe.data.ModerationAction
 
@@ -14,6 +15,6 @@ data class CommentDetalleState(
     val replyText: String = "",
     val isSubmittingReply: Boolean = false,
     val moderationDialog: ModerationAction? = null,
-    val moderationFeedback: String? = null,
+    @StringRes val moderationFeedback: Int? = null,
     val navigateBack: Boolean = false
 )

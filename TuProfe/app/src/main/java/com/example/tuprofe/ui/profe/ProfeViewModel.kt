@@ -1,5 +1,6 @@
 package com.example.tuprofe.ui.profe
 
+import com.example.tuprofe.R
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -89,7 +90,7 @@ class ProfeViewModel @Inject constructor(
             .joinToString("\n") { "- ${it.content}" }
 
         if (reseñasText.isBlank()) {
-            _uiState.update { it.copy(errorIA = "No hay reseñas suficientes para generar un resumen.") }
+            _uiState.update { it.copy(errorIA = R.string.no_hay_resenas_suficientes) }
             return
         }
 
@@ -124,7 +125,7 @@ class ProfeViewModel @Inject constructor(
                 _uiState.update { 
                     it.copy(
                         isLoadingIA = false, 
-                        errorIA = "Error al generar resumen: ${e.localizedMessage}"
+                        errorIA = R.string.error_al_generar_resumen
                     ) 
                 }
             }

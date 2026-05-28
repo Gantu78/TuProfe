@@ -1,5 +1,7 @@
 package com.example.tuprofe.ui.configPerfil
 
+import androidx.annotation.StringRes
+
 data class ConfigPerfilState(
     val email: String = "",
     val username: String = "",
@@ -12,7 +14,7 @@ data class ConfigPerfilState(
     val saveSuccess: Boolean = false,
     val showDeleteDialog: Boolean = false,
     val showSaveDialog: Boolean = false,
-    val errorMessagePerfil: String? = null,
+    @StringRes val errorMessagePerfil: Int? = null,
     val errorMessageEliminar: String? = null,
-    val passwordResetMessage: String? = null
+    @StringRes val passwordResetMessage: Int? = null
 )

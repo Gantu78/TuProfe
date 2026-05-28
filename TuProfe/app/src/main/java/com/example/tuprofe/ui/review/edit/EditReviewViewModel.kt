@@ -1,5 +1,6 @@
 package com.example.tuprofe.ui.review.edit
 
+import com.example.tuprofe.R
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -44,10 +45,10 @@ class EditReviewViewModel @Inject constructor(
                         )
                     }
                 } else {
-                    _uiState.update { it.copy(error = "Reseña no encontrada", isInitialLoading = false) }
+                    _uiState.update { it.copy(error = R.string.rese_a_no_encontrada, isInitialLoading = false) }
                 }
             } else {
-                _uiState.update { it.copy(error = "Error al cargar datos", isInitialLoading = false) }
+                _uiState.update { it.copy(error = R.string.error_al_cargar_datos, isInitialLoading = false) }
             }
         }
     }
@@ -63,7 +64,7 @@ class EditReviewViewModel @Inject constructor(
     fun updateReview() {
         val currentState = _uiState.value
         if (currentState.reviewText.isBlank()) {
-            _uiState.update { it.copy(error = "El contenido no puede estar vacío") }
+            _uiState.update { it.copy(error = R.string.contenido_no_puede_vacio) }
             return
         }
 
@@ -82,7 +83,7 @@ class EditReviewViewModel @Inject constructor(
                 _uiState.update {
                     it.copy(
                         isLoading = false,
-                        error = result.exceptionOrNull()?.message ?: "Error al actualizar"
+                        error = R.string.error_al_actualizar
                     )
                 }
             }

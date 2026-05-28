@@ -1,6 +1,7 @@
 package com.example.tuprofe.ui.configPerfil
 
 import android.net.Uri
+import com.example.tuprofe.R
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.tuprofe.data.repository.AuthRepository
@@ -52,7 +53,7 @@ class ConfigPerfilViewModel @Inject constructor(
                     _uiState.update {
                         it.copy(
                             isLoading = false,
-                            errorMessagePerfil = error.message
+                            errorMessagePerfil = R.string.error_al_procesar_solicitud
                         )
                     }
                 }
@@ -119,7 +120,7 @@ class ConfigPerfilViewModel @Inject constructor(
             result.onSuccess {
                 _uiState.update { it.copy(isLoading = false, saveSuccess = true) }
             }.onFailure { error ->
-                _uiState.update { it.copy(isLoading = false, errorMessagePerfil = error.message) }
+                _uiState.update { it.copy(isLoading = false, errorMessagePerfil = R.string.error_al_procesar_solicitud) }
             }
         }
     }
@@ -153,9 +154,9 @@ class ConfigPerfilViewModel @Inject constructor(
         viewModelScope.launch {
             val result = authRepository.resetPassword(email)
             if (result.isSuccess) {
-                _uiState.update { it.copy(passwordResetMessage = "Se ha enviado un correo para cambiar tu contraseña") }
+                _uiState.update { it.copy(passwordResetMessage = R.string.se_ha_enviado_correo_contrasena) }
             } else {
-                _uiState.update { it.copy(passwordResetMessage = result.exceptionOrNull()?.message ?: "Error al enviar el correo") }
+                _uiState.update { it.copy(passwordResetMessage = R.string.error_al_enviar_correo) }
             }
         }
     }
@@ -169,7 +170,7 @@ class ConfigPerfilViewModel @Inject constructor(
                 userRepository.updateUserPhoto(userId, imageUrl)
             }
             result.onFailure { error ->
-                _uiState.update { it.copy(errorMessagePerfil = error.message) }
+                _uiState.update { it.copy(errorMessagePerfil = R.string.error_al_procesar_solicitud) }
             }
         }
     }

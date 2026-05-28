@@ -155,7 +155,7 @@ fun ConfigScreen(
 
     val showSheet = state.showFollowersSheet || state.showFollowingSheet
     if (showSheet) {
-        val title = if (state.showFollowersSheet) "Seguidores" else "Siguiendo"
+        val title = if (state.showFollowersSheet) stringResource(R.string.seguidores) else stringResource(R.string.siguiendo)
         val list = if (state.showFollowersSheet) state.followersList else state.followingList
 
         ModalBottomSheet(onDismissRequest = { configViewModel.closeSheet() }) {
@@ -179,7 +179,7 @@ fun ConfigScreen(
                     contentAlignment = Alignment.Center
                 ) {
                     Text(
-                        text = "No hay usuarios aún",
+                        text = stringResource(R.string.no_hay_usuarios),
                         color = MaterialTheme.colorScheme.onSurfaceVariant,
                         fontSize = 14.sp
                     )
@@ -249,7 +249,7 @@ private fun ConfigUserListItem(
             )
         ) {
             Text(
-                text = if (usuario.followed) "Siguiendo" else "Seguir",
+                text = if (usuario.followed) stringResource(R.string.siguiendo) else stringResource(R.string.seguir),
                 fontSize = 13.sp,
                 fontWeight = FontWeight.Medium
             )
@@ -330,15 +330,15 @@ fun RecordatorioVencimiento(diasRestantes: Int, onClick: () -> Unit) {
         ) {
             Column(modifier = Modifier.weight(1f)) {
                 Text(
-                    text = if (diasRestantes == 0) "⚠️ Tu suscripción vence hoy"
-                    else "⚠️ Tu suscripción vence en $diasRestantes día${if (diasRestantes == 1) "" else "s"}",
+                    text = if (diasRestantes == 0) stringResource(R.string.suscripcion_vence_hoy)
+                    else stringResource(R.string.suscripcion_vence_dias, diasRestantes),
                     color = MaterialTheme.colorScheme.onErrorContainer,
                     fontWeight = FontWeight.Bold,
                     fontSize = 15.sp
                 )
                 Spacer(Modifier.height(2.dp))
                 Text(
-                    text = "Renueva para no perder el acceso",
+                    text = stringResource(R.string.renueva_acceso),
                     color = MaterialTheme.colorScheme.onErrorContainer.copy(alpha = 0.85f),
                     fontSize = 13.sp
                 )
@@ -374,14 +374,14 @@ fun SuscripcionBanner(onClick: () -> Unit) {
         ) {
             Column(modifier = Modifier.weight(1f)) {
                 Text(
-                    text = "❤ Ayúdanos a seguir mejorando",
+                    text = stringResource(R.string.ayudanos_mejorar),
                     color = Color.White,
                     fontWeight = FontWeight.Bold,
                     fontSize = 15.sp
                 )
                 Spacer(Modifier.height(2.dp))
                 Text(
-                    text = "Apoya TuProfe por solo \$9.900/mes",
+                    text = stringResource(R.string.apoya_tuprofe_precio),
                     color = Color.White.copy(alpha = 0.85f),
                     fontSize = 13.sp
                 )

@@ -1,5 +1,6 @@
 package com.example.tuprofe.ui.comment.detalle
 
+import com.example.tuprofe.R
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.tuprofe.data.ModerationAction
@@ -109,7 +110,7 @@ class CommentDetalleViewModel @Inject constructor(
                 when (action) {
                     is ModerationAction.Report -> {
                         moderationRepository.report(userId, action.targetId, action.targetType)
-                        _uiState.update { it.copy(moderationFeedback = "Comentario reportado") }
+                        _uiState.update { it.copy(moderationFeedback = R.string.comentario_reportado) }
                     }
                     is ModerationAction.Block -> {
                         moderationRepository.blockUser(userId, action.authorId)
@@ -121,7 +122,7 @@ class CommentDetalleViewModel @Inject constructor(
                     }
                 }
             } catch (e: Exception) {
-                _uiState.update { it.copy(moderationFeedback = "Error al procesar la solicitud") }
+                _uiState.update { it.copy(moderationFeedback = R.string.error_al_procesar_solicitud) }
             }
         }
     }

@@ -58,7 +58,7 @@ fun EditReviewScreen(
                         )
 
                         Text(
-                            text = "Profesor: ${state.professorName}",
+                            text = stringResource(R.string.profesor_label, state.professorName),
                             fontSize = 18.sp,
                             fontWeight = FontWeight.Medium,
                             color = MaterialTheme.colorScheme.onSurface
@@ -118,9 +118,9 @@ fun EditReviewScreen(
                             )
                         }
 
-                        state.error?.let {
+                        state.error?.let { errRes ->
                             Spacer(modifier = Modifier.height(12.dp))
-                            Text(text = it, color = Color.Red, fontSize = 14.sp)
+                            Text(text = stringResource(errRes), color = Color.Red, fontSize = 14.sp)
                         }
                     }
                 }

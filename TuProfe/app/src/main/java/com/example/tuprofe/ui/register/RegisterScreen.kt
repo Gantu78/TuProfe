@@ -60,14 +60,16 @@ fun RegisterScreen(
             Header()
 
             if (state.mostrarMensajeError) {
-                Text(
-                    text = state.errorMessage,
-                    color = Color.Red,
-                    textAlign = TextAlign.Center,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(top = 8.dp, start = 16.dp, end = 16.dp)
-                )
+                state.errorMessage?.let { errRes ->
+                    Text(
+                        text = stringResource(errRes),
+                        color = Color.Red,
+                        textAlign = TextAlign.Center,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(top = 8.dp, start = 16.dp, end = 16.dp)
+                    )
+                }
             }
 
             if (state.mostrarMensaje) {
@@ -75,17 +77,17 @@ fun RegisterScreen(
                     onDismissRequest = onSuccessDismiss,
                     title = {
                         Text(
-                            text = "¡Cuenta creada!",
+                            text = stringResource(R.string.cuenta_creada),
                             color = colorResource(id = R.color.verdetp)
                         )
                     },
                     text = {
-                        Text(text = "Por favor, verifica tu correo para activar tu cuenta.")
+                        Text(text = stringResource(R.string.verificar_correo_activar))
                     },
                     confirmButton = {
                         TextButton(onClick = onSuccessDismiss) {
                             Text(
-                                text = "Aceptar",
+                                text = stringResource(R.string.aceptar),
                                 color = colorResource(id = R.color.verdetp)
                             )
                         }

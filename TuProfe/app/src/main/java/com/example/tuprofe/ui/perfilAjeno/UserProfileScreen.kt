@@ -26,6 +26,7 @@ import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -122,24 +123,24 @@ fun UserProfileContent(
     if (state.showBlockConfirm) {
         AlertDialog(
             onDismissRequest = onDismissBlock,
-            title = { Text("Bloquear usuario") },
+            title = { Text(stringResource(R.string.bloquear_usuario)) },
             text = {
-                Text("¿Bloquear a ${state.user.nombreUsu}? Ya no verás su contenido.")
+                Text(stringResource(R.string.bloquear_usuario_desc, state.user.nombreUsu))
             },
             confirmButton = {
                 TextButton(onClick = onConfirmBlock) {
-                    Text("Bloquear", color = MaterialTheme.colorScheme.error)
+                    Text(stringResource(R.string.bloquear), color = MaterialTheme.colorScheme.error)
                 }
             },
             dismissButton = {
-                TextButton(onClick = onDismissBlock) { Text("Cancelar") }
+                TextButton(onClick = onDismissBlock) { Text(stringResource(R.string.cancelar)) }
             }
         )
     }
 
     val showSheet = state.showFollowersSheet || state.showFollowingSheet
     if (showSheet) {
-        val title = if (state.showFollowersSheet) "Seguidores" else "Siguiendo"
+        val title = if (state.showFollowersSheet) stringResource(R.string.seguidores) else stringResource(R.string.siguiendo)
         val list = if (state.showFollowersSheet) state.followersList else state.followingList
 
         ModalBottomSheet(onDismissRequest = onDismissSheet) {
@@ -167,7 +168,7 @@ fun UserProfileContent(
                     contentAlignment = Alignment.Center
                 ) {
                     Text(
-                        text = "No hay usuarios aún",
+                        text = stringResource(R.string.no_hay_usuarios),
                         color = MaterialTheme.colorScheme.onSurfaceVariant,
                         fontSize = 14.sp
                     )
@@ -319,8 +320,8 @@ private fun UserProfileHeader(
             horizontalArrangement = Arrangement.spacedBy(40.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            StatItem(label = "Seguidores", count = user.followersCount, onClick = onFollowersClick, testTag = "user_profile_followers_count")
-            StatItem(label = "Siguiendo", count = user.followingCount, onClick = onFollowingClick)
+            StatItem(label = stringResource(R.string.seguidores), count = user.followersCount, onClick = onFollowersClick, testTag = "user_profile_followers_count")
+            StatItem(label = stringResource(R.string.siguiendo), count = user.followingCount, onClick = onFollowingClick)
         }
 
         if (!isOwnProfile) {
@@ -339,7 +340,7 @@ private fun UserProfileHeader(
                     .testTag("follow_button")
             ) {
                 Text(
-                    text = if (user.followed) "Siguiendo" else "Seguir",
+                    text = if (user.followed) stringResource(R.string.siguiendo) else stringResource(R.string.seguir),
                     fontWeight = FontWeight.SemiBold,
                     fontSize = 15.sp
                 )
@@ -417,7 +418,7 @@ private fun UserListItem(
             )
         ) {
             Text(
-                text = if (usuario.followed) "Siguiendo" else "Seguir",
+                text = if (usuario.followed) stringResource(R.string.siguiendo) else stringResource(R.string.seguir),
                 fontSize = 13.sp,
                 fontWeight = FontWeight.Medium
             )
@@ -434,7 +435,7 @@ private fun ReviewsSectionHeader(reviewCount: Int, modifier: Modifier = Modifier
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
             Text(
-                text = "Reseñas",
+                text = stringResource(R.string.resenas),
                 fontFamily = BebasNeue,
                 fontSize = 26.sp,
                 color = colorResource(R.color.verdetp)
@@ -500,7 +501,7 @@ private fun EmptyReviewsMessage(modifier: Modifier = Modifier) {
             tint = colorResource(R.color.verdetp).copy(alpha = 0.35f)
         )
         Text(
-            text = "Sin reseñas aún",
+            text = stringResource(R.string.sin_resenas_aun),
             fontFamily = BebasNeue,
             fontSize = 22.sp,
             color = colorResource(R.color.verdetp).copy(alpha = 0.55f),
@@ -546,7 +547,7 @@ private fun BlockedByUserMessage(modifier: Modifier = Modifier) {
             )
             Spacer(Modifier.height(16.dp))
             Text(
-                text = "Este usuario te ha bloqueado",
+                text = stringResource(R.string.este_usuario_te_ha_bloqueado),
                 fontFamily = BebasNeue,
                 fontSize = 24.sp,
                 color = colorResource(R.color.verdetp).copy(alpha = 0.65f),
@@ -554,7 +555,7 @@ private fun BlockedByUserMessage(modifier: Modifier = Modifier) {
             )
             Spacer(Modifier.height(8.dp))
             Text(
-                text = "No puedes seguirlo ni ver sus reseñas.",
+                text = stringResource(R.string.no_puedes_seguirlo_resenas),
                 fontSize = 14.sp,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
                 textAlign = TextAlign.Center
@@ -580,14 +581,14 @@ private fun PrivateProfileMessage(modifier: Modifier = Modifier) {
             )
             Spacer(Modifier.height(16.dp))
             Text(
-                text = "Perfil privado",
+                text = stringResource(R.string.perfil_privado),
                 fontFamily = BebasNeue,
                 fontSize = 26.sp,
                 color = colorResource(R.color.verdetp).copy(alpha = 0.65f)
             )
             Spacer(Modifier.height(8.dp))
             Text(
-                text = "Este usuario ha configurado su perfil como privado.",
+                text = stringResource(R.string.perfil_privado_desc_long),
                 fontSize = 14.sp,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
                 textAlign = TextAlign.Center
@@ -605,7 +606,7 @@ private fun HiddenReviewsMessage(modifier: Modifier = Modifier) {
         contentAlignment = Alignment.Center
     ) {
         Text(
-            text = "Este usuario ha ocultado sus reseñas.",
+            text = stringResource(R.string.resenas_ocultas),
             fontSize = 14.sp,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
             textAlign = TextAlign.Center

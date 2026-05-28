@@ -15,6 +15,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.compose.ui.res.stringResource
 import com.example.tuprofe.R
 import com.example.tuprofe.ui.utils.BackgroundImage
 import com.stripe.android.paymentsheet.PaymentSheet
@@ -76,7 +77,7 @@ fun PaymentScreen(
             Spacer(Modifier.height(8.dp))
 
             Text(
-                text = "Apoya el proyecto y accede\na todas las funciones",
+                text = stringResource(R.string.apoya_proyecto_funciones),
                 fontSize = 16.sp,
                 textAlign = TextAlign.Center,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
@@ -96,7 +97,7 @@ fun PaymentScreen(
                     modifier = Modifier.padding(24.dp),
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    Text("Plan Mensual", fontWeight = FontWeight.SemiBold, fontSize = 18.sp)
+                    Text(stringResource(R.string.plan_mensual), fontWeight = FontWeight.SemiBold, fontSize = 18.sp)
                     Spacer(Modifier.height(8.dp))
                     Text(
                         text = "$9.900 COP",
@@ -104,12 +105,12 @@ fun PaymentScreen(
                         fontWeight = FontWeight.Bold,
                         color = colorResource(R.color.verdetp)
                     )
-                    Text("por mes", color = MaterialTheme.colorScheme.onSurfaceVariant)
+                    Text(stringResource(R.string.por_mes), color = MaterialTheme.colorScheme.onSurfaceVariant)
                     Spacer(Modifier.height(16.dp))
                     listOf(
-                        "✓ Reseñas ilimitadas",
-                        "✓ Sin anuncios",
-                        "✓ Acceso prioritario"
+                        stringResource(R.string.resenas_ilimitadas),
+                        stringResource(R.string.sin_anuncios),
+                        stringResource(R.string.acceso_prioritario)
                     ).forEach {
                         Text(it, modifier = Modifier.padding(vertical = 2.dp))
                     }
@@ -139,7 +140,7 @@ fun PaymentScreen(
                             .fillMaxWidth()
                             .height(52.dp)
                     ) {
-                        Text("Reintentar", color = Color.White, fontSize = 16.sp)
+                        Text(stringResource(R.string.reintentar), color = Color.White, fontSize = 16.sp)
                     }
                 }
                 else -> {
@@ -153,7 +154,7 @@ fun PaymentScreen(
                             .fillMaxWidth()
                             .height(52.dp)
                     ) {
-                        Text("Suscribirme ahora", color = Color.White, fontSize = 16.sp)
+                        Text(stringResource(R.string.suscribirme_ahora), color = Color.White, fontSize = 16.sp)
                     }
                 }
             }
@@ -161,7 +162,7 @@ fun PaymentScreen(
             Spacer(Modifier.height(12.dp))
 
             TextButton(onClick = onBackClick) {
-                Text("Ahora no", color = MaterialTheme.colorScheme.onSurfaceVariant)
+                Text(stringResource(R.string.ahora_no), color = MaterialTheme.colorScheme.onSurfaceVariant)
             }
         }
     }

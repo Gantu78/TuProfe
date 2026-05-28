@@ -57,9 +57,11 @@ fun ResetPasswordScreen(
                 )
                 Spacer(modifier = Modifier.padding(10.dp))
                 if (state.mostrarMensaje) {
-                    Text("Si el correo está registrado, recibirás un enlace", color = Color(0xFF1AC06A), fontSize = 16.sp)
+                    Text(stringResource(R.string.si_correo_registrado), color = Color(0xFF1AC06A), fontSize = 16.sp)
                 } else if (state.mostrarError) {
-                    Text(state.errorMessage, color = Color.Red, fontSize = 16.sp)
+                    state.errorMessage?.let { errRes ->
+                    Text(stringResource(errRes), color = Color.Red, fontSize = 16.sp)
+                    }
                 }
                 Spacer(modifier = Modifier.padding(10.dp))
                 AppButton(stringResource(R.string.enviar_enlace),

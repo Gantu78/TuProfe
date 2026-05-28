@@ -68,7 +68,7 @@ fun ConfigPerfilScreen(
                     horizontalAlignment = Alignment.CenterHorizontally
                 ){
                     Text(
-                        text = state.errorMessagePerfil ?: "",
+                        text = state.errorMessagePerfil?.let { stringResource(it) } ?: "",
                         color = Color.Red,
                         fontSize = 12.sp,
                         textAlign = TextAlign.Center,
@@ -96,9 +96,9 @@ fun ConfigPerfilScreen(
             }
 
             item {
-                state.passwordResetMessage?.let { mensaje ->
+                state.passwordResetMessage?.let { msgRes ->
                     Text(
-                        text = mensaje,
+                        text = stringResource(msgRes),
                         color = Color(0xFF1AC06A),
                         fontSize = 14.sp,
                         textAlign = TextAlign.Center,

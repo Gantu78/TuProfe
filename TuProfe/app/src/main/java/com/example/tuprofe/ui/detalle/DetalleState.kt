@@ -1,5 +1,6 @@
 package com.example.tuprofe.ui.detalle
 
+import androidx.annotation.StringRes
 import com.example.tuprofe.data.CommentInfo
 import com.example.tuprofe.data.ModerationAction
 import com.example.tuprofe.data.ReviewInfo
@@ -17,7 +18,7 @@ data class DetalleState(
     val commentText: String = "",
     val isSubmittingComment: Boolean = false,
     val moderationDialog: ModerationAction? = null,
-    val moderationFeedback: String? = null
+    @StringRes val moderationFeedback: Int? = null
 ) {
     // Keep for backwards compat with preview
     val respuestas: List<CommentInfo> get() = comments

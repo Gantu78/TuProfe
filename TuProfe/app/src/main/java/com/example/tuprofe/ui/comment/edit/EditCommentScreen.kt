@@ -7,6 +7,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -49,14 +50,14 @@ fun EditCommentScreen(
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
                         Text(
-                            text = "Editar Comentario",
+                            text = stringResource(R.string.editar_comentario),
                             fontSize = 24.sp,
                             fontWeight = FontWeight.Bold,
                             modifier = Modifier.padding(vertical = 24.dp)
                         )
 
                         TextFieldApp(
-                            texto = "Tu comentario...",
+                            texto = stringResource(R.string.escribe_tu_comentario),
                             value = state.commentText,
                             onValueChange = { viewModel.onCommentTextChange(it) },
                             modifier = Modifier
@@ -70,7 +71,7 @@ fun EditCommentScreen(
                             CircularProgressIndicator(color = colorResource(R.color.verdetp))
                         } else {
                             AppButton(
-                                textoBoton = "GUARDAR CAMBIOS",
+                                textoBoton = stringResource(R.string.guardar_cambios),
                                 onClick = { viewModel.updateComment() },
                                 modifier = Modifier
                                     .fillMaxWidth()
@@ -78,9 +79,9 @@ fun EditCommentScreen(
                             )
                         }
 
-                        state.error?.let {
+                        state.error?.let { errRes ->
                             Spacer(modifier = Modifier.height(12.dp))
-                            Text(text = it, color = Color.Red, fontSize = 14.sp)
+                            Text(text = stringResource(errRes), color = Color.Red, fontSize = 14.sp)
                         }
                     }
                 }

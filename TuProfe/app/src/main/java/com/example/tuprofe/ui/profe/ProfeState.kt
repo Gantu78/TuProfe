@@ -1,5 +1,6 @@
 package com.example.tuprofe.ui.profe
 
+import androidx.annotation.StringRes
 import com.example.tuprofe.data.Profesor
 import com.example.tuprofe.data.ReviewInfo
 
@@ -10,5 +11,5 @@ data class ProfeState(
     val isLoading: Boolean = true,
     val resumenIA: String? = null,
     val isLoadingIA: Boolean = false,
-    val errorIA: String? = null
+    @StringRes val errorIA: Int? = null
 )

@@ -1,5 +1,6 @@
 package com.example.tuprofe.ui.comment.edit
 
+import com.example.tuprofe.R
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -42,10 +43,10 @@ class EditCommentViewModel @Inject constructor(
                         )
                     }
                 } else {
-                    _uiState.update { it.copy(error = "Comentario no encontrado", isInitialLoading = false) }
+                    _uiState.update { it.copy(error = R.string.comentario_no_encontrado, isInitialLoading = false) }
                 }
             } else {
-                _uiState.update { it.copy(error = "Error al cargar datos", isInitialLoading = false) }
+                _uiState.update { it.copy(error = R.string.error_al_cargar_datos, isInitialLoading = false) }
             }
         }
     }
@@ -57,7 +58,7 @@ class EditCommentViewModel @Inject constructor(
     fun updateComment() {
         val state = _uiState.value
         if (state.commentText.isBlank()) {
-            _uiState.update { it.copy(error = "El contenido no puede estar vacío") }
+            _uiState.update { it.copy(error = R.string.contenido_no_puede_vacio) }
             return
         }
         _uiState.update { it.copy(isLoading = true, error = null) }
@@ -69,7 +70,7 @@ class EditCommentViewModel @Inject constructor(
                 _uiState.update {
                     it.copy(
                         isLoading = false,
-                        error = result.exceptionOrNull()?.message ?: "Error al actualizar"
+                        error = R.string.error_al_actualizar
                     )
                 }
             }

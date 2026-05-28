@@ -304,9 +304,9 @@ fun CreateReviewScreen(
                                 .pressScaleEffect()
                         )
                     }
-                    state.error?.let {
+                    state.error?.let { errRes ->
                         Spacer(modifier = Modifier.height(12.dp))
-                        Text(text = it, color = Color.Red, fontSize = 14.sp)
+                        Text(text = stringResource(errRes), color = Color.Red, fontSize = 14.sp)
                     }
                 }
             }

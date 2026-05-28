@@ -174,4 +174,93 @@
     <string name="un_profesor_encontrado">1 profesor encontrado</string>
     <string name="profesores_encontrados_count">%1$d profesores encontrados</string>
     <string name="busca_a_tuprofe">Busca a TuProfe</string>
+
+    <!-- Actions -->
+    <string name="confirmar">Confirmar</string>
+    <string name="ok">OK</string>
+    <string name="reportar">Reportar</string>
+    <string name="bloquear_perfil">Bloquear perfil</string>
+    <string name="silenciar">Silenciar</string>
+    <string name="bloquear_usuario">Bloquear usuario</string>
+    <string name="bloquear">Bloquear</string>
+    <string name="suscribirme_ahora">Suscribirme ahora</string>
+    <string name="ahora_no">Ahora no</string>
+    <string name="plan_mensual">Plan Mensual</string>
+
+    <!-- UI messages -->
+    <string name="si_correo_registrado">Si el correo está registrado, recibirás un enlace</string>
+    <string name="verificar_correo_activar">Por favor, verifica tu correo para activar tu cuenta.</string>
+    <string name="bloquear_usuario_desc">¿Bloquear a @%1$s? Ya no verás su contenido.</string>
+    <string name="este_usuario_te_ha_bloqueado">Este usuario te ha bloqueado</string>
+    <string name="no_puedes_seguirlo_resenas">No puedes seguirlo ni ver sus reseñas.</string>
+    <string name="no_has_bloqueado_ninguno">No has bloqueado a ningún usuario</string>
+    <string name="sin_resenas_aun">Sin reseñas aún</string>
+
+    <!-- ViewModel error/feedback messages -->
+    <string name="error_al_procesar_solicitud">Error al procesar la solicitud</string>
+    <string name="resena_reportada">Reseña reportada</string>
+    <string name="comentario_reportado">Comentario reportado</string>
+    <string name="se_ha_enviado_correo_contrasena">Se ha enviado un correo para cambiar tu contraseña</string>
+    <string name="error_al_enviar_correo">Error al enviar el correo</string>
+    <string name="comentario_no_encontrado">Comentario no encontrado</string>
+    <string name="error_al_cargar_datos">Error al cargar datos</string>
+    <string name="contenido_no_puede_vacio">El contenido no puede estar vacío</string>
+    <string name="error_al_actualizar">Error al actualizar</string>
+    <string name="no_hay_resenas_suficientes">No hay reseñas suficientes para generar un resumen</string>
+    <string name="error_al_generar_resumen">Error al generar resumen</string>
+    <string name="error_al_eliminar_sincronizando">Error al eliminar. Sincronizando…</string>
+    <string name="por_favor_completa_campos">Por favor completa todos los campos</string>
+    <string name="por_favor_ingresa_correo">Por favor ingresa tu correo</string>
+    <string name="debes_seleccionar_profesor">Debes seleccionar un profesor</string>
+    <string name="debes_seleccionar_materia">Debes seleccionar una materia</string>
+    <string name="calificacion_entre_1_y_5">La calificación debe estar entre 1 y 5</string>
+    <string name="debes_verificar_correo">Debes verificar tu correo electrónico antes de poder ingresar.</string>
+    <string name="error_google_signin">Error al iniciar con Google</string>
+    <string name="error_github_signin">Error con GitHub</string>
+
+    <!-- Moderation dialog strings -->
+    <string name="reportar_resena_titulo">¿Reportar reseña?</string>
+    <string name="reporte_admins">Se enviará un reporte a los administradores.</string>
+    <string name="bloquear_a_usuario_titulo">¿Bloquear a @%1$s?</string>
+    <string name="ya_no_veras_contenido">Ya no verás su contenido.</string>
+    <string name="silenciar_resena_titulo">¿Silenciar reseña?</string>
+    <string name="no_aparecera_feed">No aparecerá en tu feed.</string>
+    <string name="reportar_comentario_titulo">¿Reportar comentario?</string>
+    <string name="silenciar_comentario_titulo">¿Silenciar comentario?</string>
+
+    <!-- Action labels -->
+    <string name="comentar">COMENTAR</string>
+    <string name="desbloquear">Desbloquear</string>
+    <string name="usuarios_bloqueados">Usuarios bloqueados</string>
+    <string name="cuenta_creada">¡Cuenta creada!</string>
+    <string name="aceptar">Aceptar</string>
+    <string name="error_al_iniciar_sesion">Error al iniciar sesión</string>
+
+    <!-- Payment screen -->
+    <string name="por_mes">por mes</string>
+    <string name="apoya_proyecto_funciones">Apoya el proyecto y accede a todas las funciones</string>
+    <string name="resenas_ilimitadas">✓ Reseñas ilimitadas</string>
+    <string name="sin_anuncios">✓ Sin anuncios</string>
+    <string name="acceso_prioritario">✓ Acceso prioritario</string>
+
+    <!-- Config screen subscription -->
+    <string name="suscripcion_vence_hoy">⚠️ Tu suscripción vence hoy</string>
+    <string name="suscripcion_vence_dias">⚠️ Tu suscripción vence en %1$d días</string>
+    <string name="renueva_acceso">Renueva para no perder el acceso</string>
+    <string name="ayudanos_mejorar">❤ Ayúdanos a seguir mejorando</string>
+    <string name="apoya_tuprofe_precio">Apoya TuProfe por solo $9.900/mes</string>
+
+    <!-- Map screen -->
+    <string name="calificacion">Calificación</string>
+
+
+    <!-- Historial empty states -->
+    <string name="historial_vacio">Todavía no has hecho ninguna calificación</string>
+    <string name="sin_resenas_historial">No tienes reseñas aún</string>
+    <string name="sin_comentarios_historial">No tienes comentarios aún</string>
+
+
+    <string name="error_al_subir_imagenes">Error al subir las imágenes</string>
+    <string name="error_al_publicar">Error al publicar</string>
+
 </resources>

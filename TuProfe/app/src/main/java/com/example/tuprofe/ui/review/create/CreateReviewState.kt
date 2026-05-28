@@ -1,6 +1,7 @@
 package com.example.tuprofe.ui.review.create
 
 import android.net.Uri
+import androidx.annotation.StringRes
 import com.example.tuprofe.data.Profesor
 
 data class CreateReviewState(
@@ -15,7 +16,7 @@ data class CreateReviewState(
     val isLoading: Boolean = false,
     val isSearchingProfessors: Boolean = false,
     val success: Boolean = false,
-    val error: String? = null,
+    @StringRes val error: Int? = null,
     val isDropdownExpanded: Boolean = false,
     val latitude: Double? = null,
     val longitude: Double? = null,

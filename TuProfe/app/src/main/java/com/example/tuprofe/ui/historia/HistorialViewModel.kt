@@ -1,5 +1,6 @@
 package com.example.tuprofe.ui.historia
 
+import com.example.tuprofe.R
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.tuprofe.data.repository.AuthRepository
@@ -39,7 +40,7 @@ class HistorialViewModel @Inject constructor(
                     userReviews = reviewsResult.getOrNull() ?: it.userReviews,
                     userComments = commentsResult.getOrNull() ?: it.userComments,
                     isLoading = false,
-                    errorMessage = reviewsResult.exceptionOrNull()?.message
+                    errorMessage = R.string.error_al_cargar_datos
                 )
             }
         }
@@ -50,7 +51,7 @@ class HistorialViewModel @Inject constructor(
         viewModelScope.launch {
             val result = reviewRepository.deleteReview(reviewId)
             if (result.isFailure) {
-                _uiState.update { it.copy(errorMessage = "Error al eliminar. Sincronizando...", isLoading = true) }
+                _uiState.update { it.copy(errorMessage = R.string.error_al_eliminar_sincronizando, isLoading = true) }
                 cargarHistorial()
             }
         }
@@ -61,7 +62,7 @@ class HistorialViewModel @Inject constructor(
         viewModelScope.launch {
             val result = commentRepository.deleteComment(commentId)
             if (result.isFailure) {
-                _uiState.update { it.copy(errorMessage = "Error al eliminar. Sincronizando...", isLoading = true) }
+                _uiState.update { it.copy(errorMessage = R.string.error_al_eliminar_sincronizando, isLoading = true) }
                 cargarHistorial()
             }
         }

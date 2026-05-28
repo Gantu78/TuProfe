@@ -122,9 +122,9 @@ fun ProfeContent(
                                 )
                             }
 
-                            uiState.errorIA?.let {
+                            uiState.errorIA?.let { errRes ->
                                 Text(
-                                    text = it,
+                                    text = stringResource(errRes),
                                     color = Color.Red,
                                     fontSize = 12.sp,
                                     modifier = Modifier.padding(top = 8.dp)

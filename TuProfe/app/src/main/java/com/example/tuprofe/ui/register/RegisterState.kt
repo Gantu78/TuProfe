@@ -1,5 +1,7 @@
 package com.example.tuprofe.ui.register
 
+import androidx.annotation.StringRes
+
 data class RegisterState(
     val email: String = "",
     val usuario: String = "",
@@ -8,7 +10,7 @@ data class RegisterState(
     val password2: String = "",
     val passwordVisible: Boolean = false,
     val mostrarMensajeError: Boolean = false,
-    val errorMessage: String = "",
+    @StringRes val errorMessage: Int? = null,
     val mostrarMensaje: Boolean = false,
     val navigateHome: Boolean = false,
     val navigateLogin: Boolean = false,

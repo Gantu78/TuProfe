@@ -34,6 +34,7 @@ import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -71,9 +72,9 @@ fun CommentDetalleScreen(
 
     uiState.moderationDialog?.let { action ->
         val (title, message) = when (action) {
-            is ModerationAction.Report -> "¿Reportar comentario?" to "Se enviará un reporte a los administradores."
-            is ModerationAction.Block -> "¿Bloquear a @${action.authorName}?" to "Ya no verás su contenido."
-            is ModerationAction.Mute -> "¿Silenciar comentario?" to "No aparecerá en tu feed."
+            is ModerationAction.Report -> stringResource(R.string.reportar_comentario_titulo) to stringResource(R.string.reporte_admins)
+            is ModerationAction.Block -> stringResource(R.string.bloquear_a_usuario_titulo, action.authorName) to stringResource(R.string.ya_no_veras_contenido)
+            is ModerationAction.Mute -> stringResource(R.string.silenciar_comentario_titulo) to stringResource(R.string.no_aparecera_feed)
         }
         AlertDialog(
             onDismissRequest = { viewModel.dismissModerationDialog() },
@@ -81,24 +82,24 @@ fun CommentDetalleScreen(
             text = { Text(message) },
             confirmButton = {
                 TextButton(onClick = { viewModel.confirmModeration() }) {
-                    Text("Confirmar", color = colorResource(R.color.verdetp))
+                    Text(stringResource(R.string.confirmar), color = colorResource(R.color.verdetp))
                 }
             },
             dismissButton = {
                 TextButton(onClick = { viewModel.dismissModerationDialog() }) {
-                    Text("Cancelar")
+                    Text(stringResource(R.string.cancelar))
                 }
             }
         )
     }
 
-    uiState.moderationFeedback?.let { feedback ->
+    uiState.moderationFeedback?.let { feedbackRes ->
         AlertDialog(
             onDismissRequest = { viewModel.clearModerationFeedback() },
-            title = { Text(feedback) },
+            title = { Text(stringResource(feedbackRes)) },
             confirmButton = {
                 TextButton(onClick = { viewModel.clearModerationFeedback() }) {
-                    Text("OK", color = colorResource(R.color.verdetp))
+                    Text(stringResource(R.string.ok), color = colorResource(R.color.verdetp))
                 }
             }
         )
@@ -113,7 +114,7 @@ fun CommentDetalleScreen(
             onDismiss = { viewModel.closeReplySheet() },
             onSubmit = { viewModel.submitReply(commentId) },
             isSubmitting = uiState.isSubmittingReply,
-            submitLabel = "RESPONDER"
+            submitLabel = stringResource(R.string.responder)
         )
     }
 
@@ -281,7 +282,7 @@ fun ComentarioContent(
                             color = colorResource(R.color.verdetp).copy(alpha = 0.12f)
                         ) {
                             Text(
-                                text = "Editado",
+                                text = stringResource(R.string.editado),
                                 fontSize = 11.sp,
                                 color = colorResource(R.color.verdetp),
                                 modifier = Modifier.padding(horizontal = 6.dp, vertical = 2.dp)
@@ -301,14 +302,14 @@ fun ComentarioContent(
             modifier = Modifier.padding(start = 2.dp, top = 2.dp)
         ) {
             Text(
-                text = "${comment.likes} Likes",
+                text = stringResource(R.string.likes_count, comment.likes),
                 fontSize = 13.sp,
                 fontWeight = FontWeight.Bold,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
                 modifier = Modifier.testTag("comment_likes_count")
             )
             Text(
-                text = "${comment.repliesCount} Respuestas",
+                text = stringResource(R.string.respuestas_count, comment.repliesCount),
                 fontSize = 13.sp,
                 fontWeight = FontWeight.Bold,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
@@ -379,15 +380,15 @@ fun CommentActionBar(
             }
             DropdownMenu(expanded = expanded, onDismissRequest = { expanded = false }) {
                 DropdownMenuItem(
-                    text = { Text("Reportar") },
+                    text = { Text(stringResource(R.string.reportar)) },
                     onClick = { expanded = false; onReport() }
                 )
                 DropdownMenuItem(
-                    text = { Text("Bloquear perfil") },
+                    text = { Text(stringResource(R.string.bloquear_perfil)) },
                     onClick = { expanded = false; onBlock() }
                 )
                 DropdownMenuItem(
-                    text = { Text("Silenciar") },
+                    text = { Text(stringResource(R.string.silenciar)) },
                     onClick = { expanded = false; onMute() }
                 )
             }
@@ -409,7 +410,7 @@ private fun RespuestasHeader(modifier: Modifier = Modifier) {
         )
         Spacer(modifier = Modifier.width(10.dp))
         Text(
-            text = "Respuestas más relevantes",
+            text = stringResource(R.string.respuestas_mas_relevantes),
             fontSize = 19.sp,
             fontWeight = FontWeight.Bold,
             color = MaterialTheme.colorScheme.onSurface
@@ -475,7 +476,7 @@ fun CommentComposeSheet(
             ) {
                 TextButton(onClick = onDismiss) {
                     Text(
-                        "Cancelar",
+                        stringResource(R.string.cancelar),
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
                 }
@@ -526,7 +527,7 @@ fun CommentComposeSheet(
                     Spacer(modifier = Modifier.width(12.dp))
                     Column {
                         Text(
-                            text = "Respondiendo a @$contextUser",
+                            text = stringResource(R.string.respondiendo_a, contextUser),
                             fontSize = 13.sp,
                             color = colorResource(R.color.verdetp),
                             fontWeight = FontWeight.Medium
@@ -550,7 +551,7 @@ fun CommentComposeSheet(
                 onValueChange = onTextChange,
                 placeholder = {
                     Text(
-                        "Escribe tu comentario...",
+                        stringResource(R.string.escribe_tu_comentario),
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
                 },

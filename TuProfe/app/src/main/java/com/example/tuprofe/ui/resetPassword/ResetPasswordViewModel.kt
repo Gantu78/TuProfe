@@ -1,5 +1,6 @@
 package com.example.tuprofe.ui.resetPassword
 
+import com.example.tuprofe.R
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.tuprofe.data.repository.AuthRepository
@@ -25,7 +26,7 @@ class ResetPasswordViewModel @Inject constructor(
     fun resetPassword() {
         val email = _uiState.value.email
         if (email.isBlank()) {
-            _uiState.update { it.copy(mostrarError = true, mostrarMensaje = false, errorMessage = "Por favor ingresa tu correo") }
+            _uiState.update { it.copy(mostrarError = true, mostrarMensaje = false, errorMessage = R.string.por_favor_ingresa_correo) }
             return
         }
         viewModelScope.launch {
@@ -33,8 +34,7 @@ class ResetPasswordViewModel @Inject constructor(
             if (result.isSuccess) {
                 _uiState.update { it.copy(mostrarMensaje = true, mostrarError = false) }
             } else {
-                val mensaje = result.exceptionOrNull()?.message ?: "Error al enviar el enlace"
-                _uiState.update { it.copy(mostrarError = true, mostrarMensaje = false, errorMessage = mensaje) }
+                _uiState.update { it.copy(mostrarError = true, mostrarMensaje = false, errorMessage = R.string.error_al_enviar_correo) }
             }
         }
     }

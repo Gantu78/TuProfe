@@ -1,5 +1,7 @@
 package com.example.tuprofe.ui.review.edit
 
+import androidx.annotation.StringRes
+
 data class EditReviewState(
     val reviewId: String = "",
     val reviewText: String = "",
@@ -8,5 +10,5 @@ data class EditReviewState(
     val isLoading: Boolean = false,
     val isInitialLoading: Boolean = true,
     val success: Boolean = false,
-    val error: String? = null
+    @StringRes val error: Int? = null
 )

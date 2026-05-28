@@ -52,6 +52,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.compose.ui.res.stringResource
 import com.example.tuprofe.R
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.model.CameraPosition
@@ -230,7 +231,7 @@ fun MapaScreen(
                     .align(Alignment.BottomCenter)
                     .padding(bottom = 100.dp, start = 16.dp, end = 16.dp),
                 action = {
-                    TextButton(onClick = { viewModel.loadMarkers() }) { Text("Reintentar") }
+                    TextButton(onClick = { viewModel.loadMarkers() }) { Text(stringResource(R.string.reintentar)) }
                 }
             ) { Text(it) }
         }
@@ -272,9 +273,9 @@ fun MapaScreen(
                     ) {
                         Text(
                             text = if (uiState.hasActiveFilters)
-                                "${uiState.markers.size} de ${uiState.allMarkers.size} reseñas"
+                                stringResource(R.string.markers_count_filtered, uiState.markers.size, uiState.allMarkers.size)
                             else
-                                "${uiState.markers.size} reseñas hoy",
+                                stringResource(R.string.markers_count_today, uiState.markers.size),
                             style = MaterialTheme.typography.labelMedium,
                             color = if (uiState.showReviewList)
                                 MaterialTheme.colorScheme.onPrimaryContainer
@@ -417,7 +418,7 @@ private fun MapControlsFab(
                 if (locationGranted) {
                     MapFabItem(
                         icon = Icons.Default.MyLocation,
-                        label = "Mi ubicación",
+                        label = stringResource(R.string.mi_ubicacion),
                         onClick = {
                             expanded = false
                             if (ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
@@ -438,12 +439,12 @@ private fun MapControlsFab(
                 }
                 MapFabItem(
                     icon = Icons.Default.Add,
-                    label = "Acercar",
+                    label = stringResource(R.string.acercar),
                     onClick = { scope.launch { cameraPositionState.animate(CameraUpdateFactory.zoomIn(), 300) } }
                 )
                 MapFabItem(
                     icon = Icons.Default.Remove,
-                    label = "Alejar",
+                    label = stringResource(R.string.alejar),
                     onClick = { scope.launch { cameraPositionState.animate(CameraUpdateFactory.zoomOut(), 300) } }
                 )
             }
@@ -692,7 +693,7 @@ private fun MarkerCarouselCard(
                         modifier = Modifier.fillMaxWidth(),
                         shape = RoundedCornerShape(12.dp)
                     ) {
-                        Text("Ver reseña completa", style = MaterialTheme.typography.labelLarge, fontWeight = FontWeight.SemiBold)
+                        Text(stringResource(R.string.ver_rese_a_completa), style = MaterialTheme.typography.labelLarge, fontWeight = FontWeight.SemiBold)
                         Spacer(modifier = Modifier.width(6.dp))
                         Icon(Icons.AutoMirrored.Filled.ArrowForward, contentDescription = null, modifier = Modifier.size(16.dp))
                     }
@@ -870,14 +871,14 @@ private fun FilterBottomSheet(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
-                    text = "Filtrar marcadores",
+                    text = stringResource(R.string.filtrar_marcadores),
                     style = MaterialTheme.typography.titleMedium,
                     fontWeight = FontWeight.Bold,
                     color = MaterialTheme.colorScheme.onSurface
                 )
                 if (uiState.hasActiveFilters) {
                     TextButton(onClick = onClearFilters) {
-                        Text("Limpiar todo")
+                        Text(stringResource(R.string.limpiar_todo))
                     }
                 }
             }
@@ -885,7 +886,7 @@ private fun FilterBottomSheet(
             Spacer(modifier = Modifier.height(20.dp))
 
             Text(
-                text = "Calificación",
+                text = stringResource(R.string.calificacion),
                 style = MaterialTheme.typography.labelLarge,
                 fontWeight = FontWeight.SemiBold,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
@@ -907,7 +908,7 @@ private fun FilterBottomSheet(
             if (availableProfesores.isNotEmpty()) {
                 Spacer(modifier = Modifier.height(20.dp))
                 Text(
-                    text = "Profesor",
+                    text = stringResource(R.string.profesor),
                     style = MaterialTheme.typography.labelLarge,
                     fontWeight = FontWeight.SemiBold,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
@@ -940,7 +941,7 @@ private fun FilterBottomSheet(
             if (availableMaterias.isNotEmpty()) {
                 Spacer(modifier = Modifier.height(20.dp))
                 Text(
-                    text = "Materia",
+                    text = stringResource(R.string.materia),
                     style = MaterialTheme.typography.labelLarge,
                     fontWeight = FontWeight.SemiBold,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
@@ -1083,7 +1084,7 @@ private fun MarkerInfoCard(
                 shape = RoundedCornerShape(12.dp)
             ) {
                 Text(
-                    text = "Ver reseña completa",
+                    text = stringResource(R.string.ver_rese_a_completa),
                     style = MaterialTheme.typography.labelLarge,
                     fontWeight = FontWeight.SemiBold
                 )

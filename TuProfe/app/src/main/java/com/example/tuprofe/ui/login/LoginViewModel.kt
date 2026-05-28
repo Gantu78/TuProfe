@@ -2,6 +2,7 @@ package com.example.tuprofe.ui.login
 
 import android.app.Activity
 import android.util.Log
+import com.example.tuprofe.R
 import androidx.credentials.CredentialManager
 import androidx.credentials.GetCredentialRequest
 import androidx.credentials.exceptions.GetCredentialException
@@ -46,7 +47,7 @@ class LoginViewModel @Inject constructor(
             _uiState.update {
                 it.copy(
                     mostrarMensajeError = true,
-                    errorMessage = "Por favor complete todos los campos"
+                    errorMessage = R.string.por_favor_completa_campos
                 )
             }
             return
@@ -62,14 +63,13 @@ class LoginViewModel @Inject constructor(
                     _uiState.update {
                         it.copy(
                             mostrarMensajeError = true,
-                            errorMessage = "Debes verificar tu correo electrónico antes de poder ingresar."
+                            errorMessage = R.string.debes_verificar_correo
                         )
                     }
                 }
             } else {
-                val mensaje = result.exceptionOrNull()?.message ?: "Error al iniciar sesión"
                 _uiState.update {
-                    it.copy(mostrarMensajeError = true, errorMessage = mensaje)
+                    it.copy(mostrarMensajeError = true, errorMessage = R.string.error_al_iniciar_sesion)
                 }
             }
         }
@@ -92,7 +92,7 @@ class LoginViewModel @Inject constructor(
                     it.copy(
                         isGoogleLoading = false,
                         mostrarMensajeError = true,
-                        errorMessage = result.exceptionOrNull()?.message ?: "Error al iniciar con Google"
+                        errorMessage = R.string.error_google_signin
                     )
                 }
             }
@@ -111,7 +111,7 @@ class LoginViewModel @Inject constructor(
                     it.copy(
                         isGitHubLoading = false,
                         mostrarMensajeError = true,
-                        errorMessage = result.exceptionOrNull()?.message ?: "Error con GitHub"
+                        errorMessage = R.string.error_github_signin
                     )
                 }
             }
