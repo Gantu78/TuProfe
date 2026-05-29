@@ -226,4 +226,7 @@ string name="idioma_turco">Turco</string>
     <string name="enviar">Invia</string>
     <string name="adjuntar_imagen">Allega immagine</string>
     <string name="tu_prefijo">Tu: </string>
+
+    <string name="notif_sin_notificaciones">Nessuna notifica ancora</string>
+    <string name="notif_marcar_leidas">Segna tutto come letto</string>
 </resources>

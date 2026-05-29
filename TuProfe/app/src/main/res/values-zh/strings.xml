@@ -225,4 +225,7 @@
     <string name="enviar">发送</string>
     <string name="adjuntar_imagen">附加图片</string>
     <string name="tu_prefijo">你: </string>
+
+    <string name="notif_sin_notificaciones">暂无通知</string>
+    <string name="notif_marcar_leidas">全部标为已读</string>
 </resources>

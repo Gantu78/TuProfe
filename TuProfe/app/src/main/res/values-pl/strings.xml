@@ -210,4 +210,7 @@
     <string name="enviar">Wyślij</string>
     <string name="adjuntar_imagen">Dołącz zdjęcie</string>
     <string name="tu_prefijo">Ty: </string>
+
+    <string name="notif_sin_notificaciones">Brak powiadomień</string>
+    <string name="notif_marcar_leidas">Oznacz wszystkie jako przeczytane</string>
 </resources>

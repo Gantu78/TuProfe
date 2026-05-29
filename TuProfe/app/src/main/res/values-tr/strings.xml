@@ -210,4 +210,7 @@
     <string name="enviar">Gönder</string>
     <string name="adjuntar_imagen">Resim ekle</string>
     <string name="tu_prefijo">Sen: </string>
+
+    <string name="notif_sin_notificaciones">Henüz bildirim yok</string>
+    <string name="notif_marcar_leidas">Tümünü okundu olarak işaretle</string>
 </resources>

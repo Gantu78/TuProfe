@@ -63,6 +63,8 @@ import com.example.tuprofe.ui.ajustes.AjustesViewModel
 import com.example.tuprofe.ui.ayuda.AyudaYSoporteScreen
 import com.example.tuprofe.ui.notificaciones.NotificacionesScreen
 import com.example.tuprofe.ui.notificaciones.NotificacionesViewModel
+import com.example.tuprofe.ui.notificaciones.NotifInboxScreen
+import com.example.tuprofe.ui.notificaciones.NotifInboxViewModel
 import com.example.tuprofe.ui.splash.SplashScreen
 import androidx.compose.animation.*
 import androidx.compose.animation.core.FastOutSlowInEasing
@@ -148,6 +150,7 @@ sealed class Screen(val route: String){
 
     object AyudaYSoporte : Screen("AyudaYSoporte")
     object Notificaciones : Screen("Notificaciones")
+    object NotifInbox : Screen("NotifInbox")
     object Ajustes : Screen("Ajustes")
     object ChatList : Screen("ChatList")
     object Chat : Screen("Chat/{chatId}/{otherUserId}") {
@@ -427,7 +430,8 @@ fun AppNavegation(
                 onNotificacionesClick = { navController.navigate(Screen.Notificaciones.route) },
                 onAjustesClick = { navController.navigate(Screen.Ajustes.route) },
                 onSuscripcionClick = { navController.navigate(Screen.Payment.route) },
-                onChatListClick = { navController.navigate(Screen.ChatList.route) }
+                onChatListClick = { navController.navigate(Screen.ChatList.route) },
+                onNotifInboxClick = { navController.navigate(Screen.NotifInbox.route) }
             )
         }
 
@@ -439,6 +443,17 @@ fun AppNavegation(
             val notifViewModel: NotificacionesViewModel = hiltViewModel()
             NotificacionesScreen(
                 viewModel = notifViewModel,
+                onBackClick = { navController.popBackStack() }
+            )
+        }
+
+        composable(route = Screen.NotifInbox.route) {
+            val inboxViewModel: NotifInboxViewModel = hiltViewModel()
+            NotifInboxScreen(
+                viewModel = inboxViewModel,
+                onReviewClick = { reviewId -> navController.navigate(Screen.Detalle.createRoute(reviewId)) },
+                onCommentClick = { commentId -> navController.navigate(Screen.CommentDetalle.createRoute(commentId)) },
+                onUserClick = { userId -> navController.navigate(Screen.Profile.createRoute(userId)) },
                 onBackClick = { navController.popBackStack() }
             )
         }
@@ -587,7 +602,8 @@ val bottomNavItems = listOf(
 fun TuProfeBottomBar(
     navController: NavHostController,
     items: List<BottomNavItem> = bottomNavItems,
-    hasUnreadChats: Boolean = false
+    hasUnreadChats: Boolean = false,
+    hasUnreadNotifs: Boolean = false
 ) {
 
     val currentBackStackEntry by navController.currentBackStackEntryAsState()
@@ -630,7 +646,7 @@ fun TuProfeBottomBar(
                                     contentDescription = item.route,
                                     tint = if (isSelected) colorResource(R.color.verdetp) else Color.Gray
                                 )
-                                if (hasUnreadChats && item.route == Screen.Configuracion.route) {
+                                if ((hasUnreadChats || hasUnreadNotifs) && item.route == Screen.Configuracion.route) {
                                     Box(
                                         modifier = Modifier
                                             .size(8.dp)

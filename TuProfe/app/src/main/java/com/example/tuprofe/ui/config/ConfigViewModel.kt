@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.tuprofe.data.repository.AuthRepository
 import com.example.tuprofe.data.repository.ChatRepository
+import com.example.tuprofe.data.repository.NotificationRepository
 import com.example.tuprofe.data.repository.UserRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -19,7 +20,8 @@ import javax.inject.Inject
 class ConfigViewModel @Inject constructor(
     private val authRepository: AuthRepository,
     private val userRepository: UserRepository,
-    private val chatRepository: ChatRepository
+    private val chatRepository: ChatRepository,
+    private val notificationRepository: NotificationRepository
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(ConfigState())
@@ -52,6 +54,16 @@ class ConfigViewModel @Inject constructor(
         loadUserProfile()
         loadSubscriptionStatus()
         listenUnreadChats()
+        listenUnreadNotifications()
+    }
+
+    private fun listenUnreadNotifications() {
+        val uid = authRepository.currentUser?.uid ?: return
+        viewModelScope.launch {
+            notificationRepository.listenUnreadCount(uid).collect { count ->
+                _uiState.update { it.copy(unreadNotifCount = count) }
+            }
+        }
     }
 
     private fun listenUnreadChats() {

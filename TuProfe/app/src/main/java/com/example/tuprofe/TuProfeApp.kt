@@ -49,6 +49,7 @@ import com.google.firebase.messaging.FirebaseMessaging
 fun TuProfeApp() {
     val badgeViewModel: BadgeViewModel = androidx.hilt.navigation.compose.hiltViewModel()
     val hasUnreadChats by badgeViewModel.hasUnreadChats.collectAsState()
+    val hasUnreadNotifs by badgeViewModel.hasUnreadNotifs.collectAsState()
 
     FirebaseMessaging.getInstance().token.addOnCompleteListener { task ->
         if (task.isSuccessful) {
@@ -108,7 +109,7 @@ fun TuProfeApp() {
             },
             bottomBar = {
                 if (NavigationLogic.ShouldShowBottomBar(currentRoute)) {
-                    TuProfeBottomBar(navController = navController, hasUnreadChats = hasUnreadChats)
+                    TuProfeBottomBar(navController = navController, hasUnreadChats = hasUnreadChats, hasUnreadNotifs = hasUnreadNotifs)
                 }
             }
         ) { paddingValues ->

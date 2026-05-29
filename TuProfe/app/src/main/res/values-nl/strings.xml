@@ -198,4 +198,7 @@
     <string name="enviar">Verzenden</string>
     <string name="adjuntar_imagen">Afbeelding bijvoegen</string>
     <string name="tu_prefijo">Jij: </string>
+
+    <string name="notif_sin_notificaciones">Nog geen meldingen</string>
+    <string name="notif_marcar_leidas">Alles als gelezen markeren</string>
 </resources>

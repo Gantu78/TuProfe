@@ -285,4 +285,8 @@
     <string name="enviar">Send</string>
     <string name="adjuntar_imagen">Attach image</string>
     <string name="tu_prefijo">You: </string>
+
+    <!-- Notification inbox -->
+    <string name="notif_sin_notificaciones">No notifications yet</string>
+    <string name="notif_marcar_leidas">Mark all as read</string>
 </resources>

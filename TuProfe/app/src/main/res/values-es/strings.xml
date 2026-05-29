@@ -272,4 +272,8 @@
     <string name="enviar">Enviar</string>
     <string name="adjuntar_imagen">Adjuntar imagen</string>
     <string name="tu_prefijo">Tú: </string>
+
+    <!-- Notification inbox -->
+    <string name="notif_sin_notificaciones">Aún no hay notificaciones</string>
+    <string name="notif_marcar_leidas">Marcar todas como leídas</string>
 </resources>

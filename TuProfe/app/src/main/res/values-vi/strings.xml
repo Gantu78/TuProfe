@@ -223,4 +223,7 @@
     <string name="enviar">Gửi</string>
     <string name="adjuntar_imagen">Đính kèm ảnh</string>
     <string name="tu_prefijo">Bạn: </string>
+
+    <string name="notif_sin_notificaciones">Chưa có thông báo</string>
+    <string name="notif_marcar_leidas">Đánh dấu tất cả là đã đọc</string>
 </resources>

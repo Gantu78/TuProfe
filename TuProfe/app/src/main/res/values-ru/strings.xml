@@ -222,4 +222,7 @@
     <string name="enviar">Отправить</string>
     <string name="adjuntar_imagen">Прикрепить изображение</string>
     <string name="tu_prefijo">Вы: </string>
+
+    <string name="notif_sin_notificaciones">Уведомлений пока нет</string>
+    <string name="notif_marcar_leidas">Отметить все как прочитанные</string>
 </resources>

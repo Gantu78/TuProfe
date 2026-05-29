@@ -211,4 +211,7 @@
     <string name="enviar">Senden</string>
     <string name="adjuntar_imagen">Bild anhängen</string>
     <string name="tu_prefijo">Du: </string>
+
+    <string name="notif_sin_notificaciones">Noch keine Benachrichtigungen</string>
+    <string name="notif_marcar_leidas">Alle als gelesen markieren</string>
 </resources>

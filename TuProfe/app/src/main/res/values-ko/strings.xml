@@ -223,4 +223,7 @@
     <string name="enviar">전송</string>
     <string name="adjuntar_imagen">이미지 첨부</string>
     <string name="tu_prefijo">나: </string>
+
+    <string name="notif_sin_notificaciones">아직 알림이 없습니다</string>
+    <string name="notif_marcar_leidas">모두 읽음으로 표시</string>
 </resources>

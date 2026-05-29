@@ -18,5 +18,6 @@ data class ConfigState(
     val subscriptionActive: Boolean = false,
     val subscriptionEnd: Date? = null,
     val subscriptionDaysLeft: Int? = null,
-    val hasUnreadChats: Boolean = false
+    val hasUnreadChats: Boolean = false,
+    val unreadNotifCount: Int = 0
 )

@@ -60,6 +60,7 @@ fun ConfigScreen(
     onSuscripcionClick: () -> Unit = {},
     onChatListClick: () -> Unit = {},
     onUserClick: (String) -> Unit = {},
+    onNotifInboxClick: () -> Unit = {},
     modifier: Modifier = Modifier.testTag("profileScreen")
 ) {
 
@@ -93,10 +94,21 @@ fun ConfigScreen(
                         .padding(horizontal = 16.dp, vertical = 8.dp),
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
-                    TpIconButton(
-                        icon = Icons.Default.Notifications,
-                        contentDescription = stringResource(R.string.notificaciones)
-                    )
+                    Box {
+                        TpIconButton(
+                            icon = Icons.Default.Notifications,
+                            contentDescription = stringResource(R.string.notificaciones),
+                            onClick = onNotifInboxClick
+                        )
+                        if (state.unreadNotifCount > 0) {
+                            Box(
+                                modifier = Modifier
+                                    .size(10.dp)
+                                    .background(Color.Red, CircleShape)
+                                    .align(Alignment.TopEnd)
+                            )
+                        }
+                    }
                     Box {
                         TpIconButton(
                             icon = Icons.Default.Chat,
