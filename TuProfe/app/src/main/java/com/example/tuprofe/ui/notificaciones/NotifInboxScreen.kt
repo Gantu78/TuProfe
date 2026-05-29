@@ -33,8 +33,6 @@ import coil.compose.AsyncImage
 import com.example.tuprofe.R
 import com.example.tuprofe.data.AppNotification
 import com.example.tuprofe.ui.utils.BackgroundImage
-import java.text.SimpleDateFormat
-import java.util.*
 
 @Composable
 fun NotifInboxScreen(
@@ -247,15 +245,11 @@ private fun typeIcon(type: String): ImageVector = when (type) {
 }
 
 private fun formatRelativeTime(timestamp: Long): String {
-    val diff = System.currentTimeMillis() - timestamp
-    val minutes = diff / 60_000
-    val hours = minutes / 60
-    val days = hours / 24
-    return when {
-        minutes < 1 -> "just now"
-        minutes < 60 -> "${minutes}m"
-        hours < 24 -> "${hours}h"
-        days < 7 -> "${days}d"
-        else -> SimpleDateFormat("MMM d", Locale.getDefault()).format(Date(timestamp))
-    }
+    if (timestamp == 0L) return ""
+    return android.text.format.DateUtils.getRelativeTimeSpanString(
+        timestamp,
+        System.currentTimeMillis(),
+        android.text.format.DateUtils.SECOND_IN_MILLIS,
+        android.text.format.DateUtils.FORMAT_ABBREV_RELATIVE
+    ).toString()
 }
