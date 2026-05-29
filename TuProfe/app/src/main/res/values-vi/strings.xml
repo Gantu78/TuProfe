@@ -241,4 +241,11 @@
     <string name="describe_tu_experiencia">Mô tả trải nghiệm của bạn với giáo viên này...</string>
     <string name="incluir_ubicacion">Bao gồm vị trí</string>
     <string name="aparecera_en_mapa">Sẽ xuất hiện trên bản đồ đánh giá</string>
+    <string name="editar">Chỉnh sửa</string>
+    <string name="mi_historial">Lịch sử của tôi</string>
+    <string name="eliminar_resena_confirmacion">Xóa đánh giá?</string>
+    <string name="eliminar_comentario_confirmacion">Xóa bình luận?</string>
+    <string name="filtro_todo">Tất cả</string>
+    <string name="filtro_resenas">Đánh giá</string>
+    <string name="filtro_comentarios">Bình luận</string>
 </resources>

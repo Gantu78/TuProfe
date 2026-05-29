@@ -243,4 +243,11 @@
     <string name="describe_tu_experiencia">描述您与该教授的经历...</string>
     <string name="incluir_ubicacion">包含位置</string>
     <string name="aparecera_en_mapa">将显示在评价地图上</string>
+    <string name="editar">编辑</string>
+    <string name="mi_historial">我的历史</string>
+    <string name="eliminar_resena_confirmacion">删除评论？</string>
+    <string name="eliminar_comentario_confirmacion">删除留言？</string>
+    <string name="filtro_todo">全部</string>
+    <string name="filtro_resenas">评论</string>
+    <string name="filtro_comentarios">留言</string>
 </resources>
