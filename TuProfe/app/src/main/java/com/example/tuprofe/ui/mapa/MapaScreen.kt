@@ -251,7 +251,7 @@ fun MapaScreen(
         }
 
         // Chip contador + lista desplegable
-        if (!uiState.isLoading && uiState.allMarkers.isNotEmpty()) {
+        if (!uiState.isLoading) {
             Column(
                 modifier = Modifier
                     .align(Alignment.TopStart)
