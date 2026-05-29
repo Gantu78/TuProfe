@@ -241,4 +241,6 @@
     <string name="filtro_todo">Alla</string>
     <string name="filtro_resenas">Recensioner</string>
     <string name="filtro_comentarios">Kommentarer</string>
+    <string name="error_google_signin">Fel vid inloggning med Google</string>
+    <string name="error_github_signin">Fel vid inloggning med GitHub</string>
 </resources>

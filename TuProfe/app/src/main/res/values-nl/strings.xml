@@ -224,4 +224,6 @@
     <string name="filtro_todo">Alles</string>
     <string name="filtro_resenas">Beoordelingen</string>
     <string name="filtro_comentarios">Reacties</string>
+    <string name="error_google_signin">Fout bij aanmelden met Google</string>
+    <string name="error_github_signin">Fout bij aanmelden met GitHub</string>
 </resources>

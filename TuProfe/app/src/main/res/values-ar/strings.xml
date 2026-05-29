@@ -251,4 +251,6 @@
     <string name="filtro_todo">الكل</string>
     <string name="filtro_resenas">المراجعات</string>
     <string name="filtro_comentarios">التعليقات</string>
+    <string name="error_google_signin">خطأ في تسجيل الدخول باستخدام Google</string>
+    <string name="error_github_signin">خطأ في تسجيل الدخول باستخدام GitHub</string>
 </resources>

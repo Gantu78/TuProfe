@@ -252,4 +252,6 @@ string name="idioma_turco">Turco</string>
     <string name="filtro_todo">Tutto</string>
     <string name="filtro_resenas">Recensioni</string>
     <string name="filtro_comentarios">Commenti</string>
+    <string name="error_google_signin">Errore durante l\'accesso con Google</string>
+    <string name="error_github_signin">Errore durante l\'accesso con GitHub</string>
 </resources>

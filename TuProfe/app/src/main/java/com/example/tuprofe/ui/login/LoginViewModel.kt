@@ -14,6 +14,7 @@ import com.google.android.libraries.identity.googleid.GetGoogleIdOption
 import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential
 import com.google.firebase.auth.OAuthProvider
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
@@ -76,15 +77,15 @@ class LoginViewModel @Inject constructor(
     }
 
 
+    private var googleSignInJob: Job? = null
+    private var gitHubSignInJob: Job? = null
+
     fun signInWithGoogle(activity: Activity) {
+        googleSignInJob?.cancel()
         _uiState.update { it.copy(isGoogleLoading = true, mostrarMensajeError = false) }
-
-        viewModelScope.launch {
-
+        googleSignInJob = viewModelScope.launch {
             val provider = OAuthProvider.newBuilder("google.com").build()
-
             val result = authRepository.signInWithProvider(activity, provider)
-
             if (result.isSuccess) {
                 _uiState.update { it.copy(isGoogleLoading = false, navigate = true) }
             } else {
@@ -99,10 +100,10 @@ class LoginViewModel @Inject constructor(
         }
     }
 
-
     fun signInWithGitHub(activity: Activity) {
+        gitHubSignInJob?.cancel()
         _uiState.update { it.copy(isGitHubLoading = true, mostrarMensajeError = false) }
-        viewModelScope.launch {
+        gitHubSignInJob = viewModelScope.launch {
             val result = authRepository.signInWithGitHub(activity)
             if (result.isSuccess) {
                 _uiState.update { it.copy(isGitHubLoading = false, navigate = true) }
@@ -115,6 +116,18 @@ class LoginViewModel @Inject constructor(
                     )
                 }
             }
+        }
+    }
+
+    // Llamar cuando la pantalla vuelve al frente: cancela cualquier OAuth abandonado
+    fun resetSocialLoadingIfPending() {
+        if (googleSignInJob?.isActive == true) {
+            googleSignInJob?.cancel()
+            _uiState.update { it.copy(isGoogleLoading = false) }
+        }
+        if (gitHubSignInJob?.isActive == true) {
+            gitHubSignInJob?.cancel()
+            _uiState.update { it.copy(isGitHubLoading = false) }
         }
     }
 }

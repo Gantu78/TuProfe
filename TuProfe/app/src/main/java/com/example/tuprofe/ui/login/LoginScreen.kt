@@ -12,7 +12,11 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleEventObserver
+import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
@@ -43,21 +47,30 @@ fun HomeScreen(
     val context = LocalContext.current
     val activity = context as Activity
 
-    var showLogo    by remember { mutableStateOf(false) }
-    var showForm    by remember { mutableStateOf(false) }
-    var showButtons by remember { mutableStateOf(false) }
+    var showLogo    by rememberSaveable { mutableStateOf(false) }
+    var showForm    by rememberSaveable { mutableStateOf(false) }
+    var showButtons by rememberSaveable { mutableStateOf(false) }
 
     LaunchedEffect(Unit) {
-        showLogo = true
-        delay(180)
-        showForm = true
-        delay(140)
-        showButtons = true
+        if (!showButtons) {
+            showLogo = true
+            delay(180)
+            showForm = true
+            delay(140)
+            showButtons = true
+        }
     }
 
-    // Navegar cuando el sign-in social tiene éxito
-    LaunchedEffect(state.navigate) {
-        if (state.navigate) onLoginClick()
+    // Cuando la pantalla vuelve al frente, cancela cualquier OAuth abandonado
+    val lifecycleOwner = LocalLifecycleOwner.current
+    DisposableEffect(lifecycleOwner) {
+        val observer = LifecycleEventObserver { _, event ->
+            if (event == Lifecycle.Event.ON_RESUME) {
+                loginViewModel.resetSocialLoadingIfPending()
+            }
+        }
+        lifecycleOwner.lifecycle.addObserver(observer)
+        onDispose { lifecycleOwner.lifecycle.removeObserver(observer) }
     }
 
     Box(modifier = modifier.fillMaxSize()) {

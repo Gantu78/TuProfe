@@ -249,4 +249,6 @@
     <string name="filtro_todo">Tất cả</string>
     <string name="filtro_resenas">Đánh giá</string>
     <string name="filtro_comentarios">Bình luận</string>
+    <string name="error_google_signin">Lỗi đăng nhập bằng Google</string>
+    <string name="error_github_signin">Lỗi đăng nhập bằng GitHub</string>
 </resources>

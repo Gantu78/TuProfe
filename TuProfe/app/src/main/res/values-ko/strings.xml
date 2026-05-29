@@ -249,4 +249,6 @@
     <string name="filtro_todo">전체</string>
     <string name="filtro_resenas">리뷰</string>
     <string name="filtro_comentarios">댓글</string>
+    <string name="error_google_signin">Google 로그인 오류</string>
+    <string name="error_github_signin">GitHub 로그인 오류</string>
 </resources>

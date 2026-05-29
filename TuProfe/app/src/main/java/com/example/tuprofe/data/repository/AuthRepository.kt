@@ -2,6 +2,7 @@ package com.example.tuprofe.data.repository
 
 import android.app.Activity
 import android.net.Uri
+import android.util.Log
 import com.example.tuprofe.data.datasource.AuthRemoteDataSource
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException
 import com.google.firebase.auth.FirebaseAuthInvalidUserException
@@ -160,6 +161,7 @@ class AuthRepository @Inject constructor(
             authRemoteDataSource.signInWithGitHub(activity)
             Result.success(Unit)
         } catch (e: Exception) {
+            Log.e("AuthRepo", "GitHub sign-in failed: ${e::class.simpleName} — ${e.message}", e)
             Result.failure(Exception(e.message ?: "Error al iniciar sesión con GitHub"))
         }
     }
@@ -169,6 +171,7 @@ class AuthRepository @Inject constructor(
             authRemoteDataSource.signInWithProvider(activity, provider)
             Result.success(Unit)
         } catch (e: Exception) {
+            Log.e("AuthRepo", "Google sign-in failed: ${e::class.simpleName} — ${e.message}", e)
             Result.failure(Exception(e.message ?: "Error al iniciar sesión con proveedor"))
         }
     }

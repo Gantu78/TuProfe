@@ -248,4 +248,6 @@
     <string name="filtro_todo">Все</string>
     <string name="filtro_resenas">Отзывы</string>
     <string name="filtro_comentarios">Комментарии</string>
+    <string name="error_google_signin">Ошибка входа через Google</string>
+    <string name="error_github_signin">Ошибка входа через GitHub</string>
 </resources>

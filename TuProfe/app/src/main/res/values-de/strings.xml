@@ -237,4 +237,6 @@
     <string name="filtro_todo">Alle</string>
     <string name="filtro_resenas">Bewertungen</string>
     <string name="filtro_comentarios">Kommentare</string>
+    <string name="error_google_signin">Fehler bei der Anmeldung mit Google</string>
+    <string name="error_github_signin">Fehler bei der Anmeldung mit GitHub</string>
 </resources>

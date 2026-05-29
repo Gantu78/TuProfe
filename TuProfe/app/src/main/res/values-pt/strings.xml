@@ -264,4 +264,6 @@
     <string name="filtro_todo">Tudo</string>
     <string name="filtro_resenas">Avaliações</string>
     <string name="filtro_comentarios">Comentários</string>
+    <string name="error_google_signin">Erro ao entrar com Google</string>
+    <string name="error_github_signin">Erro ao entrar com GitHub</string>
 </resources>

@@ -258,4 +258,6 @@
     <string name="filtro_todo">Tout</string>
     <string name="filtro_resenas">Avis</string>
     <string name="filtro_comentarios">Commentaires</string>
+    <string name="error_google_signin">Erreur lors de la connexion avec Google</string>
+    <string name="error_github_signin">Erreur lors de la connexion avec GitHub</string>
 </resources>

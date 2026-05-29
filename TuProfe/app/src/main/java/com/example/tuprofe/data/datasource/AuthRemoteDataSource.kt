@@ -57,12 +57,7 @@ class AuthRemoteDataSource @Inject constructor(
         val provider = OAuthProvider.newBuilder("github.com")
             .setScopes(listOf("user:email"))
             .build()
-
-
-        val result = auth
-            .startActivityForSignInWithProvider(activity, provider)
-            .await()
-
+        val result = auth.startActivityForSignInWithProvider(activity, provider).await()
         return result.user ?: error("Firebase: usuario nulo tras GitHub sign-in")
     }
 }

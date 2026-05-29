@@ -251,4 +251,6 @@
     <string name="filtro_todo">सभी</string>
     <string name="filtro_resenas">समीक्षाएं</string>
     <string name="filtro_comentarios">टिप्पणियां</string>
+    <string name="error_google_signin">Google से साइन इन करने में त्रुटि</string>
+    <string name="error_github_signin">GitHub से साइन इन करने में त्रुटि</string>
 </resources>

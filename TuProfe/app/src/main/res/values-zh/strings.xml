@@ -251,4 +251,6 @@
     <string name="filtro_todo">全部</string>
     <string name="filtro_resenas">评论</string>
     <string name="filtro_comentarios">留言</string>
+    <string name="error_google_signin">Google登录时出错</string>
+    <string name="error_github_signin">GitHub登录时出错</string>
 </resources>
