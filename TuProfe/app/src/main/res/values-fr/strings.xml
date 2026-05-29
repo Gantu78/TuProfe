@@ -250,4 +250,11 @@
     <string name="describe_tu_experiencia">Décrivez votre expérience avec ce professeur...</string>
     <string name="incluir_ubicacion">Inclure la localisation</string>
     <string name="aparecera_en_mapa">Apparaîtra sur la carte des avis</string>
+    <string name="editar">Modifier</string>
+    <string name="mi_historial">Mon historique</string>
+    <string name="eliminar_resena_confirmacion">Supprimer l\'avis ?</string>
+    <string name="eliminar_comentario_confirmacion">Supprimer le commentaire ?</string>
+    <string name="filtro_todo">Tout</string>
+    <string name="filtro_resenas">Avis</string>
+    <string name="filtro_comentarios">Commentaires</string>
 </resources>

@@ -246,4 +246,11 @@
     <string name="describe_tu_experiencia">この教授との経験を説明してください...</string>
     <string name="incluir_ubicacion">位置情報を含める</string>
     <string name="aparecera_en_mapa">レビューマップに表示されます</string>
+    <string name="editar">編集</string>
+    <string name="mi_historial">マイ履歴</string>
+    <string name="eliminar_resena_confirmacion">レビューを削除しますか？</string>
+    <string name="eliminar_comentario_confirmacion">コメントを削除しますか？</string>
+    <string name="filtro_todo">すべて</string>
+    <string name="filtro_resenas">レビュー</string>
+    <string name="filtro_comentarios">コメント</string>
 </resources>

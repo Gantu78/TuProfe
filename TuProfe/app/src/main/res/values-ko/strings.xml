@@ -241,4 +241,11 @@
     <string name="describe_tu_experiencia">이 교수와의 경험을 설명해 주세요...</string>
     <string name="incluir_ubicacion">위치 포함</string>
     <string name="aparecera_en_mapa">리뷰 지도에 표시됩니다</string>
+    <string name="editar">편집</string>
+    <string name="mi_historial">내 기록</string>
+    <string name="eliminar_resena_confirmacion">리뷰를 삭제할까요?</string>
+    <string name="eliminar_comentario_confirmacion">댓글을 삭제할까요?</string>
+    <string name="filtro_todo">전체</string>
+    <string name="filtro_resenas">리뷰</string>
+    <string name="filtro_comentarios">댓글</string>
 </resources>

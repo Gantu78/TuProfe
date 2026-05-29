@@ -256,4 +256,11 @@
     <string name="describe_tu_experiencia">Descreva sua experiência com este professor...</string>
     <string name="incluir_ubicacion">Incluir localização</string>
     <string name="aparecera_en_mapa">Aparecerá no mapa de avaliações</string>
+    <string name="editar">Editar</string>
+    <string name="mi_historial">Meu histórico</string>
+    <string name="eliminar_resena_confirmacion">Apagar avaliação?</string>
+    <string name="eliminar_comentario_confirmacion">Apagar comentário?</string>
+    <string name="filtro_todo">Tudo</string>
+    <string name="filtro_resenas">Avaliações</string>
+    <string name="filtro_comentarios">Comentários</string>
 </resources>

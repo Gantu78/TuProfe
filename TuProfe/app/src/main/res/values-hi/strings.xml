@@ -243,4 +243,11 @@
     <string name="describe_tu_experiencia">इस प्रोफेसर के साथ अपना अनुभव बताएं...</string>
     <string name="incluir_ubicacion">स्थान शामिल करें</string>
     <string name="aparecera_en_mapa">समीक्षा मानचित्र पर दिखाई देगा</string>
+    <string name="editar">संपादित करें</string>
+    <string name="mi_historial">मेरा इतिहास</string>
+    <string name="eliminar_resena_confirmacion">समीक्षा हटाएं?</string>
+    <string name="eliminar_comentario_confirmacion">टिप्पणी हटाएं?</string>
+    <string name="filtro_todo">सभी</string>
+    <string name="filtro_resenas">समीक्षाएं</string>
+    <string name="filtro_comentarios">टिप्पणियां</string>
 </resources>

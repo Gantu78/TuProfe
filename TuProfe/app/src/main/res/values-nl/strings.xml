@@ -216,4 +216,11 @@
     <string name="describe_tu_experiencia">Beschrijf uw ervaring met deze professor...</string>
     <string name="incluir_ubicacion">Locatie opnemen</string>
     <string name="aparecera_en_mapa">Verschijnt op de beoordelingenkaart</string>
+    <string name="editar">Bewerken</string>
+    <string name="mi_historial">Mijn geschiedenis</string>
+    <string name="eliminar_resena_confirmacion">Beoordeling verwijderen?</string>
+    <string name="eliminar_comentario_confirmacion">Reactie verwijderen?</string>
+    <string name="filtro_todo">Alles</string>
+    <string name="filtro_resenas">Beoordelingen</string>
+    <string name="filtro_comentarios">Reacties</string>
 </resources>

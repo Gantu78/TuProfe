@@ -244,4 +244,11 @@ string name="idioma_turco">Turco</string>
     <string name="describe_tu_experiencia">Descrivi la tua esperienza con questo professore...</string>
     <string name="incluir_ubicacion">Includi posizione</string>
     <string name="aparecera_en_mapa">Apparirà sulla mappa delle recensioni</string>
+    <string name="editar">Modifica</string>
+    <string name="mi_historial">La mia cronologia</string>
+    <string name="eliminar_resena_confirmacion">Eliminare la recensione?</string>
+    <string name="eliminar_comentario_confirmacion">Eliminare il commento?</string>
+    <string name="filtro_todo">Tutto</string>
+    <string name="filtro_resenas">Recensioni</string>
+    <string name="filtro_comentarios">Commenti</string>
 </resources>

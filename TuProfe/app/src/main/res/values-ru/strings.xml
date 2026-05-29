@@ -240,4 +240,11 @@
     <string name="describe_tu_experiencia">Опишите ваш опыт с этим преподавателем...</string>
     <string name="incluir_ubicacion">Включить местоположение</string>
     <string name="aparecera_en_mapa">Появится на карте отзывов</string>
+    <string name="editar">Редактировать</string>
+    <string name="mi_historial">Моя история</string>
+    <string name="eliminar_resena_confirmacion">Удалить отзыв?</string>
+    <string name="eliminar_comentario_confirmacion">Удалить комментарий?</string>
+    <string name="filtro_todo">Все</string>
+    <string name="filtro_resenas">Отзывы</string>
+    <string name="filtro_comentarios">Комментарии</string>
 </resources>

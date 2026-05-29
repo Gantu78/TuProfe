@@ -228,4 +228,11 @@
     <string name="describe_tu_experiencia">Bu profesörle deneyiminizi anlatın...</string>
     <string name="incluir_ubicacion">Konum ekle</string>
     <string name="aparecera_en_mapa">İnceleme haritasında görünecek</string>
+    <string name="editar">Düzenle</string>
+    <string name="mi_historial">Geçmişim</string>
+    <string name="eliminar_resena_confirmacion">Değerlendirme silinsin mi?</string>
+    <string name="eliminar_comentario_confirmacion">Yorum silinsin mi?</string>
+    <string name="filtro_todo">Tümü</string>
+    <string name="filtro_resenas">Değerlendirmeler</string>
+    <string name="filtro_comentarios">Yorumlar</string>
 </resources>

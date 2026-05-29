@@ -228,4 +228,11 @@
     <string name="describe_tu_experiencia">Opisz swoje doświadczenie z tym profesorem...</string>
     <string name="incluir_ubicacion">Dołącz lokalizację</string>
     <string name="aparecera_en_mapa">Pojawi się na mapie recenzji</string>
+    <string name="editar">Edytuj</string>
+    <string name="mi_historial">Moja historia</string>
+    <string name="eliminar_resena_confirmacion">Usunąć recenzję?</string>
+    <string name="eliminar_comentario_confirmacion">Usunąć komentarz?</string>
+    <string name="filtro_todo">Wszystkie</string>
+    <string name="filtro_resenas">Recenzje</string>
+    <string name="filtro_comentarios">Komentarze</string>
 </resources>

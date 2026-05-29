@@ -233,4 +233,11 @@
     <string name="describe_tu_experiencia">Beskriv din upplevelse med denna professor...</string>
     <string name="incluir_ubicacion">Inkludera plats</string>
     <string name="aparecera_en_mapa">Visas på recensionskartan</string>
+    <string name="editar">Redigera</string>
+    <string name="mi_historial">Min historik</string>
+    <string name="eliminar_resena_confirmacion">Ta bort recension?</string>
+    <string name="eliminar_comentario_confirmacion">Ta bort kommentar?</string>
+    <string name="filtro_todo">Alla</string>
+    <string name="filtro_resenas">Recensioner</string>
+    <string name="filtro_comentarios">Kommentarer</string>
 </resources>

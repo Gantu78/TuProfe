@@ -304,4 +304,11 @@
     <string name="describe_tu_experiencia">Describe your experience with this professor...</string>
     <string name="incluir_ubicacion">Include location</string>
     <string name="aparecera_en_mapa">Will appear on the review map</string>
+    <string name="editar">Edit</string>
+    <string name="mi_historial">My history</string>
+    <string name="eliminar_resena_confirmacion">Delete review?</string>
+    <string name="eliminar_comentario_confirmacion">Delete comment?</string>
+    <string name="filtro_todo">All</string>
+    <string name="filtro_resenas">Reviews</string>
+    <string name="filtro_comentarios">Comments</string>
 </resources>

@@ -229,4 +229,11 @@
     <string name="describe_tu_experiencia">Beschreibe deine Erfahrung mit diesem Professor...</string>
     <string name="incluir_ubicacion">Standort hinzufügen</string>
     <string name="aparecera_en_mapa">Wird auf der Bewertungskarte angezeigt</string>
+    <string name="editar">Bearbeiten</string>
+    <string name="mi_historial">Mein Verlauf</string>
+    <string name="eliminar_resena_confirmacion">Bewertung löschen?</string>
+    <string name="eliminar_comentario_confirmacion">Kommentar löschen?</string>
+    <string name="filtro_todo">Alle</string>
+    <string name="filtro_resenas">Bewertungen</string>
+    <string name="filtro_comentarios">Kommentare</string>
 </resources>

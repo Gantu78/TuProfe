@@ -3,39 +3,35 @@ package com.example.tuprofe.ui.historia
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.itemsIndexed
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.outlined.Comment
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.colorResource
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
-import coil.compose.AsyncImage
 import com.example.tuprofe.R
 import com.example.tuprofe.data.CommentInfo
 import com.example.tuprofe.data.ReviewInfo
+import com.example.tuprofe.ui.comment.detalle.ComentarioContent
+import com.example.tuprofe.ui.main.ResenaCard
 import com.example.tuprofe.ui.utils.*
 
 @Composable
@@ -66,17 +62,14 @@ fun HistorialScreen(
             ReviewListSkeleton(count = 4)
         } else {
             LazyColumn(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(horizontal = 10.dp),
-                verticalArrangement = Arrangement.spacedBy(16.dp),
-                contentPadding = PaddingValues(top = 24.dp, bottom = 80.dp)
+                modifier = Modifier.fillMaxSize(),
+                verticalArrangement = Arrangement.spacedBy(0.dp),
+                contentPadding = PaddingValues(top = 0.dp, bottom = 100.dp)
             ) {
                 item {
                     AnimatedScreen(delayMs = 0) {
                         HistorialHeader(
                             selectedFilter = state.selectedFilter,
-                            onFilterClick = { historialViewModel.onFilterClick("") },
                             onFilterSelected = { historialViewModel.setFilter(it) }
                         )
                     }
@@ -84,9 +77,6 @@ fun HistorialScreen(
 
                 val showReviews = state.selectedFilter != HistorialFilter.COMENTARIOS
                 val showComments = state.selectedFilter != HistorialFilter.RESENAS
-
-                val isEmpty = (showReviews && state.userReviews.isEmpty() || !showReviews) &&
-                        (showComments && state.userComments.isEmpty() || !showComments)
 
                 val noContent = (if (showReviews) state.userReviews else emptyList<ReviewInfo>()).isEmpty() &&
                         (if (showComments) state.userComments else emptyList<CommentInfo>()).isEmpty()
@@ -151,16 +141,22 @@ fun HistorialScreen(
 @Composable
 fun HistorialHeader(
     selectedFilter: HistorialFilter,
-    onFilterClick: () -> Unit,
     onFilterSelected: (HistorialFilter) -> Unit = {},
     modifier: Modifier = Modifier
 ) {
-    Column(modifier = modifier.padding(horizontal = 24.dp)) {
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.spacedBy(8.dp)
+    Column(modifier = modifier) {
+        Text(
+            text = stringResource(R.string.mi_historial),
+            fontSize = 36.sp,
+            fontWeight = FontWeight.Black,
+            color = colorResource(R.color.verdetp),
+            modifier = Modifier.padding(start = 24.dp, end = 24.dp, top = 16.dp, bottom = 12.dp)
+        )
+        LazyRow(
+            horizontalArrangement = Arrangement.spacedBy(10.dp),
+            contentPadding = PaddingValues(start = 24.dp, end = 24.dp, bottom = 8.dp)
         ) {
-            HistorialFilter.entries.forEach { filter ->
+            items(HistorialFilter.entries) { filter ->
                 val isSelected = selectedFilter == filter
                 val containerColor by animateColorAsState(
                     targetValue = if (isSelected) colorResource(R.color.verdetp) else Color.Transparent,
@@ -174,41 +170,25 @@ fun HistorialHeader(
                 )
                 OutlinedButton(
                     onClick = { onFilterSelected(filter) },
-                    modifier = Modifier.weight(1f).pressScaleEffect(),
                     border = BorderStroke(1.5.dp, colorResource(R.color.verdetp)),
                     colors = ButtonDefaults.outlinedButtonColors(containerColor = containerColor),
                     shape = RoundedCornerShape(50),
-                    contentPadding = PaddingValues(horizontal = 8.dp, vertical = 6.dp)
+                    contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp)
                 ) {
                     Text(
                         text = when (filter) {
-                            HistorialFilter.TODO -> "TODO"
-                            HistorialFilter.RESENAS -> "RESEÑAS"
-                            HistorialFilter.COMENTARIOS -> "COMENTARIOS"
+                            HistorialFilter.TODO -> stringResource(R.string.filtro_todo)
+                            HistorialFilter.RESENAS -> stringResource(R.string.filtro_resenas)
+                            HistorialFilter.COMENTARIOS -> stringResource(R.string.filtro_comentarios)
                         },
                         color = textColor,
-                        fontSize = 12.sp,
-                        fontWeight = FontWeight.Bold,
+                        fontSize = 14.sp,
+                        fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Normal,
                         maxLines = 1
                     )
                 }
             }
         }
-        Spacer(modifier = Modifier.height(16.dp))
-        Text(
-            text = stringResource(R.string.texto_calificaciones),
-            fontSize = 18.sp,
-            textAlign = TextAlign.Center,
-            modifier = Modifier.fillMaxWidth(),
-            lineHeight = 22.sp,
-            color = MaterialTheme.colorScheme.onSurface,
-        )
-        Spacer(modifier = Modifier.height(12.dp))
-        HorizontalDivider(
-            thickness = 1.dp,
-            color = colorResource(R.color.BordeTuProfe),
-            modifier = Modifier.fillMaxWidth()
-        )
     }
 }
 
@@ -221,122 +201,78 @@ fun HistorialCard(
     onDeleteClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    Card(
-        modifier = modifier
-            .fillMaxWidth()
-            .pressScaleEffect(),
-        shape = RoundedCornerShape(28.dp),
-        border = BorderStroke(1.dp, colorResource(R.color.BordeTuProfe)),
-        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)
-    ) {
+    var showDeleteDialog by remember { mutableStateOf(false) }
+
+    Column(modifier = modifier) {
+        ResenaCard(
+            reviewInfo = review,
+            onCommentsClick = { _ -> onVerCalificacionClick(review) },
+            onProfileClick = { onProfessorClick(review.profesor.profeId) },
+            onUserClick = {}
+        )
         Row(
             modifier = Modifier
-                .padding(16.dp)
-                .fillMaxWidth(),
+                .fillMaxWidth()
+                .padding(horizontal = 24.dp)
+                .padding(bottom = 8.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            ProfesorAvatar(
-                imageUrl = review.profesor.imageprofeUrl,
-                onClick = { onProfessorClick(review.profesor.profeId) }
-            )
-            Spacer(modifier = Modifier.width(14.dp))
-            HistorialCardBody(
-                review = review,
-                onVerCalificacionClick = { onVerCalificacionClick(review) },
-                onEditClick = onEditClick,
-                onDeleteClick = onDeleteClick
-            )
-        }
-    }
-}
-
-@Composable
-private fun ProfesorAvatar(
-    imageUrl: String?,
-    onClick: () -> Unit,
-    modifier: Modifier = Modifier
-) {
-    AsyncImage(
-        model = imageUrl,
-        contentDescription = stringResource(R.string.foto_de_perfil),
-        placeholder = painterResource(R.drawable.loading_img),
-        error = painterResource(R.drawable.avatar),
-        modifier = modifier
-            .size(72.dp)
-            .clip(CircleShape)
-            .clickable(onClick = onClick),
-        contentScale = ContentScale.Crop
-    )
-}
-
-@Composable
-private fun HistorialCardBody(
-    review: ReviewInfo,
-    onVerCalificacionClick: () -> Unit,
-    onEditClick: () -> Unit,
-    onDeleteClick: () -> Unit,
-    modifier: Modifier = Modifier
-) {
-    Column(modifier = modifier) {
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Text(
-                text = review.profesor.nombreProfe,
-                fontWeight = FontWeight.SemiBold,
-                fontSize = 17.sp,
-                maxLines = 1,
-                overflow = TextOverflow.Ellipsis,
-                modifier = Modifier.weight(1f)
-            )
-            IconButton(
+            TextButton(
                 onClick = onEditClick,
-                modifier = Modifier.pressScaleEffect()
+                colors = ButtonDefaults.textButtonColors(contentColor = colorResource(R.color.verdetp))
             ) {
                 Icon(
                     imageVector = Icons.Default.Edit,
-                    contentDescription = "Editar reseña",
-                    tint = colorResource(R.color.verdetp)
+                    contentDescription = null,
+                    modifier = Modifier.size(16.dp)
+                )
+                Spacer(modifier = Modifier.width(4.dp))
+                Text(
+                    text = stringResource(R.string.editar),
+                    fontSize = 13.sp,
+                    fontWeight = FontWeight.Medium
                 )
             }
-            IconButton(
-                onClick = onDeleteClick,
-                modifier = Modifier.pressScaleEffect()
+            Spacer(modifier = Modifier.weight(1f))
+            TextButton(
+                onClick = { showDeleteDialog = true },
+                colors = ButtonDefaults.textButtonColors(contentColor = Color.Red)
             ) {
                 Icon(
                     imageVector = Icons.Default.Delete,
-                    contentDescription = "Eliminar reseña",
-                    tint = Color.Red
+                    contentDescription = null,
+                    modifier = Modifier.size(16.dp)
+                )
+                Spacer(modifier = Modifier.width(4.dp))
+                Text(
+                    text = stringResource(R.string.eliminar),
+                    fontSize = 13.sp,
+                    fontWeight = FontWeight.Medium
                 )
             }
         }
+    }
 
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            RatingStars(rating = review.rating.toFloat(), modifier = Modifier.height(16.dp))
-        }
-
-        Spacer(modifier = Modifier.height(4.dp))
-
-        Text(
-            text = review.materia.nombreMateria,
-            color = MaterialTheme.colorScheme.onSurfaceVariant,
-            fontSize = 13.sp,
-            maxLines = 1,
-            overflow = TextOverflow.Ellipsis
-        )
-
-        Spacer(modifier = Modifier.height(8.dp))
-
-        AppButtonRow(
-            textoBoton = stringResource(R.string.ver_rese_a),
-            onClick = onVerCalificacionClick,
-            modifier = Modifier
-                .height(34.dp)
-                .pressScaleEffect()
+    if (showDeleteDialog) {
+        AlertDialog(
+            onDismissRequest = { showDeleteDialog = false },
+            title = { Text(stringResource(R.string.eliminar_resena_confirmacion)) },
+            confirmButton = {
+                TextButton(
+                    onClick = {
+                        showDeleteDialog = false
+                        onDeleteClick()
+                    },
+                    colors = ButtonDefaults.textButtonColors(contentColor = MaterialTheme.colorScheme.error)
+                ) {
+                    Text(stringResource(R.string.eliminar))
+                }
+            },
+            dismissButton = {
+                TextButton(onClick = { showDeleteDialog = false }) {
+                    Text(stringResource(R.string.cancelar))
+                }
+            }
         )
     }
 }
@@ -349,113 +285,89 @@ fun CommentHistorialCard(
     onDeleteClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    Card(
-        modifier = modifier
-            .fillMaxWidth()
-            .pressScaleEffect(),
-        shape = RoundedCornerShape(28.dp),
-        border = BorderStroke(1.dp, colorResource(R.color.BordeTuProfe)),
-        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)
-    ) {
-        Row(
+    var showDeleteDialog by remember { mutableStateOf(false) }
+
+    Column(modifier = modifier) {
+        Card(
             modifier = Modifier
-                .padding(16.dp)
-                .fillMaxWidth(),
-            verticalAlignment = Alignment.Top
+                .fillMaxWidth()
+                .padding(horizontal = 20.dp)
+                .padding(top = 4.dp)
+                .pressScaleEffect()
+                .clickable(onClick = onVerComentarioClick),
+            shape = RoundedCornerShape(18.dp),
+            border = BorderStroke(1.dp, colorResource(R.color.BordeTuProfe)),
+            colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)
         ) {
-            Box(
-                modifier = Modifier
-                    .size(56.dp)
-                    .background(
-                        color = colorResource(R.color.verdetp).copy(alpha = 0.1f),
-                        shape = CircleShape
-                    ),
-                contentAlignment = Alignment.Center
-            ) {
-                Icon(
-                    imageVector = Icons.AutoMirrored.Outlined.Comment,
-                    contentDescription = null,
-                    tint = colorResource(R.color.verdetp),
-                    modifier = Modifier.size(26.dp)
-                )
-            }
-            Spacer(modifier = Modifier.width(14.dp))
-            CommentHistorialCardBody(
+            ComentarioContent(
                 comment = comment,
-                onVerComentarioClick = onVerComentarioClick,
-                onEditClick = onEditClick,
-                onDeleteClick = onDeleteClick
+                onUserClick = {},
+                modifier = Modifier.padding(horizontal = 16.dp, vertical = 12.dp)
             )
         }
-    }
-}
-
-@Composable
-private fun CommentHistorialCardBody(
-    comment: CommentInfo,
-    onVerComentarioClick: () -> Unit,
-    onEditClick: () -> Unit,
-    onDeleteClick: () -> Unit,
-    modifier: Modifier = Modifier
-) {
-    Column(modifier = modifier.fillMaxWidth()) {
         Row(
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 24.dp)
+                .padding(bottom = 8.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Text(
-                text = stringResource(R.string.comentario),
-                fontWeight = FontWeight.SemiBold,
-                fontSize = 15.sp,
-                color = colorResource(R.color.verdetp),
-                modifier = Modifier.weight(1f)
-            )
-            IconButton(
+            TextButton(
                 onClick = onEditClick,
-                modifier = Modifier.pressScaleEffect()
+                colors = ButtonDefaults.textButtonColors(contentColor = colorResource(R.color.verdetp))
             ) {
                 Icon(
                     imageVector = Icons.Default.Edit,
-                    contentDescription = "Editar comentario",
-                    tint = colorResource(R.color.verdetp)
+                    contentDescription = null,
+                    modifier = Modifier.size(16.dp)
+                )
+                Spacer(modifier = Modifier.width(4.dp))
+                Text(
+                    text = stringResource(R.string.editar),
+                    fontSize = 13.sp,
+                    fontWeight = FontWeight.Medium
                 )
             }
-            IconButton(
-                onClick = onDeleteClick,
-                modifier = Modifier.pressScaleEffect()
+            Spacer(modifier = Modifier.weight(1f))
+            TextButton(
+                onClick = { showDeleteDialog = true },
+                colors = ButtonDefaults.textButtonColors(contentColor = Color.Red)
             ) {
                 Icon(
                     imageVector = Icons.Default.Delete,
-                    contentDescription = "Eliminar comentario",
-                    tint = Color.Red
+                    contentDescription = null,
+                    modifier = Modifier.size(16.dp)
+                )
+                Spacer(modifier = Modifier.width(4.dp))
+                Text(
+                    text = stringResource(R.string.eliminar),
+                    fontSize = 13.sp,
+                    fontWeight = FontWeight.Medium
                 )
             }
         }
+    }
 
-        Text(
-            text = comment.content,
-            fontSize = 14.sp,
-            maxLines = 2,
-            overflow = TextOverflow.Ellipsis,
-            color = MaterialTheme.colorScheme.onSurface
-        )
-
-        Spacer(modifier = Modifier.height(4.dp))
-
-        Text(
-            text = comment.time,
-            color = MaterialTheme.colorScheme.onSurfaceVariant,
-            fontSize = 12.sp
-        )
-
-        Spacer(modifier = Modifier.height(8.dp))
-
-        AppButtonRow(
-            textoBoton = "VER COMENTARIO",
-            onClick = onVerComentarioClick,
-            modifier = Modifier
-                .height(34.dp)
-                .pressScaleEffect()
+    if (showDeleteDialog) {
+        AlertDialog(
+            onDismissRequest = { showDeleteDialog = false },
+            title = { Text(stringResource(R.string.eliminar_comentario_confirmacion)) },
+            confirmButton = {
+                TextButton(
+                    onClick = {
+                        showDeleteDialog = false
+                        onDeleteClick()
+                    },
+                    colors = ButtonDefaults.textButtonColors(contentColor = MaterialTheme.colorScheme.error)
+                ) {
+                    Text(stringResource(R.string.eliminar))
+                }
+            },
+            dismissButton = {
+                TextButton(onClick = { showDeleteDialog = false }) {
+                    Text(stringResource(R.string.cancelar))
+                }
+            }
         )
     }
 }

@@ -243,4 +243,11 @@
     <string name="describe_tu_experiencia">صف تجربتك مع هذا الأستاذ...</string>
     <string name="incluir_ubicacion">تضمين الموقع</string>
     <string name="aparecera_en_mapa">سيظهر على خريطة المراجعات</string>
+    <string name="editar">تعديل</string>
+    <string name="mi_historial">سجلي</string>
+    <string name="eliminar_resena_confirmacion">حذف المراجعة؟</string>
+    <string name="eliminar_comentario_confirmacion">حذف التعليق؟</string>
+    <string name="filtro_todo">الكل</string>
+    <string name="filtro_resenas">المراجعات</string>
+    <string name="filtro_comentarios">التعليقات</string>
 </resources>

@@ -291,4 +291,11 @@
     <string name="describe_tu_experiencia">Describe tu experiencia con este profesor...</string>
     <string name="incluir_ubicacion">Incluir ubicación</string>
     <string name="aparecera_en_mapa">Aparecerá en el mapa de reseñas</string>
+    <string name="editar">Editar</string>
+    <string name="mi_historial">Mi historial</string>
+    <string name="eliminar_resena_confirmacion">¿Eliminar reseña?</string>
+    <string name="eliminar_comentario_confirmacion">¿Eliminar comentario?</string>
+    <string name="filtro_todo">Todo</string>
+    <string name="filtro_resenas">Reseñas</string>
+    <string name="filtro_comentarios">Comentarios</string>
 </resources>
