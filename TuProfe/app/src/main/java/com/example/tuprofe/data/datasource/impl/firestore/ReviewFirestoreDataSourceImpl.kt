@@ -5,6 +5,7 @@ import com.example.tuprofe.data.dtos.CreateReviewDto
 import com.example.tuprofe.data.dtos.ReviewDto
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.Query
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
@@ -19,10 +20,12 @@ class ReviewFirestoreDataSourceImpl @Inject constructor(
     private val db: FirebaseFirestore
 ): ReviewRemoteDataSource {
     override suspend fun getAllReviews(): List<ReviewDto> {
-        return db.collection("reviews").get().await().documents.map { doc ->
-            val dto = doc.toObject(ReviewDto::class.java) ?: ReviewDto()
-            dto.copy(id = doc.id)
-        }
+        return db.collection("reviews")
+            .orderBy("time", Query.Direction.DESCENDING)
+            .get().await().documents.map { doc ->
+                val dto = doc.toObject(ReviewDto::class.java) ?: ReviewDto()
+                dto.copy(id = doc.id)
+            }
     }
 
     override suspend fun getReviewById(
@@ -124,7 +127,9 @@ class ReviewFirestoreDataSourceImpl @Inject constructor(
 
     override suspend fun listenAllReviews(): Flow<List<ReviewDto>> = callbackFlow {
 
-        val listener = db.collection("reviews").addSnapshotListener { snapshot, error ->
+        val listener = db.collection("reviews")
+            .orderBy("time", Query.Direction.DESCENDING)
+            .addSnapshotListener { snapshot, error ->
             if(error!=null){
                 close(error)
                 return@addSnapshotListener
