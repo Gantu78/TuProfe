@@ -111,7 +111,14 @@ class ReviewRepository @Inject constructor(
         }
     }
 
-    suspend fun updateReview(reviewId: String, content: String, rating: Int): Result<Unit> {
+    suspend fun updateReview(
+        reviewId: String,
+        content: String,
+        rating: Int,
+        imageUrls: List<String> = emptyList(),
+        latitude: Double? = null,
+        longitude: Double? = null
+    ): Result<Unit> {
         return try {
             val sdf = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.US)
             sdf.timeZone = TimeZone.getTimeZone("UTC")
@@ -120,7 +127,10 @@ class ReviewRepository @Inject constructor(
             val updateReviewDto = CreateReviewDto(
                 content = content,
                 rating = rating,
-                time = currentTime
+                time = currentTime,
+                imageUrls = imageUrls,
+                latitude = latitude,
+                longitude = longitude
             )
             reviewRemoteDataSource.updateReview(reviewId, updateReviewDto)
             Result.success(Unit)

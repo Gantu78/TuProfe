@@ -96,6 +96,8 @@ fun ReviewDto.toReviewInfo(): ReviewInfo {
         commentsCount = comment ?: 0,
         liked = liked,
         editado = !updatedAt.isNullOrEmpty(),
-        imageUrls = imageUrls ?: emptyList()
+        imageUrls = imageUrls ?: emptyList(),
+        latitude = latitude,
+        longitude = longitude
     )
 }

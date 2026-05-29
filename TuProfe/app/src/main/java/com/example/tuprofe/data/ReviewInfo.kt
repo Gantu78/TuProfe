@@ -12,5 +12,7 @@ data class ReviewInfo(
     val commentsCount: Int = 0,
     val liked: Boolean = false,
     val editado: Boolean = false,
-    val imageUrls: List<String> = emptyList()
+    val imageUrls: List<String> = emptyList(),
+    val latitude: Double? = null,
+    val longitude: Double? = null
 )

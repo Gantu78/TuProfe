@@ -1,10 +1,12 @@
 package com.example.tuprofe.ui.review.edit
 
-import com.example.tuprofe.R
+import android.net.Uri
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.tuprofe.R
 import com.example.tuprofe.data.repository.ReviewRepository
+import com.example.tuprofe.data.repository.StorageRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -16,6 +18,7 @@ import javax.inject.Inject
 @HiltViewModel
 class EditReviewViewModel @Inject constructor(
     private val reviewRepository: ReviewRepository,
+    private val storageRepository: StorageRepository,
     savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
@@ -24,9 +27,7 @@ class EditReviewViewModel @Inject constructor(
 
     init {
         val reviewId = savedStateHandle.get<String>("reviewId") ?: ""
-        if (reviewId.isNotEmpty()) {
-            cargarReview(reviewId)
-        }
+        if (reviewId.isNotEmpty()) cargarReview(reviewId)
     }
 
     private fun cargarReview(reviewId: String) {
@@ -41,6 +42,10 @@ class EditReviewViewModel @Inject constructor(
                             reviewText = review.content,
                             rating = review.rating,
                             professorName = review.profesor.nombreProfe,
+                            existingImageUrls = review.imageUrls,
+                            includeLocation = review.latitude != null && review.longitude != null,
+                            latitude = review.latitude,
+                            longitude = review.longitude,
                             isInitialLoading = false
                         )
                     }
@@ -53,39 +58,76 @@ class EditReviewViewModel @Inject constructor(
         }
     }
 
-    fun onReviewTextChange(newText: String) {
-        _uiState.update { it.copy(reviewText = newText) }
+    fun onReviewTextChange(text: String) = _uiState.update { it.copy(reviewText = text) }
+
+    fun onRatingChange(rating: Int) = _uiState.update { it.copy(rating = rating) }
+
+    fun onImagesSelected(uris: List<Uri>) {
+        val state = _uiState.value
+        val remaining = 4 - state.existingImageUrls.size - state.newImageUris.size
+        val toAdd = uris.distinct().take(remaining.coerceAtLeast(0))
+        _uiState.update { it.copy(newImageUris = it.newImageUris + toAdd) }
     }
 
-    fun onRatingChange(newRating: Int) {
-        _uiState.update { it.copy(rating = newRating) }
+    fun onRemoveExistingImage(url: String) {
+        _uiState.update { it.copy(existingImageUrls = it.existingImageUrls.filter { u -> u != url }) }
+    }
+
+    fun onRemoveNewImage(index: Int) {
+        _uiState.update {
+            it.copy(newImageUris = it.newImageUris.toMutableList().also { list -> list.removeAt(index) })
+        }
+    }
+
+    fun onToggleIncludeLocation(enabled: Boolean) {
+        _uiState.update {
+            it.copy(
+                includeLocation = enabled,
+                latitude = if (!enabled) null else it.latitude,
+                longitude = if (!enabled) null else it.longitude
+            )
+        }
+    }
+
+    fun onLocationReceived(latitude: Double?, longitude: Double?) {
+        _uiState.update { it.copy(latitude = latitude, longitude = longitude) }
     }
 
     fun updateReview() {
-        val currentState = _uiState.value
-        if (currentState.reviewText.isBlank()) {
+        val state = _uiState.value
+        if (state.reviewText.isBlank()) {
             _uiState.update { it.copy(error = R.string.contenido_no_puede_vacio) }
             return
         }
-
         _uiState.update { it.copy(isLoading = true, error = null) }
 
         viewModelScope.launch {
+            val newUrls = if (state.newImageUris.isNotEmpty()) {
+                _uiState.update { it.copy(isUploadingImages = true) }
+                val uploadResult = storageRepository.uploadReviewImages(state.newImageUris)
+                _uiState.update { it.copy(isUploadingImages = false) }
+                if (uploadResult.isFailure) {
+                    _uiState.update { it.copy(isLoading = false, error = R.string.error_al_subir_imagenes) }
+                    return@launch
+                }
+                uploadResult.getOrDefault(emptyList())
+            } else emptyList()
+
+            val allImageUrls = state.existingImageUrls + newUrls
+
             val result = reviewRepository.updateReview(
-                reviewId = currentState.reviewId,
-                content = currentState.reviewText,
-                rating = currentState.rating
+                reviewId = state.reviewId,
+                content = state.reviewText,
+                rating = state.rating,
+                imageUrls = allImageUrls,
+                latitude = if (state.includeLocation) state.latitude else null,
+                longitude = if (state.includeLocation) state.longitude else null
             )
 
             if (result.isSuccess) {
                 _uiState.update { it.copy(isLoading = false, success = true) }
             } else {
-                _uiState.update {
-                    it.copy(
-                        isLoading = false,
-                        error = R.string.error_al_actualizar
-                    )
-                }
+                _uiState.update { it.copy(isLoading = false, error = R.string.error_al_actualizar) }
             }
         }
     }

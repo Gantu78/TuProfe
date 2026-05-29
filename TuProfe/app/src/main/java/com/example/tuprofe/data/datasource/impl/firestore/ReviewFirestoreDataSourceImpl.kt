@@ -59,6 +59,14 @@ class ReviewFirestoreDataSourceImpl @Inject constructor(
         review.rating?.let { updates["rating"] = it }
         review.time?.let { updates["time"] = it }
         updates["updatedAt"] = java.time.Instant.now().toString()
+        updates["imageUrls"] = review.imageUrls ?: emptyList<String>()
+        if (review.latitude != null && review.longitude != null) {
+            updates["latitude"] = review.latitude
+            updates["longitude"] = review.longitude
+        } else {
+            updates["latitude"] = FieldValue.delete()
+            updates["longitude"] = FieldValue.delete()
+        }
 
         db.collection("reviews").document(id).update(updates).await()
     }
