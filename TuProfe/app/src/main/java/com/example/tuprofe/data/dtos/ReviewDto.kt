@@ -10,14 +10,17 @@ import java.util.Locale
 
 private fun formatReviewDate(raw: String?): String {
     if (raw.isNullOrEmpty()) return ""
-    return try {
-        val input = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.US)
-        // Usa el locale activo de la app (respeta el idioma seleccionado por el usuario)
-        val output = SimpleDateFormat("d MMMM yyyy", Locale.getDefault())
-        output.format(input.parse(raw)!!)
-    } catch (e: Exception) {
-        raw
+    val output = SimpleDateFormat("d MMMM yyyy", Locale.getDefault())
+    val formats = listOf(
+        SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSSSS'Z'", Locale.US),
+        SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.US),
+        SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.US),
+        SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssXXX", Locale.US)
+    )
+    for (fmt in formats) {
+        try { return output.format(fmt.parse(raw)!!) } catch (_: Exception) {}
     }
+    return raw
 }
 
 data class ReviewDto(
