@@ -16,5 +16,5 @@ object SplashModule {
 
     @Provides
     @SplashDelay
-    fun provideSplashDelay(): Long = 8000L
+    fun provideSplashDelay(): Long = 2500L
 }
