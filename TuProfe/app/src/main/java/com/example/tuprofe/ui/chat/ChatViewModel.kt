@@ -52,6 +52,9 @@ class ChatViewModel @Inject constructor(
                 _uiState.update { it.copy(messages = messages, isLoading = false) }
             }
         }
+    }
+
+    fun markAsRead() {
         viewModelScope.launch {
             chatRepository.markRead(chatId, currentUserId)
         }
@@ -73,7 +76,7 @@ class ChatViewModel @Inject constructor(
                 result.onFailure { Log.e("ChatVM", "Image upload failed: ${it.message}", it) }
                 result.getOrNull()
             } else null
-            chatRepository.sendMessage(chatId, currentUserId, trimmed, imageUrl)
+            chatRepository.sendMessage(chatId, currentUserId, otherUserId, trimmed, imageUrl)
             _uiState.update { it.copy(isSending = false) }
         }
     }

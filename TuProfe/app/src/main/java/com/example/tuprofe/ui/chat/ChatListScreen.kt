@@ -16,6 +16,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
@@ -90,9 +91,11 @@ fun ChatListScreen(
 
 @Composable
 private fun ChatListItem(chat: ChatInfo, currentUserId: String, onClick: () -> Unit) {
+    val isUnread = chat.unreadCount > 0
     Row(
         modifier = Modifier
             .fillMaxWidth()
+            .background(if (isUnread) colorResource(R.color.verdetp).copy(alpha = 0.07f) else Color.Transparent)
             .clickable(onClick = onClick)
             .padding(horizontal = 8.dp, vertical = 10.dp),
         verticalAlignment = Alignment.CenterVertically
@@ -112,26 +115,27 @@ private fun ChatListItem(chat: ChatInfo, currentUserId: String, onClick: () -> U
         Column(modifier = Modifier.weight(1f)) {
             Text(
                 text = chat.otherUserName.ifEmpty { chat.otherUserId },
-                fontWeight = FontWeight.SemiBold,
+                fontWeight = if (isUnread) FontWeight.Bold else FontWeight.SemiBold,
                 fontSize = 15.sp,
                 color = MaterialTheme.colorScheme.onSurface
             )
             val sinMensajes = stringResource(R.string.sin_mensajes)
             val tuPrefijo = stringResource(R.string.tu_prefijo)
+            val msgWeight = if (isUnread) FontWeight.SemiBold else FontWeight.Normal
             val lastMsgText = buildAnnotatedString {
                 if (chat.lastMessage.isEmpty()) {
                     append(sinMensajes)
                 } else if (chat.lastMessageSenderId == currentUserId) {
-                    withStyle(SpanStyle(fontWeight = FontWeight.SemiBold)) { append(tuPrefijo) }
-                    append(chat.lastMessage)
+                    withStyle(SpanStyle(fontWeight = FontWeight.Bold)) { append(tuPrefijo) }
+                    withStyle(SpanStyle(fontWeight = msgWeight)) { append(chat.lastMessage) }
                 } else {
-                    append(chat.lastMessage)
+                    withStyle(SpanStyle(fontWeight = msgWeight)) { append(chat.lastMessage) }
                 }
             }
             Text(
                 text = lastMsgText,
                 fontSize = 13.sp,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                color = if (isUnread) MaterialTheme.colorScheme.onSurface else MaterialTheme.colorScheme.onSurfaceVariant,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis
             )
@@ -141,7 +145,8 @@ private fun ChatListItem(chat: ChatInfo, currentUserId: String, onClick: () -> U
                 Text(
                     text = SimpleDateFormat("HH:mm", Locale.getDefault()).format(date),
                     fontSize = 11.sp,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                    fontWeight = if (isUnread) FontWeight.SemiBold else FontWeight.Normal,
+                    color = if (isUnread) colorResource(R.color.verdetp) else MaterialTheme.colorScheme.onSurfaceVariant
                 )
             }
             if (chat.unreadCount > 0) {

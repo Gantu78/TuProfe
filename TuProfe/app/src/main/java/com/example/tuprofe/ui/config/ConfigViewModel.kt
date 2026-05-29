@@ -3,6 +3,7 @@ package com.example.tuprofe.ui.config
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.tuprofe.data.repository.AuthRepository
+import com.example.tuprofe.data.repository.ChatRepository
 import com.example.tuprofe.data.repository.UserRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -17,7 +18,8 @@ import javax.inject.Inject
 @HiltViewModel
 class ConfigViewModel @Inject constructor(
     private val authRepository: AuthRepository,
-    private val userRepository: UserRepository
+    private val userRepository: UserRepository,
+    private val chatRepository: ChatRepository
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(ConfigState())
@@ -49,6 +51,16 @@ class ConfigViewModel @Inject constructor(
         }
         loadUserProfile()
         loadSubscriptionStatus()
+        listenUnreadChats()
+    }
+
+    private fun listenUnreadChats() {
+        val uid = authRepository.currentUser?.uid ?: return
+        viewModelScope.launch {
+            chatRepository.listenChats(uid).collect { chats ->
+                _uiState.update { it.copy(hasUnreadChats = chats.any { c -> c.unreadCount > 0 }) }
+            }
+        }
     }
 
     fun openFollowersSheet() {

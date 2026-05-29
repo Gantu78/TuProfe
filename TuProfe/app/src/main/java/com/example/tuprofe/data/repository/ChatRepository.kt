@@ -24,8 +24,8 @@ class ChatRepository @Inject constructor(
     fun listenChats(userId: String): Flow<List<ChatInfo>> =
         chatDataSource.listenChats(userId)
 
-    suspend fun sendMessage(chatId: String, senderId: String, text: String, imageUrl: String? = null): Result<Unit> =
-        runCatching { chatDataSource.sendMessage(chatId, senderId, text, imageUrl) }
+    suspend fun sendMessage(chatId: String, senderId: String, recipientId: String, text: String, imageUrl: String? = null): Result<Unit> =
+        runCatching { chatDataSource.sendMessage(chatId, senderId, recipientId, text, imageUrl) }
 
     suspend fun uploadChatImage(userId: String, uri: Uri): Result<String> =
         runCatching { storageDataSource.uploadChatImage(userId, uri) }

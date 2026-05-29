@@ -94,7 +94,7 @@ class ChatFirestoreDataSourceImpl @Inject constructor(
         awaitClose { listener.remove() }
     }
 
-    override suspend fun sendMessage(chatId: String, senderId: String, text: String, imageUrl: String?) {
+    override suspend fun sendMessage(chatId: String, senderId: String, recipientId: String, text: String, imageUrl: String?) {
         val messageData = mutableMapOf<String, Any>(
             "senderId" to senderId,
             "text" to text,
@@ -108,7 +108,8 @@ class ChatFirestoreDataSourceImpl @Inject constructor(
             mapOf(
                 "lastMessage" to lastMsg,
                 "lastMessageAt" to FieldValue.serverTimestamp(),
-                "lastMessageSenderId" to senderId
+                "lastMessageSenderId" to senderId,
+                "unreadCounts.$recipientId" to FieldValue.increment(1)
             )
         ).await()
     }

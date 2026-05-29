@@ -97,11 +97,21 @@ fun ConfigScreen(
                         icon = Icons.Default.Notifications,
                         contentDescription = stringResource(R.string.notificaciones)
                     )
-                    TpIconButton(
-                        icon = Icons.Default.Chat,
-                        contentDescription = stringResource(R.string.chat),
-                        onClick = onChatListClick
-                    )
+                    Box {
+                        TpIconButton(
+                            icon = Icons.Default.Chat,
+                            contentDescription = stringResource(R.string.chat),
+                            onClick = onChatListClick
+                        )
+                        if (state.hasUnreadChats) {
+                            Box(
+                                modifier = Modifier
+                                    .size(10.dp)
+                                    .background(Color.Red, CircleShape)
+                                    .align(Alignment.TopEnd)
+                            )
+                        }
+                    }
                 }
 
                 LazyColumn(

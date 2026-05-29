@@ -586,7 +586,8 @@ val bottomNavItems = listOf(
 @Composable
 fun TuProfeBottomBar(
     navController: NavHostController,
-    items: List<BottomNavItem> = bottomNavItems
+    items: List<BottomNavItem> = bottomNavItems,
+    hasUnreadChats: Boolean = false
 ) {
 
     val currentBackStackEntry by navController.currentBackStackEntryAsState()
@@ -623,17 +624,21 @@ fun TuProfeBottomBar(
                             }
                         },
                         icon = {
-                            Icon(
-                                imageVector = if (isSelected)
-                                    item.filledIcon
-                                else
-                                    item.outLinedIcon,
-                                contentDescription = item.route,
-                                tint = if (isSelected)
-                                    colorResource(R.color.verdetp)
-                                else
-                                    Color.Gray
-                            )
+                            Box {
+                                Icon(
+                                    imageVector = if (isSelected) item.filledIcon else item.outLinedIcon,
+                                    contentDescription = item.route,
+                                    tint = if (isSelected) colorResource(R.color.verdetp) else Color.Gray
+                                )
+                                if (hasUnreadChats && item.route == Screen.Configuracion.route) {
+                                    Box(
+                                        modifier = Modifier
+                                            .size(8.dp)
+                                            .background(Color.Red, CircleShape)
+                                            .align(Alignment.TopEnd)
+                                    )
+                                }
+                            }
                         },
                         label = null,
                         alwaysShowLabel = false,

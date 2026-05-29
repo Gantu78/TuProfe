@@ -12,6 +12,8 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
@@ -31,6 +33,8 @@ import androidx.navigation.compose.rememberNavController
 import com.example.tuprofe.navegation.AppNavegation
 import com.example.tuprofe.navegation.NavigationLogic
 import com.example.tuprofe.navegation.TuProfeBottomBar
+import com.example.tuprofe.ui.BadgeViewModel
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.tuprofe.ui.utils.BackButtonHeader
 import com.example.tuprofe.ui.utils.BackgroundImage
 import com.example.tuprofe.ui.utils.TitleHeader
@@ -43,6 +47,8 @@ import com.google.firebase.messaging.FirebaseMessaging
 @OptIn(ExperimentalMaterial3Api::class)
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 fun TuProfeApp() {
+    val badgeViewModel: BadgeViewModel = androidx.hilt.navigation.compose.hiltViewModel()
+    val hasUnreadChats by badgeViewModel.hasUnreadChats.collectAsState()
 
     FirebaseMessaging.getInstance().token.addOnCompleteListener { task ->
         if (task.isSuccessful) {
@@ -102,7 +108,7 @@ fun TuProfeApp() {
             },
             bottomBar = {
                 if (NavigationLogic.ShouldShowBottomBar(currentRoute)) {
-                    TuProfeBottomBar(navController = navController)
+                    TuProfeBottomBar(navController = navController, hasUnreadChats = hasUnreadChats)
                 }
             }
         ) { paddingValues ->

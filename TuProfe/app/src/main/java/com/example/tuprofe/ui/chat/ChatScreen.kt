@@ -51,7 +51,10 @@ fun ChatScreen(
     ) { uri -> viewModel.setPendingImage(uri) }
 
     LaunchedEffect(state.messages.size) {
-        if (state.messages.isNotEmpty()) listState.animateScrollToItem(state.messages.size - 1)
+        if (state.messages.isNotEmpty()) {
+            listState.animateScrollToItem(state.messages.size - 1)
+            viewModel.markAsRead()
+        }
     }
 
     Box(modifier = Modifier.fillMaxSize()) {
