@@ -248,7 +248,7 @@ private fun MessageBubble(message: Message, isOwn: Boolean) {
                     modifier = Modifier.padding(
                         start = 14.dp, end = 10.dp,
                         top = if (message.imageUrl != null) 6.dp else 8.dp,
-                        bottom = 6.dp
+                        bottom = 3.dp
                     ),
                     verticalAlignment = Alignment.Bottom,
                     horizontalArrangement = Arrangement.spacedBy(4.dp)
@@ -263,7 +263,8 @@ private fun MessageBubble(message: Message, isOwn: Boolean) {
                         Text(
                             text = SimpleDateFormat("HH:mm", Locale.getDefault()).format(date),
                             fontSize = 11.sp,
-                            color = if (isOwn) Color.White.copy(alpha = 0.65f) else Color.Gray
+                            color = if (isOwn) Color.White.copy(alpha = 0.65f) else Color.Gray,
+                            modifier = Modifier.offset(y = 3.dp)
                         )
                     }
                 }
