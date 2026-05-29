@@ -69,6 +69,7 @@
     <string name="ajustes">Configurações</string>
     <string name="configuraci_n_de_la_aplicaci_n">Configurações do aplicativo</string>
     <string name="cuenta_creada_verificar">Conta criada! Verifique seu e-mail.</string>
+    <string name="revisar_spam">Se não receber, verifique sua pasta de spam.</string>
     <string name="respondiendo_a">Respondendo a @%1$s</string>
     <string name="respuestas_mas_relevantes">Respostas mais relevantes</string>
     <string name="likes_count">%1$d Curtidas</string>

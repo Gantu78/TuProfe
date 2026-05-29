@@ -70,6 +70,7 @@
     <string name="configuraci_n_de_la_aplicaci_n">Applicatie-instellingen</string>
 
     <string name="cuenta_creada_verificar">Account aangemaakt! Controleer je e-mail voor verificatie.</string>
+    <string name="revisar_spam">Als je het niet ontvangt, controleer dan je spammap.</string>
     <string name="respondiendo_a">Antwoord aan @%1$s</string>
     <string name="respuestas_mas_relevantes">Meest relevante antwoorden</string>
     <string name="likes_count">%1$d Likes</string>

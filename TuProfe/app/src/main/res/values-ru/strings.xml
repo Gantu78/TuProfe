@@ -70,6 +70,7 @@
     <string name="configuraci_n_de_la_aplicaci_n">Настройки приложения</string>
 
     <string name="cuenta_creada_verificar">Аккаунт создан! Пожалуйста, подтвердите свою электронную почту.</string>
+    <string name="revisar_spam">Если не получили, проверьте папку «Спам».</string>
     <string name="respondiendo_a">Ответ пользователю @%1$s</string>
     <string name="respuestas_mas_relevantes">Самые актуальные ответы</string>
     <string name="likes_count">%1$d Лайков</string>

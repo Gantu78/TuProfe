@@ -70,6 +70,7 @@
     <string name="configuraci_n_de_la_aplicaci_n">Impostazioni dell\'applicazione</string>
 
     <string name="cuenta_creada_verificar">Account creato! Per favore verifica la tua email.</string>
+    <string name="revisar_spam">Se non lo ricevi, controlla la cartella spam.</string>
     <string name="respondiendo_a">Rispondendo a @%1$s</string>
     <string name="respuestas_mas_relevantes">Risposte più rilevanti</string>
     <string name="likes_count">%1$d Mi piace</string>

@@ -57,7 +57,9 @@ fun ResetPasswordScreen(
                 )
                 Spacer(modifier = Modifier.padding(10.dp))
                 if (state.mostrarMensaje) {
-                    Text(stringResource(R.string.si_correo_registrado), color = Color(0xFF1AC06A), fontSize = 16.sp)
+                    Text(stringResource(R.string.si_correo_registrado), color = Color(0xFF1AC06A), fontSize = 16.sp, textAlign = TextAlign.Center)
+                    Spacer(modifier = Modifier.padding(4.dp))
+                    Text(stringResource(R.string.revisar_spam), color = Color(0xFF1AC06A), fontSize = 14.sp, textAlign = TextAlign.Center)
                 } else if (state.mostrarError) {
                     state.errorMessage?.let { errRes ->
                     Text(stringResource(errRes), color = Color.Red, fontSize = 16.sp)

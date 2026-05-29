@@ -70,6 +70,7 @@
     <string name="configuraci_n_de_la_aplicaci_n">应用设置</string>
 
     <string name="cuenta_creada_verificar">账户已创建！请查看您的邮箱进行验证。</string>
+    <string name="revisar_spam">如果没有收到，请检查垃圾邮件文件夹。</string>
     <string name="respondiendo_a">正在回复 @%1$s</string>
     <string name="respuestas_mas_relevantes">最相关回复</string>
     <string name="likes_count">%1$d 个赞</string>

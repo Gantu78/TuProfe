@@ -70,6 +70,7 @@
     <string name="configuraci_n_de_la_aplicaci_n">Configuración de la aplicación</string>
 
     <string name="cuenta_creada_verificar">¡Cuenta creada! Por favor, verifica tu correo.</string>
+    <string name="revisar_spam">Si no lo recibes, revisa tu carpeta de spam.</string>
     <string name="respondiendo_a">Respondiendo a @%1$s</string>
     <string name="respuestas_mas_relevantes">Respuestas más relevantes</string>
     <string name="likes_count">%1$d Me gusta</string>

@@ -70,6 +70,7 @@
     <string name="configuraci_n_de_la_aplicaci_n">Uygulama ayarları</string>
 
     <string name="cuenta_creada_verificar">Hesap oluşturuldu! Lütfen e-postanızı doğrulayın.</string>
+    <string name="revisar_spam">Almazsanız spam klasörünüzü kontrol edin.</string>
     <string name="respondiendo_a">@%1$s kullanıcısına yanıt veriliyor</string>
     <string name="respuestas_mas_relevantes">En alakalı yanıtlar</string>
     <string name="likes_count">%1$d Beğeni</string>

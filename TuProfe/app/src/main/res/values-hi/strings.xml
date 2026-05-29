@@ -70,6 +70,7 @@
     <string name="configuraci_n_de_la_aplicaci_n">एप्लिकेशन सेटिंग्स</string>
 
     <string name="cuenta_creada_verificar">खाता बन गया! कृपया अपना ईमेल सत्यापित करें।</string>
+    <string name="revisar_spam">यदि आपको नहीं मिला, तो अपना स्पैम फ़ोल्डर जांचें।</string>
     <string name="respondiendo_a">@%1$s को उत्तर दे रहे हैं</string>
     <string name="respuestas_mas_relevantes">सबसे प्रासंगिक उत्तर</string>
     <string name="likes_count">%1$d पसंद</string>

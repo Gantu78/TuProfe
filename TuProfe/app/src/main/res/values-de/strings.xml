@@ -70,6 +70,7 @@
     <string name="configuraci_n_de_la_aplicaci_n">Anwendungseinstellungen</string>
 
     <string name="cuenta_creada_verificar">Konto erstellt! Bitte bestätigen Sie Ihre E-Mail.</string>
+    <string name="revisar_spam">Falls du es nicht erhältst, überprüfe deinen Spam-Ordner.</string>
     <string name="respondiendo_a">Antwort auf @%1$s</string>
     <string name="respuestas_mas_relevantes">Relevanteste Antworten</string>
     <string name="likes_count">%1$d Likes</string>

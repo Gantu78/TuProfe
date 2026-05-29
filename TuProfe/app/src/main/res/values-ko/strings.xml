@@ -70,6 +70,7 @@
     <string name="configuraci_n_de_la_aplicaci_n">앱 설정</string>
 
     <string name="cuenta_creada_verificar">계정이 생성되었습니다! 이메일을 확인해 주세요.</string>
+    <string name="revisar_spam">받지 못하셨다면 스팸 폴더를 확인하세요.</string>
     <string name="respondiendo_a">@%1$s 님에게 답글 중</string>
     <string name="respuestas_mas_relevantes">주요 답글</string>
     <string name="likes_count">좋아요 %1$d개</string>

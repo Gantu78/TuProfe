@@ -82,7 +82,7 @@ fun RegisterScreen(
                         )
                     },
                     text = {
-                        Text(text = stringResource(R.string.verificar_correo_activar))
+                        Text(text = stringResource(R.string.verificar_correo_activar) + "\n\n" + stringResource(R.string.revisar_spam))
                     },
                     confirmButton = {
                         TextButton(onClick = onSuccessDismiss) {

@@ -70,6 +70,7 @@
     <string name="configuraci_n_de_la_aplicaci_n">Cài đặt ứng dụng</string>
 
     <string name="cuenta_creada_verificar">Tài khoản đã được tạo! Vui lòng kiểm tra email của bạn.</string>
+    <string name="revisar_spam">Nếu không nhận được, hãy kiểm tra hộp thư rác.</string>
     <string name="respondiendo_a">Đang trả lời @%1$s</string>
     <string name="respuestas_mas_relevantes">Trả lời liên quan nhất</string>
     <string name="likes_count">%1$d Lượt thích</string>
