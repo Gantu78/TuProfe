@@ -12,7 +12,7 @@ import javax.inject.Singleton
 @Singleton
 class PaymentService @Inject constructor() {
 
-    private val backendUrl = " https://scolding-safeguard-bleep.ngrok-free.dev/create-payment-intent"
+    private val backendUrl = " https://tuprofe-backend.onrender.com/create-payment-intent"
 
     suspend fun createPaymentIntent(): Result<String> {
         return withContext(Dispatchers.IO) {
