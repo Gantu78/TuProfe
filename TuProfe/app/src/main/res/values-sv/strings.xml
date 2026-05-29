@@ -218,4 +218,11 @@
 
     <string name="notif_sin_notificaciones">Inga aviseringar än</string>
     <string name="notif_marcar_leidas">Markera alla som lästa</string>
+
+    <!-- Notification text -->
+    <string name="notif_like_title">%1$s gillade din recension</string>
+    <string name="notif_comment_title">%1$s kommenterade din recension</string>
+    <string name="notif_reply_title">%1$s svarade på din kommentar</string>
+    <string name="notif_follow_title">%1$s börjat följa dig</string>
+    <string name="notif_review_deleted_title">Din recension har tagits bort</string>
 </resources>

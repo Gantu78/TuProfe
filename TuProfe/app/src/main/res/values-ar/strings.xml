@@ -228,4 +228,11 @@
 
     <string name="notif_sin_notificaciones">لا توجد إشعارات بعد</string>
     <string name="notif_marcar_leidas">تحديد الكل كمقروء</string>
+
+    <!-- Notification text -->
+    <string name="notif_like_title">أعجب %1$s بتقييمك</string>
+    <string name="notif_comment_title">علّق %1$s على تقييمك</string>
+    <string name="notif_reply_title">ردّ %1$s على تعليقك</string>
+    <string name="notif_follow_title">بدأ %1$s في متابعتك</string>
+    <string name="notif_review_deleted_title">تم حذف تقييمك</string>
 </resources>

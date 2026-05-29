@@ -289,4 +289,11 @@
     <!-- Notification inbox -->
     <string name="notif_sin_notificaciones">No notifications yet</string>
     <string name="notif_marcar_leidas">Mark all as read</string>
+
+    <!-- Notification text -->
+    <string name="notif_like_title">%1$s liked your review</string>
+    <string name="notif_comment_title">%1$s commented on your review</string>
+    <string name="notif_reply_title">%1$s replied to your comment</string>
+    <string name="notif_follow_title">%1$s started following you</string>
+    <string name="notif_review_deleted_title">Your review was removed</string>
 </resources>

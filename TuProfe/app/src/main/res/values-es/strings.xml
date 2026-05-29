@@ -276,4 +276,11 @@
     <!-- Notification inbox -->
     <string name="notif_sin_notificaciones">Aún no hay notificaciones</string>
     <string name="notif_marcar_leidas">Marcar todas como leídas</string>
+
+    <!-- Notification text -->
+    <string name="notif_like_title">%1$s le dio like a tu reseña</string>
+    <string name="notif_comment_title">%1$s comentó en tu reseña</string>
+    <string name="notif_reply_title">%1$s respondió tu comentario</string>
+    <string name="notif_follow_title">%1$s empezó a seguirte</string>
+    <string name="notif_review_deleted_title">Tu reseña fue eliminada</string>
 </resources>

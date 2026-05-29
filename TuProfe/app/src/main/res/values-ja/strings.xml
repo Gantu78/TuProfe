@@ -231,4 +231,11 @@
 
     <string name="notif_sin_notificaciones">まだ通知はありません</string>
     <string name="notif_marcar_leidas">すべて既読にする</string>
+
+    <!-- Notification text -->
+    <string name="notif_like_title">%1$sがあなたのレビューにいいねしました</string>
+    <string name="notif_comment_title">%1$sがあなたのレビューにコメントしました</string>
+    <string name="notif_reply_title">%1$sがあなたのコメントに返信しました</string>
+    <string name="notif_follow_title">%1$sがあなたをフォローしました</string>
+    <string name="notif_review_deleted_title">あなたのレビューが削除されました</string>
 </resources>

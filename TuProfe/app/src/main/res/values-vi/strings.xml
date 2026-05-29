@@ -226,4 +226,11 @@
 
     <string name="notif_sin_notificaciones">Chưa có thông báo</string>
     <string name="notif_marcar_leidas">Đánh dấu tất cả là đã đọc</string>
+
+    <!-- Notification text -->
+    <string name="notif_like_title">%1$s đã thích đánh giá của bạn</string>
+    <string name="notif_comment_title">%1$s đã bình luận về đánh giá của bạn</string>
+    <string name="notif_reply_title">%1$s đã trả lời bình luận của bạn</string>
+    <string name="notif_follow_title">%1$s đã bắt đầu theo dõi bạn</string>
+    <string name="notif_review_deleted_title">Đánh giá của bạn đã bị xóa</string>
 </resources>

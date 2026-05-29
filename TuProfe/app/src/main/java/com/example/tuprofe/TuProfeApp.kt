@@ -14,6 +14,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import kotlinx.coroutines.flow.filterNotNull
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.mapNotNull
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
@@ -32,6 +35,8 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.tuprofe.navegation.AppNavegation
 import com.example.tuprofe.navegation.NavigationLogic
+import com.example.tuprofe.navegation.NotifDeepLinkManager
+import com.example.tuprofe.navegation.Screen
 import com.example.tuprofe.navegation.TuProfeBottomBar
 import com.example.tuprofe.ui.BadgeViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -70,6 +75,14 @@ fun TuProfeApp() {
     val navController = rememberNavController()
     val currentBackStackEntry = navController.currentBackStackEntryAsState()
     val currentRoute = currentBackStackEntry.value?.destination?.route
+
+    val pendingTarget by NotifDeepLinkManager.pendingTarget.collectAsState()
+    LaunchedEffect(pendingTarget, currentRoute) {
+        if (pendingTarget == "notif_inbox" && NavigationLogic.ShouldShowBottomBar(currentRoute)) {
+            navController.navigate(Screen.NotifInbox.route) { launchSingleTop = true }
+            NotifDeepLinkManager.clear()
+        }
+    }
 
     val context = LocalContext.current
     val notificationPermissionLauncher = rememberLauncherForActivityResult(

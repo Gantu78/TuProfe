@@ -214,4 +214,11 @@
 
     <string name="notif_sin_notificaciones">Noch keine Benachrichtigungen</string>
     <string name="notif_marcar_leidas">Alle als gelesen markieren</string>
+
+    <!-- Notification text -->
+    <string name="notif_like_title">%1$s hat deine Bewertung gemocht</string>
+    <string name="notif_comment_title">%1$s hat deine Bewertung kommentiert</string>
+    <string name="notif_reply_title">%1$s hat auf deinen Kommentar geantwortet</string>
+    <string name="notif_follow_title">%1$s folgt dir jetzt</string>
+    <string name="notif_review_deleted_title">Deine Bewertung wurde entfernt</string>
 </resources>

@@ -199,19 +199,11 @@ private fun NotifItem(
 
             Column(modifier = Modifier.weight(1f)) {
                 Text(
-                    text = notif.title,
+                    text = localizedTitle(notif),
                     fontWeight = if (!notif.isRead) FontWeight.Bold else FontWeight.Normal,
                     fontSize = 14.sp,
                     maxLines = 1
                 )
-                if (notif.body.isNotBlank()) {
-                    Text(
-                        text = notif.body,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant,
-                        fontSize = 12.sp,
-                        maxLines = 2
-                    )
-                }
                 if (notif.timestamp > 0L) {
                     Text(
                         text = formatRelativeTime(notif.timestamp),
@@ -230,6 +222,19 @@ private fun NotifItem(
                 )
             }
         }
+    }
+}
+
+@Composable
+private fun localizedTitle(notif: AppNotification): String {
+    val name = notif.senderName.ifBlank { "?" }
+    return when (notif.type) {
+        "like" -> stringResource(R.string.notif_like_title, name)
+        "comment" -> stringResource(R.string.notif_comment_title, name)
+        "reply" -> stringResource(R.string.notif_reply_title, name)
+        "follow" -> stringResource(R.string.notif_follow_title, name)
+        "reviewDeleted" -> stringResource(R.string.notif_review_deleted_title)
+        else -> notif.title.ifBlank { notif.type }
     }
 }
 

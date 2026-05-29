@@ -201,4 +201,11 @@
 
     <string name="notif_sin_notificaciones">Nog geen meldingen</string>
     <string name="notif_marcar_leidas">Alles als gelezen markeren</string>
+
+    <!-- Notification text -->
+    <string name="notif_like_title">%1$s vond je recensie leuk</string>
+    <string name="notif_comment_title">%1$s reageerde op je recensie</string>
+    <string name="notif_reply_title">%1$s reageerde op je reactie</string>
+    <string name="notif_follow_title">%1$s volgt je nu</string>
+    <string name="notif_review_deleted_title">Je recensie is verwijderd</string>
 </resources>

@@ -213,4 +213,11 @@
 
     <string name="notif_sin_notificaciones">Henüz bildirim yok</string>
     <string name="notif_marcar_leidas">Tümünü okundu olarak işaretle</string>
+
+    <!-- Notification text -->
+    <string name="notif_like_title">%1$s yorumunuzu beğendi</string>
+    <string name="notif_comment_title">%1$s yorumunuzu yorumladı</string>
+    <string name="notif_reply_title">%1$s yorumunuzu yanıtladı</string>
+    <string name="notif_follow_title">%1$s sizi takip etmeye başladı</string>
+    <string name="notif_review_deleted_title">İncelemeniz kaldırıldı</string>
 </resources>

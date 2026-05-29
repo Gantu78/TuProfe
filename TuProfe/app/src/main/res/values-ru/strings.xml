@@ -225,4 +225,11 @@
 
     <string name="notif_sin_notificaciones">Уведомлений пока нет</string>
     <string name="notif_marcar_leidas">Отметить все как прочитанные</string>
+
+    <!-- Notification text -->
+    <string name="notif_like_title">%1$s лайкнул вашу рецензию</string>
+    <string name="notif_comment_title">%1$s прокомментировал вашу рецензию</string>
+    <string name="notif_reply_title">%1$s ответил на ваш комментарий</string>
+    <string name="notif_follow_title">%1$s начал(а) читать вас</string>
+    <string name="notif_review_deleted_title">Ваша рецензия удалена</string>
 </resources>

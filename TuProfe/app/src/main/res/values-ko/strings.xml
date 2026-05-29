@@ -226,4 +226,11 @@
 
     <string name="notif_sin_notificaciones">아직 알림이 없습니다</string>
     <string name="notif_marcar_leidas">모두 읽음으로 표시</string>
+
+    <!-- Notification text -->
+    <string name="notif_like_title">%1$s님이 회원님의 리뷰를 좋아합니다</string>
+    <string name="notif_comment_title">%1$s님이 회원님의 리뷰에 댓글을 남겼습니다</string>
+    <string name="notif_reply_title">%1$s님이 회원님의 댓글에 답글을 남겼습니다</string>
+    <string name="notif_follow_title">%1$s님이 팔로우를 시작했습니다</string>
+    <string name="notif_review_deleted_title">리뷰가 삭제되었습니다</string>
 </resources>

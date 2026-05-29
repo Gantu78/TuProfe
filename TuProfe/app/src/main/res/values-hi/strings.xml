@@ -228,4 +228,11 @@
 
     <string name="notif_sin_notificaciones">अभी तक कोई सूचना नहीं</string>
     <string name="notif_marcar_leidas">सभी को पढ़ा हुआ चिह्नित करें</string>
+
+    <!-- Notification text -->
+    <string name="notif_like_title">%1$s ने आपकी समीक्षा पसंद की</string>
+    <string name="notif_comment_title">%1$s ने आपकी समीक्षा पर टिप्पणी की</string>
+    <string name="notif_reply_title">%1$s ने आपकी टिप्पणी का जवाब दिया</string>
+    <string name="notif_follow_title">%1$s ने आपको फॉलो करना शुरू किया</string>
+    <string name="notif_review_deleted_title">आपकी समीक्षा हटा दी गई</string>
 </resources>

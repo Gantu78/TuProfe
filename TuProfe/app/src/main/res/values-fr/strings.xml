@@ -235,4 +235,11 @@
 
     <string name="notif_sin_notificaciones">Aucune notification pour l\'instant</string>
     <string name="notif_marcar_leidas">Tout marquer comme lu</string>
+
+    <!-- Notification text -->
+    <string name="notif_like_title">%1$s a aimé ta critique</string>
+    <string name="notif_comment_title">%1$s a commenté ta critique</string>
+    <string name="notif_reply_title">%1$s a répondu à ton commentaire</string>
+    <string name="notif_follow_title">%1$s a commencé à te suivre</string>
+    <string name="notif_review_deleted_title">Ta critique a été supprimée</string>
 </resources>

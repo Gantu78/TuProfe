@@ -228,4 +228,11 @@
 
     <string name="notif_sin_notificaciones">暂无通知</string>
     <string name="notif_marcar_leidas">全部标为已读</string>
+
+    <!-- Notification text -->
+    <string name="notif_like_title">%1$s 赞了你的评价</string>
+    <string name="notif_comment_title">%1$s 评论了你的评价</string>
+    <string name="notif_reply_title">%1$s 回复了你的评论</string>
+    <string name="notif_follow_title">%1$s 开始关注你</string>
+    <string name="notif_review_deleted_title">你的评价已被删除</string>
 </resources>

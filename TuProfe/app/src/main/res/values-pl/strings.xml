@@ -213,4 +213,11 @@
 
     <string name="notif_sin_notificaciones">Brak powiadomień</string>
     <string name="notif_marcar_leidas">Oznacz wszystkie jako przeczytane</string>
+
+    <!-- Notification text -->
+    <string name="notif_like_title">%1$s polubił(a) Twoją recenzję</string>
+    <string name="notif_comment_title">%1$s skomentował(a) Twoją recenzję</string>
+    <string name="notif_reply_title">%1$s odpowiedział(a) na Twój komentarz</string>
+    <string name="notif_follow_title">%1$s zaczął(ęła) Cię obserwować</string>
+    <string name="notif_review_deleted_title">Twoja recenzja została usunięta</string>
 </resources>

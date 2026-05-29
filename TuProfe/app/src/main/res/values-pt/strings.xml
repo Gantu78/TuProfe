@@ -241,4 +241,11 @@
 
     <string name="notif_sin_notificaciones">Ainda sem notificações</string>
     <string name="notif_marcar_leidas">Marcar tudo como lido</string>
+
+    <!-- Notification text -->
+    <string name="notif_like_title">%1$s curtiu sua resenha</string>
+    <string name="notif_comment_title">%1$s comentou sua resenha</string>
+    <string name="notif_reply_title">%1$s respondeu ao seu comentário</string>
+    <string name="notif_follow_title">%1$s começou a seguir você</string>
+    <string name="notif_review_deleted_title">Sua resenha foi removida</string>
 </resources>

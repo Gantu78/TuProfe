@@ -229,4 +229,11 @@ string name="idioma_turco">Turco</string>
 
     <string name="notif_sin_notificaciones">Nessuna notifica ancora</string>
     <string name="notif_marcar_leidas">Segna tutto come letto</string>
+
+    <!-- Notification text -->
+    <string name="notif_like_title">%1$s ha messo Mi piace alla tua recensione</string>
+    <string name="notif_comment_title">%1$s ha commentato la tua recensione</string>
+    <string name="notif_reply_title">%1$s ha risposto al tuo commento</string>
+    <string name="notif_follow_title">%1$s ha iniziato a seguirti</string>
+    <string name="notif_review_deleted_title">La tua recensione è stata rimossa</string>
 </resources>
