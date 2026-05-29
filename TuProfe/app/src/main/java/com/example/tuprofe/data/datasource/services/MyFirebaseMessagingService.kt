@@ -9,7 +9,6 @@ import androidx.core.app.NotificationCompat
 import com.example.tuprofe.MainActivity
 import com.example.tuprofe.R
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
@@ -29,29 +28,9 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
         super.onMessageReceived(message)
         val title = message.notification?.title ?: message.data["title"] ?: return
         val body = message.notification?.body ?: message.data["body"] ?: return
-        saveNotificationToFirestore(title, body, message.data)
+        // The Cloud Function already saves the notification to Firestore.
+        // Here we only show the system tray notification.
         showNotification(title, body)
-    }
-
-    private fun saveNotificationToFirestore(title: String, body: String, data: Map<String, String>) {
-        val userId = FirebaseAuth.getInstance().currentUser?.uid ?: return
-        FirebaseFirestore.getInstance()
-            .collection("users")
-            .document(userId)
-            .collection("notifications")
-            .add(
-                mapOf(
-                    "type" to (data["type"] ?: ""),
-                    "entityId" to (data["entityId"] ?: ""),
-                    "title" to title,
-                    "body" to body,
-                    "senderId" to (data["senderId"] ?: ""),
-                    "senderName" to (data["senderName"] ?: ""),
-                    "senderImageUrl" to (data["senderImageUrl"] ?: ""),
-                    "timestamp" to FieldValue.serverTimestamp(),
-                    "isRead" to false
-                )
-            )
     }
 
     private fun showNotification(title: String, body: String) {

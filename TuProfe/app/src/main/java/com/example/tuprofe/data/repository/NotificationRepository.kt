@@ -1,8 +1,8 @@
 package com.example.tuprofe.data.repository
 
-import com.example.tuprofe.data.AppNotification
 import com.example.tuprofe.data.datasource.NotificationFirestoreDataSource
 import kotlinx.coroutines.flow.Flow
+import com.example.tuprofe.data.AppNotification
 import javax.inject.Inject
 
 class NotificationRepository @Inject constructor(
@@ -13,9 +13,6 @@ class NotificationRepository @Inject constructor(
 
     fun listenUnreadCount(userId: String): Flow<Int> =
         dataSource.listenUnreadCount(userId)
-
-    suspend fun saveNotification(userId: String, notification: AppNotification) =
-        dataSource.saveNotification(userId, notification)
 
     suspend fun markRead(userId: String, notifId: String) =
         dataSource.markRead(userId, notifId)

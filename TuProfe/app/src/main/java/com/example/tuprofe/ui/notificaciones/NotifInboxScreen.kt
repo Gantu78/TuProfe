@@ -119,8 +119,8 @@ fun NotifInboxScreen(
                         onClick = {
                             viewModel.onNotificationClick(notif)
                             when (notif.type) {
-                                "like", "review" -> if (notif.entityId.isNotBlank()) onReviewClick(notif.entityId)
-                                "comment" -> if (notif.entityId.isNotBlank()) onCommentClick(notif.entityId)
+                                "like", "reviewDeleted" -> if (notif.entityId.isNotBlank()) onReviewClick(notif.entityId)
+                                "comment", "reply" -> if (notif.entityId.isNotBlank()) onCommentClick(notif.entityId)
                                 "follow" -> if (notif.entityId.isNotBlank()) onUserClick(notif.entityId)
                             }
                         }
@@ -235,9 +235,9 @@ private fun NotifItem(
 
 private fun typeIcon(type: String): ImageVector = when (type) {
     "like" -> Icons.Outlined.ThumbUp
-    "comment" -> Icons.AutoMirrored.Outlined.Comment
+    "comment", "reply" -> Icons.AutoMirrored.Outlined.Comment
     "follow" -> Icons.Default.PersonAdd
-    "review" -> Icons.Default.Star
+    "review", "reviewDeleted" -> Icons.Default.Star
     else -> Icons.Default.Notifications
 }
 

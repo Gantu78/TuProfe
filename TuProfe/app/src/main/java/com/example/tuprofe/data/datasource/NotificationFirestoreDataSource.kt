@@ -2,7 +2,6 @@ package com.example.tuprofe.data.datasource
 
 import com.example.tuprofe.data.AppNotification
 import com.google.firebase.Timestamp
-import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
@@ -24,23 +23,30 @@ class NotificationFirestoreDataSource @Inject constructor(
                 val list = snapshot?.documents?.mapNotNull { doc ->
                     val d = doc.data ?: return@mapNotNull null
                     val title = d["title"] as? String ?: ""
-                    if (title.isBlank()) return@mapNotNull null  // descarta entradas vacías del servidor
-                    val ts = when (val raw = d["timestamp"]) {
+                    if (title.isBlank()) return@mapNotNull null
+                    val type = d["type"] as? String ?: ""
+                    val reviewId = d["reviewId"] as? String ?: ""
+                    val commentId = d["commentId"] as? String ?: ""
+                    val fromUserId = d["fromUserId"] as? String ?: ""
+                    val entityId = entityId(type, reviewId, commentId, fromUserId)
+                    val ts = when (val raw = d["createdAt"]) {
                         is Timestamp -> raw.toDate().time
                         is Long -> raw
                         else -> 0L
                     }
+                    // CF uses "read"; client-saved docs used "isRead" — support both
+                    val isRead = d["read"] as? Boolean ?: d["isRead"] as? Boolean ?: false
                     AppNotification(
                         id = doc.id,
-                        type = d["type"] as? String ?: "",
-                        entityId = d["entityId"] as? String ?: "",
+                        type = type,
+                        entityId = entityId,
                         title = title,
                         body = d["body"] as? String ?: "",
-                        senderId = d["senderId"] as? String ?: "",
-                        senderName = d["senderName"] as? String ?: "",
+                        senderId = fromUserId,
+                        senderName = d["fromUsername"] as? String ?: "",
                         senderImageUrl = d["senderImageUrl"] as? String ?: "",
                         timestamp = ts,
-                        isRead = d["isRead"] as? Boolean ?: false
+                        isRead = isRead
                     )
                 }?.sortedByDescending { it.timestamp } ?: emptyList()
                 trySend(list)
@@ -50,41 +56,37 @@ class NotificationFirestoreDataSource @Inject constructor(
 
     fun listenUnreadCount(userId: String): Flow<Int> = callbackFlow {
         val listener = userNotifs(userId)
-            .whereEqualTo("isRead", false)
             .addSnapshotListener { snapshot, _ ->
                 val count = snapshot?.documents?.count { doc ->
-                    (doc.getString("title") ?: "").isNotBlank()
+                    val d = doc.data ?: return@count false
+                    val title = d["title"] as? String ?: ""
+                    val read = d["read"] as? Boolean ?: d["isRead"] as? Boolean ?: false
+                    title.isNotBlank() && !read
                 } ?: 0
                 trySend(count)
             }
         awaitClose { listener.remove() }
     }
 
-    suspend fun saveNotification(userId: String, notification: AppNotification) {
-        userNotifs(userId).add(
-            mapOf(
-                "type" to notification.type,
-                "entityId" to notification.entityId,
-                "title" to notification.title,
-                "body" to notification.body,
-                "senderId" to notification.senderId,
-                "senderName" to notification.senderName,
-                "senderImageUrl" to notification.senderImageUrl,
-                "timestamp" to FieldValue.serverTimestamp(),
-                "isRead" to false
-            )
-        ).await()
-    }
-
     suspend fun markRead(userId: String, notifId: String) {
-        userNotifs(userId).document(notifId).update("isRead", true).await()
+        userNotifs(userId).document(notifId).update("read", true).await()
     }
 
     suspend fun markAllRead(userId: String) {
-        val unread = userNotifs(userId).whereEqualTo("isRead", false).get().await()
+        val unread = userNotifs(userId)
+            .whereEqualTo("read", false)
+            .get().await()
         if (unread.documents.isEmpty()) return
         val batch = db.batch()
-        unread.documents.forEach { batch.update(it.reference, "isRead", true) }
+        unread.documents.forEach { batch.update(it.reference, "read", true) }
         batch.commit().await()
     }
 }
+
+private fun entityId(type: String, reviewId: String, commentId: String, fromUserId: String): String =
+    when (type) {
+        "like", "reviewDeleted" -> reviewId
+        "comment", "reply" -> commentId.ifBlank { reviewId }
+        "follow" -> fromUserId
+        else -> reviewId.ifBlank { commentId }.ifBlank { fromUserId }
+    }
