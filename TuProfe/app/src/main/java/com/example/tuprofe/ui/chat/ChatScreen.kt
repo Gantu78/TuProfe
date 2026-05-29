@@ -1,5 +1,7 @@
 package com.example.tuprofe.ui.chat
 
+import java.text.SimpleDateFormat
+import java.util.Locale
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
@@ -242,12 +244,44 @@ private fun MessageBubble(message: Message, isOwn: Boolean) {
                 )
             }
             if (message.text.isNotBlank()) {
-                Text(
-                    text = message.text,
-                    color = textColor,
-                    fontSize = 15.sp,
-                    modifier = Modifier.padding(horizontal = 14.dp, vertical = if (message.imageUrl != null) 6.dp else 8.dp)
-                )
+                Row(
+                    modifier = Modifier.padding(
+                        start = 14.dp, end = 10.dp,
+                        top = if (message.imageUrl != null) 6.dp else 8.dp,
+                        bottom = 6.dp
+                    ),
+                    verticalAlignment = Alignment.Bottom,
+                    horizontalArrangement = Arrangement.spacedBy(4.dp)
+                ) {
+                    Text(
+                        text = message.text,
+                        color = textColor,
+                        fontSize = 15.sp,
+                        modifier = Modifier.weight(1f, fill = false)
+                    )
+                    message.sentAt?.let { date ->
+                        Text(
+                            text = SimpleDateFormat("HH:mm", Locale.getDefault()).format(date),
+                            fontSize = 11.sp,
+                            color = if (isOwn) Color.White.copy(alpha = 0.65f) else Color.Gray
+                        )
+                    }
+                }
+            } else {
+                message.sentAt?.let { date ->
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(end = 10.dp, bottom = 5.dp, top = 4.dp),
+                        horizontalArrangement = Arrangement.End
+                    ) {
+                        Text(
+                            text = SimpleDateFormat("HH:mm", Locale.getDefault()).format(date),
+                            fontSize = 11.sp,
+                            color = if (isOwn) Color.White.copy(alpha = 0.65f) else Color.Gray
+                        )
+                    }
+                }
             }
         }
     }

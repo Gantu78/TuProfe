@@ -54,8 +54,8 @@ class ChatFirestoreDataSourceImpl @Inject constructor(
                         imageUrl = data["imageUrl"] as? String
                     )
                 } ?: emptyList()
-                // Sort client-side ascending by sentAt
-                trySend(messages.sortedBy { it.sentAt })
+                // Sort ascending by sentAt, nulls last (pending server timestamps stay at the end)
+                trySend(messages.sortedWith(compareBy(nullsLast(naturalOrder())) { it.sentAt }))
             }
         awaitClose { listener.remove() }
     }
