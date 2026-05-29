@@ -316,12 +316,9 @@ fun Resena(
         TuProfeCardBody(
             content = reviewInfo.content,
             date = reviewInfo.time,
-            editado = reviewInfo.editado
+            editado = reviewInfo.editado,
+            imageUrls = reviewInfo.imageUrls
         )
-
-        if (reviewInfo.imageUrls.isNotEmpty()) {
-            ReviewImageMosaic(imageUrls = reviewInfo.imageUrls)
-        }
 
         ResenaCardActions(
             likes = reviewInfo.likes,
@@ -496,6 +493,7 @@ fun TuProfeCardBody(
     content: String,
     date: String,
     editado: Boolean = false,
+    imageUrls: List<String> = emptyList(),
     modifier: Modifier = Modifier
 ) {
     Column(
@@ -503,6 +501,9 @@ fun TuProfeCardBody(
         verticalArrangement = Arrangement.spacedBy(10.dp)
     ) {
         Text(content)
+        if (imageUrls.isNotEmpty()) {
+            ReviewImageMosaic(imageUrls = imageUrls)
+        }
         Row(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.spacedBy(8.dp)
