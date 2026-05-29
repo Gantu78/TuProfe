@@ -29,7 +29,6 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -40,7 +39,6 @@ import coil.compose.AsyncImage
 import com.example.tuprofe.R
 import com.example.tuprofe.ui.utils.*
 import com.google.android.gms.location.LocationServices
-import kotlinx.coroutines.delay
 
 @SuppressLint("MissingPermission")
 @OptIn(ExperimentalMaterial3Api::class)
@@ -51,7 +49,7 @@ fun CreateReviewScreen(
     modifier: Modifier = Modifier
 ) {
     val state by viewModel.uiState.collectAsState()
-    val context = LocalContext.current
+    val context = androidx.compose.ui.platform.LocalContext.current
 
     val imagePickerLauncher = rememberLauncherForActivityResult(
         ActivityResultContracts.GetMultipleContents()
@@ -71,8 +69,10 @@ fun CreateReviewScreen(
         }
     }
 
-    LaunchedEffect(Unit) {
-        locationLauncher.launch(Manifest.permission.ACCESS_FINE_LOCATION)
+    LaunchedEffect(state.includeLocation) {
+        if (state.includeLocation) {
+            locationLauncher.launch(Manifest.permission.ACCESS_FINE_LOCATION)
+        }
     }
 
     LaunchedEffect(state.success) {
@@ -82,16 +82,6 @@ fun CreateReviewScreen(
         }
     }
 
-    // Staggered entrance for the whole form
-    var showTitle   by remember { mutableStateOf(false) }
-    var showForm    by remember { mutableStateOf(false) }
-    var showActions by remember { mutableStateOf(false) }
-    LaunchedEffect(Unit) {
-        showTitle = true; delay(120)
-        showForm = true;  delay(120)
-        showActions = true
-    }
-
     Box(modifier = modifier.fillMaxSize()) {
         BackgroundImage()
 
@@ -99,44 +89,108 @@ fun CreateReviewScreen(
             modifier = Modifier
                 .fillMaxSize()
                 .verticalScroll(rememberScrollState())
-                .padding(24.dp),
-            horizontalAlignment = Alignment.CenterHorizontally
+                .padding(top = 8.dp, bottom = 24.dp),
+            verticalArrangement = Arrangement.spacedBy(20.dp)
         ) {
-            AnimatedScreen(delayMs = 0) {
-                Text(
-                    text = stringResource(R.string.crear_rese_a),
-                    fontSize = 24.sp,
-                    fontWeight = FontWeight.Bold,
-                    color = MaterialTheme.colorScheme.onSurface,
-                    modifier = Modifier.padding(vertical = 24.dp)
-                )
-            }
+            // ── Title ────────────────────────────────────────────────────────
+            Text(
+                text = stringResource(R.string.nueva_resena),
+                fontSize = 24.sp,
+                fontWeight = FontWeight.Bold,
+                color = MaterialTheme.colorScheme.onSurface,
+                modifier = Modifier
+                    .padding(horizontal = 24.dp)
+                    .padding(top = 16.dp)
+            )
 
-            AnimatedScreen(delayMs = 100) {
-                Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                    // ── Professor selector ────────────────────────────────────
-                    ExposedDropdownMenuBox(
-                        expanded = state.isDropdownExpanded,
-                        onExpandedChange = { viewModel.toggleDropdown() }
+            // ── Professor section ─────────────────────────────────────────────
+            Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                Text(
+                    text = stringResource(R.string.profesor),
+                    fontSize = 15.sp,
+                    fontWeight = FontWeight.SemiBold,
+                    color = MaterialTheme.colorScheme.onSurface,
+                    modifier = Modifier.padding(horizontal = 24.dp)
+                )
+
+                if (state.selectedProfessor != null) {
+                    // Selected professor chip
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = 16.dp)
+                            .clip(CircleShape)
+                            .background(colorResource(R.color.pastel))
+                            .border(1.5.dp, colorResource(R.color.verdetp), CircleShape)
+                            .padding(horizontal = 16.dp, vertical = 10.dp),
+                        verticalAlignment = Alignment.CenterVertically
                     ) {
-                        TextFieldApp(
-                            texto = stringResource(R.string.buscar_profesor),
-                            value = state.professorQuery,
-                            onValueChange = { viewModel.onProfessorQueryChange(it) },
+                        AsyncImage(
+                            model = state.selectedProfessor!!.imageprofeUrl,
+                            contentDescription = null,
+                            contentScale = ContentScale.Crop,
+                            modifier = Modifier
+                                .size(36.dp)
+                                .clip(CircleShape)
+                        )
+                        Spacer(modifier = Modifier.width(10.dp))
+                        Text(
+                            text = state.selectedProfessor!!.nombreProfe,
+                            fontSize = 14.sp,
+                            fontWeight = FontWeight.Medium,
+                            color = MaterialTheme.colorScheme.onSurface,
+                            modifier = Modifier.weight(1f)
+                        )
+                        IconButton(
+                            onClick = { viewModel.onClearProfessor() },
+                            modifier = Modifier.size(24.dp)
+                        ) {
+                            Icon(
+                                imageVector = Icons.Default.Close,
+                                contentDescription = null,
+                                tint = MaterialTheme.colorScheme.onSurfaceVariant,
+                                modifier = Modifier.size(18.dp)
+                            )
+                        }
+                    }
+                } else {
+                    // Professor picker capsule
+                    Box(modifier = Modifier.padding(horizontal = 16.dp)) {
+                        Box(
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .menuAnchor(MenuAnchorType.PrimaryNotEditable),
-                            trailingIcon = {
+                                .clip(CircleShape)
+                                .background(colorResource(R.color.pastel))
+                                .border(
+                                    1.5.dp,
+                                    colorResource(R.color.BordeTuProfe).copy(alpha = 0.6f),
+                                    CircleShape
+                                )
+                                .clickable { viewModel.toggleDropdown() }
+                                .padding(horizontal = 16.dp, vertical = 14.dp)
+                        ) {
+                            Row(
+                                modifier = Modifier.fillMaxWidth(),
+                                verticalAlignment = Alignment.CenterVertically
+                            ) {
+                                Text(
+                                    text = stringResource(R.string.seleccionar_profesor),
+                                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                                    fontSize = 15.sp,
+                                    modifier = Modifier.weight(1f)
+                                )
                                 Icon(
                                     imageVector = if (state.isDropdownExpanded)
                                         Icons.Default.ArrowDropUp else Icons.Default.ArrowDropDown,
-                                    contentDescription = null
+                                    contentDescription = null,
+                                    tint = colorResource(R.color.verdetp)
                                 )
                             }
-                        )
-                        ExposedDropdownMenu(
+                        }
+                        DropdownMenu(
                             expanded = state.isDropdownExpanded,
-                            onDismissRequest = { viewModel.onDismissDropdown() }
+                            onDismissRequest = { viewModel.onDismissDropdown() },
+                            modifier = Modifier.fillMaxWidth(0.9f)
                         ) {
                             state.filteredProfessors.forEach { professor ->
                                 DropdownMenuItem(
@@ -146,142 +200,194 @@ fun CreateReviewScreen(
                             }
                         }
                     }
+                }
+            }
 
-                    // ── Materia selector (visible only after professor selected) ──
-                    if (state.selectedProfessor != null) {
-                        Spacer(modifier = Modifier.height(16.dp))
-                        ExposedDropdownMenuBox(
-                            expanded = state.isMateriaDropdownExpanded,
-                            onExpandedChange = { viewModel.toggleMateriaDropdown() }
+            // ── Materia section (only after professor selected) ───────────────
+            if (state.selectedProfessor != null) {
+                Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                    Text(
+                        text = stringResource(R.string.materia),
+                        fontSize = 15.sp,
+                        fontWeight = FontWeight.SemiBold,
+                        color = MaterialTheme.colorScheme.onSurface,
+                        modifier = Modifier.padding(horizontal = 24.dp)
+                    )
+
+                    Box(modifier = Modifier.padding(horizontal = 16.dp)) {
+                        Box(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .clip(CircleShape)
+                                .background(colorResource(R.color.pastel))
+                                .border(
+                                    1.5.dp,
+                                    colorResource(R.color.BordeTuProfe).copy(alpha = 0.6f),
+                                    CircleShape
+                                )
+                                .clickable { viewModel.toggleMateriaDropdown() }
+                                .padding(horizontal = 16.dp, vertical = 14.dp)
                         ) {
-                            TextFieldApp(
-                                texto = stringResource(R.string.seleccionar_materia),
-                                value = state.selectedMateria,
-                                onValueChange = {},
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .menuAnchor(MenuAnchorType.PrimaryNotEditable),
-                                trailingIcon = {
-                                    Icon(
-                                        imageVector = if (state.isMateriaDropdownExpanded)
-                                            Icons.Default.ArrowDropUp else Icons.Default.ArrowDropDown,
-                                        contentDescription = null
-                                    )
-                                }
-                            )
-                            ExposedDropdownMenu(
-                                expanded = state.isMateriaDropdownExpanded,
-                                onDismissRequest = { viewModel.onDismissMateriaDropdown() }
+                            Row(
+                                modifier = Modifier.fillMaxWidth(),
+                                verticalAlignment = Alignment.CenterVertically
                             ) {
-                                state.selectedProfessor!!.materias.forEach { materia ->
-                                    DropdownMenuItem(
-                                        text = { Text(materia) },
-                                        onClick = { viewModel.onMateriaSelected(materia) }
-                                    )
-                                }
+                                Text(
+                                    text = if (state.selectedMateria.isEmpty())
+                                        stringResource(R.string.seleccionar_materia)
+                                    else
+                                        state.selectedMateria,
+                                    color = if (state.selectedMateria.isEmpty())
+                                        MaterialTheme.colorScheme.onSurfaceVariant
+                                    else
+                                        MaterialTheme.colorScheme.onSurface,
+                                    fontSize = 15.sp,
+                                    modifier = Modifier.weight(1f)
+                                )
+                                Icon(
+                                    imageVector = if (state.isMateriaDropdownExpanded)
+                                        Icons.Default.ArrowDropUp else Icons.Default.ArrowDropDown,
+                                    contentDescription = null,
+                                    tint = colorResource(R.color.verdetp)
+                                )
+                            }
+                        }
+                        DropdownMenu(
+                            expanded = state.isMateriaDropdownExpanded,
+                            onDismissRequest = { viewModel.onDismissMateriaDropdown() },
+                            modifier = Modifier.fillMaxWidth(0.9f)
+                        ) {
+                            state.selectedProfessor!!.materias.forEach { materia ->
+                                DropdownMenuItem(
+                                    text = { Text(materia) },
+                                    onClick = { viewModel.onMateriaSelected(materia) }
+                                )
                             }
                         }
                     }
+                }
+            }
 
-                    Spacer(modifier = Modifier.height(20.dp))
-
-                    // ── Star rating with bounce animation ─────────────────────
-                    Text(
-                        text = stringResource(R.string.calificaci_n),
-                        fontWeight = FontWeight.Medium,
-                        color = MaterialTheme.colorScheme.onSurface
-                    )
-                    Row(modifier = Modifier.padding(vertical = 8.dp)) {
-                        repeat(5) { index ->
-                            val ratingValue = index + 1
-                            val isSelected = state.rating >= ratingValue
-                            val scale = rememberStarBounceScale(selected = isSelected)
-                            Icon(
-                                imageVector = Icons.Default.Star,
-                                contentDescription = null,
-                                tint = if (isSelected) colorResource(R.color.verdetp) else Color.LightGray,
-                                modifier = Modifier
-                                    .size(40.dp)
-                                    .graphicsLayer { scaleX = scale; scaleY = scale }
-                                    .pressScaleEffect()
-                                    .clickable {
-                                        viewModel.onRatingChange(ratingValue)
-                                    }
-                            )
-                        }
+            // ── Rating section ────────────────────────────────────────────────
+            Column(
+                verticalArrangement = Arrangement.spacedBy(8.dp),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Text(
+                    text = stringResource(R.string.calificaci_n),
+                    fontSize = 15.sp,
+                    fontWeight = FontWeight.SemiBold,
+                    color = MaterialTheme.colorScheme.onSurface,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 24.dp)
+                )
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.Center
+                ) {
+                    repeat(5) { index ->
+                        val ratingValue = index + 1
+                        val isSelected = state.rating >= ratingValue
+                        val scale = rememberStarBounceScale(selected = isSelected)
+                        Icon(
+                            imageVector = Icons.Default.Star,
+                            contentDescription = null,
+                            tint = if (isSelected) colorResource(R.color.verdetp) else Color.LightGray,
+                            modifier = Modifier
+                                .size(40.dp)
+                                .graphicsLayer { scaleX = scale; scaleY = scale }
+                                .pressScaleEffect()
+                                .clickable { viewModel.onRatingChange(ratingValue) }
+                        )
                     }
+                }
+            }
 
-                    Spacer(modifier = Modifier.height(20.dp))
+            // ── Review text section ───────────────────────────────────────────
+            Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                Text(
+                    text = stringResource(R.string.tu_resena),
+                    fontSize = 15.sp,
+                    fontWeight = FontWeight.SemiBold,
+                    color = MaterialTheme.colorScheme.onSurface,
+                    modifier = Modifier.padding(horizontal = 24.dp)
+                )
 
-                    TextFieldApp(
-                        texto = stringResource(R.string.tu_opini_n_sobre_el_profesor),
-                        value = state.reviewText,
-                        onValueChange = { viewModel.onReviewTextChange(it) },
-                        singleLine = false,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .height(150.dp)
-                    )
+                TextFieldApp(
+                    texto = stringResource(R.string.describe_tu_experiencia),
+                    value = state.reviewText,
+                    onValueChange = { viewModel.onReviewTextChange(it) },
+                    singleLine = false,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(120.dp)
+                        .padding(horizontal = 16.dp)
+                )
 
-                    Spacer(modifier = Modifier.height(12.dp))
-
-                    // Image picker toolbar
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        verticalAlignment = Alignment.CenterVertically
+                // Image picker toolbar
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 24.dp),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    IconButton(
+                        onClick = { imagePickerLauncher.launch("image/*") },
+                        enabled = state.selectedImageUris.size < 4
                     ) {
-                        IconButton(
-                            onClick = { imagePickerLauncher.launch("image/*") },
-                            enabled = state.selectedImageUris.size < 4
-                        ) {
-                            Icon(
-                                imageVector = Icons.Default.Image,
-                                contentDescription = "Agregar imágenes",
-                                tint = if (state.selectedImageUris.size < 4)
-                                    colorResource(R.color.verdetp) else Color.Gray
-                            )
-                        }
-                        if (state.selectedImageUris.isNotEmpty()) {
-                            Text(
-                                text = "${state.selectedImageUris.size}/4",
-                                fontSize = 12.sp,
-                                color = MaterialTheme.colorScheme.onSurfaceVariant
-                            )
-                        }
+                        Icon(
+                            imageVector = Icons.Default.Image,
+                            contentDescription = stringResource(R.string.adjuntar_imagen),
+                            tint = if (state.selectedImageUris.size < 4)
+                                colorResource(R.color.verdetp) else Color.Gray
+                        )
                     }
-
-                    // Selected image thumbnails
                     if (state.selectedImageUris.isNotEmpty()) {
-                        LazyRow(
-                            horizontalArrangement = Arrangement.spacedBy(8.dp),
-                            modifier = Modifier.fillMaxWidth()
-                        ) {
-                            itemsIndexed(state.selectedImageUris) { index, uri ->
-                                Box(modifier = Modifier.size(80.dp)) {
-                                    AsyncImage(
-                                        model = uri,
-                                        contentDescription = null,
-                                        contentScale = ContentScale.Crop,
-                                        modifier = Modifier
-                                            .fillMaxSize()
-                                            .clip(RoundedCornerShape(8.dp))
-                                            .border(1.dp, colorResource(R.color.BordeTuProfe), RoundedCornerShape(8.dp))
-                                    )
-                                    IconButton(
-                                        onClick = { viewModel.onRemoveImage(index) },
-                                        modifier = Modifier
-                                            .size(22.dp)
-                                            .align(Alignment.TopEnd)
-                                            .clip(CircleShape)
-                                            .background(Color.Black.copy(alpha = 0.6f))
-                                    ) {
-                                        Icon(
-                                            imageVector = Icons.Default.Close,
-                                            contentDescription = "Eliminar imagen",
-                                            tint = Color.White,
-                                            modifier = Modifier.size(14.dp)
+                        Text(
+                            text = "${state.selectedImageUris.size}/4",
+                            fontSize = 12.sp,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                        )
+                    }
+                }
+
+                // Selected image thumbnails
+                if (state.selectedImageUris.isNotEmpty()) {
+                    LazyRow(
+                        contentPadding = PaddingValues(horizontal = 24.dp),
+                        horizontalArrangement = Arrangement.spacedBy(8.dp),
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
+                        itemsIndexed(state.selectedImageUris) { index, uri ->
+                            Box(modifier = Modifier.size(80.dp)) {
+                                AsyncImage(
+                                    model = uri,
+                                    contentDescription = null,
+                                    contentScale = ContentScale.Crop,
+                                    modifier = Modifier
+                                        .fillMaxSize()
+                                        .clip(RoundedCornerShape(8.dp))
+                                        .border(
+                                            1.dp,
+                                            colorResource(R.color.BordeTuProfe),
+                                            RoundedCornerShape(8.dp)
                                         )
-                                    }
+                                )
+                                IconButton(
+                                    onClick = { viewModel.onRemoveImage(index) },
+                                    modifier = Modifier
+                                        .size(22.dp)
+                                        .align(Alignment.TopEnd)
+                                        .clip(CircleShape)
+                                        .background(Color.Black.copy(alpha = 0.6f))
+                                ) {
+                                    Icon(
+                                        imageVector = Icons.Default.Close,
+                                        contentDescription = null,
+                                        tint = Color.White,
+                                        modifier = Modifier.size(14.dp)
+                                    )
                                 }
                             }
                         }
@@ -289,26 +395,64 @@ fun CreateReviewScreen(
                 }
             }
 
-            Spacer(modifier = Modifier.height(32.dp))
-
-            AnimatedScreen(delayMs = 200) {
-                Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                    if (state.isLoading) {
-                        CircularProgressIndicator(color = colorResource(R.color.verdetp))
-                    } else {
-                        AppButton(
-                            textoBoton = stringResource(R.string.publicar_rese_a),
-                            onClick = { viewModel.createReview() },
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .pressScaleEffect()
-                        )
-                    }
-                    state.error?.let { errRes ->
-                        Spacer(modifier = Modifier.height(12.dp))
-                        Text(text = stringResource(errRes), color = Color.Red, fontSize = 14.sp)
-                    }
+            // ── Location toggle ───────────────────────────────────────────────
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 24.dp),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Column(modifier = Modifier.weight(1f)) {
+                    Text(
+                        text = stringResource(R.string.incluir_ubicacion),
+                        fontSize = 15.sp,
+                        fontWeight = FontWeight.Medium,
+                        color = MaterialTheme.colorScheme.onSurface
+                    )
+                    Text(
+                        text = stringResource(R.string.aparecera_en_mapa),
+                        fontSize = 12.sp,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
                 }
+                Switch(
+                    checked = state.includeLocation,
+                    onCheckedChange = { viewModel.onToggleIncludeLocation(it) },
+                    colors = SwitchDefaults.colors(
+                        checkedThumbColor = Color.White,
+                        checkedTrackColor = colorResource(R.color.verdetp)
+                    )
+                )
+            }
+
+            // ── Error ─────────────────────────────────────────────────────────
+            state.error?.let { errRes ->
+                Text(
+                    text = stringResource(errRes),
+                    color = Color.Red,
+                    fontSize = 14.sp,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 24.dp)
+                )
+            }
+
+            // ── Submit button ─────────────────────────────────────────────────
+            if (state.isLoading) {
+                CircularProgressIndicator(
+                    color = colorResource(R.color.verdetp),
+                    modifier = Modifier.align(Alignment.CenterHorizontally)
+                )
+            } else {
+                AppButton(
+                    textoBoton = stringResource(R.string.publicar_rese_a),
+                    onClick = { viewModel.createReview() },
+                    enabled = state.canSubmit,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 16.dp)
+                        .pressScaleEffect()
+                )
             }
         }
     }

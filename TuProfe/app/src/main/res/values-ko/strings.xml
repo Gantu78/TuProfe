@@ -233,4 +233,12 @@
     <string name="notif_reply_title">%1$s님이 회원님의 댓글에 답글을 남겼습니다</string>
     <string name="notif_follow_title">%1$s님이 팔로우를 시작했습니다</string>
     <string name="notif_review_deleted_title">리뷰가 삭제되었습니다</string>
+
+    <!-- Create review screen (iOS parity) -->
+    <string name="nueva_resena">새 리뷰</string>
+    <string name="seleccionar_profesor">교수 선택</string>
+    <string name="tu_resena">내 리뷰</string>
+    <string name="describe_tu_experiencia">이 교수와의 경험을 설명해 주세요...</string>
+    <string name="incluir_ubicacion">위치 포함</string>
+    <string name="aparecera_en_mapa">리뷰 지도에 표시됩니다</string>
 </resources>

@@ -232,4 +232,12 @@
     <string name="notif_reply_title">%1$s ответил на ваш комментарий</string>
     <string name="notif_follow_title">%1$s начал(а) читать вас</string>
     <string name="notif_review_deleted_title">Ваша рецензия удалена</string>
+
+    <!-- Create review screen (iOS parity) -->
+    <string name="nueva_resena">Новый отзыв</string>
+    <string name="seleccionar_profesor">Выбрать преподавателя</string>
+    <string name="tu_resena">Ваш отзыв</string>
+    <string name="describe_tu_experiencia">Опишите ваш опыт с этим преподавателем...</string>
+    <string name="incluir_ubicacion">Включить местоположение</string>
+    <string name="aparecera_en_mapa">Появится на карте отзывов</string>
 </resources>

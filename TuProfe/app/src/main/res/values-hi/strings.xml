@@ -235,4 +235,12 @@
     <string name="notif_reply_title">%1$s ने आपकी टिप्पणी का जवाब दिया</string>
     <string name="notif_follow_title">%1$s ने आपको फॉलो करना शुरू किया</string>
     <string name="notif_review_deleted_title">आपकी समीक्षा हटा दी गई</string>
+
+    <!-- Create review screen (iOS parity) -->
+    <string name="nueva_resena">नई समीक्षा</string>
+    <string name="seleccionar_profesor">प्रोफेसर चुनें</string>
+    <string name="tu_resena">आपकी समीक्षा</string>
+    <string name="describe_tu_experiencia">इस प्रोफेसर के साथ अपना अनुभव बताएं...</string>
+    <string name="incluir_ubicacion">स्थान शामिल करें</string>
+    <string name="aparecera_en_mapa">समीक्षा मानचित्र पर दिखाई देगा</string>
 </resources>

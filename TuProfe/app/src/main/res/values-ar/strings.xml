@@ -235,4 +235,12 @@
     <string name="notif_reply_title">ردّ %1$s على تعليقك</string>
     <string name="notif_follow_title">بدأ %1$s في متابعتك</string>
     <string name="notif_review_deleted_title">تم حذف تقييمك</string>
+
+    <!-- Create review screen (iOS parity) -->
+    <string name="nueva_resena">مراجعة جديدة</string>
+    <string name="seleccionar_profesor">اختر الأستاذ</string>
+    <string name="tu_resena">مراجعتك</string>
+    <string name="describe_tu_experiencia">صف تجربتك مع هذا الأستاذ...</string>
+    <string name="incluir_ubicacion">تضمين الموقع</string>
+    <string name="aparecera_en_mapa">سيظهر على خريطة المراجعات</string>
 </resources>

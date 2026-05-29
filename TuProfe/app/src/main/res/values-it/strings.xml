@@ -236,4 +236,12 @@ string name="idioma_turco">Turco</string>
     <string name="notif_reply_title">%1$s ha risposto al tuo commento</string>
     <string name="notif_follow_title">%1$s ha iniziato a seguirti</string>
     <string name="notif_review_deleted_title">La tua recensione è stata rimossa</string>
+
+    <!-- Create review screen (iOS parity) -->
+    <string name="nueva_resena">Nuova recensione</string>
+    <string name="seleccionar_profesor">Seleziona professore</string>
+    <string name="tu_resena">La tua recensione</string>
+    <string name="describe_tu_experiencia">Descrivi la tua esperienza con questo professore...</string>
+    <string name="incluir_ubicacion">Includi posizione</string>
+    <string name="aparecera_en_mapa">Apparirà sulla mappa delle recensioni</string>
 </resources>

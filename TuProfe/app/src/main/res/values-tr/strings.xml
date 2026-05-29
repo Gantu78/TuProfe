@@ -220,4 +220,12 @@
     <string name="notif_reply_title">%1$s yorumunuzu yanıtladı</string>
     <string name="notif_follow_title">%1$s sizi takip etmeye başladı</string>
     <string name="notif_review_deleted_title">İncelemeniz kaldırıldı</string>
+
+    <!-- Create review screen (iOS parity) -->
+    <string name="nueva_resena">Yeni İnceleme</string>
+    <string name="seleccionar_profesor">Profesör seç</string>
+    <string name="tu_resena">İncelemeniz</string>
+    <string name="describe_tu_experiencia">Bu profesörle deneyiminizi anlatın...</string>
+    <string name="incluir_ubicacion">Konum ekle</string>
+    <string name="aparecera_en_mapa">İnceleme haritasında görünecek</string>
 </resources>

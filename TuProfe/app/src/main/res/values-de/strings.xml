@@ -221,4 +221,12 @@
     <string name="notif_reply_title">%1$s hat auf deinen Kommentar geantwortet</string>
     <string name="notif_follow_title">%1$s folgt dir jetzt</string>
     <string name="notif_review_deleted_title">Deine Bewertung wurde entfernt</string>
+
+    <!-- Create review screen (iOS parity) -->
+    <string name="nueva_resena">Neue Bewertung</string>
+    <string name="seleccionar_profesor">Professor auswählen</string>
+    <string name="tu_resena">Deine Bewertung</string>
+    <string name="describe_tu_experiencia">Beschreibe deine Erfahrung mit diesem Professor...</string>
+    <string name="incluir_ubicacion">Standort hinzufügen</string>
+    <string name="aparecera_en_mapa">Wird auf der Bewertungskarte angezeigt</string>
 </resources>

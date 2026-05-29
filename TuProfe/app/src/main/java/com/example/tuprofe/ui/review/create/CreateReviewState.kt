@@ -18,8 +18,16 @@ data class CreateReviewState(
     val success: Boolean = false,
     @StringRes val error: Int? = null,
     val isDropdownExpanded: Boolean = false,
+    val includeLocation: Boolean = false,
     val latitude: Double? = null,
     val longitude: Double? = null,
     val selectedImageUris: List<Uri> = emptyList(),
     val isUploadingImages: Boolean = false
-)
+) {
+    val canSubmit: Boolean
+        get() = selectedProfessor != null &&
+                selectedMateria.isNotBlank() &&
+                rating > 0 &&
+                reviewText.isNotBlank() &&
+                !isLoading
+}

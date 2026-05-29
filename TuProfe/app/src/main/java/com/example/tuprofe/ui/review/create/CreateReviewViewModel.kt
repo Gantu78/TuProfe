@@ -158,8 +158,8 @@ class CreateReviewViewModel @Inject constructor(
                 content = currentState.reviewText,
                 rating = currentState.rating,
                 materia = currentState.selectedMateria,
-                latitude = currentState.latitude,
-                longitude = currentState.longitude,
+                latitude = if (currentState.includeLocation) currentState.latitude else null,
+                longitude = if (currentState.includeLocation) currentState.longitude else null,
                 imageUrls = imageUrls
             )
 
@@ -188,5 +188,22 @@ class CreateReviewViewModel @Inject constructor(
 
     fun toggleDropdown() {
         _uiState.update { it.copy(isDropdownExpanded = !it.isDropdownExpanded) }
+    }
+
+    fun onClearProfessor() {
+        _uiState.update { it.copy(
+            selectedProfessor = null,
+            professorQuery = "",
+            selectedMateria = "",
+            isMateriaDropdownExpanded = false
+        ) }
+    }
+
+    fun onToggleIncludeLocation(enabled: Boolean) {
+        _uiState.update { it.copy(
+            includeLocation = enabled,
+            latitude = if (!enabled) null else it.latitude,
+            longitude = if (!enabled) null else it.longitude
+        ) }
     }
 }

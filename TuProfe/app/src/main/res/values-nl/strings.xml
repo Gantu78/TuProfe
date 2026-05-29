@@ -208,4 +208,12 @@
     <string name="notif_reply_title">%1$s reageerde op je reactie</string>
     <string name="notif_follow_title">%1$s volgt je nu</string>
     <string name="notif_review_deleted_title">Je recensie is verwijderd</string>
+
+    <!-- Create review screen (iOS parity) -->
+    <string name="nueva_resena">Nieuwe beoordeling</string>
+    <string name="seleccionar_profesor">Professor selecteren</string>
+    <string name="tu_resena">Uw beoordeling</string>
+    <string name="describe_tu_experiencia">Beschrijf uw ervaring met deze professor...</string>
+    <string name="incluir_ubicacion">Locatie opnemen</string>
+    <string name="aparecera_en_mapa">Verschijnt op de beoordelingenkaart</string>
 </resources>

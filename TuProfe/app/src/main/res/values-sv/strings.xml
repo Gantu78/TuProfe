@@ -225,4 +225,12 @@
     <string name="notif_reply_title">%1$s svarade på din kommentar</string>
     <string name="notif_follow_title">%1$s börjat följa dig</string>
     <string name="notif_review_deleted_title">Din recension har tagits bort</string>
+
+    <!-- Create review screen (iOS parity) -->
+    <string name="nueva_resena">Ny recension</string>
+    <string name="seleccionar_profesor">Välj professor</string>
+    <string name="tu_resena">Din recension</string>
+    <string name="describe_tu_experiencia">Beskriv din upplevelse med denna professor...</string>
+    <string name="incluir_ubicacion">Inkludera plats</string>
+    <string name="aparecera_en_mapa">Visas på recensionskartan</string>
 </resources>

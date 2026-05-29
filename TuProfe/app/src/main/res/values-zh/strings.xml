@@ -235,4 +235,12 @@
     <string name="notif_reply_title">%1$s 回复了你的评论</string>
     <string name="notif_follow_title">%1$s 开始关注你</string>
     <string name="notif_review_deleted_title">你的评价已被删除</string>
+
+    <!-- Create review screen (iOS parity) -->
+    <string name="nueva_resena">新评价</string>
+    <string name="seleccionar_profesor">选择教授</string>
+    <string name="tu_resena">您的评价</string>
+    <string name="describe_tu_experiencia">描述您与该教授的经历...</string>
+    <string name="incluir_ubicacion">包含位置</string>
+    <string name="aparecera_en_mapa">将显示在评价地图上</string>
 </resources>
