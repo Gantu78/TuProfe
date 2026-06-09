@@ -116,7 +116,7 @@ fun ProfeContent(
                                 )
                             } else if (uiState.resumenIA == null) {
                                 AppButton(
-                                    textoBoton = "Resumen",
+                                    textoBoton = stringResource(R.string.resumen_ia),
                                     onClick = onGenerarResumenClick,
                                     modifier = Modifier.fillMaxWidth()
                                 )

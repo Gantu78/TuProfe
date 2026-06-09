@@ -24,7 +24,7 @@ android {
         applicationId = "com.angarita.tuprofe"
         minSdk = 26
         targetSdk = 35
-        versionCode = 4
+        versionCode = 5
         versionName = "1.0"
         buildConfigField("String", "IAAPIKEY", "\"${localProps.getProperty("IAAPIKEY") ?: ""}\"")
         buildConfigField("String", "GOOGLE_WEB_CLIENT_ID", "\"${localProps.getProperty("GOOGLE_WEB_CLIENT_ID") ?: ""}\"")
